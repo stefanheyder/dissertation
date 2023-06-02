@@ -1,1 +1,79 @@
 \chapter{State Space Models}
+\label{chapt:ssm}
+
+State space models ...
+
+
+\begin{definition}[State Space Model]
+    \label{def:ssm}
+    A \textbf{state space model} is a discrete time stochastic process $(X_t, Y_t)_{t=0, \dots, n -1}$ taking values in $\mathcal X \times \mathcal Y$ such that
+    \begin{enumerate}
+        \item The marginal distribution of the \textbf{states} $(X_0, \dots, X_{n - 1})$ is a discrete time Markov process, i.e. if $s <t$ then $X_t$ is conditionally independent of $X_s$ given $X_{t - 1}$.
+        \item Conditional on the state $X_t$ and observation $Y_{t - 1}$, $Y_t$ is independent of $X_s$ and $Y_{s - 1}$, $s < t$.
+    \end{enumerate}
+\end{definition}
+
+For notational convenience we will write $\X_{s:t} = \left(X_s, \dots, X_{t}\right)$ for the vector that contains all states from $s$ to $t$, dropping the index $s:t$ if we consider the whole set of observations, so $\X = \X_{0:n-1}$ 
+Similarly we set $\Y_{s:t} = \left(Y_s, \dots, Y_{t}\right)$ and $\Y = \Y_{0:n-1}$.
+
+
+\todo{picutre of dependency structure}
+
+\begin{remark}
+    Contrary to the standard definition of a state space model, our \Cref{def:ssm} allows $Y_t$ to depend on $Y_{t - 1}$.
+    This is not a limitation of the standard definition: given a state space model of the form in \Cref{def:ssm} we can transform it to the standard form by choosing states $(X_t, Y_t) \in \mathcal X \times \mathcal Y$ and observations $Y_t \in \mathcal Y$ such that the state space model becomes a stochastic process on $ \left( \mathcal X \times \mathcal Y\right) \times \mathcal Y$.
+    As \Cref{chapt:epi_ssm} will make extensive use of state space models with this dependency structure we opt to use this non-standard definition here.
+\end{remark}
+
+Given data $(y_t)_{t = 0, \dots, n - 1}$ that may be modeled with a state space model the practitioner is confronted with several tasks:
+
+\begin{enumerate}
+    \item\label{it:model_choice} Choosing a suitable, usually parametric, class of state space models that include the effects of interest.
+    \item\label{it:model_fitting} Fitting such a parametric model to the data at hand by either frequentist or bayesian techniques.
+    \item\label{it:smoothing_problem} Infer about the latent states $(X_0, \dots, X_{n-1})$ from the observations by determining, either analytically or through simulation, the \textbf{smoothing distribution} $\X|\Y$ or various functionals thereof.
+\end{enumerate}
+
+
+The first step, \cref{it:model_choice}, requires that the practitioner to specfiy a joint probability distribution for the states and observations.
+Due to the assumed dependency structure this boils down to specifying transition kernels for the states and observations
+\todo{ausführlicher}. 
+
+Most models that I consider in this thesis will admit densities for the state transitions w.r.t. a common dominating measure $\mu_{\mathcal X}$ and similar for the observations w.r.t. a (potentially different) domination measure $\mu_{\mathcal Y}$. \todo{check whether there are models that violate this} 
+
+\begin{notation}[Densities, conditional densities]
+    I will use the standard abuse of notation for densities that makes the type of density `'obvious`' from the arguments used.
+    This means that $p(x)$ is the density for all states $\X$, $p(x_t|x_{t - 1})$ the conditional density of $X_t|X_{t - 1}$ and similaryl for 
+    observations: $p(y|x)$ is the density of all observations $\Y$ conditional on all states $\X$.
+
+    Note that this notation also implicitly includes the time $t$ and allows for changes in, \eg, the state transition over time.
+
+    When densities stem from a parametric model parametrized by $\theta \in \Theta$ and the dependence of the model on $\theta$ is of interest I indicate this by adding a subscript to the densities.
+    If the dependence is not of interest, \eg because $\theta$ is fixed, I will usually omit $\theta$ for better readability.
+
+    In this notation the joint density of a parametric state space model factorizes as
+    \begin{align}
+        p_\theta(x,y) &= p_\theta(x_0, \dots, x_{n - 1}, y_0, \dots, y_{n - 1}) \\
+        &= p(_\thetax_0)\prod_{t = 1}^{n - 1} p_\theta(x_{t}|x_{t - 1}) \prod_{t = 0}^{n - 1} p_\theta(y_t | x_t, y_{t - 1}).
+    \end{align}
+
+\end{notation}
+    
+Refer to \Cref{chapt:epi_ssm} for constructing parametric state space models that capture relevant epidemiological effects.
+
+Regarding the second step, \cref{it:model_fitting}, a frequentist practitioner will want to perform maximum likelihood inference on $\theta$.
+While confidence intervals for $\theta$ can be derived both theoretically and practically, they are usually of little interest \todo{cite chopin?}.
+
+To obtain maximum likelihood estimates $\hat\theta$ one needs access to the likelihood 
+\begin{align}
+    \label{eq:likelihood}
+    p(y) = \int_{\mathcal X^n} p(x,y) \d x,
+\end{align}
+which is not analytically available except in special models (see \Cref{sec:lgssm}).
+Direct numerical evaluation of \Cref{eq:likelihood} is usually hopeless due to the high dimensionality of the state space $\mathcal X^n$. 
+Instead one resorts to simulation based inference by importance sampling (see \Cref{sec:is_for_ssm}) or particle filters \todo{cite something}.
+
+\section{Linear Gaussian State Space Models}
+\label{sec:lgssm}
+
+\section{Importance Samping for State Space Models}
+\label{sec:is_for_ssm}

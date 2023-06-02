@@ -1,8 +1,17 @@
-\documentclass{scrbook}
+\documentclass[
+    11pt, 
+    a4paper,
+    cleardoublepage=empty
+    twoside,
+    openright,
+    titlepage
+]{scrreport}
+
 
 \input{preamble.tex}
+\input{commands.tex}
 \usepackage{classicthesis}
-
+\usepackage[top=2cm,left=3cm,right=3cm,bottom=3cm]{geometry}
 
 \addbibresource{bibliography.bib}
 \addbibresource[label=ownpubs]{own_publications.bib}
@@ -22,17 +31,14 @@
 \cleardoublepage
 \pagestyle{scrheadings}
 \pagenumbering{arabic}
-\cleardoublepage
-\input{chapters/introduction.tex}
-\input{chapters/epidemiology.tex}
-\input{chapters/state_space_models.tex}
-\input{chapters/epidemiological_ssms.tex}
-\input{chapters/conclusion.tex}
+\cleardoublepage\input{chapters/introduction.tex}
+\cleardoublepage\input{chapters/epidemiology.tex}
+\cleardoublepage\input{chapters/state_space_models.tex}
+\cleardoublepage\input{chapters/epidemiological_ssms.tex}
+\cleardoublepage\input{chapters/conclusion.tex}
 
 \appendix
-\cleardoublepage
-\part{Appendix}
-\input{chapters/appendix.tex}
+\cleardoublepage\input{chapters/appendix.tex}
 
 \cleardoublepage\input{backmatter/bibliography.tex}
 \cleardoublepage\input{backmatter/declaration.tex}
