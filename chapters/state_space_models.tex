@@ -23,6 +23,8 @@ Similarly we set $\Y_{s:t} = \left(Y_s, \dots, Y_{t}\right)$ and $\Y = \Y_{0:n-1
     Contrary to the standard definition of a state space model, our \Cref{def:ssm} allows $Y_t$ to depend on $Y_{t - 1}$.
     This is not a limitation of the standard definition: given a state space model of the form in \Cref{def:ssm} we can transform it to the standard form by choosing states $(X_t, Y_t) \in \mathcal X \times \mathcal Y$ and observations $Y_t \in \mathcal Y$ such that the state space model becomes a stochastic process on $ \left( \mathcal X \times \mathcal Y\right) \times \mathcal Y$.
     As \Cref{chapt:epi_ssm} will make extensive use of state space models with this dependency structure we opt to use this non-standard definition here.
+
+    In most models I consider in this thesis I will use $\mathcal X = \R^m$, $\mathcal Y = \R^p$ or $\mathcal Y = \Z^p$ so that $\mathcal X$ is $m$ dimensional and $\mathcal Y$ is $p$ dimensional.
 \end{remark}
 
 Given data $(y_t)_{t = 0, \dots, n - 1}$ that may be modeled with a state space model the practitioner is confronted with several tasks:
@@ -41,7 +43,7 @@ Due to the assumed dependency structure this boils down to specifying transition
 Most models that I consider in this thesis will admit densities for the state transitions w.r.t. a common dominating measure $\mu_{\mathcal X}$ and similar for the observations w.r.t. a (potentially different) domination measure $\mu_{\mathcal Y}$. \todo{check whether there are models that violate this} 
 
 \begin{notation}[Densities, conditional densities]
-    I will use the standard abuse of notation for densities that makes the type of density `'obvious`' from the arguments used.
+    I will use the standard abuse of notation for densities that makes the type of density `obvious' from the arguments used.
     This means that $p(x)$ is the density for all states $\X$, $p(x_t|x_{t - 1})$ the conditional density of $X_t|X_{t - 1}$ and similaryl for 
     observations: $p(y|x)$ is the density of all observations $\Y$ conditional on all states $\X$.
 
@@ -51,10 +53,11 @@ Most models that I consider in this thesis will admit densities for the state tr
     If the dependence is not of interest, \eg because $\theta$ is fixed, I will usually omit $\theta$ for better readability.
 
     In this notation the joint density of a parametric state space model factorizes as
-    \begin{align}
+    \begin{align*}
         p_\theta(x,y) &= p_\theta(x_0, \dots, x_{n - 1}, y_0, \dots, y_{n - 1}) \\
-        &= p(_\thetax_0)\prod_{t = 1}^{n - 1} p_\theta(x_{t}|x_{t - 1}) \prod_{t = 0}^{n - 1} p_\theta(y_t | x_t, y_{t - 1}).
-    \end{align}
+        &= p(_\theta x_0)\prod_{t = 1}^{n - 1} p_\theta(x_{t}|x_{t - 1}) \prod_{t = 0}^{n - 1} p_\theta(y_t | x_t, y_{t - 1}),
+    \end{align*}
+    where $p_\theta(y_0|x_0, y_{-1}) = p_\theta(y_0, x_0)$. 
 
 \end{notation}
     
@@ -75,5 +78,28 @@ Instead one resorts to simulation based inference by importance sampling (see \C
 \section{Linear Gaussian State Space Models}
 \label{sec:lgssm}
 
-\section{Importance Samping for State Space Models}
+\section{Importance Sampling for State Space Models}
 \label{sec:is_for_ssm}
+
+As the likelihood of a general state space model is neither analytically nor numerically tractable one has to resort to Monte-Carlo techniques.
+Recall that the likelihood is a high-dimensional integral of the form
+\begin{align*}
+    \lik(\theta) = p_\theta(y) = \int p_\theta(y,x) \d x = \int p_\theta(y|x) p_\theta(x) \d x = \E p_\theta(y|X).
+\end{align*}
+By the standard law of large numbers we can approximate $\lik(\theta)$ by 
+\begin{align*}
+  \hat\lik(\theta) = \frac 1 N \sum_{i=1}^N p_\theta(y|X^i)  
+\end{align*}
+for $N\in\N$ samples $X^i \iid p(x)$. 
+However, the variance of $\hat\lik(\theta)$ is likely to be very high if samples $X^i$ are drawn from the prior distribution $p(x)$ as they are not informed by the observations $y$. 
+As $p_\theta(x|y) \propto p_\theta(x,y)$ a more promising approach would be to use samples $X^i \sim p_\theta(x|y)$, but this distribution is usually not available. 
+
+While bayesian computational approaches such as MCMC\todo{cite} are able to generate (approximate) samples from this posterior distribution, importance sampling tries to find a distribution close to the target and re-weighs samples to ensure unbiased estimates of $\lik(\theta)$.
+
+In more general terms, let $g: \mathcal X \to \R$ be a function whose integral $$\zeta = \int_{\mathcal X} g(x) \d x$$ we want to compute. 
+Furthermore suppose that we can write 
+$$
+    \int_{\mathcal X} g(x) \d x = \int_{\mathcal X} f(x) \d \P(x)
+$$
+for a probability measure $\P$ and function $f: \mathcal X \to \R$. 
+Let $\Q$ be another measure on $\mathcal X$ such that $f\P$ is absolutely continuous w.r.t. $\Q$, $f\P \ll \Q$.
