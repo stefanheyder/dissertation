@@ -102,4 +102,18 @@ $$
     \int_{\mathcal X} g(x) \d x = \int_{\mathcal X} f(x) \d \P(x)
 $$
 for a probability measure $\P$ and function $f: \mathcal X \to \R$. 
-Let $\Q$ be another measure on $\mathcal X$ such that $f\P$ is absolutely continuous w.r.t. $\Q$, $f\P \ll \Q$.
+Let $\Q$ be another measure on $\mathcal X$ such that $f\P$ is absolutely continuous with respect to $\Q$, $f\P \ll \Q$ and let $v = \frac{\d f\P}{\d\Q}$ be the corresponding Radon-Nikodym derivative. Then 
+$$
+\zeta = \int_{\mathcal X} g(x) \d x = \int_{\mathcal X} f(x) \d \P(x) = \int_{\mathcal X} v(x)\d\Q(x)
+$$
+which suggests to estimate $\zeta$ by Monte-Carlo integration: $\hat \zeta = \frac 1 N \sum v(X_i)$ for independent $X_i \sim \Q$. 
+
+If one is not interested in a particular $g$ but rather in an approximation of $\P$ and $\P$ is absolutely continuous with respect to $\Q$, then one may view $\hat P_N = \frac{1}{N} \sum_{i = 1}^{N} w(X_i) \delta_{X_i}$ as a particle approximation of $\P$. In this setting \cite{Agapiou2017Importance} shows that the random measure $\hat P_N$ converges to $\P$ at rate $\mathcal O\left(\frac 1 N\right)$ in an appropriate metric. 
+
+To perform importance sampling one must be able to evaluate the weights $v$ or $w$. In a bayesian setting this is usually infeasible: if $\P$ is a posterior then the integration constant of its density is intractible. 
+When this is the case one can usually evaluate the weights up to a constant, i.e. $w(x) \propto_x \frac{\d \P}{\d \Q}(x)$ is available. The missing constant is then $\int w(x) \d \Q$ which is itself amenable to importance sampling.
+This leads to the self-normalized importance sampling weights $W_i = \frac{w(X_i)}{\sum_{i = 1}^N w(X_i)}$ and Monte Carlo estimates $\hat \zeta = \sum_{i = 1}^{N} W_i f(X_i)$ and particle approximation $\hat P_N = \sum_{i = 1}^{N} W_i \delta_{X_i}$.
+
+In both cases one can show that once second moments of $w$ with respect to $\Q$ exist the Monte-Carlo estimates are consistent and asymptotically normal at the usual rates, see \cite[Chapter 8]{Chopin2020Introduction}. 
+
+Importance sampling is useful in situations where simulation from $\P$ is not feasible or when Monte Carlo integration with respect to $\P$ is unattractive due to high variance estimates. 
