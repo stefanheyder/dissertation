@@ -1,0 +1,98 @@
+\chapter{Epidemiological considerations}
+\label{chap:epidemiological_considerations}
+
+\begin{itemize}
+    \item COVID-19 induced unprecedented interest in epidemiological modelling from all disciplines, but also mathematics
+    \item this chapter highlights challenges that epi modelling brings and what desirable outcomes would be from an applied perspective
+    \item mathematical epidemiology concerns itself with modelling epidemiolocial systems, from small (local outbreaks) to large (epi/pandemics)
+    \item conclusions from analysis only as good as the model and the data are
+    \item dependening on goal and circumstances different methods are applicable
+    \item by its nature, data are observational so causal claims difficult
+    \item in this thesis I focus on models for larger-scale epidemics, techniques would be flexible enough to deal with smaller scale as well, as long as latent states are gaussian
+\end{itemize}
+\section{Objectives of epidemiological modelling}
+
+\paragraph{Monitoring}
+\begin{itemize}
+    \item monitoring is real-time scenario, interested in current developments, i.e. recent past and near future. complicated by potentially slow reporting, data revisions
+    \item informs decision makers on whether measures should be taken
+    \item ForecastHub(s) provide platform that creates ensemble forecast to obtain better predictions \cite{Bracher2022National,Bracher2021Preregistered,Ray2020Ensemble,Sherratt2022Predictive}
+\end{itemize}
+\paragraph{Retrospective Analysis}
+\begin{itemize}
+    \item evaluation of measures taken, want interpretation as causal as possible
+    \item informs decision makes on which measures were effective and how much
+    \item difficult due to usual reasons: poor data quality, observational data, causual structure difficult, early/late adoption makes timing of measurements difficult
+    \item cite some papers that did this \cite{Flaxman2020Estimating,Brauner2021Inferring,Khazaei2023Using}
+\end{itemize}
+\paragraph{Scenario Modelling}
+
+\begin{itemize}
+    \item concerns itself with modelling the impact that variants, seasonality etc. have in specific scenarios 
+    \item find out whether there is already paper of ECDC to cite
+\end{itemize}
+
+\section{Available data and its quality}
+\label{sec:data}
+
+\begin{itemize}
+    \item surprising amount of data available, but quality questionable, 
+    \item in Germany have data on reported cases and deaths by gender, age group, county, with reporting date of case and for some cases even date of symptom onset
+    \item reporting of cases is regulated by Infektionsschutzgesetz
+    \item parallel dataset for reports of hospitalisations 
+    \item have description section from Nowcasting draft here
+    \item descriptive statistics of German COVID-19 data set
+    \item even larger datasets that compile this for europe + EFTA (?) by ECDC or by world (JHU)
+    \item quality of reported case data is potentially too low 
+    \begin{itemize}
+        \item reporting delays
+        \item weeakday effects
+        \item testing regime changing (2G/3G)
+        \item ...
+    \end{itemize}
+    \item data on commuting
+\end{itemize}
+
+\section{Measures of epidemic spread}
+\label{sec:measures_of_epidemic_spread}
+This section consists of the ideas published in \cite{Heyder2023Measures}, but has been rewritten to fit better into this thesis.
+
+\begin{itemize}
+    \item not only epidemic spread but also speed of proliferation is of interest, enables forecasts
+    \item measuring speed difficult: data problems ... (look at AK book article)
+    \item 
+\end{itemize}
+
+\subsection{Growth Factor}
+\label{subsec:growth_factor}
+\subsection{Reproduction number}
+\label{subsec:reproduction_number}
+
+\subsection{Other indicators}
+\label{subsec:other_indicat}
+
+\subsection{Usefulness of indicators}
+\label{subsec:usefulness_of_indicators}
+
+
+\section{Dessiderata for epidemiological models}
+\label{sec:dessiderata}
+
+\begin{itemize}
+    \item we want models to be able to include as much data as possible, while still being numerically tractable 
+\end{itemize}
+
+\paragraph{Regional dependencies and effects}
+\begin{itemize}
+    \item German case data are reported on Landkreis level, performing analysis of each individual is not sensible 
+    \item inhabitants travel between regions, and measures were taken on on regional level as well
+    \item effects are not really spatial: euclidean distance is not so much of an issue but how closely connected regions are (give some examples)
+    \item also want to account for other regional effects such as different socio-economic settings ... 
+\end{itemize}
+
+\paragraph{Temporal correlation}
+
+\paragraph{Interpretability}
+
+
+

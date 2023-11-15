@@ -9,10 +9,38 @@
   doi = {10.48550/arXiv.1511.06196},
   url = {http://arxiv.org/abs/1511.06196},
   urldate = {2023-04-03},
-  abstract = {The basic idea of importance sampling is to use independent samples from a proposal measure in order to approximate expectations with respect to a target measure. It is key to understand how many samples are required in order to guarantee accurate approximations. Intuitively, some notion of distance between the target and the proposal should determine the computational cost of the method. A major challenge is to quantify this distance in terms of parameters or statistics that are pertinent for the practitioner. The subject has attracted substantial interest from within a variety of communities. The objective of this paper is to overview and unify the resulting literature by creating an overarching framework. A general theory is presented, with a focus on the use of importance sampling in Bayesian inverse problems and filtering.},
-  pubstate = {preprint},
-  keywords = {Statistics - Computation},
-  file = {/home/stefan/Nextcloud/Literatur/Agapiou2017Importance.pdf;/home/stefan/Zotero/storage/6SRUQTQ9/1511.html}
+  pubstate = {preprint}
+}
+
+@article{Brauner2021Inferring,
+  title = {Inferring the Effectiveness of Government Interventions against {{COVID-19}}},
+  author = {Brauner, Jan M. and Mindermann, Sören and Sharma, Mrinank and Johnston, David and Salvatier, John and Gavenčiak, Tomáš and Stephenson, Anna B. and Leech, Gavin and Altman, George and Mikulik, Vladimir and Norman, Alexander John and Monrad, Joshua Teperowski and Besiroglu, Tamay and Ge, Hong and Hartwick, Meghan A. and Teh, Yee Whye and Chindelevitch, Leonid and Gal, Yarin and Kulveit, Jan},
+  date = {2021-02-19},
+  journaltitle = {Science},
+  volume = {371},
+  number = {6531},
+  pages = {eabd9338},
+  issn = {0036-8075, 1095-9203},
+  doi = {10.1126/science.abd9338},
+  url = {https://www.science.org/doi/10.1126/science.abd9338},
+  urldate = {2023-07-06},
+  langid = {english}
+}
+
+@article{Chan2011Comparison,
+  title = {A Comparison of Cross-Entropy and Variance Minimization Strategies},
+  author = {Chan, Joshua C. C. and Glynn, Peter W. and Kroese, Dirk P.},
+  date = {2011-08},
+  journaltitle = {Journal of Applied Probability},
+  volume = {48},
+  number = {A},
+  pages = {183--194},
+  publisher = {{Cambridge University Press}},
+  issn = {0021-9002, 1475-6072},
+  doi = {10.1239/jap/1318940464},
+  url = {https://www.cambridge.org/core/journals/journal-of-applied-probability/article/comparison-of-crossentropy-and-variance-minimization-strategies/DBDE37194527FB257C7A416B7ECF5A21},
+  urldate = {2023-09-27},
+  langid = {english}
 }
 
 @book{Chopin2020Introduction,
@@ -24,8 +52,52 @@
   location = {{Cham, Switzerland}},
   isbn = {978-3-030-47844-5},
   langid = {english},
-  pagetotal = {378},
-  file = {/home/stefan/Nextcloud/Literatur/Chopin2020Introduction.pdf}
+  pagetotal = {378}
+}
+
+@book{Durbin2012Time,
+  title = {Time Series Analysis by State Space Methods},
+  author = {Durbin, J. and Koopman, S. J.},
+  date = {2012},
+  series = {Oxford Statistical Science Series},
+  edition = {2nd ed},
+  number = {38},
+  publisher = {{Oxford University Press}},
+  location = {{Oxford}},
+  isbn = {978-0-19-964117-8},
+  pagetotal = {346}
+}
+
+@article{Flaxman2020Estimating,
+  title = {Estimating the Effects of Non-Pharmaceutical Interventions on {{COVID-19}} in {{Europe}}},
+  author = {Flaxman, Seth and Mishra, Swapnil and Gandy, Axel and Unwin, H. Juliette T. and Mellan, Thomas A. and Coupland, Helen and Whittaker, Charles and Zhu, Harrison and Berah, Tresnia and Eaton, Jeffrey W. and Monod, Mélodie and Ghani, Azra C. and Donnelly, Christl A. and Riley, Steven and Vollmer, Michaela A. C. and Ferguson, Neil M. and Okell, Lucy C. and Bhatt, Samir},
+  date = {2020-08},
+  journaltitle = {Nature},
+  volume = {584},
+  number = {7820},
+  eprint = {32512579},
+  eprinttype = {pmid},
+  pages = {257--261},
+  issn = {1476-4687},
+  doi = {10.1038/s41586-020-2405-7},
+  url = {https://www.nature.com/articles/s41586-020-2405-7},
+  urldate = {2020-08-28},
+  langid = {english}
+}
+
+@article{Khazaei2023Using,
+  title = {Using a {{Bayesian}} Hierarchical Approach to Study the Association between Non-Pharmaceutical Interventions and the Spread of {{Covid-19}} in {{Germany}}},
+  author = {Khazaei, Yeganeh and Küchenhoff, Helmut and Hoffmann, Sabine and Syliqi, Diella and Rehms, Raphael},
+  date = {2023-11-02},
+  journaltitle = {Sci Rep},
+  volume = {13},
+  number = {1},
+  pages = {18900},
+  issn = {2045-2322},
+  doi = {10.1038/s41598-023-45950-2},
+  url = {https://www.nature.com/articles/s41598-023-45950-2},
+  urldate = {2023-11-10},
+  langid = {english}
 }
 
 @article{Koopman2019Modified,
@@ -40,8 +112,33 @@
   doi = {10.1111/stan.12128},
   url = {https://onlinelibrary.wiley.com/doi/abs/10.1111/stan.12128},
   urldate = {2023-02-28},
-  abstract = {The construction of an importance density for partially non-Gaussian state space models is crucial when simulation methods are used for likelihood evaluation, signal extraction, and forecasting. The method of efficient importance sampling is successful in this respect, but we show that it can be implemented in a computationally more efficient manner using standard Kalman filter and smoothing methods. Efficient importance sampling is generally applicable for a wide range of models, but it is typically a custom-built procedure. For the class of partially non-Gaussian state space models, we present a general method for efficient importance sampling. Our novel method makes the efficient importance sampling methodology more accessible because it does not require the computation of a (possibly) complicated density kernel that needs to be tracked for each time period. The new method is illustrated for a stochastic volatility model with a Student's t distribution.},
-  langid = {english},
-  keywords = {efficient importance sampling,Kalman filter,Monte Carlo maximum likelihood,non-Gaussian dynamic models,simulation smoothing},
-  file = {/home/stefan/Nextcloud/Literatur/Koopman2019Modified.pdf}
+  langid = {english}
+}
+
+@article{Ray2020Ensemble,
+  title = {Ensemble {{Forecasts}} of {{Coronavirus Disease}} 2019 ({{COVID-19}}) in the {{U}}.{{S}}.},
+  author = {Ray, Evan L. and Wattanachit, Nutcha and Niemi, Jarad and Kanji, Abdul Hannan and House, Katie and Cramer, Estee Y. and Bracher, Johannes and Zheng, Andrew and Yamana, Teresa K. and Xiong, Xinyue and Woody, Spencer and Wang, Yuanjia and Wang, Lily and Walraven, Robert L. and Tomar, Vishal and Sherratt, Katherine and Sheldon, Daniel and Reiner, Robert C. and Prakash, B. Aditya and Osthus, Dave and Li, Michael Lingzhi and Lee, Elizabeth C. and Koyluoglu, Ugur and Keskinocak, Pinar and Gu, Youyang and Gu, Quanquan and George, Glover E. and España, Guido and Corsetti, Sabrina and Chhatwal, Jagpreet and Cavany, Sean and Biegel, Hannah and Ben-Nun, Michal and Walker, Jo and Slayton, Rachel and Lopez, Velma and Biggerstaff, Matthew and Johansson, Michael A. and Reich, Nicholas G. and Consortium, COVID-19 Forecast Hub},
+  date = {2020-08-22},
+  journaltitle = {medRxiv},
+  pages = {2020.08.19.20177493},
+  publisher = {{Cold Spring Harbor Laboratory Press}},
+  doi = {10.1101/2020.08.19.20177493},
+  url = {https://www.medrxiv.org/content/10.1101/2020.08.19.20177493v1},
+  urldate = {2020-09-02},
+  langid = {english}
+}
+
+@article{Richard2007Efficient,
+  title = {Efficient High-Dimensional Importance Sampling},
+  author = {Richard, Jean-Francois and Zhang, Wei},
+  date = {2007-12-01},
+  journaltitle = {Journal of Econometrics},
+  volume = {141},
+  number = {2},
+  pages = {1385--1411},
+  issn = {0304-4076},
+  doi = {10.1016/j.jeconom.2007.02.007},
+  url = {https://www.sciencedirect.com/science/article/pii/S0304407607000486},
+  urldate = {2022-11-23},
+  langid = {english}
 }
