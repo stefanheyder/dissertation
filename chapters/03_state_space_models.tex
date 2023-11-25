@@ -53,20 +53,21 @@ Most models that I consider in this thesis will admit densities for the state tr
     When densities stem from a parametric model parametrized by $\theta \in \Theta \subseteq \mathbf{R}^{k}$ and the dependence of the model on $\theta$ is of interest, i.e. because we try to estimate $\theta$, we indicate this by adding a subscript to the densities.
     If the dependence is not of interest, e.g. because $\theta$ is fixed, I will usually omit $\theta$ for better readability.
 
-    In this notation the joint density of a parametric state space model factorizes as
+    In this notation, the joint density of a parametric state space model factorizes as
     \begin{align*}
         p_\theta(x,y) &= p_\theta(x_0, \dots, x_{n - 1}, y_0, \dots, y_{n - 1}) \\
         &= p_\theta (x_0)\prod_{t = 1}^{n - 1} p_\theta(x_{t}|x_{t - 1}) \prod_{t = 0}^{n - 1} p_\theta(y_t | x_t, y_{t - 1}),
     \end{align*}
-    where $p_\theta(y_0|x_0, y_{-1}) = p_\theta(y_0, x_0)$. 
+    where $p_\theta(y_0|x_0, y_{-1}) = p_\theta(y_0, x_0)$.
 
+    As inferences we make in this thesis depend on the state space model only through the likelihood we identify almost sure versions of $(X, Y)$ with itself, i.e. all equations involving $X$ or $Y$ are understood almost surely.
 \end{notation}
 
-Given data $(y_t)_{t = 0, \dots, n - 1}$ that may be modeled with a state space model the practitioner is confronted with several tasks, which provides the structure of this chapter:
+Given data $(y_t)_{t = 0, \dots, n - 1}$ that may be modeled with a state space model the practitioner is confronted with several tasks, which provide the structure of this chapter:
 
 \begin{enumerate}
     \item\label{it:model_choice} Choosing a suitable, usually parametric, class of state space models that include the effects of interest.
-    \item\label{it:model_fitting} Fitting such a parametric model to the data at hand by either frequentist or bayesian techniques.
+    \item\label{it:model_fitting} Fitting such a parametric model to the data at hand by either frequentist or Bayesian techniques.
     \item\label{it:smoothing_problem} Infer about the latent states $X$ from the observations $Y$ by determining, either analytically or through simulation, the smoothing distribution $X|Y$.
 \end{enumerate}
 
@@ -89,8 +90,8 @@ which is usually not analytically available.
 Direct numerical evaluation of \Cref{eq:likelihood} is hopeless due to the high dimensionality of the state space $\mathcal X^n$. 
 Instead we will resort to simulation based inference by importance sampling (see \Cref{sec:importance_sampling}), an alternative would be particle filters \cite{Chopin2020Introduction}.
 
-The performance of these simulations depends crucially on constructing distributions that are close to the posterior $p(x|y)$ but are easy to sample from. To this end we construct suitable Gaussian state space models (\Cref{sec:gaussian_importance_sampling_for_state_space_models}) in which sampling from the posterior is analytically possible. 
-This will be a good strategy if the target posterior $p(x|y)$ can be well approximated by a Gaussian distribution --- otherwise we may want to account for multiple modes by considering mixtures of Gaussian state space models or account for heavy tails with t-distributed errors (\Cref{sec:accouting_for_multimodality_and_heavy_tails}). 
+The performance of these simulations depends crucially on constructing distributions that are close to the posterior $p(x|y)$ but are easy to sample from. To this end, we construct suitable Gaussian state space models (\Cref{sec:gaussian_importance_sampling_for_state_space_models}) in which sampling from the posterior is analytically possible. 
+This will be a good strategy if the target posterior $p(x|y)$ can be well approximated by a Gaussian distribution --- otherwise, we may want to account for multiple modes by considering mixtures of Gaussian state space models or account for heavy tails with t-distributed errors (\Cref{sec:accouting_for_multimodality_and_heavy_tails}). 
 
 \section{Modelling epidemiological dessiderata with state space models}
 \label{sec:modelling_epidemiological_dessiderata_with_state_space_models}
@@ -108,6 +109,77 @@ This will be a good strategy if the target posterior $p(x|y)$ can be well approx
     \item $Y_{t + 1}$ may also depend on $Y_{t}$ as we will target the conditional distribution anyways
 \end{itemize}
 
+\acrfull{glssm} are the working horses of most methods used in this thesis because they are analytically tractable and computationally efficient. Indeed for fixed dimension of states $m$ and observations $p$ the runtime of algorithms that we consider in this thesis is $\mathcal O(n)$.
+
+\begin{definition}[\acrfull{glssm}]
+    A \acrshort{glssm} is a state space model where states obey the transition equation
+    \begin{align}
+    \label{eq:glssm_states}
+        X_{t + 1} &= A_{t}X_{t} + u_{t} \varepsilon_{t + 1} && t = 0, \dots, n - 1,
+    \end{align}
+    and observations obey the observation equation
+    \begin{align}
+        \label{eq:glssm_observations}
+        Y_{t} &= B_{t}X_{t} + v_{t} + \eta_{t} && t = 0, \dots, n.
+    \end{align}
+    Here $A_{t} \in \mathbf{R}^{m \times m}$ and $B_{t} \in \mathbf{R}^{p \times m}$ are matrices the specify the systems dynamics. The \textbf{innovations} $\varepsilon_{t + 1}$ and \textbf{measurement noise} $\eta_{t}$ are independent from one another and from the starting value $X_{0} \mathcal N (\E X_{0}, \Sigma_{0})$. 
+
+    Furthermore, $\varepsilon_{t+1} \sim \mathcal N(0, \Sigma_{t})$ and $\eta_{t}\sim \mathcal N(0, \Omega)$ are centered Gaussian random variables and $u_{t + 1}, t = 1, \dots, n-1$, $v_{t}, t = 0, \dots, n$ are deterministic biases.
+\end{definition}
+
+The defining feature of a \acrshort{glssm} is that its joint distribution is Gaussian.
+
+\begin{lemma}
+    A state space model can be written as a \acrshort{glssm} if and only if its joint distribution is Gaussian.
+\end{lemma}
+\begin{proof}
+    \todo{technicailty: distringuish between a.s. version}
+\end{proof}
+
+As the joint distribution of $(X, Y)$ is Gaussian, so are conditional distributions of states given observations. Two such distributions are of interest: the \textbf{filtering distribution} is the conditional distribution of $X_{t}$ given all observations until time $t$, that is $Y_{0:t}$. When $t < n$ this is distinct from the \textbf{smoothing distribution}, i.e. the distribution of $X_{t}$ given all observations $Y$. 
+\todo{Note that the filtering distributions does not specify a valid joint distribution for the states, but the smoothing does.}
+
+Both distributions may be obtained efficiently using the celebrated Kalman filter and smoother algorithms \todo{cite correclty}. 
+
+\begin{algorithm}
+    \caption{Kalman filter}
+    \KwIn{observations $y = (y_{0}, \dots, y_{n})$, \acrshort{glssm}}
+    \KwOut{filtered expectations $\hat X_{t|t}$, covariance matrices $\Xi_{t|t}$, likelihood $p(y)$}
+    \emph{Initialization}\;
+    $\hat y_{0|-1} = B_{0}\hat x_{0|-1} + v_{t}$\;
+    $\Psi_{0|-1} = B_{0} \Sigma_{0}B_{0}^{T} + \Omega_{0}$\;
+    \emph{Prediction}\;
+    \emph{Filter}\;
+\end{algorithm}
+
+\begin{algorithm}
+    \caption{Kalman smoother}
+    \KwIn{observations $y = (y_{0}, \dots, y_{n})$, \acrshort{glssm}}
+    \KwOut{filtered expectations $\hat X_{t|t}$ and covariance matrices $\Xi_{t|t}$}
+    \emph{Initialization}\;
+    $\hat y_{0|-1} = B_{0}\hat x_{0|-1} + v_{t}$\;
+    $\Psi_{0|-1} = B_{0} \Sigma_{0}B_{0}^{T} + \Omega_{0}$\;
+    \emph{Prediction}\;
+    \emph{Filter}\;
+\end{algorithm}
+
+Notice that the Kalman filter calculates the likelihood $p(y)$ while filtering --- this is possible because of the dependency structure of the state space model --- this makes inference via maximum likelihood possible in \acrshort{glssm}s.
+
+To ensure numerical stability in these algorithms, the square root filter and smoother \cite{Morf1975Squareroot} may be used, see also \cite{Schneider1986Kalmanfilter} for an accessible introduction to it and other variants.
+
+The Kalman smoother computes the marginal distributions $X_{t} | Y$ for $t = 0, \dots, n-1$ and, owing to the Markov structure of the states, these are enough to specify the joint distribution $X|Y$, allowing to simulate from it.
+
+\begin{algorithm}
+    \caption{Forwards filter, backwards smoother \cite[Proposition 1]{Fruhwirth-Schnatter1994Data}}
+    \KwIn{TODO}
+    \KwOut{TODO}
+    \emph{Something}\;
+\end{algorithm}
+
+The modeling capacity of \acrshort{glssm} is, however, limited: most interesting phenomena follow neither linear dynamics nor are well modeled by a Gaussian distribution.
+Nevertheless, linearization of non-linear dynamics suggests that \acrshort{glssm}s may have some use as approximations to these more complicated phenomena, provided they are sufficiently close to Gaussian models, e.g. unimodal and without heavy tails. 
+We start to move away from linear Gaussian models by allowing observations that are non-Gaussian.
+
 \section{Logconcave Gaussian state space models}
 \label{sec:logconcave_gaussian_state_space_models}
 
@@ -118,6 +190,9 @@ This will be a good strategy if the target posterior $p(x|y)$ can be well approx
     \item Laplace approximation sensible for these types of models: single mode
     \item special case: exponential family distributions
 \end{itemize}
+
+The distribution of observations is never Gaussian - all statisticians may hope for is that the data-generating mechanism is close enough to a Gaussian distribution that inferences made carry over. 
+For epidemiological models, Gaussian distributions may be appropriate if incidences are high, e.g. during large outbreaks in a whole country.
 
 \section{Importance Sampling}
 \label{sec:importance_sampling}
@@ -144,6 +219,22 @@ This leads to the self-normalized importance sampling weights $W_i = \frac{w(X_i
 In both cases one can show that once second moments of $w$ with respect to $\G$ exist the Monte-Carlo estimates are consistent and asymptotically normal at the usual rates, see \cite[Chapter 8]{Chopin2020Introduction}. 
 
 Importance sampling is useful in situations where simulation from $\P$ is not feasible or when Monte Carlo integration with respect to $\P$ is unattractive due to high variance estimates. 
+
+\todo{decide where to put this}
+As the likelihood of a general state space model is neither analytically nor numerically tractable one has to resort to Monte-Carlo techniques.
+Recall that the likelihood is a high-dimensional integral of the form
+\begin{align*}
+    \lik(\theta) = p_\theta(y) = \int p_\theta(y,x) \d x = \int p_\theta(y|x) p_\theta(x) \d x = \E p_\theta(y|X).
+\end{align*}
+By the standard law of large numbers we can approximate $\lik(\theta)$ by 
+\begin{align*}
+  \hat\lik(\theta) = \frac 1 N \sum_{i=1}^N p_\theta(y|X^i)  
+\end{align*}
+for $N\in\N$ samples $X^i \iid p(x)$. 
+However, the variance of $\hat\lik(\theta)$ is likely to be very high if samples $X^i$ are drawn from the prior distribution $p(x)$ as they are not informed by the observations $y$. 
+As $p_\theta(x|y) \propto p_\theta(x,y)$ a more promising approach would be to use samples $X^i \sim p_\theta(x|y)$, but this distribution is usually not available. 
+
+While bayesian computational approaches such as MCMC\todo{cite} are able to generate (approximate) samples from this posterior distribution, importance sampling tries to find a distribution close to the target and re-weighs samples to ensure unbiased estimates of $\lik(\theta)$.
 
 \begin{itemize}
     \item importance sampling as a variance reduction technique
@@ -173,20 +264,32 @@ Importance sampling is useful in situations where simulation from $\P$ is not fe
 \section{Gaussian importance sampling for state space models}
 \label{sec:gaussian_importance_sampling_for_state_space_models}
 
-As the likelihood of a general state space model is neither analytically nor numerically tractable one has to resort to Monte-Carlo techniques.
-Recall that the likelihood is a high-dimensional integral of the form
-\begin{align*}
-    \lik(\theta) = p_\theta(y) = \int p_\theta(y,x) \d x = \int p_\theta(y|x) p_\theta(x) \d x = \E p_\theta(y|X).
-\end{align*}
-By the standard law of large numbers we can approximate $\lik(\theta)$ by 
-\begin{align*}
-  \hat\lik(\theta) = \frac 1 N \sum_{i=1}^N p_\theta(y|X^i)  
-\end{align*}
-for $N\in\N$ samples $X^i \iid p(x)$. 
-However, the variance of $\hat\lik(\theta)$ is likely to be very high if samples $X^i$ are drawn from the prior distribution $p(x)$ as they are not informed by the observations $y$. 
-As $p_\theta(x|y) \propto p_\theta(x,y)$ a more promising approach would be to use samples $X^i \sim p_\theta(x|y)$, but this distribution is usually not available. 
+Most models in this thesis can be viewed as an inverse problem of the form
 
-While bayesian computational approaches such as MCMC\todo{cite} are able to generate (approximate) samples from this posterior distribution, importance sampling tries to find a distribution close to the target and re-weighs samples to ensure unbiased estimates of $\lik(\theta)$.
+\begin{align*}
+\mathbf{R}^{n\cdot m} \ni X &\sim \mathcal N(\mu, \Sigma)\\
+Y|X \sim Y|BX \sim \the smathcal p(y|s)
+\end{align*}
+and the state space formulation allows for efficient computation of, e.g., $p(y|x)$.
+To perform importance sampling for the smoothing distribution $p(x|y)$ we want to have approximations that are close, but also depend on few parameters, ideally only $\mathcal O(n)$ many. 
+
+\todo{paragraph about laplace approximation for the posterior}
+
+In total we want to perform importance sampling with proposal distributions $g(x|z)$ given by Gaussian linear models of the form
+
+\begin{align*}
+    X &\sim \mathcal N(\mu, \Sigma) \\
+    Z &= BX + \eta \\
+    \eta \sim \mathcal N(0, \Omega).
+\end{align*}
+The dependency structure of the state space model implies that $\Omega$ should be a blockdiagonal matrix with at most $n \cdot m^{2}$ many non-zero entries.
+If, additionally, the observations $y_{t}$ are conditionally independent given $x_{t}$, i.e. if $p(y_{t}|s_{t}) &= \prod_{i = 1}^{p} p(y_{t}^{i}|s_{t}^i)$, then $\Omega$ is a diagonal matrix with only $\mathcal O(n \dot m)$ many non-zero entries. 
+
+The proposal distribution $g(x|z)$ is then parameterized by the synthetic observations $z$ and the entries of $\Omega$ and we denote this set of parameters by $\psi = (z, \Omega)$.
+
+The Laplace approximation chooses $\psi_{\text{LA}}$ such that the mode of $g(x|z)$ and the curvature at the mode match that of the true posterior, while the CE-method and EIS choose $\psi_{\text{CE}}$ and $\psi_{\text{EIS}}$ the solutions to associated optimization problems.
+
+This means that we can treat all three methods in the same framework, facilitating comparison between the resulting three importance sampling proposals.
 
 \section{Accouting for multimodality and heavy tails}
 \label{sec:accouting_for_multimodality_and_heavy_tails}
