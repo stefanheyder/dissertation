@@ -109,10 +109,10 @@ This will be a good strategy if the target posterior $p(x|y)$ can be well approx
     \item $Y_{t + 1}$ may also depend on $Y_{t}$ as we will target the conditional distribution anyways
 \end{itemize}
 
-\acrfull{glssm} are the working horses of most methods used in this thesis because they are analytically tractable and computationally efficient. Indeed for fixed dimension of states $m$ and observations $p$ the runtime of algorithms that we consider in this thesis is $\mathcal O(n)$.
+\gls{glssm} are the working horses of most methods used in this thesis because they are analytically tractable and computationally efficient. Indeed for fixed dimension of states $m$ and observations $p$ the runtime of algorithms that we consider in this thesis is $\mathcal O(n)$.
 
-\begin{definition}[\acrfull{glssm}]
-    A \acrshort{glssm} is a state space model where states obey the transition equation
+\begin{definition}[\gls{glssm}]
+    A \gls{glssm} is a state space model where states obey the transition equation
     \begin{align}
         \label{eq:glssm_states}
         X_{t + 1} & = A_{t}X_{t} + u_{t} \varepsilon_{t + 1} &  & t = 0, \dots, n - 1,
@@ -127,10 +127,10 @@ This will be a good strategy if the target posterior $p(x|y)$ can be well approx
     Furthermore, $\varepsilon_{t+1} \sim \mathcal N(0, \Sigma_{t})$ and $\eta_{t}\sim \mathcal N(0, \Omega)$ are centered Gaussian random variables and $u_{t + 1}, t = 1, \dots, n-1$, $v_{t}, t = 0, \dots, n$ are deterministic biases.
 \end{definition}
 
-The defining feature of a \acrshort{glssm} is that its joint distribution is Gaussian.
+The defining feature of a \gls{glssm} is that its joint distribution is Gaussian.
 
 \begin{lemma}
-    A state space model can be written as a \acrshort{glssm} if and only if its joint distribution is Gaussian.
+    A state space model can be written as a \gls{glssm} if and only if its joint distribution is Gaussian.
 \end{lemma}
 \begin{proof}
     \todo{technicailty: distringuish between a.s. version}
@@ -143,7 +143,7 @@ Both distributions may be obtained efficiently using the celebrated Kalman filte
 
 \begin{algorithm}
     \caption{Kalman filter}
-    \KwIn{observations $y = (y_{0}, \dots, y_{n})$, \acrshort{glssm}}
+    \KwIn{observations $y = (y_{0}, \dots, y_{n})$, \gls{glssm}}
     \KwOut{filtered expectations $\hat X_{t|t}$, covariance matrices $\Xi_{t|t}$, likelihood $p(y)$}
     \emph{Initialization}\;
     $\hat y_{0|-1} = B_{0}\hat x_{0|-1} + v_{t}$\;
@@ -154,7 +154,7 @@ Both distributions may be obtained efficiently using the celebrated Kalman filte
 
 \begin{algorithm}
     \caption{Kalman smoother}
-    \KwIn{observations $y = (y_{0}, \dots, y_{n})$, \acrshort{glssm}}
+    \KwIn{observations $y = (y_{0}, \dots, y_{n})$, \gls{glssm}}
     \KwOut{filtered expectations $\hat X_{t|t}$ and covariance matrices $\Xi_{t|t}$}
     \emph{Initialization}\;
     $\hat y_{0|-1} = B_{0}\hat x_{0|-1} + v_{t}$\;
@@ -163,7 +163,7 @@ Both distributions may be obtained efficiently using the celebrated Kalman filte
     \emph{Filter}\;
 \end{algorithm}
 
-Notice that the Kalman filter calculates the likelihood $p(y)$ while filtering --- this is possible because of the dependency structure of the state space model --- this makes inference via maximum likelihood possible in \acrshort{glssm}s.
+Notice that the Kalman filter calculates the likelihood $p(y)$ while filtering --- this is possible because of the dependency structure of the state space model --- this makes inference via maximum likelihood possible in \gls{glssm}s.
 
 To ensure numerical stability in these algorithms, the square root filter and smoother \cite{Morf1975Squareroot} may be used, see also \cite{Schneider1986Kalmanfilter} for an accessible introduction to it and other variants.
 
@@ -176,8 +176,8 @@ The Kalman smoother computes the marginal distributions $X_{t} | Y$ for $t = 0, 
     \emph{Something}\;
 \end{algorithm}
 
-The modeling capacity of \acrshort{glssm} is, however, limited: most interesting phenomena follow neither linear dynamics nor are well modeled by a Gaussian distribution.
-Nevertheless, linearization of non-linear dynamics suggests that \acrshort{glssm}s may have some use as approximations to these more complicated phenomena, provided they are sufficiently close to Gaussian models, e.g. unimodal and without heavy tails.
+The modeling capacity of \gls{glssm} is, however, limited: most interesting phenomena follow neither linear dynamics nor are well modeled by a Gaussian distribution.
+Nevertheless, linearization of non-linear dynamics suggests that  \gls{glssm}s may have some use as approximations to these more complicated phenomena, provided they are sufficiently close to Gaussian models, e.g. unimodal and without heavy tails.
 We start to move away from linear Gaussian models by allowing observations that are non-Gaussian.
 
 \section{Logconcave Gaussian state space models}
@@ -283,7 +283,7 @@ In total we want to perform importance sampling with proposal distributions $g(x
     \eta & \sim \mathcal N(0, \Omega).
 \end{align*}
 The dependency structure of the state space model implies that $\Omega$ should be a blockdiagonal matrix with at most $n \cdot m^{2}$ many non-zero entries.
-If, additionally, the observations $y_{t}$ are conditionally independent given $x_{t}$, i.e. if $p(y_{t}|s_{t}) = \prod_{i = 1}^{p} p(y_{t}^{i}|s_{t}^i)$, then $\Omega$ is a diagonal matrix with only $\mathcal O(n \dot m)$ many non-zero entries.
+If, additionally, the observations $y_{t}$ are conditionally independent given $x_{t}$, i.e. if $p(y_{t}|s_{t}) = \prod_{i = 1}^{p} p(y_{t}^{i}|s_{t}^i)$, then $\Omega$ is a diagonal matrix with only $\mathcal O(n \cdot m)$ many non-zero entries.
 
 The proposal distribution $g(x|z)$ is then parameterized by the synthetic observations $z$ and the entries of $\Omega$ and we denote this set of parameters by $\psi = (z, \Omega)$.
 The following results on this distribution will be useful when analysing Gaussian importance sampling.
