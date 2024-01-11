@@ -9,24 +9,24 @@
 % comment out to render only selection of document
 \renewcommand\includeonly[1]{}%
 \includeonly{%
-frontmatter/titlepage.tex,%
-frontmatter/abstract.tex,%
-frontmatter/contribution.tex,%
-frontmatter/acknowledgments.tex,%
-frontmatter/table_of_contents.tex,%
+frontmatter/titlepage,%
+frontmatter/abstract,%
+frontmatter/contribution,%
+frontmatter/acknowledgments,%
+frontmatter/table_of_contents,%
 %
-%chapters/01_introduction.tex,%
-%chapters/02_epidemiology.tex,%
-chapters/03_state_space_models.tex,%
-%chapters/04_epidemiological_ssms.tex,%
-%chapters/05_discussion.tex,%
-%chapters/06_conclusion.tex,%
+%chapters/01_introduction,%
+%chapters/02_epidemiology,%
+chapters/03_state_space_models,%
+%chapters/04_epidemiological_ssms,%
+%chapters/05_discussion,%
+%chapters/06_conclusion,%
 %
-%chapters/AA_appendix.tex,%
+%chapters/AA_appendix,%
 %
-backmatter/bibliography.tex,%
-backmatter/glossary.tex,%
-backmatter/declaration.tex,%
+backmatter/bibliography,%
+backmatter/glossary,%
+backmatter/declaration,%
 }
 
 \addbibresource{bibliography.bib}
@@ -39,27 +39,27 @@ backmatter/declaration.tex,%
 %\pagestyle{plain}
 \frontmatter
 
-\include{frontmatter/titlepage.tex}
-\include{frontmatter/abstract.tex}
-\include{frontmatter/contribution.tex}
-\include{frontmatter/acknowledgments.tex}
-\include{frontmatter/table_of_contents.tex}
+\include{frontmatter/titlepage}
+\include{frontmatter/abstract}
+\include{frontmatter/contribution}
+\include{frontmatter/acknowledgments}
+\include{frontmatter/table_of_contents}
 
 %\pagestyle{scrheadings}
 %\pagenumbering{arabic}
 \mainmatter
-\include{chapters/01_introduction.tex}
-\include{chapters/02_epidemiology.tex}
-\include{chapters/03_state_space_models.tex}
-\include{chapters/04_epidemiological_ssms.tex}
-\include{chapters/05_discussion.tex}
-\include{chapters/06_conclusion.tex}
+\include{chapters/01_introduction}
+\include{chapters/02_epidemiology}
+\include{chapters/03_state_space_models}
+\include{chapters/04_epidemiological_ssms}
+\include{chapters/05_discussion}
+\include{chapters/06_conclusion}
 
 \appendix
-\include{chapters/AA_appendix.tex}
+\include{chapters/AA_appendix}
 
-\include{backmatter/bibliography.tex}
-\include{backmatter/glossary.tex}
-\include{backmatter/declaration.tex}
+\include{backmatter/bibliography}
+\include{backmatter/glossary}
+\include{backmatter/declaration}
 
 \end{document}

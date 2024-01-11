@@ -192,7 +192,31 @@ We start to move away from linear Gaussian models by allowing observations that 
 \end{itemize}
 
 The distribution of observations is never Gaussian - all statisticians may hope for is that the data-generating mechanism is close enough to a Gaussian distribution that inferences made carry over.
-For epidemiological models, Gaussian distributions may be appropriate if incidences are high, e.g. during large outbreaks in a whole country.
+For epidemiological models, Gaussian distributions are appropriate if incidences are high, e.g. during large outbreaks in a whole country. 
+The discrete nature of incidences is then better captured by a distribution on $\mathbf N_{0}$, and standard distributions used are the Poisson and negative binomial distributions, see \todo{auto/cref?}.
+
+Both the Poisson and negative binomial belong to the class of exponential family distributions, as such they have many desirable properties. 
+
+\begin{definition}[Exponential family]
+    
+\end{definition}
+
+\begin{definition}[Curved exponential family]
+
+\end{definition}
+    
+\begin{lemma}[Log-concavity of exponential family distributions]
+    
+\end{lemma}
+
+
+
+\todo{this paragraph to modelling chapter}
+The Poisson distribution arises from the law of small numbers: if there is a large population where every individual has, independently, a small probability of becoming infected in a small window of time then the total number of infections in that window of time is well approximated by the Poisson distribution.
+Indeed, the law of small numbers remains valid for small dependencies \cite{Ross2011Fundamentalsa,Arratia1990Poisson}.
+However, incidences observed from the SARS-CoV-2 epidemic tend to follow a negative binomial distribution \cite{Chan2021Count}. 
+
+
 
 \section{Importance Sampling}
 \label{sec:importance_sampling}
