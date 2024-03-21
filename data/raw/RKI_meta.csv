@@ -1,0 +1,413 @@
+IdBundesland,Bundesland,IdLandkreis,Landkreis
+1,Schleswig-Holstein,01001,SK Flensburg
+1,Schleswig-Holstein,01002,SK Kiel
+1,Schleswig-Holstein,01003,SK Lübeck
+1,Schleswig-Holstein,01004,SK Neumünster
+1,Schleswig-Holstein,01051,LK Dithmarschen
+1,Schleswig-Holstein,01053,LK Herzogtum Lauenburg
+1,Schleswig-Holstein,01054,LK Nordfriesland
+1,Schleswig-Holstein,01055,LK Ostholstein
+1,Schleswig-Holstein,01056,LK Pinneberg
+1,Schleswig-Holstein,01057,LK Plön
+1,Schleswig-Holstein,01058,LK Rendsburg-Eckernförde
+1,Schleswig-Holstein,01059,LK Schleswig-Flensburg
+1,Schleswig-Holstein,01060,LK Segeberg
+1,Schleswig-Holstein,01061,LK Steinburg
+1,Schleswig-Holstein,01062,LK Stormarn
+2,Hamburg,02000,SK Hamburg
+3,Niedersachsen,03101,SK Braunschweig
+3,Niedersachsen,03102,SK Salzgitter
+3,Niedersachsen,03103,SK Wolfsburg
+3,Niedersachsen,03151,LK Gifhorn
+3,Niedersachsen,03153,LK Goslar
+3,Niedersachsen,03154,LK Helmstedt
+3,Niedersachsen,03157,LK Peine
+3,Niedersachsen,03155,LK Northeim
+3,Niedersachsen,03158,LK Wolfenbüttel
+3,Niedersachsen,03159,LK Göttingen
+3,Niedersachsen,03241,Region Hannover
+3,Niedersachsen,03251,LK Diepholz
+3,Niedersachsen,03252,LK Hameln-Pyrmont
+3,Niedersachsen,03254,LK Hildesheim
+3,Niedersachsen,03255,LK Holzminden
+3,Niedersachsen,03256,LK Nienburg (Weser)
+3,Niedersachsen,03257,LK Schaumburg
+3,Niedersachsen,03351,LK Celle
+3,Niedersachsen,03352,LK Cuxhaven
+3,Niedersachsen,03353,LK Harburg
+3,Niedersachsen,03354,LK Lüchow-Dannenberg
+3,Niedersachsen,03355,LK Lüneburg
+3,Niedersachsen,03356,LK Osterholz
+3,Niedersachsen,03357,LK Rotenburg (Wümme)
+3,Niedersachsen,03358,LK Heidekreis
+3,Niedersachsen,03359,LK Stade
+3,Niedersachsen,03360,LK Uelzen
+3,Niedersachsen,03361,LK Verden
+3,Niedersachsen,03401,SK Delmenhorst
+3,Niedersachsen,03403,SK Oldenburg
+3,Niedersachsen,03402,SK Emden
+3,Niedersachsen,03404,SK Osnabrück
+3,Niedersachsen,03405,SK Wilhelmshaven
+3,Niedersachsen,03451,LK Ammerland
+3,Niedersachsen,03452,LK Aurich
+3,Niedersachsen,03453,LK Cloppenburg
+3,Niedersachsen,03454,LK Emsland
+3,Niedersachsen,03455,LK Friesland
+3,Niedersachsen,03456,LK Grafschaft Bentheim
+3,Niedersachsen,03457,LK Leer
+3,Niedersachsen,03458,LK Oldenburg
+3,Niedersachsen,03459,LK Osnabrück
+3,Niedersachsen,03460,LK Vechta
+3,Niedersachsen,03461,LK Wesermarsch
+3,Niedersachsen,03462,LK Wittmund
+4,Bremen,04011,SK Bremen
+4,Bremen,04012,SK Bremerhaven
+5,Nordrhein-Westfalen,05111,SK Düsseldorf
+5,Nordrhein-Westfalen,05112,SK Duisburg
+5,Nordrhein-Westfalen,05113,SK Essen
+5,Nordrhein-Westfalen,05114,SK Krefeld
+5,Nordrhein-Westfalen,05116,SK Mönchengladbach
+5,Nordrhein-Westfalen,05117,SK Mülheim a.d.Ruhr
+5,Nordrhein-Westfalen,05119,SK Oberhausen
+5,Nordrhein-Westfalen,05120,SK Remscheid
+5,Nordrhein-Westfalen,05122,SK Solingen
+5,Nordrhein-Westfalen,05124,SK Wuppertal
+5,Nordrhein-Westfalen,05154,LK Kleve
+5,Nordrhein-Westfalen,05158,LK Mettmann
+5,Nordrhein-Westfalen,05162,LK Rhein-Kreis Neuss
+5,Nordrhein-Westfalen,05166,LK Viersen
+5,Nordrhein-Westfalen,05170,LK Wesel
+5,Nordrhein-Westfalen,05314,SK Bonn
+5,Nordrhein-Westfalen,05315,SK Köln
+5,Nordrhein-Westfalen,05316,SK Leverkusen
+5,Nordrhein-Westfalen,05334,StadtRegion Aachen
+5,Nordrhein-Westfalen,05358,LK Düren
+5,Nordrhein-Westfalen,05362,LK Rhein-Erft-Kreis
+5,Nordrhein-Westfalen,05366,LK Euskirchen
+5,Nordrhein-Westfalen,05370,LK Heinsberg
+5,Nordrhein-Westfalen,05374,LK Oberbergischer Kreis
+5,Nordrhein-Westfalen,05378,LK Rheinisch-Bergischer Kreis
+5,Nordrhein-Westfalen,05382,LK Rhein-Sieg-Kreis
+5,Nordrhein-Westfalen,05512,SK Bottrop
+5,Nordrhein-Westfalen,05513,SK Gelsenkirchen
+5,Nordrhein-Westfalen,05515,SK Münster
+5,Nordrhein-Westfalen,05554,LK Borken
+5,Nordrhein-Westfalen,05558,LK Coesfeld
+5,Nordrhein-Westfalen,05562,LK Recklinghausen
+5,Nordrhein-Westfalen,05566,LK Steinfurt
+5,Nordrhein-Westfalen,05570,LK Warendorf
+5,Nordrhein-Westfalen,05711,SK Bielefeld
+5,Nordrhein-Westfalen,05754,LK Gütersloh
+5,Nordrhein-Westfalen,05758,LK Herford
+5,Nordrhein-Westfalen,05762,LK Höxter
+5,Nordrhein-Westfalen,05766,LK Lippe
+5,Nordrhein-Westfalen,05770,LK Minden-Lübbecke
+5,Nordrhein-Westfalen,05774,LK Paderborn
+5,Nordrhein-Westfalen,05911,SK Bochum
+5,Nordrhein-Westfalen,05913,SK Dortmund
+5,Nordrhein-Westfalen,05914,SK Hagen
+5,Nordrhein-Westfalen,05915,SK Hamm
+5,Nordrhein-Westfalen,05916,SK Herne
+5,Nordrhein-Westfalen,05954,LK Ennepe-Ruhr-Kreis
+5,Nordrhein-Westfalen,05958,LK Hochsauerlandkreis
+5,Nordrhein-Westfalen,05962,LK Märkischer Kreis
+5,Nordrhein-Westfalen,05966,LK Olpe
+5,Nordrhein-Westfalen,05970,LK Siegen-Wittgenstein
+5,Nordrhein-Westfalen,05974,LK Soest
+5,Nordrhein-Westfalen,05978,LK Unna
+6,Hessen,06411,SK Darmstadt
+6,Hessen,06412,SK Frankfurt am Main
+6,Hessen,06413,SK Offenbach
+6,Hessen,06414,SK Wiesbaden
+6,Hessen,06431,LK Bergstraße
+6,Hessen,06432,LK Darmstadt-Dieburg
+6,Hessen,06433,LK Groß-Gerau
+6,Hessen,06434,LK Hochtaunuskreis
+6,Hessen,06435,LK Main-Kinzig-Kreis
+6,Hessen,06436,LK Main-Taunus-Kreis
+6,Hessen,06437,LK Odenwaldkreis
+6,Hessen,06438,LK Offenbach
+6,Hessen,06439,LK Rheingau-Taunus-Kreis
+6,Hessen,06440,LK Wetteraukreis
+6,Hessen,06531,LK Gießen
+6,Hessen,06532,LK Lahn-Dill-Kreis
+6,Hessen,06533,LK Limburg-Weilburg
+6,Hessen,06534,LK Marburg-Biedenkopf
+6,Hessen,06535,LK Vogelsbergkreis
+6,Hessen,06611,SK Kassel
+6,Hessen,06631,LK Fulda
+6,Hessen,06632,LK Hersfeld-Rotenburg
+6,Hessen,06633,LK Kassel
+6,Hessen,06634,LK Schwalm-Eder-Kreis
+6,Hessen,06635,LK Waldeck-Frankenberg
+6,Hessen,06636,LK Werra-Meißner-Kreis
+7,Rheinland-Pfalz,07111,SK Koblenz
+7,Rheinland-Pfalz,07131,LK Ahrweiler
+7,Rheinland-Pfalz,07132,LK Altenkirchen
+7,Rheinland-Pfalz,07133,LK Bad Kreuznach
+7,Rheinland-Pfalz,07134,LK Birkenfeld
+7,Rheinland-Pfalz,07135,LK Cochem-Zell
+7,Rheinland-Pfalz,07137,LK Mayen-Koblenz
+7,Rheinland-Pfalz,07138,LK Neuwied
+7,Rheinland-Pfalz,07140,LK Rhein-Hunsrück-Kreis
+7,Rheinland-Pfalz,07141,LK Rhein-Lahn-Kreis
+7,Rheinland-Pfalz,07143,LK Westerwaldkreis
+7,Rheinland-Pfalz,07211,SK Trier
+7,Rheinland-Pfalz,07231,LK Bernkastel-Wittlich
+7,Rheinland-Pfalz,07232,LK Bitburg-Prüm
+7,Rheinland-Pfalz,07233,LK Vulkaneifel
+7,Rheinland-Pfalz,07235,LK Trier-Saarburg
+7,Rheinland-Pfalz,07311,SK Frankenthal
+7,Rheinland-Pfalz,07312,SK Kaiserslautern
+7,Rheinland-Pfalz,07313,SK Landau i.d.Pfalz
+7,Rheinland-Pfalz,07314,SK Ludwigshafen
+7,Rheinland-Pfalz,07315,SK Mainz
+7,Rheinland-Pfalz,07316,SK Neustadt a.d.Weinstraße
+7,Rheinland-Pfalz,07318,SK Speyer
+7,Rheinland-Pfalz,07317,SK Pirmasens
+7,Rheinland-Pfalz,07319,SK Worms
+7,Rheinland-Pfalz,07331,LK Alzey-Worms
+7,Rheinland-Pfalz,07320,SK Zweibrücken
+7,Rheinland-Pfalz,07332,LK Bad Dürkheim
+7,Rheinland-Pfalz,07333,LK Donnersbergkreis
+7,Rheinland-Pfalz,07334,LK Germersheim
+7,Rheinland-Pfalz,07335,LK Kaiserslautern
+7,Rheinland-Pfalz,07336,LK Kusel
+7,Rheinland-Pfalz,07337,LK Südliche Weinstraße
+7,Rheinland-Pfalz,07338,LK Rhein-Pfalz-Kreis
+7,Rheinland-Pfalz,07339,LK Mainz-Bingen
+7,Rheinland-Pfalz,07340,LK Südwestpfalz
+8,Baden-Württemberg,08111,SK Stuttgart
+8,Baden-Württemberg,08115,LK Böblingen
+8,Baden-Württemberg,08116,LK Esslingen
+8,Baden-Württemberg,08117,LK Göppingen
+8,Baden-Württemberg,08118,LK Ludwigsburg
+8,Baden-Württemberg,08119,LK Rems-Murr-Kreis
+8,Baden-Württemberg,08121,SK Heilbronn
+8,Baden-Württemberg,08125,LK Heilbronn
+8,Baden-Württemberg,08126,LK Hohenlohekreis
+8,Baden-Württemberg,08127,LK Schwäbisch Hall
+8,Baden-Württemberg,08128,LK Main-Tauber-Kreis
+8,Baden-Württemberg,08135,LK Heidenheim
+8,Baden-Württemberg,08136,LK Ostalbkreis
+8,Baden-Württemberg,08211,SK Baden-Baden
+8,Baden-Württemberg,08212,SK Karlsruhe
+8,Baden-Württemberg,08215,LK Karlsruhe
+8,Baden-Württemberg,08216,LK Rastatt
+8,Baden-Württemberg,08221,SK Heidelberg
+8,Baden-Württemberg,08222,SK Mannheim
+8,Baden-Württemberg,08225,LK Neckar-Odenwald-Kreis
+8,Baden-Württemberg,08226,LK Rhein-Neckar-Kreis
+8,Baden-Württemberg,08231,SK Pforzheim
+8,Baden-Württemberg,08235,LK Calw
+8,Baden-Württemberg,08236,LK Enzkreis
+8,Baden-Württemberg,08237,LK Freudenstadt
+8,Baden-Württemberg,08311,SK Freiburg i.Breisgau
+8,Baden-Württemberg,08315,LK Breisgau-Hochschwarzwald
+8,Baden-Württemberg,08316,LK Emmendingen
+8,Baden-Württemberg,08317,LK Ortenaukreis
+8,Baden-Württemberg,08325,LK Rottweil
+8,Baden-Württemberg,08326,LK Schwarzwald-Baar-Kreis
+8,Baden-Württemberg,08327,LK Tuttlingen
+8,Baden-Württemberg,08335,LK Konstanz
+8,Baden-Württemberg,08336,LK Lörrach
+8,Baden-Württemberg,08337,LK Waldshut
+8,Baden-Württemberg,08415,LK Reutlingen
+8,Baden-Württemberg,08416,LK Tübingen
+8,Baden-Württemberg,08417,LK Zollernalbkreis
+8,Baden-Württemberg,08421,SK Ulm
+8,Baden-Württemberg,08425,LK Alb-Donau-Kreis
+8,Baden-Württemberg,08426,LK Biberach
+8,Baden-Württemberg,08435,LK Bodenseekreis
+8,Baden-Württemberg,08436,LK Ravensburg
+8,Baden-Württemberg,08437,LK Sigmaringen
+9,Bayern,09161,SK Ingolstadt
+9,Bayern,09162,SK München
+9,Bayern,09163,SK Rosenheim
+9,Bayern,09171,LK Altötting
+9,Bayern,09172,LK Berchtesgadener Land
+9,Bayern,09173,LK Bad Tölz-Wolfratshausen
+9,Bayern,09174,LK Dachau
+9,Bayern,09175,LK Ebersberg
+9,Bayern,09176,LK Eichstätt
+9,Bayern,09177,LK Erding
+9,Bayern,09178,LK Freising
+9,Bayern,09179,LK Fürstenfeldbruck
+9,Bayern,09180,LK Garmisch-Partenkirchen
+9,Bayern,09181,LK Landsberg a.Lech
+9,Bayern,09182,LK Miesbach
+9,Bayern,09183,LK Mühldorf a.Inn
+9,Bayern,09184,LK München
+9,Bayern,09185,LK Neuburg-Schrobenhausen
+9,Bayern,09186,LK Pfaffenhofen a.d.Ilm
+9,Bayern,09187,LK Rosenheim
+9,Bayern,09188,LK Starnberg
+9,Bayern,09189,LK Traunstein
+9,Bayern,09190,LK Weilheim-Schongau
+9,Bayern,09261,SK Landshut
+9,Bayern,09262,SK Passau
+9,Bayern,09263,SK Straubing
+9,Bayern,09271,LK Deggendorf
+9,Bayern,09272,LK Freyung-Grafenau
+9,Bayern,09273,LK Kelheim
+9,Bayern,09274,LK Landshut
+9,Bayern,09275,LK Passau
+9,Bayern,09276,LK Regen
+9,Bayern,09277,LK Rottal-Inn
+9,Bayern,09278,LK Straubing-Bogen
+9,Bayern,09279,LK Dingolfing-Landau
+9,Bayern,09361,SK Amberg
+9,Bayern,09362,SK Regensburg
+9,Bayern,09363,SK Weiden i.d.OPf.
+9,Bayern,09371,LK Amberg-Sulzbach
+9,Bayern,09372,LK Cham
+9,Bayern,09373,LK Neumarkt i.d.OPf.
+9,Bayern,09374,LK Neustadt a.d.Waldnaab
+9,Bayern,09375,LK Regensburg
+9,Bayern,09376,LK Schwandorf
+9,Bayern,09377,LK Tirschenreuth
+9,Bayern,09461,SK Bamberg
+9,Bayern,09462,SK Bayreuth
+9,Bayern,09464,SK Hof
+9,Bayern,09463,SK Coburg
+9,Bayern,09471,LK Bamberg
+9,Bayern,09472,LK Bayreuth
+9,Bayern,09473,LK Coburg
+9,Bayern,09474,LK Forchheim
+9,Bayern,09475,LK Hof
+9,Bayern,09476,LK Kronach
+9,Bayern,09477,LK Kulmbach
+9,Bayern,09478,LK Lichtenfels
+9,Bayern,09479,LK Wunsiedel i.Fichtelgebirge
+9,Bayern,09561,SK Ansbach
+9,Bayern,09562,SK Erlangen
+9,Bayern,09563,SK Fürth
+9,Bayern,09564,SK Nürnberg
+9,Bayern,09571,LK Ansbach
+9,Bayern,09565,SK Schwabach
+9,Bayern,09572,LK Erlangen-Höchstadt
+9,Bayern,09573,LK Fürth
+9,Bayern,09574,LK Nürnberger Land
+9,Bayern,09575,LK Neustadt a.d.Aisch-Bad Windsheim
+9,Bayern,09576,LK Roth
+9,Bayern,09577,LK Weißenburg-Gunzenhausen
+9,Bayern,09661,SK Aschaffenburg
+9,Bayern,09662,SK Schweinfurt
+9,Bayern,09663,SK Würzburg
+9,Bayern,09671,LK Aschaffenburg
+9,Bayern,09672,LK Bad Kissingen
+9,Bayern,09673,LK Rhön-Grabfeld
+9,Bayern,09674,LK Haßberge
+9,Bayern,09675,LK Kitzingen
+9,Bayern,09676,LK Miltenberg
+9,Bayern,09677,LK Main-Spessart
+9,Bayern,09678,LK Schweinfurt
+9,Bayern,09679,LK Würzburg
+9,Bayern,09761,SK Augsburg
+9,Bayern,09762,SK Kaufbeuren
+9,Bayern,09763,SK Kempten
+9,Bayern,09764,SK Memmingen
+9,Bayern,09771,LK Aichach-Friedberg
+9,Bayern,09772,LK Augsburg
+9,Bayern,09773,LK Dillingen a.d.Donau
+9,Bayern,09774,LK Günzburg
+9,Bayern,09775,LK Neu-Ulm
+9,Bayern,09776,LK Lindau
+9,Bayern,09777,LK Ostallgäu
+9,Bayern,09778,LK Unterallgäu
+9,Bayern,09779,LK Donau-Ries
+9,Bayern,09780,LK Oberallgäu
+10,Saarland,10041,LK Stadtverband Saarbrücken
+10,Saarland,10042,LK Merzig-Wadern
+10,Saarland,10043,LK Neunkirchen
+10,Saarland,10044,LK Saarlouis
+10,Saarland,10045,LK Saarpfalz-Kreis
+10,Saarland,10046,LK Sankt Wendel
+11,Berlin,11001,SK Berlin Mitte
+11,Berlin,11002,SK Berlin Friedrichshain-Kreuzberg
+11,Berlin,11003,SK Berlin Pankow
+11,Berlin,11004,SK Berlin Charlottenburg-Wilmersdorf
+11,Berlin,11005,SK Berlin Spandau
+11,Berlin,11006,SK Berlin Steglitz-Zehlendorf
+11,Berlin,11007,SK Berlin Tempelhof-Schöneberg
+11,Berlin,11008,SK Berlin Neukölln
+11,Berlin,11009,SK Berlin Treptow-Köpenick
+11,Berlin,11010,SK Berlin Marzahn-Hellersdorf
+11,Berlin,11011,SK Berlin Lichtenberg
+11,Berlin,11012,SK Berlin Reinickendorf
+12,Brandenburg,12051,SK Brandenburg a.d.Havel
+12,Brandenburg,12052,SK Cottbus
+12,Brandenburg,12053,SK Frankfurt (Oder)
+12,Brandenburg,12054,SK Potsdam
+12,Brandenburg,12060,LK Barnim
+12,Brandenburg,12061,LK Dahme-Spreewald
+12,Brandenburg,12062,LK Elbe-Elster
+12,Brandenburg,12063,LK Havelland
+12,Brandenburg,12064,LK Märkisch-Oderland
+12,Brandenburg,12065,LK Oberhavel
+12,Brandenburg,12066,LK Oberspreewald-Lausitz
+12,Brandenburg,12067,LK Oder-Spree
+12,Brandenburg,12068,LK Ostprignitz-Ruppin
+12,Brandenburg,12069,LK Potsdam-Mittelmark
+12,Brandenburg,12070,LK Prignitz
+12,Brandenburg,12071,LK Spree-Neiße
+12,Brandenburg,12072,LK Teltow-Fläming
+12,Brandenburg,12073,LK Uckermark
+13,Mecklenburg-Vorpommern,13003,SK Rostock
+13,Mecklenburg-Vorpommern,13004,SK Schwerin
+13,Mecklenburg-Vorpommern,13071,LK Mecklenburgische Seenplatte
+13,Mecklenburg-Vorpommern,13072,LK Rostock
+13,Mecklenburg-Vorpommern,13073,LK Vorpommern-Rügen
+13,Mecklenburg-Vorpommern,13074,LK Nordwestmecklenburg
+13,Mecklenburg-Vorpommern,13075,LK Vorpommern-Greifswald
+13,Mecklenburg-Vorpommern,13076,LK Ludwigslust-Parchim
+14,Sachsen,14511,SK Chemnitz
+14,Sachsen,14521,LK Erzgebirgskreis
+14,Sachsen,14522,LK Mittelsachsen
+14,Sachsen,14523,LK Vogtlandkreis
+14,Sachsen,14524,LK Zwickau
+14,Sachsen,14612,SK Dresden
+14,Sachsen,14625,LK Bautzen
+14,Sachsen,14626,LK Görlitz
+14,Sachsen,14627,LK Meißen
+14,Sachsen,14628,LK Sächsische Schweiz-Osterzgebirge
+14,Sachsen,14713,SK Leipzig
+14,Sachsen,14729,LK Leipzig
+14,Sachsen,14730,LK Nordsachsen
+15,Sachsen-Anhalt,15001,SK Dessau-Roßlau
+15,Sachsen-Anhalt,15002,SK Halle
+15,Sachsen-Anhalt,15003,SK Magdeburg
+15,Sachsen-Anhalt,15081,LK Altmarkkreis Salzwedel
+15,Sachsen-Anhalt,15082,LK Anhalt-Bitterfeld
+15,Sachsen-Anhalt,15083,LK Börde
+15,Sachsen-Anhalt,15084,LK Burgenlandkreis
+15,Sachsen-Anhalt,15085,LK Harz
+15,Sachsen-Anhalt,15086,LK Jerichower Land
+15,Sachsen-Anhalt,15087,LK Mansfeld-Südharz
+15,Sachsen-Anhalt,15088,LK Saalekreis
+15,Sachsen-Anhalt,15089,LK Salzlandkreis
+15,Sachsen-Anhalt,15090,LK Stendal
+15,Sachsen-Anhalt,15091,LK Wittenberg
+16,Thüringen,16051,SK Erfurt
+16,Thüringen,16052,SK Gera
+16,Thüringen,16053,SK Jena
+16,Thüringen,16054,SK Suhl
+16,Thüringen,16055,SK Weimar
+16,Thüringen,16056,SK Eisenach
+16,Thüringen,16061,LK Eichsfeld
+16,Thüringen,16062,LK Nordhausen
+16,Thüringen,16063,LK Wartburgkreis
+16,Thüringen,16064,LK Unstrut-Hainich-Kreis
+16,Thüringen,16065,LK Kyffhäuserkreis
+16,Thüringen,16066,LK Schmalkalden-Meiningen
+16,Thüringen,16067,LK Gotha
+16,Thüringen,16068,LK Sömmerda
+16,Thüringen,16069,LK Hildburghausen
+16,Thüringen,16070,LK Ilm-Kreis
+16,Thüringen,16071,LK Weimarer Land
+16,Thüringen,16072,LK Sonneberg
+16,Thüringen,16073,LK Saalfeld-Rudolstadt
+16,Thüringen,16074,LK Saale-Holzland-Kreis
+16,Thüringen,16075,LK Saale-Orla-Kreis
+16,Thüringen,16076,LK Greiz
+16,Thüringen,16077,LK Altenburger Land

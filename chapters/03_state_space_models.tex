@@ -1,3 +1,4 @@
+\glsresetall
 \chapter{State space models}
 \label{cha:state_space_models}
 
@@ -112,6 +113,7 @@ This will be a good strategy if the target posterior $p(x|y)$ can be well approx
 \gls{glssm} are the working horses of most methods used in this thesis because they are analytically tractable and computationally efficient. Indeed for fixed dimension of states $m$ and observations $p$ the runtime of algorithms that we consider in this thesis is $\mathcal O(n)$.
 
 \begin{definition}[\gls{glssm}]
+    \label{def:glssm}
     A \gls{glssm} is a state space model where states obey the transition equation
     \begin{align}
         \label{eq:glssm_states}
@@ -122,7 +124,7 @@ This will be a good strategy if the target posterior $p(x|y)$ can be well approx
         \label{eq:glssm_observations}
         Y_{t} & = B_{t}X_{t} + v_{t} + \eta_{t} &  & t = 0, \dots, n.
     \end{align}
-    Here $A_{t} \in \mathbf{R}^{m \times m}$ and $B_{t} \in \mathbf{R}^{p \times m}$ are matrices the specify the systems dynamics. The \textbf{innovations} $\varepsilon_{t + 1}$ and \textbf{measurement noise} $\eta_{t}$ are independent from one another and from the starting value $X_{0} \mathcal N (\E X_{0}, \Sigma_{0})$.
+    Here $A_{t} \in \mathbf{R}^{m \times m}$ and $B_{t} \in \mathbf{R}^{p \times m}$ are matrices the specify the systems dynamics. The \textbf{innovations} $\varepsilon_{t + 1}$ and \textbf{measurement noise} $\eta_{t}$ are independent from one another and from the starting value $X_{0} \sim \mathcal N (\E X_{0}, \Sigma_{0})$.
 
     Furthermore, $\varepsilon_{t+1} \sim \mathcal N(0, \Sigma_{t})$ and $\eta_{t}\sim \mathcal N(0, \Omega)$ are centered Gaussian random variables and $u_{t + 1}, t = 1, \dots, n-1$, $v_{t}, t = 0, \dots, n$ are deterministic biases.
 \end{definition}
@@ -193,23 +195,54 @@ We start to move away from linear Gaussian models by allowing observations that 
 
 The distribution of observations is never Gaussian - all statisticians may hope for is that the data-generating mechanism is close enough to a Gaussian distribution that inferences made carry over.
 For epidemiological models, Gaussian distributions are appropriate if incidences are high, e.g. during large outbreaks in a whole country. 
-The discrete nature of incidences is then better captured by a distribution on $\mathbf N_{0}$, and standard distributions used are the Poisson and negative binomial distributions, see \todo{auto/cref?}.
+When case numbers are small, the discrete nature of incidences is better captured by a distribution on $\mathbf N_{0}$, and standard distributions used are the Poisson and negative binomial distributions, see \todo{auto/cref?}.
+Both the Poisson and negative binomial belong to the class of exponential family distributions. As such, their densities have a simple structure, allowing only for a linear interaction between the natural parameter and the densities argument. We refer to \cite{Brown1986Fundamentals} for a comprehensive treatment of exponential families and use their definitions throughout this chapter.
 
-Both the Poisson and negative binomial belong to the class of exponential family distributions, as such they have many desirable properties. 
+\begin{definition}[exponential family]
+    Let $\mu$ be a $\sigma$-finite measure on $\R^{p}$ and denote by 
+    $$\Theta = \left\{\theta \in \R^{p} : \int \exp \left( \theta^{T} x \right) \d\mu(y) < \infty\right\}$$
+    the set of parameters $\theta$ such that the moment-generating function of $\mu$ is finite. 
+    For every $\theta \in \Theta$ $$p_{\theta}(y) = Z(\theta)^{-1} \exp (\theta^{T} y)$$ defines a probability density with respect to the measure $\mu$, where $$Z(\theta) = \int \exp \left( \theta^{T} x \right) \d\mu(y)$$ is the normalizing constant. 
+    We call both the densities $p_{\theta}$ and induced probability measures $$ \P_{\theta} (A) = \int_{A} p_{\theta}(y) \d \mu(y),$$ for measurable $A \subset \R^{p}$ \textbf{standard exponential families}.
 
-\begin{definition}[Exponential family]
-    
+    Conversely, let $\P_{\theta}, \theta \in \Theta$ be a given parametric family of probability measures on some space $\mathcal Y$ that is absolutely continuous with respect to a common dominating measure $\mu$. Suppose there exists a reparametrization $\eta : \Theta \to \R^{p}$, a statistic $T: \mathcal Y \to \R^{p}$ and functions $Z: \Theta\to \R$, $h:\mathcal Y \to \R$ exist, such that
+    $$
+        p_{\theta}(y) = \frac{\d P_{\theta}}{\d \mu} = Z(\theta) h(y) \exp \left(\eta(\theta)^{T}T(y)\right),
+    $$
+    then we call $\P_{\theta}, \theta \in \Theta$ and $p_{\theta}, \theta \in \Theta$ a \textbf{$p$-dimensional exponential family}.
 \end{definition}
 
-\begin{definition}[Curved exponential family]
+\todo{necessary?}
+\begin{definition}[curved exponential family]
 
 \end{definition}
     
-\begin{lemma}[Log-concavity of exponential family distributions]
-    
+Exponential families have the attractive property that they are log-concave in their parameters. As such the Fisher-information is always positive semidefinite, which will be crucial in defining surrogate Gaussian models in \todo{later section}.
+\begin{lemma}[log-concavity of exponential family distributions]
+    Let $p_{\theta}, \theta \in \Theta$ be a natural dimensional exponential family and $\Theta$ open in $\R^{p}$. In this case $\theta \to \log p_{\theta}(y)$ is concave for every $y \in \R^{p}$.
 \end{lemma}
 
+\begin{proof}
+    As $\log p_{\theta}(y) = - \log Z(\theta) + \theta^{T} y$ it suffices to show that $\log Z(\theta)$ is convex. However, $\log Z(\theta)$ is the cumulant generating function of the base measure $\mu$ which is known to be convex \todo{more reasoning? differentiate under integral, check if dominated convergence applies, or look for a ref}.
+\end{proof}
 
+We now generalize \cref{def:glssm} to allow for non-gaussian observations by replacing the observation equation \cref{eq:glssm_observations} by more general exponential families.
+
+\begin{definition}[\gls{lcssm}]
+    A \textbf{\gls{lcssm}} is a state space model where states obey the transition equation 
+    $$
+    X_{t + 1} = A_{t}X_{t} + u_{t}\varepsilon_{t + 1}
+    $$
+    and the conditional distribution of $Y_{t}$ given $X_{t}$ comes from an exponential family with respect to a base measure $\mu_{t}$, i.e.
+    $$
+    p (y_{t}|x_{t}) = h_{t}(y_{t}) Z_{t}(x_{t}) \exp \left( \eta_{t}(x_{t})^{T} T_{t}(y_{t}) \right)
+    $$
+    for suitable functions $h_{t}, Z_{t}, \eta_{t}, T_{t}$. 
+\end{definition}
+
+\begin{remark}
+    To simplify notation we will drop in our notation the dependence of $h$, $Z$, and $T$ on $t$ and assume that the base measure $\mu_t$ is the same for all relevant $t$.
+\end{remark}
 
 \todo{this paragraph to modelling chapter}
 The Poisson distribution arises from the law of small numbers: if there is a large population where every individual has, independently, a small probability of becoming infected in a small window of time then the total number of infections in that window of time is well approximated by the Poisson distribution.
