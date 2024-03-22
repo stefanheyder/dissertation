@@ -4,14 +4,14 @@
 
 State space models are a versatile class of statistical models which allow to model non-stationary time series data and come along with straight-forward interpretation.
 The main idea of these models is to introduce unobserved \textbf{latent states} whose joint distribution is given by a Markov process and model the observed time series conditional on theses states.
-By exploiting this structure, inference in state space models becomes computationally efficient, i.e. the complexity of algorithms is linear with respect to the number $n$ of time points considered.
+By exploiting this structure, inference in \glspl{ssm} becomes computationally efficient, i.e. the complexity of algorithms is linear with respect to the number $n$ of time points considered.
 
-An additional advantage, that will become more explicit in \Cref{sec:modelling_epidemiological_dessiderata_with_state_space_models}, is that state space models allow to interpret the modeled dynamics of latent states which makes
+An additional advantage, that will become more explicit in \Cref{sec:modelling_epidemiological_dessiderata_with_state_space_models}, is that \glspl{ssm} allow to interpret the modeled dynamics of latent states which makes
 
 
 \begin{definition}[State Space Model]
     \label{def:ssm}
-    A \textbf{state space model} is a discrete time stochastic process $(X_t, Y_t)_{t=0, \dots, n -1}$ taking values in a measurable space $\mathcal X \times \mathcal Y$ such that
+    A \textbf{\gls{ssm}} is a discrete time stochastic process $(X_t, Y_t)_{t=0, \dots, n -1}$ taking values in a measurable space $\mathcal X \times \mathcal Y$ such that
     \begin{enumerate}
         \item The marginal distribution of the \textbf{states} $(X_0, \dots, X_{n - 1})$ is a discrete time Markov process, i.e. for $t = 1, \dots, n-1$
               \begin{align}
@@ -33,12 +33,12 @@ Similarly we set $Y_{s:t} = \left(Y_s, \dots, Y_{t}\right)$ and $Y = Y_{0:n-1}$.
 \todo{picutre of dependency structure}
 
 \begin{remark}
-    Contrary to the standard definition of a state space model, our \Cref{def:ssm} allows $Y_t$ to depend on $Y_{t - 1}$.
-    This is not a limitation of the standard definition: given a state space model of the form in \Cref{def:ssm} we can transform it to the standard form by choosing states $(X_t, Y_t) \in \mathcal X \times \mathcal Y$ and observations $Y_t \in \mathcal Y$ such that the state space model becomes a stochastic process on $ \left( \mathcal X \times \mathcal Y\right) \times \mathcal Y$.
+    Contrary to the standard definition of a \gls{ssm}, our \Cref{def:ssm} allows $Y_t$ to depend on $Y_{t - 1}$.
+    This is not a limitation of the standard definition: given a \gls{ssm} of the form in \Cref{def:ssm} we can transform it to the standard form by choosing states $(X_t, Y_t) \in \mathcal X \times \mathcal Y$ and observations $Y_t \in \mathcal Y$ such that the \gls{ssm} becomes a stochastic process on $ \left( \mathcal X \times \mathcal Y\right) \times \mathcal Y$.
 
-    Additionally most computations and inferences in this thesis will condition on the observations $Y$ and as such $Y$ may be treated as fixed. The only exception to this is in simulation studies where we sample from the joint distribution of $(X, Y)$.
+    Additionally, most computations and inferences in this thesis will be conditioned on a single set of observations $Y$. As such $Y$ may be treated as fixed and $Y_{t}$ only depends on $X_{t}$. The only exception to this is in simulation studies where we sample from the joint distribution of $(X, Y)$.
 
-    As the models considered in \Cref{cha:analysis_of_selected_models} will make extensive use of state space models with this dependency structure we opt to use this non-standard definition here.
+    As the models considered in \Cref{cha:analysis_of_selected_models} will make extensive use of \glspl{ssm} with this dependency structure we opt to use this non-standard definition here.
 
     In most models we consider in this thesis we use $\mathcal X = \R^m$, $\mathcal Y = \R^p$ or $\mathcal Y = \Z^p$ so that $\mathcal X$ is $m$ dimensional and $\mathcal Y$ is $p$ dimensional and equip these spaces with the usual Borel $\sigma$-Algebras.
 \end{remark}
@@ -54,20 +54,20 @@ Most models that I consider in this thesis will admit densities for the state tr
     When densities stem from a parametric model parametrized by $\theta \in \Theta \subseteq \mathbf{R}^{k}$ and the dependence of the model on $\theta$ is of interest, i.e. because we try to estimate $\theta$, we indicate this by adding a subscript to the densities.
     If the dependence is not of interest, e.g. because $\theta$ is fixed, I will usually omit $\theta$ for better readability.
 
-    In this notation, the joint density of a parametric state space model factorizes as
+    In this notation, the joint density of a parametric \gls{ssm} factorizes as
     \begin{align*}
         p_\theta(x,y) & = p_\theta(x_0, \dots, x_{n - 1}, y_0, \dots, y_{n - 1})                                                              \\
                       & = p_\theta (x_0)\prod_{t = 1}^{n - 1} p_\theta(x_{t}|x_{t - 1}) \prod_{t = 0}^{n - 1} p_\theta(y_t | x_t, y_{t - 1}),
     \end{align*}
     where $p_\theta(y_0|x_0, y_{-1}) = p_\theta(y_0, x_0)$.
 
-    As inferences we make in this thesis depend on the state space model only through the likelihood we identify almost sure versions of $(X, Y)$ with itself, i.e. all equations involving $X$ or $Y$ are understood almost surely.
+    As inferences we make in this thesis depend on the \gls{ssm} only through the likelihood we identify almost sure versions of $(X, Y)$ with itself, i.e. all equations involving $X$ or $Y$ are understood almost surely.
 \end{notation}
 
-Given data $(y_t)_{t = 0, \dots, n - 1}$ that may be modeled with a state space model the practitioner is confronted with several tasks, which provide the structure of this chapter:
+Given data $(y_t)_{t = 0, \dots, n - 1}$ that may be modeled with a \gls{ssm} the practitioner is confronted with several tasks, which provide the structure of this chapter:
 
 \begin{enumerate}
-    \item\label{it:model_choice} Choosing a suitable, usually parametric, class of state space models that include the effects of interest.
+    \item\label{it:model_choice} Choosing a suitable, usually parametric, class of \glspl{ssm} that include the effects of interest.
     \item\label{it:model_fitting} Fitting such a parametric model to the data at hand by either frequentist or Bayesian techniques.
     \item\label{it:smoothing_problem} Infer about the latent states $X$ from the observations $Y$ by determining, either analytically or through simulation, the smoothing distribution $X|Y$.
 \end{enumerate}
@@ -75,7 +75,7 @@ Given data $(y_t)_{t = 0, \dots, n - 1}$ that may be modeled with a state space 
 The first step, \cref{it:model_choice}, requires that the practitioner specifies a joint probability distribution for the states and observations (\Cref{sec:modelling_epidemiological_dessiderata_with_state_space_models}).
 Due to the assumed dependency structure this boils down to specifying transition kernels for the states and observations.
 The setting \Cref{def:ssm} is too abstract to perform inference in so further assumptions on the types of distributions for the latent states and observations are needed.
-In this chapter we will discuss linear gaussian state space models (\Cref{sec:linear_gaussian_state_space_models}), where both the posterior distribution and the likelihood are analytically available. For the epidemiological application we have in mind these are however insufficient due to the non-linear behaviour of incidences and the low count per region (\Cref{sec:dessiderata}).
+In this chapter we will discuss \gls{glssm}  (\Cref{sec:linear_gaussian_state_space_models}), where both the posterior distribution and the likelihood are analytically available. For the epidemiological application we have in mind these are however insufficient due to the non-linear behaviour of incidences and the low count per region (\Cref{sec:dessiderata}).
 Such observations are better modeled with distributions on the natural numbers, i.e. with a Poisson or negative binomial distribution, leading to the class of logconcave Gaussian state space models (\Cref{sec:logconcave_gaussian_state_space_models}).
 
 Regarding the second step, \cref{it:model_fitting}, a frequentist practitioner will want to perform maximum likelihood inference on $\theta$.
@@ -238,11 +238,19 @@ We now generalize \cref{def:glssm} to allow for non-gaussian observations by rep
     p (y_{t}|x_{t}) = h_{t}(y_{t}) Z_{t}(x_{t}) \exp \left( \eta_{t}(x_{t})^{T} T_{t}(y_{t}) \right)
     $$
     for suitable functions $h_{t}, Z_{t}, \eta_{t}, T_{t}$. 
+
+    \todo{LCSSM only logconcave observations would suffice, then EF is just an instance of this}
 \end{definition}
 
 \begin{remark}
     To simplify notation we will drop in our notation the dependence of $h$, $Z$, and $T$ on $t$ and assume that the base measure $\mu_t$ is the same for all relevant $t$.
 \end{remark}
+
+As in the previous chapter, after having observed $Y$, one is interested in the conditional distribution of states $X$, given $Y$. If the observations are not Gaussian, this is a difficult task as the distribution is not analytically tractable. Instead, one uses analytically tractable approximations such as the \gls{la}. Under appropriate assumptions on the observation distributions, the \gls{la} is given by a (possibly degenerate) \gls{glssm} \cite{Durbin1997Monte, Shephard1997Likelihood}, though the derivations and computations are more involved in the nonlinear case or if the observation densities are not log-concave.
+
+\begin{theorem}[\gls{LA} of \gls{lcssm}]
+    
+\end{theorem}
 
 \todo{this paragraph to modelling chapter}
 The Poisson distribution arises from the law of small numbers: if there is a large population where every individual has, independently, a small probability of becoming infected in a small window of time then the total number of infections in that window of time is well approximated by the Poisson distribution.
@@ -353,7 +361,7 @@ This means that we can treat all three methods in the same framework, facilitati
 
 \subsection{Gaussian smoothing proposals}
 \label{subsec:gaussian_smoothing_proposals}
-In this section, we analyze the properties of Gaussian proposals for importance sampling in state space models that exploit the available Markov property of states. As mentioned in the introduction to this section, these proposals are conditional distributions $\P^{X|Z=z}$ where $ \mathbf{R}^{m} \ni X \sim \mathcal N \left( \mu, \Sigma \right)$ and $Z = BX + \eta \in \mathbf{R}^{p}$ where $\eta\sim\mathcal N(0, \Omega)$ is independent of $X$. Standard results from linear regression theory imply that the conditional distribution in question is again a Gaussian distribution, $X|Z=z \sim \mathcal N(\bar \mu, \bar \Sigma)$ with mean
+In this section, we analyze the properties of Gaussian proposals for importance sampling in \glspl{ssm} that exploit the available Markov property of states. As mentioned in the introduction to this section, these proposals are conditional distributions $\P^{X|Z=z}$ where $ \mathbf{R}^{m} \ni X \sim \mathcal N \left( \mu, \Sigma \right)$ and $Z = BX + \eta \in \mathbf{R}^{p}$ where $\eta\sim\mathcal N(0, \Omega)$ is independent of $X$. Standard results from linear regression theory imply that the conditional distribution in question is again a Gaussian distribution, $X|Z=z \sim \mathcal N(\bar \mu, \bar \Sigma)$ with mean
 \begin{align}
     \bar \mu    & = \mu + \Sigma B^{T} \left( B \Sigma B^{T} + \Omega \right)^{-1} (z - B \mu), \label{eq:posterior_mean_1} \\
                 & = \bar \Sigma\left(\Sigma^{-1}\mu + B^{T}\Omega^{-1}z \right)\label{eq:posterior_mean_2}                  \\
