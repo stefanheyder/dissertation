@@ -246,7 +246,14 @@ We now generalize \cref{def:glssm} to allow for non-gaussian observations by rep
     To simplify notation we will drop in our notation the dependence of $h$, $Z$, and $T$ on $t$ and assume that the base measure $\mu_t$ is the same for all relevant $t$.
 \end{remark}
 
-As in the previous chapter, after having observed $Y$, one is interested in the conditional distribution of states $X$, given $Y$. If the observations are not Gaussian, this is a difficult task as the distribution is not analytically tractable. Instead, one uses analytically tractable approximations such as the \gls{la}. Under appropriate assumptions on the observation distributions, the \gls{la} is given by a (possibly degenerate) \gls{glssm} \cite{Durbin1997Monte, Shephard1997Likelihood}, though the derivations and computations are more involved in the nonlinear case or if the observation densities are not log-concave.
+
+
+As in the previous chapter, after having observed $Y$, one is interested in the conditional distribution of states $X$, given $Y$. If the observations are not Gaussian, this is a difficult task as the distribution is not analytically tractable. Instead approximations, e.g. the \gls{la} (see \cref{cha:laplace_approximation}, or simulation based inference, e.g. importance sampling or MCMC-methods, are used. Similarly, fitting hyperparameters $\theta$ by maximum likelihood inference becomes more difficult as evaluating $\ell(\theta) = p(y) = \int p(x,y) \d x$ is not analyically avaiable, thus requiring numerical or simulation methods for evaluation and  gradient descent or EM-techniques for optimization (\todo{really EM?}.
+
+In this thesis we will use importance sampling methods, which are the focus of the next section. 
+
+\todo{move this to the LA section}
+Under appropriate assumptions on the observation distributions, the \gls{la} is given by a (possibly degenerate) \gls{glssm} \cite{Durbin1997Monte, Shephard1997Likelihood}, though the derivations and computations are more involved in the nonlinear case or if the observation densities are not log-concave.
 
 \begin{theorem}[\gls{LA} of \gls{lcssm}]
     
@@ -261,6 +268,16 @@ However, incidences observed from the SARS-CoV-2 epidemic tend to follow a negat
 
 \section{Importance Sampling}
 \label{sec:importance_sampling}
+\todo{some intro}
+Importance sampling is a simulation technique that allows to approximate expectations by sampling from a tractable approximation, the proposal, to the measure of interest, the target, and weighting samples according to their importance. As the user has freedom in the choice of approximation (except for some technical conditions), importance sampling also acts as a variance reduction technique with better approximations resulting in smaller Monte-Carlo variance. Thus the role that importance sampling plays is twofold: first it allows to perform Monte-Carlo integration even if sampling from the target is not possible, and second it allows to do so in an efficient way by choosing, to be defined precicely below, the approximation in an optimal way.
+
+Alternative approaches to importance sampling for performing inference in \glspl{ssm} include \gls{mcmc} and \gls{smc}. Let us give a concise comparison of these approaches, weighing their advantages and disadvantages over importance sampling, in particular with respect to the \glspl{ssm} that this thesis deals with. 
+
+\gls{mcmc} \todo{cite brook handbook}is a simulation technique that allows to generate correlated samples from a distribution by constructing a Markov chain that has as its invariant distribution the desired distribution. In the most general method, Metropolic Hastings \gls{mcmc}, one needs access to the density of the sought distribution up to a constant to simulate a step in the Markov chain. While this method is very general, it fails in high dimensions and a lot of current research in \gls{mcmc} methods deals with this \todo{quotes} curse of dimensionality \todo{cite something}. \todo{dis-advantages MCMC over IS}
+
+While \gls{MCMC} methods aim at providing exact inference, at least once the Markov chain has converged, \gls{abc} methods provide only approximate inference by minimizing the KL-divergence between the target and a prespecified class of distributions. 
+
+This chapter starts with a general treatment of importance sampling. Subsequently we will focus our attention on \gls{lcssm} and how we can exploit structure to perform importance sampling effectively. 
 
 Suppose we have a function $h: \mathcal X \to \R$ whose integral $$\zeta = \int_{\mathcal X} h(x) \d x$$ we want to compute.
 Furthermore suppose that we can write
@@ -276,14 +293,15 @@ which suggests to estimate $\zeta$ by Monte-Carlo integration: $$\hat \zeta = \f
 
 If one is not interested in a particular $h$ but rather in an approximation of $\P$ and $\P$ is absolutely continuous with respect to $\G$, then one may view $$\hat \P_N = \frac{1}{N} \sum_{i = 1}^{N} v(X_i) \delta_{X_i}$$ as a particle approximation of $\P$. In this setting \cite{Agapiou2017Importance} shows that the random measure $\hat \P_N$ converges to $\P$ at rate $\mathcal O\left(\frac 1 N\right)$\todo{check} in an appropriate metric.
 
-To perform importance sampling one must be able to evaluate the weights $v$. In a bayesian setting this is usually infeasible: if $\P$ is a posterior then the integration constant of its density is intractable.
+To perform importance sampling one must be able to evaluate the weights $v$. In a Bayesian setting this is usually infeasible: if $\P$ is a posterior distribution then the integration constant of its density is intractable.
 In this case one can usually evaluate the weights up to a constant, i.e. $w(x) \propto_x \frac{\d \P}{\d \G}(x)$ is available. The missing constant is then $\int w(x) \d \G$ which is itself amenable to importance sampling.
-
 This leads to the self-normalized importance sampling weights $W_i = \frac{w(X_i)}{\sum_{i = 1}^N w(X_i)}$ and Monte Carlo estimates $\hat \zeta = \sum_{i = 1}^{N} W_i f(X_i)$ and particle approximation $\hat \P_N = \sum_{i = 1}^{N} W_i \delta_{X_i}$.
 
-In both cases one can show that once second moments of $w$ with respect to $\G$ exist the Monte-Carlo estimates are consistent and asymptotically normal at the usual rates, see \cite[Chapter 8]{Chopin2020Introduction}.
-
-Importance sampling is useful in situations where simulation from $\P$ is not feasible or when Monte Carlo integration with respect to $\P$ is unattractive due to high variance estimates.
+In both cases one can show that once second moments of $w$ with respect to $\G$ exist the Monte-Carlo estimates are consistent and asymptotically normal at the usual rates, see \cite[Chapter 8]{Chopin2020Introduction}. 
+However, the finite sample variance of $\hat\zeta$, and thus the practical performance of the procedure, depends on the variance of $w\cdot f$ under $\G$, and thus on the proposal $\G$. \todo{cite agap} show that  the expected mean squared TV distance \todo{check if true} between $\hat P_n$ and  $\P$ may be bounded, up to a constant, by the second moments of $w$ as well as the KL-divergence 
+$$
+\mathcal D_{\text{KL}} \left(\P, \G\right) = \int \log \frac{\d \P}{\d \G} \d \P.
+$$
 
 \todo{decide where to put this}
 As the likelihood of a general state space model is neither analytically nor numerically tractable one has to resort to Monte-Carlo techniques.
