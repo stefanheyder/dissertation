@@ -27,8 +27,8 @@ An additional advantage, that will become more explicit in \Cref{sec:modelling_e
     \end{enumerate}
 \end{definition}
 
-For notational convenience we will write $X_{s:t} = \left(X_s, \dots, X_{t}\right)$ for the vector that contains all states from $s$ to $t$, dropping the index if we consider the whole set of observations, so $X = X_{0:n-1}$
-Similarly we set $Y_{s:t} = \left(Y_s, \dots, Y_{t}\right)$ and $Y = Y_{0:n-1}$.
+For notational convenience we will write $X_{s:t} = \left(X_s, \dots, X_{t}\right)$ for the vector that contains all states from $s$ to $t$, dropping the first index if we consider the whole set of observations up to time $t$, so $X_{:t} = X_{0:t}$.
+Similarly we set $Y_{s:t} = \left(Y_s, \dots, Y_{t}\right)$ and $Y_{:t} = Y_{0:t}$.
 
 \todo{picutre of dependency structure}
 
@@ -255,7 +255,7 @@ In this thesis we will use importance sampling methods, which are the focus of t
 \todo{move this to the LA section}
 Under appropriate assumptions on the observation distributions, the \gls{la} is given by a (possibly degenerate) \gls{glssm} \cite{Durbin1997Monte, Shephard1997Likelihood}, though the derivations and computations are more involved in the nonlinear case or if the observation densities are not log-concave.
 
-\begin{theorem}[\gls{LA} of \gls{lcssm}]
+\begin{theorem}[\gls{la} of \gls{lcssm}]
     
 \end{theorem}
 
@@ -271,37 +271,62 @@ However, incidences observed from the SARS-CoV-2 epidemic tend to follow a negat
 \todo{some intro}
 Importance sampling is a simulation technique that allows to approximate expectations by sampling from a tractable approximation, the proposal, to the measure of interest, the target, and weighting samples according to their importance. As the user has freedom in the choice of approximation (except for some technical conditions), importance sampling also acts as a variance reduction technique with better approximations resulting in smaller Monte-Carlo variance. Thus the role that importance sampling plays is twofold: first it allows to perform Monte-Carlo integration even if sampling from the target is not possible, and second it allows to do so in an efficient way by choosing, to be defined precicely below, the approximation in an optimal way.
 
-Alternative approaches to importance sampling for performing inference in \glspl{ssm} include \gls{mcmc} and \gls{smc}. Let us give a concise comparison of these approaches, weighing their advantages and disadvantages over importance sampling, in particular with respect to the \glspl{ssm} that this thesis deals with. 
+Alternative approaches to importance sampling for performing inference in \glspl{ssm} include \gls{mcmc} and \gls{smc}. 
+Recall from Chapter \todo{insert} that this inference concerns three objectives: maximum likelihood estimation, i.e. evaluation and optimization of the likelihood, the posterior distribution $X_{:n} | Y_{:n}$ and prediction of future states and observations. Let us give a concise comparison of these alternative approaches, weighing their advantages and disadvantages over importance sampling, in particular for the \glspl{ssm} that this thesis deals with. 
 
-\gls{mcmc} \todo{cite brook handbook}is a simulation technique that allows to generate correlated samples from a distribution by constructing a Markov chain that has as its invariant distribution the desired distribution. In the most general method, Metropolic Hastings \gls{mcmc}, one needs access to the density of the sought distribution up to a constant to simulate a step in the Markov chain. While this method is very general, it fails in high dimensions and a lot of current research in \gls{mcmc} methods deals with this \todo{quotes} curse of dimensionality \todo{cite something}. \todo{dis-advantages MCMC over IS}
+% MCMC intro
+\gls{mcmc} \todo{cite brook handbook}is a simulation technique that allows to generate correlated samples from a distribution by constructing a Markov chain that has as its invariant distribution the desired distribution. In the most general method, Metropolis Hastings \gls{mcmc}, one needs access to the density of the sought distribution up to a constant to simulate a step in the Markov chain. While this method is very general, it fails in high dimensions and a lot of current research in \gls{mcmc} methods deals with this \todo{quotes} curse of dimensionality \todo{cite something}. \todo{dis-advantages MCMC over IS}
 
-While \gls{MCMC} methods aim at providing exact inference, at least once the Markov chain has converged, \gls{abc} methods provide only approximate inference by minimizing the KL-divergence between the target and a prespecified class of distributions. 
+% MCMC vs IS
 
-This chapter starts with a general treatment of importance sampling. Subsequently we will focus our attention on \gls{lcssm} and how we can exploit structure to perform importance sampling effectively. 
+% SMC intro
+\gls{smc} \cite{Chopin2020Introduction}, sometimes called a particle filter, uses sequential importance sampling to provide a particle approximation to the filtering distributions $X_{t} | Y_{:t}$, essentially decomposing the problem into a $n$ importance sampling steps. 
+To avoid particle collapse, \gls{smc} is usually equipped with a resampling step once the effective sample size of the current set of particles drops below a specified level. Once the final filtering distribution $X_{n}|Y_{:n}$ is approximated, the smoothing distribution may be obtained in several ways ... \todo{look up Chopin}.
+
+% SMC vs. IS
+Conveniently, \gls{smc} allows us to approximate the likelihood $\ell(\theta)$ for a single parameter by a single pass of the particle filter. However, the discrete nature of resampling makes the approximated likelihood non-continuous, complicating maximum likelihood inference. \cite[Chapter 14.3]{Chopin2020Introduction} discusses several strategies: the first amounts to importance sampling of the order as discussed in this thesis, where one fixes a reference parameter $\theta_{0}$ to perform importance sampling with $p_{\theta_{0}}(x|y)$ against $p_{\theta}(x|y)$. The second strategy only works in the univariate case and consists of approximating the non-continuous inverse CDFs appearing in the resampling step by continuous ones. Under j stochastic gradient ascent  \todo{more}
+
+This chapter proceeds with a general treatment of importance sampling. Subsequently, we will focus our attention on \glspl{lcssm} and how we can exploit their structure to perform importance sampling efficiently. 
 
 Suppose we have a function $h: \mathcal X \to \R$ whose integral $$\zeta = \int_{\mathcal X} h(x) \d x$$ we want to compute.
-Furthermore suppose that we can write
+Furthermore, suppose that we can write
 $$
     \int_{\mathcal X} h(x) \d x = \int_{\mathcal X} f(x) \d \P(x)
 $$
 for a probability measure $\P$ and function $f: \mathcal X \to \R$.
-Let $\G$ be another measure on $\mathcal X$ such that $f\P$ is absolutely continuous with respect to $\G$, $f\P \ll \G$ and let $v = \frac{\d f\P}{\d\G}$ be the corresponding Radon-Nikodym derivative. Then
+Let $\G$ be another measure on $\mathcal X$ such that $f\P$ is absolutely continuous with respect to $\G$, $f\P \ll \G$, and let $v = \frac{\d f\P}{\d\G}$ be the corresponding Radon-Nikodym derivative. Then
 $$
     \zeta = \int_{\mathcal X} h(x) \d x = \int_{\mathcal X} f(x) \d \P(x) = \int_{\mathcal X} v(x)\d\G(x)
 $$
-which suggests to estimate $\zeta$ by Monte-Carlo integration: $$\hat \zeta = \frac 1 N \sum_{i=1}^{N} v(X_i)$$ for $X_i \iid \G$, $i = 1, \dots, N$.
+which suggests to estimate $\zeta$ by Monte-Carlo integration: $$\hat \zeta = \frac 1 N \sum_{i=1}^{N} v(X_i)$$ for $X_i \iid \G$, $i = 1, \dots, N$. Here we call $\hat \zeta$ the importance sampling estimate of $\zeta$.
 
-If one is not interested in a particular $h$ but rather in an approximation of $\P$ and $\P$ is absolutely continuous with respect to $\G$, then one may view $$\hat \P_N = \frac{1}{N} \sum_{i = 1}^{N} v(X_i) \delta_{X_i}$$ as a particle approximation of $\P$. In this setting \cite{Agapiou2017Importance} shows that the random measure $\hat \P_N$ converges to $\P$ at rate $\mathcal O\left(\frac 1 N\right)$\todo{check} in an appropriate metric.
+If one is not interested in a particular $h$ but rather in an approximation of $\P$, and $\P$ is absolutely continuous with respect to $\G$, then one may view $$\hat \P_N = \frac{1}{N} \sum_{i = 1}^{N} v(X_i) \delta_{X_i}$$ as a particle approximation of $\P$, in the sense that for sufficiently well behaved test functions $f$, $\P (f) \approx \hat\P_{N}(f)$. In this setting \cite{Agapiou2017Importance} shows that the random measure $\hat \P_N$ converges to $\P$ at rate $\mathcal O\left(\frac 1 N\right)$\todo{check} in an appropriate metric.
 
 To perform importance sampling one must be able to evaluate the weights $v$. In a Bayesian setting this is usually infeasible: if $\P$ is a posterior distribution then the integration constant of its density is intractable.
 In this case one can usually evaluate the weights up to a constant, i.e. $w(x) \propto_x \frac{\d \P}{\d \G}(x)$ is available. The missing constant is then $\int w(x) \d \G$ which is itself amenable to importance sampling.
 This leads to the self-normalized importance sampling weights $W_i = \frac{w(X_i)}{\sum_{i = 1}^N w(X_i)}$ and Monte Carlo estimates $\hat \zeta = \sum_{i = 1}^{N} W_i f(X_i)$ and particle approximation $\hat \P_N = \sum_{i = 1}^{N} W_i \delta_{X_i}$.
 
 In both cases one can show that once second moments of $w$ with respect to $\G$ exist the Monte-Carlo estimates are consistent and asymptotically normal at the usual rates, see \cite[Chapter 8]{Chopin2020Introduction}. 
-However, the finite sample variance of $\hat\zeta$, and thus the practical performance of the procedure, depends on the variance of $w\cdot f$ under $\G$, and thus on the proposal $\G$. \todo{cite agap} show that  the expected mean squared TV distance \todo{check if true} between $\hat P_n$ and  $\P$ may be bounded, up to a constant, by the second moments of $w$ as well as the KL-divergence 
+However, the finite sample variance of $\hat\zeta$, and thus the practical performance of the procedure, depends on the variance of $w\cdot f$ under $\G$, and thus on the proposal $\G$. \citep{Agapiou2017Importance} show that  the expected mean squared TV distance \todo{check if true} between $\hat \P_N$ and  $\P$ may be bounded, up to a constant, by the second moments of $w$. In addition they provide bounds that involve the KL-divergence 
 $$
-\mathcal D_{\text{KL}} \left(\P, \G\right) = \int \log \frac{\d \P}{\d \G} \d \P.
+\mathcal D_{\text{KL}} \left(\P, \G\right) = \int \log \frac{\d \P}{\d \G} \d \P,
 $$
+fostering the intuition that $\G$ should be close to $\P$ for the particle approximation $\hat\P_{N}$ to be close to $\P$.
+\todo{more referenceable defs in this chapter}
+
+To judge the convergence of importance sampling several criteria are discussed in the literature. The classic \gls{ess}\cite{Kong1994Sequential} 
+$$
+\text{ESS} = \frac{1}{\sum_{i = 1}^N W^{2}_{i}}
+$$
+arises from the asymptotic efficiency of importance sampling estimates and is easy to interpret, though care has to be taken in particular settings \todo{find literature}. Assessing convergence through the variance of $\hat \P_{n}$ is, while natural, flawed \cite{Chatterjee2018Sample} and should be avoided. As a remedy \cite{Chatterjee2018Sample} suggest the heuristic $q_{N} = \E Q_{N}$ where
+$$
+Q_{N} = \max_{1\leq i\leq N} W_{i},
+$$
+which judges whether importance sampling has collapsed to just a few particles.
+
+\todo{discuss problems/remedies of high dimensional importance sampling}
+
+In the context of this thesis, importance sampling serves as the main tool to facilitate inference in \glspl{ssm}, both for maximum likelihood estimation and access to the smoothing distribution. As the dimension of the state space is $n\cdot m^{2}$, which will usually be large, we have to perform importance sampling efficiently, exploiting the dependence structure. 
 
 \todo{decide where to put this}
 As the likelihood of a general state space model is neither analytically nor numerically tractable one has to resort to Monte-Carlo techniques.
@@ -334,8 +359,11 @@ While bayesian computational approaches such as MCMC\todo{cite} are able to gene
 
 \subsection{Laplace approximation}
 
+The Laplace approximation is based on a second-order Taylor series expansion of the log target density $\log p(x)$ around its mode $\hat x$. Assuming the density is sufficiently smooth, the mode exists and is unique we have
+
 \begin{itemize}
     \item approximate at mode, problematic if posterior is not unimodal (but then gaussian approximation probably not worth it)
+    \item can be solved by KF, even if non log-concave (\todo{think about whether to generalize to non LC, problem might be that sqrt filter does not work})
 \end{itemize}
 \subsection{Cross entropy method}
 \begin{itemize}
