@@ -357,9 +357,28 @@ While bayesian computational approaches such as MCMC\todo{cite} are able to gene
     \item related results regarding performance of IS (Chatterje, Agapiou)
 \end{itemize}
 
-\subsection{Laplace approximation}
+\subsection{\gls{la}}
 
-The Laplace approximation is based on a second-order Taylor series expansion of the log target density $\log p(x)$ around its mode $\hat x$. Assuming the density is sufficiently smooth, the mode exists and is unique we have
+\gls{la} goes back to Laplace \cite{Laplace1986Memoir} who invented the technique to approximate moments of otherwise intractable distributions. Since \cite{Tierney1986Accurate,Tierney1989Fully} rediscovered its use to approximate posterior means and variances, it has been a staple method for statisticians \todo{cite something}.
+
+The method is based on a second-order Taylor series expansion of the log target density $\log p(x)$ around its mode $\hat x$, i.e. matching mode and curvature. Assuming the density is sufficiently smooth, the mode exists and is unique we have
+$$
+\log p(x) \approx \log p(\hat x) + \underbrace{\nabla_{x} \log p (\hat x)}_{= 0} \left( x - \hat x \right) + \frac{1}{2} (x - \hat x)^{T} H (x - \hat x)
+$$
+where $H$ is the Hessian of $\log p$ evaluated at the mode. As $\log p (\hat x)$ does not depend on $x$, the right-hand side can be seen (up to additive constants) as the density of a Gaussian distribution with mean $\hat x$ and covariance matrix $\Sigma = - H^{-1}$. 
+
+% degenerate case when $H$ is not PSD
+If $p$ is log-concave in $x$, $H$ is guaranteed to be negative semidefinite and the \gls{la} yields an actual Gaussian distribution. \todo{what to do if we cannot gurantee this}
+
+% numerics
+
+% advantages / disadvantages
+The main advantage of the \gls{la} is that fast to obtain and, for sufficiently well-behaved distributions on a moderate dimensional space, provides reasonably high \gls{ess}. Additionally, the Newton-Raphson iterations to find the mode and Hessian are robust and require no simulation, unlike the other methods discussed further below.
+For the \glspl{ssm} we consider in this thesis, the numerical methods can be implemented using the Kalman filter and smoother \cite{Shephard1997Likelihood,Durbin1997Monte}, even in the degenerate case where $H$ is indefinite \cite{Jungbacker2007Monte}.
+\todo{incorporate some of the citations from How good is your LA}
+
+However, as the \gls{la} is a local approximation, it may be an inappropriate description of the global behavior of the target, see \cref{ex:la_failure} for a breakdown of \gls{la}. 
+Additionally, even if \gls{la} works in principle, its \gls{ess} will usually degenerate quickly once the dimension increases whereas the \gls{cem} and \gls{eis} do so at a slower pace.
 
 \begin{itemize}
     \item approximate at mode, problematic if posterior is not unimodal (but then gaussian approximation probably not worth it)
@@ -371,6 +390,17 @@ The Laplace approximation is based on a second-order Taylor series expansion of 
 \end{itemize}
 \subsection{Efficient importance sampling}
 
+\subsection{Comparison}
+\begin{example}[Failure of \gls{la}]
+  \label{ex:la_failure}
+  Consider the Gaussian scale mixture $\P = \frac{1}{2} \left(\mathcal N (0,1) + \mathcal N(0, \varepsilon^{-2})\right)$ with mode $x^{\ast}=0$. 
+  The \gls{la} is $\G_{\text{LA}} = \mathcal N \left( 0, \frac{1}{\varepsilon^{2} - \varepsilon + 1} \right)$, whose variance goes to $1$ as $\varepsilon$ goes to $0$, so the \gls{la} will miss close to $\frac 1 2$ of the total mass.
+  For $\varepsilon$ small enough, the variance of the \gls{la} will be smaller than $\frac{1}{2\varepsilon^{2}}$, whence the second moment of the weights is infinite and importance sampling fails.
+
+  The \gls{cem} minimizes the KL-divergence between $\P$ and $\G_{\psi}$, is given by $\G_{\text{CE}} = \mathcal N (0, \sigma^{2})$, where $\sigma^{2} = \frac{1}{2}\left( 1 + \varepsilon^{-2} \right)$ is the variance of $\P$.
+  As $\sigma^{2} > \frac{1}{2}\varepsilon^{-2}$, the weights have finite second moment, and importance sampling is consistent.
+  \todo{add proof for $\frac{1}{2}$ to appendix}
+\end{example}
 
 \section{Gaussian importance sampling for state space models}
 \label{sec:gaussian_importance_sampling_for_state_space_models}
