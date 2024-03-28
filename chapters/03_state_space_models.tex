@@ -307,7 +307,7 @@ A classical result is that the minimum MSE proposal $\G^\ast$ has a closed form,
     \G^{\ast}  = \frac{\lvert f \rvert}{\P\left(\lvert f \rvert \right)} \P
     $$
 \end{proposition}
-Unfortunately, this optimality result has no practical use, indeed if $f$ is positive we'd have to obtain $\P(f)$, the overall target of our endeavor! Additionally, sampling from $\G^{\ast}$ is not guaranteed to be possible. 
+Unfortunately, this optimality result has no practical use, indeed if $f$ is positive we'd have to obtain $\P(f)$, the overall target of our endeavor. Additionally, sampling from $\G^{\ast}$ is not guaranteed to be practically feasible. 
 
 If one is not interested in a particular $h$ but rather in an approximation of $\P$, and $\P$ is absolutely continuous with respect to $\G$, then one may view $$\hat \P_N = \frac{1}{N} \sum_{i = 1}^{N} v(X_i) \delta_{X_i}$$ as a particle approximation of $\P$, in the sense that for sufficiently well behaved test functions $f$, $\P (f) \approx \hat\P_{N}(f)$. In this setting \cite{Agapiou2017Importance} shows that the random measure $\hat \P_N$ converges to $\P$ at rate $\mathcal O\left(\frac 1 N\right)$\todo{check} in an appropriate metric.
 
