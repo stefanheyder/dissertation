@@ -1,0 +1,61 @@
+\definecolor{TUIl-orange}{RGB}{255, 121, 0}
+\definecolor{TUIl-blue}{RGB}{0, 51, 89}
+\definecolor{TUIl-green}{RGB}{0, 116, 122}
+\definecolor{TUIl-grey}{RGB}{165, 165, 165}
+
+\newcommand*{\xMin}{0}%
+\newcommand*{\xMax}{22}%
+\newcommand*{\yMin}{0}%
+\newcommand*{\yMax}{7}%
+\tikzset{chunk/.style=very thick, rounded corners}
+\begin{tikzpicture}
+
+    % grid
+    %\draw [gray] (\xMax,\yMin) -- (\xMax,\yMax);
+    %\foreach \i in {\xMin,...,21} {
+    %    \draw [gray] (\i,\yMin) -- (\i,\yMax)  node [below, black] at (\i + .5,\yMin) {$\i$};
+    %}
+
+    %\draw [gray] (\xMin,\yMax) -- (\xMax,\yMax);
+    %\foreach \i in {\yMin,...,6} {
+    %    \draw [gray] (\xMin,\i) -- (\xMax,\i) node [left, black] at (\xMin,\i + .5) {T - $\i$};
+    %}
+
+    % axis-labels
+    \foreach \i in {\yMin,...,6} {
+        \draw node [left, black] at (\xMin,\i + .5) {T - $\i$};
+    }
+    \foreach \i in {\xMin,...,21} {
+        \draw node [below, black] at (\i + .5,\yMin) {$\i$};
+    }
+
+
+    % known
+    \foreach \j in {0, ..., 6} {
+        \foreach \i in {0, ..., \j} {
+            \filldraw[chunk, fill=TUIl-orange!40] (\i, \j) -- (\i + 1, \j) -- (\i + 1, \j + 1) -- (\i, \j + 1) -- cycle;
+        }
+    }
+
+    % weekly chunks
+    \foreach \j in {0} {
+        \foreach \i in {0, 1, 2} {
+            \filldraw[chunk,fill=TUIl-green!40] (\j + 1 + 7 * \i, \j) -- (\j + 7 * \i + 8, \j) -- (\j + 7 * \i + 8, \j + 1)  -- (\j + 1 + 7 * \i, \j + 1) -- cycle;
+        }
+    }
+    \foreach \j in {1, ..., 6} {
+        \foreach \i in {0, 1} {
+            \filldraw[chunk,fill=TUIl-green!40] (\j + 1 + 7 * \i, \j) -- (\j + 7 * \i + 8, \j) -- (\j + 7 * \i + 8, \j + 1)  -- (\j + 1 + 7 * \i, \j + 1) -- cycle;
+        }
+    }
+
+    % last chunks which are not weekly
+    \foreach \j in {1, ..., 6} {
+        \filldraw[chunk,fill=TUIl-blue!40] (\j + 1 + 7 * 2, \j) -- (\j + 7 * 2+ 8 - \j, \j) -- (\j + 7 * 2 + 8 - \j, \j + 1)  -- (\j + 1 + 7 * 2, \j + 1) -- cycle;
+    }
+
+
+    % labels
+    \node[] at (\xMax / 2, -1) {delay $d$};
+    \node[rotate=90] at (-1.8, \yMax / 2) {time $t$};
+\end{tikzpicture}

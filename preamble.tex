@@ -55,8 +55,8 @@
 
 \usepackage{csquotes}
 \PassOptionsToPackage{%
-  %backend=biber,bibencoding=utf8, %instead of bibtex
-  backend=bibtex8,bibencoding=ascii,%
+  backend=biber,bibencoding=utf8, %instead of bibtex
+  %backend=bibtex8,bibencoding=ascii,%
   language=auto,%
   style=numeric-comp,%
   %style=authoryear-comp, % Author 1999, 2010
@@ -103,8 +103,10 @@
   \def\bflabel#1{{\acsfont{#1}\hfill}}
   \def\aclabelfont#1{\acsfont{#1}}
 % ****************************************************************************************************
-%\usepackage{pgfplots} % External TikZ/PGF support (thanks to Andreas Nautsch)
-%\usetikzlibrary{external}
+\usepackage{tikz}
+\usepackage{tikzscale}
+\usetikzlibrary{calc}
+\usetikzlibrary{external}
 %\tikzexternalize[mode=list and make, prefix=ext-tikz/]
 % ****************************************************************************************************
 
@@ -145,7 +147,14 @@
 }
 % ****************************************************************************************************
 
+% Colors
+\usepackage{xcolor}
 
+% TU Ilmenau color scheme definitions
+\definecolor{TUIl-orange}{RGB}{255, 121, 0}
+\definecolor{TUIl-blue}{RGB}{0, 51, 89}
+\definecolor{TUIl-green}{RGB}{0, 116, 122}
+\definecolor{TUIl-grey}{RGB}{165, 165, 165}
 
 
 % ****************************************************************************************************
@@ -172,7 +181,8 @@
   % pdfpagemode=UseOutlines,%
   plainpages=false, bookmarksnumbered, bookmarksopen=true, bookmarksopenlevel=1,%
   hypertexnames=true, pdfhighlight=/O,%nesting=true,%frenchlinks,%
-  %urlcolor=CTurl, linkcolor=CTlink, citecolor=CTcitation, %pagecolor=RoyalBlue,%
+  %urlcolor=CTurl, linkcolor=CTlink, 
+  citecolor=gray, %pagecolor=RoyalBlue,%
   %urlcolor=Black, linkcolor=Black, citecolor=Black, %pagecolor=Black,%
   pdftitle={\myTitle},%
   pdfauthor={\textcopyright\ \myName, \myUni, \myFaculty},%
@@ -271,3 +281,4 @@
 \glsdisablehyper
 % cleveref should be loaded last
 \usepackage{cleveref} 
+\crefname{figure}{Figure}{Figures}
