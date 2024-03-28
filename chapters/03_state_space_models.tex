@@ -291,7 +291,7 @@ This chapter proceeds with a general treatment of importance sampling. Subsequen
 Suppose we have a function $h: \mathcal X \to \R$ whose integral $$\zeta = \int_{\mathcal X} h(x) \d x$$ we want to compute.
 Furthermore, suppose that we can write
 $$
-    \int_{\mathcal X} h(x) \d x = \int_{\mathcal X} f(x) \d \P(x)
+    \int_{\mathcal X} h(x) \d x = \int_{\mathcal X} f(x) \d \P(x) = \P (f)
 $$
 for a probability measure $\P$ and function $f: \mathcal X \to \R$.
 Let $\G$ be another measure on $\mathcal X$ such that $f\P$ is absolutely continuous with respect to $\G$, $f\P \ll \G$, and let $v = \frac{\d f\P}{\d\G}$ be the corresponding Radon-Nikodym derivative. Then
@@ -299,6 +299,15 @@ $$
     \zeta = \int_{\mathcal X} h(x) \d x = \int_{\mathcal X} f(x) \d \P(x) = \int_{\mathcal X} v(x)\d\G(x)
 $$
 which suggests to estimate $\zeta$ by Monte-Carlo integration: $$\hat \zeta = \frac 1 N \sum_{i=1}^{N} v(X_i)$$ for $X_i \iid \G$, $i = 1, \dots, N$. Here we call $\hat \zeta$ the importance sampling estimate of $\zeta$.
+
+A classical result is that the minimum MSE proposal $\G^\ast$ has a closed form, which can be shown by a simple application of Jensen's inequality. 
+\begin{proposition}[{\cite[Proposition 8.2]{Chopin2020Introduction}}][minimum MSE proposal]
+    The proposal $\G^{\ast}$ that minimizes the MSE of importance sampling is given by
+    $$
+    \G^{\ast}  = \frac{\lvert f \rvert}{\P\left(\lvert f \rvert \right)} \P
+    $$
+\end{proposition}
+Unfortunately, this optimality result has no practical use, indeed if $f$ is positive we'd have to obtain $\P(f)$, the overall target of our endeavor! Additionally, sampling from $\G^{\ast}$ is not guaranteed to be possible. 
 
 If one is not interested in a particular $h$ but rather in an approximation of $\P$, and $\P$ is absolutely continuous with respect to $\G$, then one may view $$\hat \P_N = \frac{1}{N} \sum_{i = 1}^{N} v(X_i) \delta_{X_i}$$ as a particle approximation of $\P$, in the sense that for sufficiently well behaved test functions $f$, $\P (f) \approx \hat\P_{N}(f)$. In this setting \cite{Agapiou2017Importance} shows that the random measure $\hat \P_N$ converges to $\P$ at rate $\mathcal O\left(\frac 1 N\right)$\todo{check} in an appropriate metric.
 
@@ -320,9 +329,9 @@ $$
 $$
 arises from the asymptotic efficiency of importance sampling estimates and is easy to interpret, though care has to be taken in particular settings \todo{find literature}. Assessing convergence through the variance of $\hat \P_{n}$ is, while natural, flawed \cite{Chatterjee2018Sample} and should be avoided. As a remedy \cite{Chatterjee2018Sample} suggest the heuristic $q_{N} = \E Q_{N}$ where
 $$
-Q_{N} = \max_{1\leq i\leq N} W_{i},
+Q_{N} = \max_{1\leq i\leq N} W_{i}.
 $$
-which judges whether importance sampling has collapsed to just a few particles.
+This judges whether importance sampling has collapsed to just a few particles and is amenable to Monte-Carlo integration.
 
 \todo{discuss problems/remedies of high dimensional importance sampling}
 
@@ -384,10 +393,10 @@ Additionally, even if \gls{la} works in principle, its \gls{ess} will usually de
     \item approximate at mode, problematic if posterior is not unimodal (but then gaussian approximation probably not worth it)
     \item can be solved by KF, even if non log-concave (\todo{think about whether to generalize to non LC, problem might be that sqrt filter does not work})
 \end{itemize}
-\subsection{Cross entropy method}
-\begin{itemize}
-    \item
-\end{itemize}
+
+\subsection{\gls{cem}}
+To provide a global approximation to the target, the \gls{cem} selects from a parametric family $ \left( G_{\psi} \right)_{\psi \in \Psi}$ of proposals the one that minimizes the \gls{kld} to the target. 
+
 \subsection{Efficient importance sampling}
 
 \subsection{Comparison}
