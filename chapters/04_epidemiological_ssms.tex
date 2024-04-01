@@ -17,31 +17,11 @@
 Judging the severity of the COVID-19 epidemic has been an ongoing challenge since its inception. As immunization against COVID-19 rose, strict enforcement of social distancing rules eased and testing regimes became less strict, case incidences became a less reliable and harder to interpret indicator of epidemic severity. Instead more direct indicators of morbidity, such as the number of deaths and ICU admissions and occupancy have come to the fore. But these indicators are late due to the substantial delays between infection and occurence. An alternative indicator that captures the morbidity caused by COVID-19 but is earlier than the others is the number of hospitalisations of positive COVID-19
 cases.
 
-While hospitalisations occur earlier, they still come with substantial delay between the infection and subsequent admission to hospital. Additional difficulties arise due to delays in reporting, i.e.~the time it takes until the hospital reports the new case to the national health authorities. The problem of accounting for delays in reporting for occurred, but not yet reported events has been termed \textbf{nowcasting}, i.e.~forecasting of the indicator at time ``now''. Predicting the number of hospitalisations is thus a mixture of both forecasting --- which reported COVID-19 cases will end up in the hospital --- and nowcasting --- which cases have yet to be reported --- and we will use the term nowcasting in this paper to mean this predictive mixture. In this section we focus on the situation in Germany where data on hospitalisations has been available since April 2021 provided by the German federal health care authorithy, the Robert Koch-Institut (RKI), via Github \cite{RobertKoch-Institut2021COVID19Hospitalisierungen}. In these data the number of hospitalisations is linked to the date of reporting of the associated case, so, in a sense, the term of nowcasting is accurate: we are interested in the ``true'' value of the indicator today, that will only be observed after a long delay. While this association requires a careful interpretation of the indicator (see \cref{subsec:nowcasting_discussion}) it was, besides case incidences and ICU occupancy, one of the main official indicators in Germany informing countermeasures and so there is merit in nowcasting it. 
+While hospitalisations occur earlier, they still come with substantial delay between the infection and subsequent admission to hospital. Additional difficulties arise due to delays in reporting, i.e.~the time it takes until the hospital reports the new case to the national health authorities. The problem of accounting for delays in reporting for occurred, but not yet reported events has been termed \textbf{nowcasting}, i.e.~forecasting of the indicator at time ``now''. Predicting the number of hospitalisations is thus a mixture of both forecasting --- which reported COVID-19 cases will end up in the hospital --- and nowcasting --- which cases have yet to be reported --- and we will use the term nowcasting in this paper to mean this predictive mixture. In this section we focus on the situation in Germany where data on hospitalisations has been available since April 2021 provided by the German federal health care authorithy, the \gls{rki}, via Github \cite{RobertKoch-Institut2021COVID19Hospitalisierungen}. In these data the number of hospitalisations is linked to the date of reporting of the associated case, so the term of nowcasting is accurate: we are interested in the ``true'' value of the indicator today, that will only be observed after a long delay. While this association requires a careful interpretation of the indicator (see \Cref{subsec:nowcasting_discussion}) it was, besides case incidences and ICU occupancy, one of the main official indicators in Germany informing countermeasures in 2021 and so there is merit in nowcasting it. 
 
-The ideas in this section are based on the ``ILM-prop'' model that Thomas Hotz and I submitted to the German COVID-19 NowcastHub \todo{ref}. However, the model submitted there was based on simple point estimates for the proportion of hospitalisations per reported case, neglecting regularization over time. Here we adapt this model to the \gls{ssm} setting of this thesis and investigate if the increased model complexity results in improved performance.
+The extent of delays is visible in \cref{fig:delays_in_reporting}: the reported number of hospitalisations will roughly double over the course of twelve weeks. By the aforementioned reporting scheme of hospitalisations there are two reporting dates for a single hospitalised case: the reporting date of the case, i.e.~the date when local health authorities were made aware of the positive test, and the reporting date of the hospitalisation, i.e.~when the hospitalisation was reported to the \gls{rki}. This induces a double weekday effect in the reporting delays which we make visible in \cref{fig:double_weekday_effect}.
 
-The extent of delays is visible in \cref{fig:delays_in_reporting}:
-the reported number of hospitalisations will roughly double over the
-course of twelve weeks. By the aforementioned reporting scheme of
-hospitalisations there are two reporting dates for a single hospitalised
-case: the reporting date of the case, i.e.~the date when local health
-authorities were made aware of the positive test, and the reporting date
-of the hospitalisation, i.e.~when the hospitalisation was reported to
-the RKI. This induces a double weekday effect in the reporting delays
-which we make visible in \cref{fig:double_weekday_effect}.
-
-Compared to previous approaches to nowcasting that tend to exclusively
-focus on modelling the delay distribution with intricate parametric
-models, our model sidesteps this complex delay structure by decomposing
-delayed hospitalisations into weekly chunks (\cref{fig:reporting_triangle}) and incorporate additional data. As cases
-and hospitalisations are explicitly linked by the case reporting date we
-forecast the number of hospitalisations in each chunk based on the
-current incidences and past fractions of hospitalisations in a
-comparable weekly chunk. We additionally quantify uncertainty by
-prediction intervals that are informed by the past performance of our
-model. This makes our model straightforward to understand, easy to
-implement and fast to run.
+Compared to other approaches in the COVID-19 NowcastHub, that tended to exclusively focus on modelling the delay distribution with parametric and non-parametric models, our model sidesteps this complex delay structure by decomposing delayed hospitalisations into weekly chunks (\cref{fig:reporting_triangle}) and incorporating case data. As cases and hospitalisations are explicitly linked by the case reporting date we forecast the number of hospitalisations in each chunk based on the current incidences and past fractions of hospitalisations in a comparable weekly chunk. We additionally quantify uncertainty by prediction intervals that are informed by the past performance of our model. This makes our model straightforward to understand, easy to implement and fast to run.\todo{reformulate}
 
 \begin{figure}
 
@@ -61,54 +41,13 @@ implement and fast to run.
 \caption{The hospitalisation incidence contains a double weekday effect owed to the reporting of both the COVID-19 case and the subsequent hospitalisation. While the weekday effect of the case reporting date is somewhat mitigated by summing over $7$ day periods, the weekday effect of reporting date of the hospitalisation is still present in the data. It is most pronounced for hospitalisations that are reported with delays, i.e. where the case reporting date does not match the reporting date of the hospitalisation.}\label{fig:double_weekday_effect}
 \end{figure}
 
-The origin of nowcasting lie in accounting for incurred, but not
-reported claims in the actuarial sciences
-\cite{Kaminsky1987Prediction}, delays in reporting for AIDS
-\cite{Zeger1989Statistical,Lawless1994Adjustments} and other
-infectious diseases \cite{Farrington1996Statistical}.
+The origin of nowcasting lie in accounting for incurred, but not reported claims in the actuarial sciences \cite{Kaminsky1987Prediction}, delays in reporting for AIDS \cite{Zeger1989Statistical,Lawless1994Adjustments} and other infectious diseases \cite{Farrington1996Statistical}. Popular statistical approaches include methods from survival analysis \cite{Lawless1994Adjustments} and generalized linear regression \cite{Zeger1989Statistical}. In the survial analysis setting one commonly models the reverse time discrete hazard parametrically and assumes multinomial sampling of the final number of cases, potentially accounting for overdispersion. This has been studied with frequentist \cite{Midthune2005Modeling} and Bayesian \cite{Hohle2014Bayesian,AnDerHeiden2020Schatzung} methods. The generalized linear regression approach has origins in the chain ladder model from actuarial sciences \cite{Renshaw1998Stochastic} and models the observed counts in the reporting triangle by a Poisson or negative binomial distribution.
+For both approaches, available covariates can be incorporated in a straightforward way. In the setting of real-time nowcasting, it is often beneficial to incorporate epidemic dynamics into the model, this can be achieved by splines \cite{Hohle2014Bayesian,vandeKassteele2019Nowcasting} or by a latent process of infections \cite{McGough2020Nowcasting}.
 
-Nowcasting problems have been analysed with methods from survival
-analysis \cite{Lawless1994Adjustments} and generalized linear
-regression \cite{Zeger1989Statistical}. In the survial analysis
-setting one commonly models the reverse time discrete hazard
-parametrically and assumes multinomial sampling of the final number of
-cases, potentially accounting for overdispersion. This has been studied
-with frequentist \cite{Midthune2005Modeling} and bayesian
-\cite{Hohle2014Bayesian,AnDerHeiden2020Schatzung} methods. The
-generalized linear regression approach has origins in the chain ladder
-model from actuarial sciences \cite{Renshaw1998Stochastic} and
-models the observed counts in the reporting triangle by a Poisson or
-negative binomial distribution.
+Nowcasting methods have wide application in accouting for reporting delays \cite{Midthune2005Modeling}, early outbreak detection \cite{Salmon2015Bayesian,Bastos2019Modelling}, and, in the recent COVID-19 epidemic, improving real-time monitoring of epidemic outbreaks \cite{AnDerHeiden2020Schatzung,Gunther2021Nowcasting,Schneble2021Nowcasting,Akhmetzhanov2021Estimation}. Evaluating a forecasting model in a real-time public health setting is advantageous as it avoid hindsight bias \cite{Desai2019Realtime}, however nowcasting approach may have difficulties with bias and properly calibrated uncertainty if used in a real-time setting. This includes rapidly changing dynamics \cite{Gunther2021Nowcasting,vandeKassteele2019Nowcasting}, both of the delay distribution and the underlying epidemic, retrospective changes in data \cite{Midthune2005Modeling} and long delays with few observed cases \cite{Noufaily2015Modelling}. 
 
-For both approaches available covariates can be incorporated in a
-straight-forward way. In the setting of real-time nowcasting it is often
-beneficial to incorporate epidemic dynamics into the model, this can be
-done by splines
-\cite{Hohle2014Bayesian,vandeKassteele2019Nowcasting} or by a latent
-process of infections \cite{McGough2020Nowcasting}.
+To avoid the aforementioned hindsight bias one can make their predictions publicly available in real-time \cite{Ray2020Ensemble,Bracher2021Preregistered}. For the hospitalisations in Germany, Thomas Hotz and I have participated in the German COVID-19 NowcastHub \cite{2022Nowcasts} since November 2021 where nowcasts are available in a public Github repository \cite{2022Hospitalization} with the ``ILM-prop'' model. The ideas, especially the model and the ``double-weekday effect'', discussed this section are based on this model. However, the ``ILM-prop'' model is based on simple point estimates for the proportion of hospitalisations per reported case, neglecting regularization over time. In this thesis we extend this model to the \gls{ssm} setting of this thesis and investigate if the increased model complexity results in improved performance.
 
-Nowcasting methods have wide application in accouting for reporting
-delays \cite{Midthune2005Modeling}, early outbreak detection
-\cite{Salmon2015Bayesian,Bastos2019Modelling}, and, in the recent
-COVID-19 epidemic, improving real-time monitoring of epidemic outbreaks
-\cite{AnDerHeiden2020Schatzung,Gunther2021Nowcasting,Schneble2021Nowcasting,Akhmetzhanov2021Estimation}.
-
-Evaluating a forecasting model in a real-time public health setting is
-advantageous as it avoid hindsight bias \cite{Desai2019Realtime},
-however nowcasting approach may have difficulties with bias and properly
-calibrated uncertainty if used in a real-time setting. This includes
-rapidly changing dynamics
-\cite{Gunther2021Nowcasting,vandeKassteele2019Nowcasting}, both of
-the delay distribution and the underlying epidemic, retrospective
-changes in data \cite{Midthune2005Modeling} and long delays with
-few observed cases \cite{Noufaily2015Modelling}. To avoid the
-aforementioned hindsight bias one can make their predictions publicly
-available in real-time
-\cite{Ray2020Ensemble,Bracher2021Preregistered}. For the
-hospitalisations in Germany we have particiapted in the German COVID-19
-NowcastHub \cite{2022Nowcasts} since November 2021 where nowcasts
-are available in a public Github repository
-\cite{2022Hospitalization}.
 \subsection{Data}
 To predict the number of hospitalisations we consider the reporting
 process of both reported COVID-19 cases and reported hospitalisations.
@@ -127,7 +66,7 @@ these weekly chunks then consists of the fraction of hospitalisations of
 reported cases in the past.
 
 We use publicly available data from the German national health authority
-(Robert-Koch institut) on daily reported COVID-19 cases
+(\gls{rki}) on daily reported COVID-19 cases
 \cite{RobertKoch-Institut2022SARSCoV2} and weekly reported
 hospitalisations
 \cite{RobertKoch-Institut2021COVID19Hospitalisierungen}. Both
@@ -160,8 +99,7 @@ Daily incident cases and weekly hospitalisations are reported by federal
 state and age group (00-04, 05-14, 15-34, 35-59, 60-79, 80+). Incident
 cases are additionally reported by county and sex.
 
-In line with the structure of the data provided by the Robert-Koch
-institut we let \(H^a_{t,d}\) be the number of weekly hospitalisations
+In line with the structure of the data provided by the \gls{rki} we let \(H^a_{t,d}\) be the number of weekly hospitalisations
 in age group \(a\) with case reporting date \(t - 1, \dots, t - 7\) that
 are known on day \(t + d\), aggregating over all states. Accordingly we
 define \(I^a_{t,d}\) to be the number of weekly incident cases in age
@@ -426,7 +364,7 @@ hospitalisation can be recovered from the publicly available data, the
 date of hospitalisation cannot. Additionally, no information on the
 duration of stay is available, making it impossible to create an
 indicator for the occupancy of hospitals based solely on data provided
-by the Robert Koch-Institut.
+by the \gls{rki}.
 
 Implicit in all of these approaches is an assumption of
 ``stationarity'', i.e.~that future reported hospitalisations will behave
