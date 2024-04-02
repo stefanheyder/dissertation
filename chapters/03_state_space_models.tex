@@ -207,7 +207,7 @@ Both the Poisson and negative binomial belong to the class of exponential family
 
     Conversely, let $\P_{\theta}, \theta \in \Theta$ be a given parametric family of probability measures on some space $\mathcal Y$ that is absolutely continuous with respect to a common dominating measure $\mu$. Suppose there exists a reparametrization $\eta : \Theta \to \R^{p}$, a statistic $T: \mathcal Y \to \R^{p}$ and functions $Z: \Theta\to \R$, $h:\mathcal Y \to \R$ exist, such that
     $$
-        p_{\theta}(y) = \frac{\d P_{\theta}}{\d \mu} = Z(\theta) h(y) \exp \left(\eta(\theta)^{T}T(y)\right),
+        p_{\theta}(y) = \frac{\d \P_{\theta}}{\d \mu} = Z(\theta) h(y) \exp \left(\eta(\theta)^{T}T(y)\right),
     $$
     then we call $\P_{\theta}, \theta \in \Theta$ and $p_{\theta}, \theta \in \Theta$ a \textbf{$p$-dimensional exponential family}.
 \end{definition}
@@ -402,19 +402,38 @@ To provide a global approximation to the target, the \gls{cem}\cite{Rubinstein19
     \psi_{\text{CE}} &= \argmin_{\psi \in \Psi} \Dkl{\G^{\ast}}{\G_{\psi}} \\
     &= \argmin_{\psi \in \Psi} \int \log \frac{\d \G^{\ast}}{\d\G_{\psi}} \d \G^{\ast}
 \end{align*}
-where $\G^{\ast}$ is either the optimal proposal from \Cref{prop:minimum_MSE_IS} or $\P$. If $\G^{\ast}$ and $\G_{\psi}$ possess densities $g^{\ast}$ and $g_{\psi}$ w.r.t. some common measure $\mu$, the same for all $\psi$, we may rewrite the optimization problem to
+where $\G^{\ast}$ is either the optimal proposal from \Cref{prop:minimum_MSE_IS} or $\P$. If $\G^{\ast}$ and $\G_{\psi}$ possess densities $g^{\ast}$ and $g_{\psi}$ w.r.t. some common measure $\mu$, the same for all $\psi$, we may reformulate the optimization problem to maximize the cross-entropy between $g^{\ast}$ and $g_{\psi}$
 \begin{align*}
-    \psi_{\text{CE}} &= \argmin_{\psi \in \Psi} \int \log g^{\ast}\log g^{\ast}(x) \d \mu(x) - \int g^{\ast}\log g_{\psi} \d \mu(x) \\
-    &= \argmax_{\psi \in \Psi} \int g^{\ast} \log g_{\psi} \d \mu(x).
+    \psi_{\text{CE}} &= \argmin_{\psi \in \Psi} \int  g^{\ast}(x)\log g^{\ast}(x) \d \mu(x) - \int g^{\ast}(x)\log g_{\psi} \d \mu(x) \\
+    &= \argmax_{\psi \in \Psi} \int g^{\ast}(x) \log g_{\psi}(x) \d \mu(x),
 \end{align*}
-This last integral is the cross-entropy between $g^{\ast}$ and $g_{\psi}$.
-
-
-% CEM only needs CE
-
-% break-down in higher dimensions?
+as the first integral does not depend on $\psi$.
 
 % analytical solution, MLE
+An attractive property of the \gls{cem} is that if $\G_{\psi}$ form an exponential family with natural parameter $\psi \in \R^{p}$, the optimal $\psi_{\text{CE}}$ only depends on certain moments of $\G^{\ast}$. Indeed, for $\log g_{\psi}(x) = \log h(x) + \log Z(\psi) + \psi^{T} T(x)$ we have 
+$$
+\int g^{\ast}(x) \log g_{\psi}(x) \d \mu(x) = \E \log h(X) + \log Z(\psi) + \psi^{T} \E T(X)
+$$
+for $X \sim \G^{\ast}$. As $\log Z(\psi)$ is the cumulant-generating function of $\G_{\psi}$it is, under appropriate regularity conditions, smooth. Thus the optimal $\psi_{\text{CE}}$ solves
+$$
+\frac{\nabla_{\psi}Z(\psi_{\text{CE}})}{Z(\psi_{\text{CE}})} = - \E T(X).
+$$
+Given $\E T(X)$, this system of equations can, in many cases, be solved analytically or by gradient descent algorithms. While $\E T(X)$ is usually not available, it is itself amenable to importance sampling. Given a proposal $\G$ we may estimate $\E T(X)$ by $\hat T = \sum_{i = 1}^{N} W^{i} T(X^{i})$ for $X_{1}, \dots, X_{N} \iid \G$ and auto-normalized importance sampling weights $W^{i}$ and in turn estimate $\psi_{\text{CE}}$ by $\hat \psi_{\text{CE}}$ solving
+$$
+\frac{\nabla_{\psi}Z(\hat\psi_{\text{CE}})}{Z(\hat\psi_{\text{CE}})} = - \hat T.
+$$
+Thus $\hat \psi_{\text{CE}}$ is a Z-estimator and we may analyze its statistical behavior by standard methods, see e.g. \cite[Chapter 5]{VanderVaart2000Asymptotic}.
+\todo{rework this: consistency for non-EF proposals (there use VdV and potentially technical assumptions, then special case of EF with Brown)}
+% Z-estimator behaviour 
+\begin{theorem}[consistency of $\hat \psi_{\text{CE}}$]
+    If $\hat T$ is a consistent estimate of $\E T(X)$, then 
+\end{theorem}
+
+\begin{theorem}[asymptotic normality of $\hat \psi_{\text{CE}}$]
+    
+\end{theorem}
+
+% break-down in higher dimensions?
 
 % iterative procedure, CRNs
 
