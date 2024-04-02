@@ -302,6 +302,7 @@ which suggests to estimate $\zeta$ by Monte-Carlo integration: $$\hat \zeta = \f
 
 A classical result is that the minimum MSE proposal $\G^\ast$ has a closed form, which can be shown by a simple application of Jensen's inequality. 
 \begin{proposition}[{\cite[Proposition 8.2]{Chopin2020Introduction}}][minimum MSE proposal]
+    \label{prop:minimum_MSE_IS}
     The proposal $\G^{\ast}$ that minimizes the MSE of importance sampling is given by
     $$
     \G^{\ast}  = \frac{\lvert f \rvert}{\P\left(\lvert f \rvert \right)} \P
@@ -318,7 +319,7 @@ This leads to the self-normalized importance sampling weights $W_i = \frac{w(X_i
 In both cases one can show that once second moments of $w$ with respect to $\G$ exist the Monte-Carlo estimates are consistent and asymptotically normal at the usual rates, see \cite[Chapter 8]{Chopin2020Introduction}. 
 However, the finite sample variance of $\hat\zeta$, and thus the practical performance of the procedure, depends on the variance of $w\cdot f$ under $\G$, and thus on the proposal $\G$. \citep{Agapiou2017Importance} show that  the expected mean squared TV distance \todo{check if true} between $\hat \P_N$ and  $\P$ may be bounded, up to a constant, by the second moments of $w$. In addition they provide bounds that involve the KL-divergence 
 $$
-\mathcal D_{\text{KL}} \left(\P, \G\right) = \int \log \frac{\d \P}{\d \G} \d \P,
+\Dkl{\P}{\G} = \int \log \frac{\d \P}{\d \G} \d \P,
 $$
 fostering the intuition that $\G$ should be close to $\P$ for the particle approximation $\hat\P_{N}$ to be close to $\P$.
 \todo{more referenceable defs in this chapter}
@@ -366,11 +367,11 @@ While bayesian computational approaches such as MCMC\todo{cite} are able to gene
     \item related results regarding performance of IS (Chatterje, Agapiou)
 \end{itemize}
 
-\subsection{\gls{la}}
+\subsection{\acrfull{la}}
 
-\gls{la} goes back to Laplace \cite{Laplace1986Memoir} who invented the technique to approximate moments of otherwise intractable distributions. Since \cite{Tierney1986Accurate,Tierney1989Fully} rediscovered its use to approximate posterior means and variances, it has been a staple method for statisticians \todo{cite something}.
+\acrfull{la} goes back to Laplace \cite{Laplace1986Memoir} who invented the technique to approximate moments of otherwise intractable distributions. Since \cite{Tierney1986Accurate,Tierney1989Fully} rediscovered its use to approximate posterior means and variances, it has been a staple method for statisticians \todo{cite something}.
 
-The method is based on a second-order Taylor series expansion of the log target density $\log p(x)$ around its mode $\hat x$, i.e. matching mode and curvature. Assuming the density is sufficiently smooth, the mode exists and is unique we have
+The method is based on a second-order Taylor series expansion of the log target density $\log p(x)$ around its mode $\hat x$, i.e. matching mode and curvature. Assuming the density is sufficiently smooth and the mode exists and is unique, we have
 $$
 \log p(x) \approx \log p(\hat x) + \underbrace{\nabla_{x} \log p (\hat x)}_{= 0} \left( x - \hat x \right) + \frac{1}{2} (x - \hat x)^{T} H (x - \hat x)
 $$
@@ -395,7 +396,30 @@ Additionally, even if \gls{la} works in principle, its \gls{ess} will usually de
 \end{itemize}
 
 \subsection{\gls{cem}}
-To provide a global approximation to the target, the \gls{cem} selects from a parametric family $ \left( G_{\psi} \right)_{\psi \in \Psi}$ of proposals the one that minimizes the \gls{kld} to the target. 
+To provide a global approximation to the target, the \gls{cem}\cite{Rubinstein1999CrossEntropy,Rubinstein2004CrossEntropy} selects from a family $ \left( \G_{\psi} \right)_{\psi \in \Psi}$ of proposals the one that minimizes the \gls{kld} to the target. Thus, the \gls{cem} finds $\psi_{\text{CE}}$ which solves the following optimization problem
+
+\begin{align*}
+    \psi_{\text{CE}} &= \argmin_{\psi \in \Psi} \Dkl{\G^{\ast}}{\G_{\psi}} \\
+    &= \argmin_{\psi \in \Psi} \int \log \frac{\d \G^{\ast}}{\d\G_{\psi}} \d \G^{\ast}
+\end{align*}
+where $\G^{\ast}$ is either the optimal proposal from \Cref{prop:minimum_MSE_IS} or $\P$. If $\G^{\ast}$ and $\G_{\psi}$ possess densities $g^{\ast}$ and $g_{\psi}$ w.r.t. some common measure $\mu$, the same for all $\psi$, we may rewrite the optimization problem to
+\begin{align*}
+    \psi_{\text{CE}} &= \argmin_{\psi \in \Psi} \int \log g^{\ast}\log g^{\ast}(x) \d \mu(x) - \int g^{\ast}\log g_{\psi} \d \mu(x) \\
+    &= \argmax_{\psi \in \Psi} \int g^{\ast} \log g_{\psi} \d \mu(x).
+\end{align*}
+This last integral is the cross-entropy between $g^{\ast}$ and $g_{\psi}$.
+
+
+% CEM only needs CE
+
+% break-down in higher dimensions?
+
+% analytical solution, MLE
+
+% iterative procedure, CRNs
+
+% applications of CEM
+The \gls{cem} is routinely used for estimating failure probabilities for rare events \cite{Homem-de-Mello2007Study} \todo{cite more} and has been applied to Bayesian inference \cite{Engel2023Bayesian,Ehre2023Certified} and optimal control problems \cite{Kappen2016Adaptive,Zhang2014Applications}.
 
 \subsection{Efficient importance sampling}
 
@@ -550,10 +574,8 @@ As one can readily see from \Cref{thm:elliptical-conditional} the parameters of 
 \todo{present some models with heavy tails}
 
 
-\section{Maximum likelihood estimation}
+\section{Maximum likelihood estimation in \glspl{ssm}}
 \label{sec:maximum_likelihood_estimation}
 
-
-
-%\section{State space models in high dimensions}
-%\label{sec:state_space_models_in_high_dimensions}
+\section{Simulation studies}
+\label{sec:simulation_studies}
