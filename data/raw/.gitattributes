@@ -1,3 +1,4 @@
 all_hosp_age.csv filter=lfs diff=lfs merge=lfs -text
 delayed_cases_age.csv filter=lfs diff=lfs merge=lfs -text
 RKI.csv filter=lfs diff=lfs merge=lfs -text
+*.csv filter=lfs diff=lfs merge=lfs -text
