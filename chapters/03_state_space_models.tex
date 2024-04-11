@@ -203,13 +203,14 @@ Both the Poisson and negative binomial belong to the class of exponential family
     $$\Theta = \left\{\theta \in \R^{p} : \int \exp \left( \theta^{T} x \right) \d\mu(y) < \infty\right\}$$
     the set of parameters $\theta$ such that the moment-generating function of $\mu$ is finite. 
     For every $\theta \in \Theta$ $$p_{\theta}(y) = Z(\theta)^{-1} \exp (\theta^{T} y)$$ defines a probability density with respect to the measure $\mu$, where $$Z(\theta) = \int \exp \left( \theta^{T} x \right) \d\mu(y)$$ is the normalizing constant. 
-    We call both the densities $p_{\theta}$ and induced probability measures $$ \P_{\theta} (A) = \int_{A} p_{\theta}(y) \d \mu(y),$$ for measurable $A \subset \R^{p}$ \textbf{standard exponential families}.
+    We call both the densities $p_{\theta}$ and induced probability measures $$ \P_{\theta} (A) = \int_{A} p_{\theta}(y) \d \mu(y),$$ for measurable $A \subset \R^{p}$, a \textbf{standard exponential family}.
 
     Conversely, let $\P_{\theta}, \theta \in \Theta$ be a given parametric family of probability measures on some space $\mathcal Y$ that is absolutely continuous with respect to a common dominating measure $\mu$. Suppose there exists a reparametrization $\eta : \Theta \to \R^{p}$, a statistic $T: \mathcal Y \to \R^{p}$ and functions $Z: \Theta\to \R$, $h:\mathcal Y \to \R$ exist, such that
     $$
         p_{\theta}(y) = \frac{\d \P_{\theta}}{\d \mu} = Z(\theta) h(y) \exp \left(\eta(\theta)^{T}T(y)\right),
     $$
-    then we call $\P_{\theta}, \theta \in \Theta$ and $p_{\theta}, \theta \in \Theta$ a \textbf{$p$-dimensional exponential family}.
+    then we call $\P_{\theta}, \theta \in \Theta$ and $p_{\theta}, \theta \in \Theta$ a \textbf{$p$-dimensional exponential family}. If $\eta(\theta) = \theta$ we call $\theta$ the canonical parameter. If $T(y) = y$, we call $y$ the canonical observation. By reparametrization (in $\theta$) and sufficiency (in $y$) every $p$-dimensional exponential family can be written as an equivalent standard exponential family, see the elaborations in \cite[Chapter 1]{Brown1986Fundamentals}.
+    % potentially more: canonical parameter/statistic/observation, regular, full, minimal, convex support
 \end{definition}
 
 \todo{necessary?}
