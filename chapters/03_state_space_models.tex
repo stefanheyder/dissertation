@@ -49,7 +49,7 @@ Most models that I consider in this thesis will admit densities for the state tr
     I will use the standard abuse of notation for densities that makes the type of density \glqq{}obvious\grqq{} from the arguments used.
     This means that $p(x)$ is the density for all states $X$, $p(x_t|x_{t - 1})$ the conditional density of $X_t|X_{t - 1}$ and similarly for observations: $p(y|x)$ is the density of all observations $Y$ conditional on all states $X$.
 
-    Note that this notation also implicitly includes the time $t$ and allows for changes in, \eg, the state transition over time.
+    Note that this notation also implicitly includes the time $t$ and allows for changes in, e.g. , the state transition over time.
 
     When densities stem from a parametric model parametrized by $\theta \in \Theta \subseteq \mathbf{R}^{k}$ and the dependence of the model on $\theta$ is of interest, i.e. because we try to estimate $\theta$, we indicate this by adding a subscript to the densities.
     If the dependence is not of interest, e.g. because $\theta$ is fixed, I will usually omit $\theta$ for better readability.
@@ -318,7 +318,7 @@ In this case one can usually evaluate the weights up to a constant, i.e. $w(x) \
 This leads to the self-normalized importance sampling weights $W_i = \frac{w(X_i)}{\sum_{i = 1}^N w(X_i)}$ and Monte Carlo estimates $\hat \zeta = \sum_{i = 1}^{N} W_i f(X_i)$ and particle approximation $\hat \P_N = \sum_{i = 1}^{N} W_i \delta_{X_i}$.
 
 In both cases one can show that once second moments of $w$ with respect to $\G$ exist the Monte-Carlo estimates are consistent and asymptotically normal at the usual rates, see \cite[Chapter 8]{Chopin2020Introduction}. 
-However, the finite sample variance of $\hat\zeta$, and thus the practical performance of the procedure, depends on the variance of $w\cdot f$ under $\G$, and thus on the proposal $\G$. \citep{Agapiou2017Importance} show that  the expected mean squared TV distance \todo{check if true} between $\hat \P_N$ and  $\P$ may be bounded, up to a constant, by the second moments of $w$. In addition they provide bounds that involve the KL-divergence 
+However, the finite sample variance of $\hat\zeta$, and thus the practical performance of the procedure, depends on the variance of $w\cdot f$ under $\G$, and thus on the proposal $\G$. \cite{Agapiou2017Importance} show that  the expected mean squared TV distance \todo{check if true} between $\hat \P_N$ and  $\P$ may be bounded, up to a constant, by the second moments of $w$. In addition they provide bounds that involve the KL-divergence 
 $$
 \Dkl{\P}{\G} = \int \log \frac{\d \P}{\d \G} \d \P,
 $$
@@ -423,7 +423,7 @@ Given $\E T(X)$, this system of equations can, in many cases, be solved analytic
 $$
 \frac{\nabla_{\psi}Z(\hat\psi_{\text{CE}})}{Z(\hat\psi_{\text{CE}})} = - \hat T.
 $$
-Thus $\hat \psi_{\text{CE}}$ is a Z-estimator and we may analyze its statistical behavior by standard methods, see e.g. \cite[Chapter 5]{VanderVaart2000Asymptotic}.
+Thus $\hat \psi_{\text{CE}}$ is a Z-estimator and we may analyze its asymptotic behavior by standard methods, see e.g. \cite[Chapter 5]{VanderVaart2000Asymptotic}. 
 \todo{rework this: consistency for non-EF proposals (there use VdV and potentially technical assumptions, then special case of EF with Brown)}
 % Z-estimator behaviour 
 \begin{theorem}[consistency of $\hat \psi_{\text{CE}}$]

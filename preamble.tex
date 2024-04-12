@@ -1,21 +1,7 @@
-\PassOptionsToPackage{utf8}{inputenc}
-  \usepackage{inputenc}
-
-\PassOptionsToPackage{T1}{fontenc} % T2A for cyrillics
-  \usepackage{fontenc}
-
-%\PassOptionsToPackage{
-%  drafting=true,    % print version information on the bottom of the pages
-%  tocaligned=false, % the left column of the toc will be aligned (no indentation)
-%  dottedtoc=false,  % page numbers in ToC flushed right
-%  eulerchapternumbers=true, % use AMS Euler for chapter font (otherwise Palatino)
-%  linedheaders=false,       % chaper headers will have line above and beneath
-%  floatperchapter=true,     % numbering per chapter for all floats (i.e., Figure 1.1)
-%  eulermath=false,  % use awesome Euler fonts for mathematical formulae (only with pdfLaTeX)
-%  beramono=true,    % toggle a nice monospaced font (w/ bold)
-%  palatino=true,    % deactivate standard font for loading another one, see the last section at the end of this file for suggestions style=classicthesis % classicthesis, arsclassica
-%}{classicthesis}
-
+\usepackage[width=150mm,top=35mm,bottom=25mm,bindingoffset=6mm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
 
 % ****************************************************************************************************
 % 2. Personal data and user ad-hoc commands (insert your own data here)
@@ -34,43 +20,30 @@
 \newcommand{\myTime}{October 2023\xspace}
 \newcommand{\myVersion}{Draft v 0.1}
 
-% ********************************************************************
-% Setup, finetuning, and useful commands
-% ********************************************************************
-\newcommand{\ie}{i.\,e.}
-\newcommand{\Ie}{I.\,e.}
-\newcommand{\eg}{e.\,g.}
-\newcommand{\Eg}{E.\,g.}
-% ****************************************************************************************************
-
-
 % ****************************************************************************************************
 % 3. Loading some handy packages
 % ****************************************************************************************************
 % ********************************************************************
 % Packages with options that might require adjustments
 % ********************************************************************
-\PassOptionsToPackage{ngerman,american}{babel} 
-    \usepackage{babel}
+\usepackage[ngerman,american]{babel}
 
 \usepackage{csquotes}
-\PassOptionsToPackage{%
-  backend=biber,bibencoding=utf8, %instead of bibtex
-  %backend=bibtex8,bibencoding=ascii,%
-  language=auto,%
-  style=numeric-comp,%
-  %style=authoryear-comp, % Author 1999, 2010
-  %bibstyle=authoryear,dashed=false, % dashed: substitute rep. author with ---
-  sorting=nyt, % name, year, title
-  maxbibnames=10, % default: 3, et al.
-  %backref=true,%
-  natbib=true % natbib compatibility mode (\citep and \citet still work)
-}{biblatex}
-    \usepackage{biblatex}
+%\PassOptionsToPackage{%
+%  backend=biber,bibencoding=utf8, %instead of bibtex
+%  %backend=bibtex8,bibencoding=ascii,%
+%  language=auto,%
+%  style=numeric-comp,%
+%  %style=authoryear-comp, % Author 1999, 2010
+%  %bibstyle=authoryear,dashed=false, % dashed: substitute rep. author with ---
+%  sorting=nyt, % name, year, title
+%  maxbibnames=10, % default: 3, et al.
+%  %backref=true,%
+%  natbib=true % natbib compatibility mode (\citep and \citet still work)
+%}{biblatex}
+\usepackage[backend=biber,bibencoding=utf8,language=auto,style=numeric-comp,sorting=nyt,maxbibnames=3,natbib=true]{biblatex}
 
-\PassOptionsToPackage{fleqn}{amsmath}       % math environments and more by the AMS
-  \usepackage{amsmath}
-
+\usepackage[fleqn]{amsmath}
 \usepackage{amsthm}
 
 
@@ -92,60 +65,23 @@
 % General useful packages
 % ********************************************************************
 \usepackage{graphicx} %
-\usepackage{scrhack} % fix warnings when using KOMA with listings package
-\usepackage{xspace} % to get the spacing after macros right
-\PassOptionsToPackage{printonlyused,smaller}{acronym}
-  \usepackage{acronym} % nice macros for handling all acronyms in the thesis
-  %\renewcommand{\bflabel}[1]{{#1}\hfill} % fix the list of acronyms --> no longer working
-  %\renewcommand*{\acsfont}[1]{\textsc{#1}}
-  %\renewcommand*{\aclabelfont}[1]{\acsfont{#1}}
-  %\def\bflabel#1{{#1\hfill}}
-  \def\bflabel#1{{\acsfont{#1}\hfill}}
-  \def\aclabelfont#1{\acsfont{#1}}
-% ****************************************************************************************************
+\usepackage[printonlyused,smaller]{acronym} % nice macros for handling all acronyms in the thesis
+
+% ********************************************************************
+% TIKZ
+% ********************************************************************
 \usepackage{tikz}
 \usepackage{tikzscale}
 \usetikzlibrary{calc}
 \usetikzlibrary{external}
 %\tikzexternalize[mode=list and make, prefix=ext-tikz/]
-% ****************************************************************************************************
 
 
 % ****************************************************************************************************
 % 4. Setup floats: tables, (sub)figures, and captions
 % ****************************************************************************************************
 \usepackage{tabularx} % better tables
-  \setlength{\extrarowheight}{3pt} % increase table row height
-\newcommand{\tableheadline}[1]{\multicolumn{1}{l}{\spacedlowsmallcaps{#1}}}
-\newcommand{\myfloatalign}{\centering} % to be used with each float for alignment
 \usepackage{subfig}
-% ****************************************************************************************************
-
-
-% ****************************************************************************************************
-% 5. Setup code listings
-% ****************************************************************************************************
-\usepackage{listings}
-%\lstset{emph={trueIndex,root},emphstyle=\color{BlueViolet}}%\underbar} % for special keywords
-\lstset{language=[LaTeX]Tex,%C++,
-  morekeywords={PassOptionsToPackage,selectlanguage},
-  keywordstyle=\color{RoyalBlue},%\bfseries,
-  basicstyle=\small\ttfamily,
-  %identifierstyle=\color{NavyBlue},
-  commentstyle=\color{Green}\ttfamily,
-  stringstyle=\rmfamily,
-  numbers=none,%left,%
-  numberstyle=\scriptsize,%\tiny
-  stepnumber=5,
-  numbersep=8pt,
-  showstringspaces=false,
-  breaklines=true,
-  %frameround=ftff,
-  %frame=single,
-  belowcaptionskip=.75\baselineskip
-  %frame=L
-}
-% ****************************************************************************************************
 
 % Colors
 \usepackage{xcolor}
@@ -155,41 +91,6 @@
 \definecolor{TUIl-blue}{RGB}{0, 51, 89}
 \definecolor{TUIl-green}{RGB}{0, 116, 122}
 \definecolor{TUIl-grey}{RGB}{165, 165, 165}
-
-
-% ****************************************************************************************************
-% 6. Last calls before the bar closes
-% ****************************************************************************************************
-% ********************************************************************
-% Her Majesty herself
-% ********************************************************************
-%\usepackage{classicthesis}
-
-
-% ********************************************************************
-% Fine-tune hyperreferences (hyperref should be called last)
-% ********************************************************************
-
-\usepackage{hyperref}
-\hypersetup{%
-  %draft, % hyperref's draft mode, for printing see below
-  colorlinks=true, linktocpage=true, pdfstartpage=3, pdfstartview=FitV,%
-  % uncomment the following line if you want to have black links (e.g., for printing)
-  %colorlinks=false, linktocpage=false, pdfstartpage=3, pdfstartview=FitV, pdfborder={0 0 0},%
-  breaklinks=true, pageanchor=true,%
-  pdfpagemode=UseNone, %
-  % pdfpagemode=UseOutlines,%
-  plainpages=false, bookmarksnumbered, bookmarksopen=true, bookmarksopenlevel=1,%
-  hypertexnames=true, pdfhighlight=/O,%nesting=true,%frenchlinks,%
-  %urlcolor=CTurl, linkcolor=CTlink, 
-  citecolor=gray, %pagecolor=RoyalBlue,%
-  %urlcolor=Black, linkcolor=Black, citecolor=Black, %pagecolor=Black,%
-  pdftitle={\myTitle},%
-  pdfauthor={\textcopyright\ \myName, \myUni, \myFaculty},%
-  pdfsubject={},%
-  pdfkeywords={},%
-  pdfcreator={pdfLaTeX}%
-}
 
 
 % ********************************************************************
@@ -227,58 +128,41 @@
       \providecommand{\subfigureautorefname}{\figureautorefname}%
     }{\relax}
 \makeatother
+% ********************************************************************
+% Fine-tune hyperreferences (hyperref should be called last)
+% ********************************************************************
 
+\usepackage{hyperref}
+\hypersetup{%
+  %draft, % hyperref's draft mode, for printing see below
+  colorlinks=true, linktocpage=true, pdfstartpage=3, pdfstartview=FitV,%
+  % uncomment the following line if you want to have black links (e.g., for printing)
+  %colorlinks=false, linktocpage=false, pdfstartpage=3, pdfstartview=FitV, pdfborder={0 0 0},%
+  breaklinks=true, pageanchor=true,%
+  pdfpagemode=UseNone, %
+  % pdfpagemode=UseOutlines,%
+  plainpages=false, bookmarksnumbered, bookmarksopen=true, bookmarksopenlevel=1,%
+  hypertexnames=true, pdfhighlight=/O,%nesting=true,%frenchlinks,%
+  %urlcolor=CTurl, linkcolor=CTlink, 
+  citecolor=gray, %pagecolor=RoyalBlue,%
+  %urlcolor=Black, linkcolor=Black, citecolor=Black, %pagecolor=Black,%
+  pdftitle={\myTitle},%
+  pdfauthor={\textcopyright\ \myName, \myUni, \myFaculty},%
+  pdfsubject={},%
+  pdfkeywords={},%
+  pdfcreator={pdfLaTeX}%
+}
 
-% ********************************************************************
-% Development Stuff
-% ********************************************************************
-\listfiles
-%\PassOptionsToPackage{l2tabu,orthodox,abort}{nag}
-%  \usepackage{nag}
-%\PassOptionsToPackage{warning, all}{onlyamsmath}
-%  \usepackage{onlyamsmath}
-
-
-% ****************************************************************************************************
-% 7. Further adjustments (experimental)
-% ****************************************************************************************************
-% ********************************************************************
-% Changing the text area
-% ********************************************************************
-%\areaset[current]{312pt}{761pt} % 686 (factor 2.2) + 33 head + 42 head \the\footskip
-%\setlength{\marginparwidth}{7em}%
-%\setlength{\marginparsep}{2em}%
-
-% ********************************************************************
-% Using different fonts
-% ********************************************************************
-%\usepackage[oldstylenums]{kpfonts} % oldstyle notextcomp
-% \usepackage[osf]{libertine}
-%\usepackage[light,condensed,math]{iwona}
-%\renewcommand{\sfdefault}{iwona}
-%\usepackage{lmodern} % <-- no osf support :-(
-%\usepackage{cfr-lm} %
-%\usepackage[urw-garamond]{mathdesign} <-- no osf support :-(
-%\usepackage[default,osfigures]{opensans} % scale=0.95
-%\usepackage[sfdefault]{FiraSans}
-% \usepackage[opticals,mathlf]{MinionPro} % onlytext
-% ********************************************************************
-%\usepackage[largesc,osf]{newpxtext}
-%\linespread{1.05} % a bit more for Palatino
-% Used to fix these:
-% https://bitbucket.org/amiede/classicthesis/issues/139/italics-in-pallatino-capitals-chapter
-% https://bitbucket.org/amiede/classicthesis/issues/45/problema-testatine-su-classicthesis-style
-% ********************************************************************
-% ****************************************************************************************************
 
 % glossaries and acronyms
 \usepackage[acronym]{glossaries}
+
 % algorithms
 \usepackage{algorithm2e}
 \RestyleAlgo{ruled}
 % todos
 \usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
-\glsdisablehyper
+
 % cleveref should be loaded last
 \usepackage{cleveref} 
 \crefname{figure}{Figure}{Figures}
