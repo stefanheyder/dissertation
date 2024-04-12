@@ -423,10 +423,27 @@ Given $\E T(X)$, this system of equations can, in many cases, be solved analytic
 $$
 \frac{\nabla_{\psi}Z(\hat\psi_{\text{CE}})}{Z(\hat\psi_{\text{CE}})} = - \hat T.
 $$
-Thus $\hat \psi_{\text{CE}}$ is a Z-estimator and we may analyze its asymptotic behavior by standard methods, see e.g. \cite[Chapter 5]{VanderVaart2000Asymptotic}. 
+Thus $\hat \psi_{\text{CE}}$ is a Z-estimator and we may analyze its asymptotic behavior by standard methods, see e.g. \cite[Chapter 5]{VanderVaart2000Asymptotic}.
+
 \todo{rework this: consistency for non-EF proposals (there use VdV and potentially technical assumptions, then special case of EF with Brown)}
 % Z-estimator behaviour 
-\begin{theorem}[consistency of $\hat \psi_{\text{CE}}$]
+
+\begin{theorem}[consistencty of $\hat\psi_{\text{CE}}$]
+    Assume the following technical conditions apply:
+    \begin{itemize}
+        \item[A1] Uniform consistency of importance sampling
+            $$\sup_{\psi \in \Psi}\lVert \hat \G_N (w\log g_\psi) - \G(w \log g_\psi) \rVert \stackrel{P}{\to} 0$$ 
+        \item[A2] Regularity condition
+            $$ \partial_\psi \P \left(\log g_\theta\right) = \P \left(\partial_\theta \log g_\theta\right) $$
+            for all $\psi \in \Psi$
+        \item[A3] positive definite misspecified Fisher information
+            $$ \P \left(\left(\partial_\psi \log g_\theta\right)\left(\partial_\theta \log g_\theta\right)^T\right) > 0$$
+    \end{itemize}
+
+    Then, as $N \to \infty$, $\hat\psi_{\text{CE}}$ goes to $\psi_{\text{CE}}$ in probability.
+\end{theorem}
+If $\G_\psi$ belongs to an exponential family, the assumptions may be weakened a bit:
+\begin{theorem}[consistency of $\hat \psi_{\text{CE}}$ in exponential families]
     If $\hat T$ is a consistent estimate of $\E T(X)$, then 
 \end{theorem}
 
