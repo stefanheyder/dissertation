@@ -404,11 +404,41 @@ To provide a global approximation to the target, the \gls{cem}\cite{Rubinstein19
     &= \argmin_{\psi \in \Psi} \int \log \frac{\d \G^{\ast}}{\d\G_{\psi}} \d \G^{\ast}
 \end{align*}
 where $\G^{\ast}$ is either the optimal proposal from \Cref{prop:minimum_MSE_IS} or $\P$. If $\G^{\ast}$ and $\G_{\psi}$ possess densities $g^{\ast}$ and $g_{\psi}$ w.r.t. some common measure $\mu$, the same for all $\psi$, we may reformulate the optimization problem to maximize the cross-entropy between $g^{\ast}$ and $g_{\psi}$
-\begin{align*}
-    \psi_{\text{CE}} &= \argmin_{\psi \in \Psi} \int  g^{\ast}(x)\log g^{\ast}(x) \d \mu(x) - \int g^{\ast}(x)\log g_{\psi} \d \mu(x) \\
-    &= \argmax_{\psi \in \Psi} \int g^{\ast}(x) \log g_{\psi}(x) \d \mu(x),
-\end{align*}
+\begin{align}
+    \psi_{\text{CE}} &= \argmin_{\psi \in \Psi} \int  g^{\ast}(x)\log g^{\ast}(x) \d \mu(x) - \int g^{\ast}(x)\log g_{\psi} \d \mu(x) \nonumber\\ 
+    &= \argmax_{\psi \in \Psi} \int g^{\ast}(x) \log g_{\psi}(x) \d \mu(x), \label{eq:ce_argmax}
+\end{align}
 as the first integral does not depend on $\psi$.
+
+As $\G^\ast$ is usually intractable, so is $\psi_{\text{CE}}$. However, the integral \cref{eq:ce_argmax} is amenable to importance sampling: Given a proposal $\G$, we may estimate it by
+\begin{align}
+\hat\psi_{\text{CE}} &= \argmax_{\psi \in \Psi}\frac 1 N \sum_{i = 1}^N \log  g_\psi (X_i) \label{eq:ce-M-estimator}
+\end{align}
+where $X_1, \dots, X_N \iid \G$. 
+%Thus $\hat \psi_{\text{CE}}$ is an M-estimator and we may analyze its asymptotic behavior by standard methods, see e.g. \cite[Chapter 5]{VanderVaart2000Asymptotic}.
+%
+%\todo{rework this: consistency for non-EF proposals (there use VdV and potentially technical assumptions, then special case of EF with Brown)}
+%% M-estimator behaviour 
+%
+%\begin{theorem}[consistencty of $\hat\psi_{\text{CE}}$]
+%    \label{thm:ce-m-estimator}
+%    Assume the following technical conditions apply:
+%    \begin{itemize}
+%        \item[A1] Uniform consistency of importance sampling
+%            $$\sup_{\psi \in \Psi}\lVert \hat \G_N (w\log g_\psi) - \G(w \log g_\psi) \rVert \stackrel{P}{\to} 0$$ 
+%        \item[A2] Regularity condition
+%            $$ \partial_\psi \P \left(\log g_\theta\right) = \P \left(\partial_\theta \log g_\theta\right) $$
+%            for all $\psi \in \Psi$
+%        \item[A3] positive definite misspecified Fisher information
+%            $$ \P \left(\left(\partial_\psi \log g_\theta\right)\left(\partial_\theta \log g_\theta\right)^T\right) > 0$$
+%    \end{itemize}
+%
+%    Then $\hat\psi_{\text{CE}}$ is a consistent estimator of $\psi_{\text{CE}}$.
+%\end{theorem}
+%
+%\begin{theorem}[asymptotic normality of $\hat\psi_{\text{CE}}$]
+%    
+%\end{theorem}
 
 % analytical solution, MLE
 An attractive property of the \gls{cem} is that if $\G_{\psi}$ form an exponential family with natural parameter $\psi \in \R^{p}$, the optimal $\psi_{\text{CE}}$ only depends on certain moments of $\G^{\ast}$. Indeed, for $\log g_{\psi}(x) = \log h(x) + \log Z(\psi) + \psi^{T} T(x)$ we have 
@@ -419,38 +449,51 @@ for $X \sim \G^{\ast}$. As $\log Z(\psi)$ is the cumulant-generating function of
 $$
 \frac{\nabla_{\psi}Z(\psi_{\text{CE}})}{Z(\psi_{\text{CE}})} = - \E T(X).
 $$
-Given $\E T(X)$, this system of equations can, in many cases, be solved analytically or by gradient descent algorithms. While $\E T(X)$ is usually not available, it is itself amenable to importance sampling. Given a proposal $\G$ we may estimate $\E T(X)$ by $\hat T = \sum_{i = 1}^{N} W^{i} T(X^{i})$ for $X_{1}, \dots, X_{N} \iid \G$ and auto-normalized importance sampling weights $W^{i}$ and in turn estimate $\psi_{\text{CE}}$ by $\hat \psi_{\text{CE}}$ solving
+Given $\E T(X)$, this system of equations can, in many cases, be solved analytically or by gradient descent algorithms.
+
+While $\E T(X)$ is usually not available, it is itself amenable to importance sampling. Given a proposal $\G$ we may estimate $\E T(X)$ by $\hat\G_N T = \sum_{i = 1}^{N} W^{i} T(X^{i})$ for $X_{1}, \dots, X_{N} \iid \G$ and auto-normalized importance sampling weights $W^{i}$ and in turn estimate $\psi_{\text{CE}}$ by $\hat \psi_{\text{CE}}$ solving
 $$
-\frac{\nabla_{\psi}Z(\hat\psi_{\text{CE}})}{Z(\hat\psi_{\text{CE}})} = - \hat T.
+\frac{\nabla_{\psi}Z(\hat\psi_{\text{CE}})}{Z(\hat\psi_{\text{CE}})} = - \frac{\hat G_N T}{\hat G_N w}.
 $$
-Thus $\hat \psi_{\text{CE}}$ is a Z-estimator and we may analyze its asymptotic behavior by standard methods, see e.g. \cite[Chapter 5]{VanderVaart2000Asymptotic}.
-
-\todo{rework this: consistency for non-EF proposals (there use VdV and potentially technical assumptions, then special case of EF with Brown)}
-% Z-estimator behaviour 
-
-\begin{theorem}[consistencty of $\hat\psi_{\text{CE}}$]
-    Assume the following technical conditions apply:
-    \begin{itemize}
-        \item[A1] Uniform consistency of importance sampling
-            $$\sup_{\psi \in \Psi}\lVert \hat \G_N (w\log g_\psi) - \G(w \log g_\psi) \rVert \stackrel{P}{\to} 0$$ 
-        \item[A2] Regularity condition
-            $$ \partial_\psi \P \left(\log g_\theta\right) = \P \left(\partial_\theta \log g_\theta\right) $$
-            for all $\psi \in \Psi$
-        \item[A3] positive definite misspecified Fisher information
-            $$ \P \left(\left(\partial_\psi \log g_\theta\right)\left(\partial_\theta \log g_\theta\right)^T\right) > 0$$
-    \end{itemize}
-
-    Then, as $N \to \infty$, $\hat\psi_{\text{CE}}$ goes to $\psi_{\text{CE}}$ in probability.
-\end{theorem}
 % proof: appeal to vdV, pd ensures that M(\theta) is convex, so global maximum unique and well separated
-If $\G_\psi$ belongs to an exponential family, the assumptions may be weakened a bit:
-\begin{theorem}[consistency of $\hat \psi_{\text{CE}}$ in exponential families]
-    If $\hat T$ is a consistent estimate of $\E T(X)$, then 
+Thus $\hat\psi_{\text{CE}}$ is a Z-estimator, and we can analyze its asymptotic behavior using standard results. 
+\begin{theorem}[consistency of $\hat \psi_{\text{CE}}$]
 \end{theorem}
 
 \begin{theorem}[asymptotic normality of $\hat \psi_{\text{CE}}$]
-    
+    Suppose that $\nabla_\psi \log Z$ is locally Lipschitz around $\psi_{\text{CE}}$, $T$ is square integrable  w.r.t. $\G$ and the Fisher information $I(\psi_{\text{CE}})$ is positive definite. \todo{regularity conditions? + consistency?}
+    Then
+    $$
+        \sqrt{N} \left(\hat\psi_\text{CE} - \psi_{\text{CE}}\right) \to \mathcal N \left(0, V\right)
+    $$
+    where 
+    $$
+    V = - I(\psi_{\text{CE}})^{-1} \frac{\G(w^2)}{(\G w)^2}.
+    $$
 \end{theorem}
+
+\begin{proof}
+    We check that the conditions of the central limit theorem for Z-estimators \cite[Theorem 5.21]{VanderVaart2000Asymptotic} are fulfilled. Let $\dot z = \nabla_\psi \log Z(\psi)$ and consider the functions $x\mapsto f_\psi(x) = w(x) \dot z (\psi) + w(x) T(x)$ for $\psi \in \Psi$. Then $\left\lVert f_{\psi_1}(x) - f_{\psi_2}(x)\right\rVert = w(x) \left\lVert \dot z (\psi_1) - \dot z(\psi_2)\right\rVert$ where $\G w^2(x) < \infty $ and $\psi \mapsto z(\psi)$ is locally Lipschitz by our assumptions. Thus the local Lipschitz condition required by \cite[Theorem 5.21]{VanderVaart2000Asymptotic} is fulfilled.
+
+    Furthermore, as $wT$ is square integrable w.r.t. $\G$, we have 
+    $$
+    \G \left\lVert f_\psi \right\rVert^2 \leq \G w^2 \left\lVert \dot z(\psi) \right\rVert ^2  + \G \left\lVert wT\right\rVert^2 < \infty.
+    $$
+    Additionally $\psi \mapsto\G f_\psi = (\G w) \dot z (\psi) + \G wT$ is differentiable everywhere, with Jacobian $(\G w) \ddot z(\psi)$, where  $\ddot z(\psi) = \partial_\psi \dot z(\psi)$ is the Hessian of the cumulant generating function.
+
+    Under the proposed regularity conditions we see that 
+    $$
+    \G \left(w^2 \frac{\partial^2_{\psi^2} g_\psi}{g_\psi(x)}\right) = \partial^2_{\psi^2} \G w^2 = 0,
+    $$
+    so $\G f_\psi f_\psi^T = I(\psi)\G w^2$. 
+    By \cite[Theorem 5.21]{VanderVaart2000Asymptotic} the asymptotic covariance matrix is 
+    $$
+    V(\psi) = \frac{\ddot z(\psi)^{-1}}{\G w} \left(\G f_\psi f_\psi^T \right) \frac{\ddot z(\psi^{-1})}{\G w},
+    $$
+    which finishes the proof.
+\end{proof}
+
+If $\G_\psi$ do not form an exponential family, $\hat\psi_{\text{CE}}$ will still be consistent and asymptotically normal, provided the usual regularity conditions for M-estimators apply.
 
 % break-down in higher dimensions?
 
