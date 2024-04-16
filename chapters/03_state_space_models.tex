@@ -463,6 +463,7 @@ Thus $\hat\psi_{\text{CE}}$ is a Z-estimator, and we can analyze its asymptotic 
 \end{theorem}
 
 \begin{theorem}[asymptotic normality of $\hat \psi_{\text{CE}}$]
+    \todo{rewrite this with non-natural parameter}
     Suppose that $\nabla_\psi \log Z$ is locally Lipschitz around $\psi_{\text{CE}}$, $T$ is square integrable  w.r.t. $\G$ and the Fisher information $I(\psi_{\text{CE}})$ is positive definite. \todo{regularity conditions? + consistency?}
     Then
     $$
@@ -499,6 +500,9 @@ Thus $\hat\psi_{\text{CE}}$ is a Z-estimator, and we can analyze its asymptotic 
     which finishes the proof.
 \end{proof}
 
+\begin{example}[univariate Gaussian]
+    \todo{...}
+\end{example}
 The form of the asymptotic covariance matrix is that of the sandwich estimator \todo{cite Huber}, corrected for the importance sampling with $\G$. This is not surprising: the \gls{cem} performs maximum likelihood estimation where the data $X_{i}$ \todo{sub or superskript} come from the misspecified $\P$. Additionally, we have to correct the variance for performing importance sampling with $\G$, instead of sampling directly from $\P$.
 
 If $\G_\psi$ do not form an exponential family, $\hat\psi_{\text{CE}}$ will still be consistent and asymptotically normal, provided the usual regularity conditions for M-estimators apply.
