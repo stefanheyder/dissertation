@@ -1,4 +1,6 @@
 \glsresetall
+\newcommand{\psice}{{\ensuremath{\psi_{\text{CE}}}}}
+
 \chapter{State space models}
 \label{cha:state_space_models}
 
@@ -318,7 +320,7 @@ In this case one can usually evaluate the weights up to a constant, i.e. $w(x) \
 This leads to the self-normalized importance sampling weights $W_i = \frac{w(X_i)}{\sum_{i = 1}^N w(X_i)}$ and Monte Carlo estimates $\hat \zeta = \sum_{i = 1}^{N} W_i f(X_i)$ and particle approximation $\hat \P_N = \sum_{i = 1}^{N} W_i \delta_{X_i}$.
 
 In both cases one can show that once second moments of $w$ with respect to $\G$ exist the Monte-Carlo estimates are consistent and asymptotically normal at the usual rates, see \cite[Chapter 8]{Chopin2020Introduction}. 
-However, the finite sample variance of $\hat\zeta$, and thus the practical performance of the procedure, depends on the variance of $w\cdot f$ under $\G$, and thus on the proposal $\G$. \cite{Agapiou2017Importance} show that  the expected mean squared TV distance \todo{check if true} between $\hat \P_N$ and  $\P$ may be bounded, up to a constant, by the second moments of $w$. In addition they provide bounds that involve the KL-divergence 
+However, the finite sample variance of $\hat\zeta$, and thus the practical performance of the procedure, depends on the variance of $w\cdot f$ under $\G$, and thus on the proposal $\G$. \cite{Agapiou2017Importance} show that  the expected mean squared TV distance \todo{check if true} between $\hat \P_N$ and  $\P$ may be bounded, up to a constant, by the second moments of $w$ \todo{more extensive discussion of $\rho$}. In addition, they provide bounds that involve the KL-divergence 
 $$
 \Dkl{\P}{\G} = \int \log \frac{\d \P}{\d \G} \d \P,
 $$
@@ -468,12 +470,16 @@ Thus $\hat\psi_{\text{CE}}$ is a Z-estimator, and we can analyze its asymptotic 
     $$
     where 
     $$
-    V = - I(\psi_{\text{CE}})^{-1} \frac{\G(w^2)}{(\G w)^2}.
+    V = - \frac{1}{(\G w)^2}I(\psi_{\text{CE}})^{-1}  \text{Cov}_{\G} \left( w (\nabla_{\psi_{\text{CE}}}\log Z(\psi_{\text{CE}}) + T) \right) I(\psi_{\text{CE}})^{-1}.
+    $$
+    Moreover $\G (w (\nabla_{\psi}\log Z_{\psi_{\text{CE}}} + T)) = 0$, so we may estimate $V$ consistently by 
+    $$
+    \hat V = \frac{1}{\left(\sum_{i = 1}^N w_{i}\right)^{2}}I(\hat\psi_{\text{CE}})^{-1}  \left( \sum_{i = 1}^N w^{2}_{i} (\nabla_{\psi}\log Z(\hat\psi_{\text{CE}}) + T(X^{i}))(\nabla_{\psi}\log Z(\hat\psi_{\text{CE}}) + T(X^{i}))^{T} \right) I(\hat\psi_{\text{CE}})^{-1}.
     $$
 \end{theorem}
 
 \begin{proof}
-    We check that the conditions of the central limit theorem for Z-estimators \cite[Theorem 5.21]{VanderVaart2000Asymptotic} are fulfilled. Let $\dot z = \nabla_\psi \log Z(\psi)$ and consider the functions $x\mapsto f_\psi(x) = w(x) \dot z (\psi) + w(x) T(x)$ for $\psi \in \Psi$. Then $\left\lVert f_{\psi_1}(x) - f_{\psi_2}(x)\right\rVert = w(x) \left\lVert \dot z (\psi_1) - \dot z(\psi_2)\right\rVert$ where $\G w^2(x) < \infty $ and $\psi \mapsto z(\psi)$ is locally Lipschitz by our assumptions. Thus the local Lipschitz condition required by \cite[Theorem 5.21]{VanderVaart2000Asymptotic} is fulfilled.
+    We check that the conditions of the central limit theorem for Z-estimators \cite[Theorem 5.21]{VanderVaart2000Asymptotic} are fulfilled. Let $\dot z = \nabla_\psi \log Z(\psi)$ and consider the functions $$x\mapsto f_\psi(x) = \nabla_{\psi} \left(w(x)\log g_{\psi}(x)\right) = w(x) \dot z (\psi) + w(x) T(x)$$ for $\psi \in \Psi$. Then $\left\lVert f_{\psi_1}(x) - f_{\psi_2}(x)\right\rVert = w(x) \left\lVert \dot z (\psi_1) - \dot z(\psi_2)\right\rVert$ where $\G w^2(x) < \infty $ and $\psi \mapsto z(\psi)$ is locally Lipschitz by our assumptions. Thus the local Lipschitz condition required by \cite[Theorem 5.21]{VanderVaart2000Asymptotic} is fulfilled.
 
     Furthermore, as $wT$ is square integrable w.r.t. $\G$, we have 
     $$
@@ -483,15 +489,17 @@ Thus $\hat\psi_{\text{CE}}$ is a Z-estimator, and we can analyze its asymptotic 
 
     Under the proposed regularity conditions we see that 
     $$
-    \G \left(w^2 \frac{\partial^2_{\psi^2} g_\psi}{g_\psi(x)}\right) = \partial^2_{\psi^2} \G w^2 = 0,
+    \G \left(f_{\psice}\right) = \P \left( \dot z(\psice) + T \right) = \dot z (\psice) + \P T = 0,
     $$
-    so $\G f_\psi f_\psi^T = I(\psi)\G w^2$. 
+    by definition of $\hat\psice$.
     By \cite[Theorem 5.21]{VanderVaart2000Asymptotic} the asymptotic covariance matrix is 
     $$
-    V(\psi) = \frac{\ddot z(\psi)^{-1}}{\G w} \left(\G f_\psi f_\psi^T \right) \frac{\ddot z(\psi^{-1})}{\G w},
+    V(\psice) = \frac{\ddot z(\psice)^{-1}}{\G w} \left(\G f_\psice f_{}\psice^T \right) \frac{\ddot z(\psice^{-1})}{\G w},
     $$
     which finishes the proof.
 \end{proof}
+
+The form of the asymptotic covariance matrix is that of the sandwich estimator \todo{cite Huber}, corrected for the importance sampling with $\G$. This is not surprising: the \gls{cem} performs maximum likelihood estimation where the data $X_{i}$ \todo{sub or superskript} come from the misspecified $\P$. Additionally, we have to correct the variance for performing importance sampling with $\G$, instead of sampling directly from $\P$.
 
 If $\G_\psi$ do not form an exponential family, $\hat\psi_{\text{CE}}$ will still be consistent and asymptotically normal, provided the usual regularity conditions for M-estimators apply.
 
