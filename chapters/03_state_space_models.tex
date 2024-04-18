@@ -3,6 +3,7 @@
 \newcommand{\hpce}{{\ensuremath{\hat\psi_{\text{CE}}}}}
 \newcommand{\peis}{{\ensuremath{\psi_{\text{EIS}}}}}
 \newcommand{\hpeis}{{\ensuremath{\hat\psi_{\text{EIS}}}}}
+\newcommand{\Dto}{\stackrel{\mathcal D}{\to}}
 
 \chapter{State space models}
 \label{cha:state_space_models}
@@ -446,19 +447,20 @@ where $X_1, \dots, X_N \iid \G$.
 %\end{theorem}
 
 % analytical solution, MLE
-An attractive property of the \gls{cem} is that if $\G_{\psi}$ form an exponential family with natural parameter $\psi \in \R^{p}$, the optimal $\psi_{\text{CE}}$ only depends on certain moments of $\G^{\ast}$. Indeed, for $\log g_{\psi}(x) = \log h(x) + \log Z(\psi) + \psi^{T} T(x)$ we have 
+An attractive property of the \gls{cem} is that if $\G_{\psi}$ form an exponential family with natural parameter $\psi \in \R^{p}$, the optimal $\psi_{\text{CE}}$ only depends on certain moments of $\G^{\ast}$. Indeed, for $\log g_{\psi}(x) = \log h(x) - \log Z(\psi) + \psi^{T} T(x)$ we have 
 $$
-\int g^{\ast}(x) \log g_{\psi}(x) \d \mu(x) = \E \log h(X) + \log Z(\psi) + \psi^{T} \E T(X)
+\int g^{\ast}(x) \log g_{\psi}(x) \d \mu(x) = \G^{\ast} \log h - \log Z(\psi) + \psi^{T} \G^{\ast} T.
 $$
-for $X \sim \G^{\ast}$. As $\log Z(\psi)$ is the cumulant-generating function of $\G_{\psi}$it is, under appropriate regularity conditions, smooth. Thus the optimal $\psi_{\text{CE}}$ solves
+ As $\log Z(\psi)$ is the cumulant-generating function of $\G_{\psi}$it is, under appropriate regularity conditions, smooth. Thus the optimal $\psi_{\text{CE}}$ solves
 $$
-\frac{\nabla_{\psi}Z(\psi_{\text{CE}})}{Z(\psi_{\text{CE}})} = - \E T(X).
+\G^{\ast} T = \nabla_{\psi} \log Z(\psi) = \G_{\pce}T,
 $$
-Given $\E T(X)$, this system of equations can, in many cases, be solved analytically or by gradient descent algorithms.
+and so reduces to match the moments of the sufficient statistic of the target and proposal.
+Given $\G^{\ast} T$, this system of equations can, in many cases, be solved analytically or by gradient descent algorithms.
 
-While $\E T(X)$ is usually not available, it is itself amenable to importance sampling. Given a proposal $\G$ we may estimate $\E T(X)$ by $\hat\G_N T = \sum_{i = 1}^{N} W^{i} T(X^{i})$ for $X_{1}, \dots, X_{N} \iid \G$ and auto-normalized importance sampling weights $W^{i}$ and in turn estimate $\psi_{\text{CE}}$ by $\hat \psi_{\text{CE}}$ solving
+While $\G^{\ast} T$ is usually not available, it is itself amenable to importance sampling. Given a proposal $\G$ we may estimate $\G^{\ast} T$ by $\hat\G_N T = \sum_{i = 1}^{N} W^{i} T(X^{i})$ for $X_{1}, \dots, X_{N} \iid \G$ and auto-normalized importance sampling weights $W^{i}$ and in turn estimate $\psi_{\text{CE}}$ by $\hat \psi_{\text{CE}}$ solving
 $$
-\frac{\nabla_{\psi}Z(\hat\psi_{\text{CE}})}{Z(\hat\psi_{\text{CE}})} = - \frac{\hat G_N T}{\hat G_N w}.
+\G_{\hpce} T = \hat \G_N T.
 $$
 % proof: appeal to vdV, pd ensures that M(\theta) is convex, so global maximum unique and well separated
 Thus $\hat\psi_{\text{CE}}$ is a Z-estimator, and we can analyze its asymptotic behavior using standard results. 
@@ -470,15 +472,16 @@ Thus $\hat\psi_{\text{CE}}$ is a Z-estimator, and we can analyze its asymptotic 
     Suppose that $\nabla_\psi \log Z$ is locally Lipschitz around $\psi_{\text{CE}}$, $T$ is square integrable  w.r.t. $\G$ and the Fisher information $I(\psi_{\text{CE}})$ is positive definite. \todo{regularity conditions? + consistency?}
     Then
     $$
-        \sqrt{N} \left(\hat\psi_\text{CE} - \psi_{\text{CE}}\right) \to \mathcal N \left(0, V\right)
+        \sqrt{N} \left(\hat\psi_\text{CE} - \psi_{\text{CE}}\right) \Dto \mathcal N \left(0, V\right)
     $$
     where 
     $$
-    V = - \frac{1}{(\G w)^2}I(\psi_{\text{CE}})^{-1}  \text{Cov}_{\G} \left( w (T - \nabla_{\psi_{\text{CE}}}\log Z(\psi_{\text{CE}})) \right) I(\psi_{\text{CE}})^{-1}.
+    V_{\text{CE}} = I(\psi_{\text{CE}})^{-1}  \text{Cov}_{\G} \left( W (T - \G_{\pce}T) \right) I(\psi_{\text{CE}})^{-1},
     $$
-    Moreover $\G (w(T - \nabla_{\psi}\log Z(\psi_{\text{CE}}))) = 0$, so we may estimate $V$ consistently by 
+    and $W = \frac{\d\G^{\ast}}{\d \G}$ are the normalized weights.
+    Moreover $\G (W(T - \G_{\pce}T))) = 0$, so we may estimate $V_{\text{CE}}$ consistently by 
     $$
-    \hat V = I(\hat\psi_{\text{CE}})^{-1}  \frac{\sum_{i = 1}^N w^{2}_{i} \left(T(X^{i}) - \nabla_{\psi}\log Z(\hat\psi_{\text{CE}}) \right)\left(T(X^{i}) - \nabla_{\psi}\log Z(\hat\psi_{\text{CE}})\right)^{T}}{\left(\sum_{i = 1}^N w_{i}\right)^{2}} I(\hat\psi_{\text{CE}})^{-1}.
+    \hat V_{\text{CE}} = I(\hat\psi_{\text{CE}})^{-1}  \left(\sum_{i = 1}^N W^{2}_{i} \left(T(X^{i}) - \G_{\hpce}T \right)\left(T(X^{i}) - \G_{\hpce} T\right)^{T} \right)I(\hat\psi_{\text{CE}})^{-1}.
     $$
 \end{theorem}
 
@@ -542,11 +545,30 @@ Under the usual regularity conditions allowing to differentiate under the integr
     -2 \P \left(\left( \log p - \log g_{\psi} - \lambda \right) \nabla_{\psi}\log g_{\psi}\right)&=0\\
     -2 \P \left( \log p - \log g_{\psi} - \lambda \right)&=0,
 \end{align*}
-which may be used to derive asymptotics for $\hpeis$. Similar to the \gls{cem} we restrict ourselves here to exponential families where $\log g_{\psi}(x) = \psi^{T}T(x) - \log Z(\psi) + \log h(x)$. In this setting, $\hpeis$ becomes a weighted linear least squares estimator, which can be calculated analytically.
-
+which may be used to derive asymptotics for $\hpeis$. Similar to the \gls{cem} we restrict ourselves here to exponential families where $\log g_{\psi}(x) = \psi^{T}T(x) - \log Z(\psi) + \log h(x)$. In this setting, $\hpeis$ becomes a weighted linear least squares estimator, which can be calculated analytically after reparameterizing to $\psi' = (\lambda - \log Z(\psi),\psi)$ and $T'(x) = \left(1, T(x)^{T}\right)^{T}$:
 $$
-
+\hat\psi'_{\text{EIS}} = \left(\mathbf X \mathbf X^{T}\right)^{-1}\mathbf X^{T} \left( \log p(X^{1}), \dots, \log p(X^{N}) \right)
 $$
+where the design matrix $\mathbf X$ is given by
+$$\mathbf X = \text{diag} \left( \sqrt{W_{1}}, \dots, \sqrt{W_{N}} \right)\begin{pmatrix}
+    T'(X^{1})^{T} \\
+    \dots\\
+    T'(X^{N})^{T} \\
+\end{pmatrix}.$$
+
+
+\begin{theorem}
+    \todo{think about regularity conditions}
+    Under the appropriate regularity conditions, as $N$ goes to $\infty$,
+    $$
+    \sqrt{N} \left( \hpeis' - \peis' \right) \Dto \mathcal N (0, V_{\text{EIS}})
+    $$
+    where 
+    $$
+    V_{\text{EIS}} = \left(\P (T'(T')^{T})\right)^{-1} \left(\G \left(W^{2}(\log p - (T')^{T}\psi')^{2}T'(T')^{T}\right)\right)\left(\P (T'(T')^{T})\right)^{-1}.
+    $$
+\end{theorem}
+
 
 \subsection{Comparison}
 
@@ -711,3 +733,7 @@ As one can readily see from \Cref{thm:elliptical-conditional} the parameters of 
 
 \section{Simulation studies}
 \label{sec:simulation_studies}
+
+\begin{itemize}
+    \item stationary AR(1) process with high auto-correlation, NB observations, different $n$, large $N$, compare ESS, Variances, DKL(?)
+\end{itemize}
