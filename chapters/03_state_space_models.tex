@@ -1,5 +1,8 @@
 \glsresetall
-\newcommand{\psice}{{\ensuremath{\psi_{\text{CE}}}}}
+\newcommand{\pce}{{\ensuremath{\psi_{\text{CE}}}}}
+\newcommand{\hpce}{{\ensuremath{\hat\psi_{\text{CE}}}}}
+\newcommand{\peis}{{\ensuremath{\psi_{\text{EIS}}}}}
+\newcommand{\hpeis}{{\ensuremath{\hat\psi_{\text{EIS}}}}}
 
 \chapter{State space models}
 \label{cha:state_space_models}
@@ -471,31 +474,34 @@ Thus $\hat\psi_{\text{CE}}$ is a Z-estimator, and we can analyze its asymptotic 
     $$
     where 
     $$
-    V = - \frac{1}{(\G w)^2}I(\psi_{\text{CE}})^{-1}  \text{Cov}_{\G} \left( w (\nabla_{\psi_{\text{CE}}}\log Z(\psi_{\text{CE}}) + T) \right) I(\psi_{\text{CE}})^{-1}.
+    V = - \frac{1}{(\G w)^2}I(\psi_{\text{CE}})^{-1}  \text{Cov}_{\G} \left( w (T - \nabla_{\psi_{\text{CE}}}\log Z(\psi_{\text{CE}})) \right) I(\psi_{\text{CE}})^{-1}.
     $$
-    Moreover $\G (w (\nabla_{\psi}\log Z_{\psi_{\text{CE}}} + T)) = 0$, so we may estimate $V$ consistently by 
+    Moreover $\G (w(T - \nabla_{\psi}\log Z(\psi_{\text{CE}}))) = 0$, so we may estimate $V$ consistently by 
     $$
-    \hat V = \frac{1}{\left(\sum_{i = 1}^N w_{i}\right)^{2}}I(\hat\psi_{\text{CE}})^{-1}  \left( \sum_{i = 1}^N w^{2}_{i} (\nabla_{\psi}\log Z(\hat\psi_{\text{CE}}) + T(X^{i}))(\nabla_{\psi}\log Z(\hat\psi_{\text{CE}}) + T(X^{i}))^{T} \right) I(\hat\psi_{\text{CE}})^{-1}.
+    \hat V = I(\hat\psi_{\text{CE}})^{-1}  \frac{\sum_{i = 1}^N w^{2}_{i} \left(T(X^{i}) - \nabla_{\psi}\log Z(\hat\psi_{\text{CE}}) \right)\left(T(X^{i}) - \nabla_{\psi}\log Z(\hat\psi_{\text{CE}})\right)^{T}}{\left(\sum_{i = 1}^N w_{i}\right)^{2}} I(\hat\psi_{\text{CE}})^{-1}.
     $$
 \end{theorem}
 
 \begin{proof}
-    We check that the conditions of the central limit theorem for Z-estimators \cite[Theorem 5.21]{VanderVaart2000Asymptotic} are fulfilled. Let $\dot z = \nabla_\psi \log Z(\psi)$ and consider the functions $$x\mapsto f_\psi(x) = \nabla_{\psi} \left(w(x)\log g_{\psi}(x)\right) = w(x) \dot z (\psi) + w(x) T(x)$$ for $\psi \in \Psi$. Then $\left\lVert f_{\psi_1}(x) - f_{\psi_2}(x)\right\rVert = w(x) \left\lVert \dot z (\psi_1) - \dot z(\psi_2)\right\rVert$ where $\G w^2(x) < \infty $ and $\psi \mapsto z(\psi)$ is locally Lipschitz by our assumptions. Thus the local Lipschitz condition required by \cite[Theorem 5.21]{VanderVaart2000Asymptotic} is fulfilled.
+    We check that the conditions of the central limit theorem for Z-estimators \cite[Theorem 5.21]{VanderVaart2000Asymptotic} are fulfilled. Let $\dot z(\psi) = \nabla_\psi \log Z(\psi)$ and consider the estimating equations for $\pce$ 
+    $$x\mapsto f_\psi(x) = \nabla_{\psi} \left(w(x)\log g_{\psi}(x)\right) = w(x) T(x) - w(x) \dot z (\psi).$$ 
+    As $\left\lVert f_{\psi_1}(x) - f_{\psi_2}(x)\right\rVert = w(x) \left\lVert \dot z (\psi_1) - \dot z(\psi_2)\right\rVert$ for all $\psi_{1}, \psi_{2}\in \Psi$ and $\G w^2(x) < \infty $ the local Lipschitz condition required by \cite[Theorem 5.21]{VanderVaart2000Asymptotic} is fulfilled.
 
     Furthermore, as $wT$ is square integrable w.r.t. $\G$, we have 
+    \todo{fix: no triangle equation (squared norm)}
     $$
-    \G \left\lVert f_\psi \right\rVert^2 \leq \G w^2 \left\lVert \dot z(\psi) \right\rVert ^2  + \G \left\lVert wT\right\rVert^2 < \infty.
+    \G \left\lVert f_\psi \right\rVert^2 \leq \G w^2 \left\lVert \dot z(\psi) \right\rVert ^2  + 2 \lVert \dot z(\psi) \rVert \G \lVert wT\rVert + \G \left\lVert wT\right\rVert^2 < \infty.
     $$
     Additionally $\psi \mapsto\G f_\psi = (\G w) \dot z (\psi) + \G wT$ is differentiable everywhere, with Jacobian $(\G w) \ddot z(\psi)$, where  $\ddot z(\psi) = \partial_\psi \dot z(\psi)$ is the Hessian of the cumulant generating function.
 
     Under the proposed regularity conditions we see that 
     $$
-    \G \left(f_{\psice}\right) = \P \left( \dot z(\psice) + T \right) = \dot z (\psice) + \P T = 0,
+    \G f_{\pce} = \P \left( \dot z(\pce) + T \right) = \dot z (\pce) + \P T = 0,
     $$
-    by definition of $\hat\psice$.
+    by definition of $\pce$, so $\text{Cov}_{\G} \left( w(T - \nabla_{\pce} \log Z (\pce)) \right) \text{Cov}_{\G}(f_{\pce}) = \G f_{\pce}f_{\pce}^{T}$ .
     By \cite[Theorem 5.21]{VanderVaart2000Asymptotic} the asymptotic covariance matrix is 
     $$
-    V(\psice) = \frac{\ddot z(\psice)^{-1}}{\G w} \left(\G f_\psice f_{}\psice^T \right) \frac{\ddot z(\psice^{-1})}{\G w},
+    V(\pce) = \frac{\ddot z(\pce)^{-1}}{\G w} \left(\G f_\pce f_\pce^T \right) \frac{\ddot z(\pce^{-1})}{\G w},
     $$
     which finishes the proof.
 \end{proof}
@@ -515,8 +521,41 @@ If $\G_\psi$ do not form an exponential family, $\hat\psi_{\text{CE}}$ will stil
 The \gls{cem} is routinely used for estimating failure probabilities for rare events \cite{Homem-de-Mello2007Study} \todo{cite more} and has been applied to Bayesian inference \cite{Engel2023Bayesian,Ehre2023Certified} and optimal control problems \cite{Kappen2016Adaptive,Zhang2014Applications}.
 
 \subsection{Efficient importance sampling}
+\gls{eis}\cite{Richard2007Efficient} provides an alternative to the \gls{cem}. Instead of minimizing the \gls{kld} between the target $\G^{\ast}$ and $\G_{\psi}$, \gls{eis} aims at minimizing the variance of the logarithm of importance sampling weights. Thus, \gls{eis} finds $\psi_{EIS}$ which solves 
+\begin{align*}
+\psi_{EIS} &= \argmin_{\psi \in\Psi} \text{Var}_{\P} \left( \log w_{\psi} \right) \\
+    &= \argmin_{\psi \in \Psi} \P (\log w_{\psi} - \P \log w_{\psi})^{2},
+\end{align*}
+where $\log w_{\psi} = \log p - \log g_{\psi}$.
+As $\P \log w_{\psi}$ is usually intractable as well, we include it in the optimization problem, utilizing the fact that the mean is the minimizer of the squared distance functional.
+Here the unnormalized weights $w \propto \frac{\d\P}{\d\G}$ may be used, as the unknown integration constant gets absorbed by the unknown mean. In total, \gls{eis} solves
+\begin{align*}
+\psi_{\text{EIS}}, \lambda_{\text{EIS}} &= \argmin_{\psi \in\Psi, \lambda \in \mathbf R} \P \left( \log p - \log g_{\psi} - \lambda \right)^{2}.
+\end{align*}
+Similar to the \gls{cem} this problem is analytically intractable, and so we resort to importance sampling with a proposal $\G$, estimating $\psi_{\text{EIS}}$ by
+$$
+\hat \psi_{\text{EIS}} = \argmin_{\psi} \sum_{i=1}^N W^{i} \left( \log p(X^{i}) - \log g_{\psi}(X^{i}) - \lambda \right)^{2},
+$$
+where $X^{1}, \dots, X^{N} \iid \G$. 
+Under the usual regularity conditions allowing to differentiate under the integral, the estimating equations for $\peis$ read
+\begin{align*}
+    -2 \P \left(\left( \log p - \log g_{\psi} - \lambda \right) \nabla_{\psi}\log g_{\psi}\right)&=0\\
+    -2 \P \left( \log p - \log g_{\psi} - \lambda \right)&=0,
+\end{align*}
+which may be used to derive asymptotics for $\hpeis$. Similar to the \gls{cem} we restrict ourselves here to exponential families where $\log g_{\psi}(x) = \psi^{T}T(x) - \log Z(\psi) + \log h(x)$. In this setting, $\hpeis$ becomes a weighted linear least squares estimator, which can be calculated analytically.
+
+$$
+
+$$
 
 \subsection{Comparison}
+
+\begin{itemize}
+    \item discuss variances from CLT
+    \item discuss targets
+    \item numerical stability
+    \item time complexity
+\end{itemize}
 \begin{example}[Failure of \gls{la}]
   \label{ex:la_failure}
   Consider the Gaussian scale mixture $\P = \frac{1}{2} \left(\mathcal N (0,1) + \mathcal N(0, \varepsilon^{-2})\right)$ with mode $x^{\ast}=0$. 
