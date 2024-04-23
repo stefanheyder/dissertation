@@ -3,6 +3,8 @@
 \usepackage[T1]{fontenc}
 \usepackage{microtype}
 
+\setlength\parindent{0pt}
+
 % ****************************************************************************************************
 % 2. Personal data and user ad-hoc commands (insert your own data here)
 % ****************************************************************************************************
@@ -43,9 +45,11 @@
 %}{biblatex}
 \usepackage[backend=biber,bibencoding=utf8,language=auto,style=numeric-comp,sorting=nyt,maxbibnames=3,natbib=true]{biblatex}
 
-\usepackage[fleqn]{amsmath}
+\usepackage{amsmath}
 \usepackage{amsthm}
 
+
+\usepackage{enumitem}
 
 \newtheorem{proposition}{Proposition}[chapter]
 \newtheorem{theorem}{Theorem}[chapter]
@@ -58,8 +62,8 @@
 
 
 \theoremstyle{remark}
-\newtheorem*{remark}{Remark}
-\newtheorem*{notation}{Notation}
+\newtheorem{remark}{Remark}[chapter]
+\newtheorem{notation}{Notation}[chapter]
 
 % ********************************************************************
 % General useful packages
@@ -166,3 +170,4 @@
 % cleveref should be loaded last
 \usepackage{cleveref} 
 \crefname{figure}{Figure}{Figures}
+\crefname{notation}{notation}{Notations}

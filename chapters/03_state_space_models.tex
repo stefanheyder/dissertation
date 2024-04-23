@@ -1,6 +1,8 @@
 \glsresetall
+\newcommand{\ce}{{\ensuremath{\text{CE}}}}
 \newcommand{\pce}{{\ensuremath{\psi_{\text{CE}}}}}
 \newcommand{\hpce}{{\ensuremath{\hat\psi_{\text{CE}}}}}
+\newcommand{\eis}{{\ensuremath{\text{EIS}}}}
 \newcommand{\peis}{{\ensuremath{\psi_{\text{EIS}}}}}
 \newcommand{\hpeis}{{\ensuremath{\hat\psi_{\text{EIS}}}}}
 \newcommand{\Dto}{\stackrel{\mathcal D}{\to}}
@@ -470,58 +472,92 @@ The following theorem of \citep{VanderVaart2000Asymptotic} will be useful in ana
 \begin{theorem}[asymptotic variance of Z-estimators, {\cite[Theorem 5.21]{VanderVaart2000Asymptotic}}]
     \label{thm:clt_z_est_vdv}
     For every $\psi$ in an open subset of $\R^{k}$, let $x \mapsto f_{\psi}(x)$ be a measurable vector-valued function such that, for every $\psi_{1}$ and $\psi_{2}$ in a neighborhood of $\psi_{0}$ and a measurable function $\dot f$ with $\G \dot f < \infty$,
-    $$
-    \lVert f_{\psi_{1}}(x) - f_{\psi_{2}}(x)\rVert \leq \dot f(x) \lVert \psi_{1} - \psi_{2}\rVert.
-    $$
+    \begin{align}
+    \label{eq:clt-vdv-local-lipschitz}
+    \lVert f_{\psi_{1}}(x) - f_{\psi_{2}}(x)\rVert \leq \dot f(x) \lVert \psi_{1} - \psi_{2}\rVert \tag{LL}.
+    \end{align}
 
-    Assume that $\G \lVert f_{\psi_{0}}\rVert < \infty$ and that the map $\psi \mapsto \G f_{\psi}$ is differentiable at $\psi_{0}$, with nonsingular derivative matrix $B^{-1}_{\psi_{0}}$. If $\hat\G_{N} f_{\hat\psi_{N}} = o_{P} \left( N^{-\frac{1}{2}} \right)$, and $\hat\psi_{N} \to \psi_{0}$ in probability, then
-    $$
-    \sqrt{N} \left( \hat\psi_{N} - \psi_{0} \right) \Dto \mathcal N(0, BMB^{T}),
-    $$
+    Assume that $\G \lVert f_{\psi_{0}}\rVert < \infty$ and that the map $\psi \mapsto \G f_{\psi}$ is differentiable at $\psi_{0}$, with nonsingular derivative matrix $B^{-1}$. If $\hat\G_{N} f_{\hat\psi_{N}} = o_{P} \left( N^{-\frac{1}{2}} \right)$, and $\hat\psi_{N} \to \psi_{0}$ in probability, then
+    \begin{align}
+        \label{eq:clt-vdv}
+        \sqrt{N} \left( \hat\psi_{N} - \psi_{0} \right) \Dto \mathcal N(0, BMB^{T}),
+    \end{align}
     where $M = \G f_{\psi_{0}} f_{\psi_{0}^{T}}$.
 \end{theorem}
 
+\begin{notation}[central limit theorem for Z-estimators]
+    \label{not:notation-clt}
+    The central limit theorems derived in this and the next section will make frequent use of \Cref{thm:clt_z_est_vdv}. We will use the following consistent notation in the statement of theorems and their proofs:
+    \begin{itemize}
+        \item $f_\psi(x): \R^{k} \to \R^{k}$ the estimating equation              
+        \item $B = \left(\G\partial_{\psi} f_{\psi}\right)^{-1}$ the bread matrix
+        \item $M = \G f_{\psi}f_{\psi}^{T}$ the meat matrix
+        \item $V = BMB$ the asymptotic covariance matrix
+        \item $\log g_{\psi}(x) = \psi^{T}T(x) + \log h(x) - \log Z(\psi)$ the density of the natural exponential family considered
+        \item $\dot z (\psi) = \nabla_{\psi}\log Z(\psi) = \G_{\psi} T$ the derivative of the log-normalizing constant $\psi \mapsto \log Z(\psi)$
+        \item $\ddot z(\psi) = \partial_{\psi} \dot z(\psi) =\cov_{\G_{\psi}}T$ the Hessian of the log-normalizing constant $\psi \mapsto \log Z(\psi)$
+    \end{itemize}
+    The naming of $B$ and $M$ stems from the sandwich estimator \todo{cite white 1982}, where $B$ is the Jacobian of the estimating equations $\G^{\ast}f_{psi} = 0$ and $M$ is the covariance matrix of $f_{\psi}$ under $\G^{\ast}$. 
+\end{notation}
+
 \begin{theorem}[consistency of $\hat \psi_{\text{CE}}$]
+    \label{thm:ce-consistent}
+    \todo{from vdV}
 \end{theorem}
 
 \begin{theorem}[asymptotic normality of $\hat \psi_{\text{CE}}$]
-    \todo{rewrite this with non-natural parameter}
-    Suppose that $\nabla_\psi \log Z$ is locally Lipschitz around $\psi_{\text{CE}}$, $T$ is square integrable  w.r.t. $\G$ and the Fisher information $I(\psi_{\text{CE}})$ is positive definite. \todo{regularity conditions? + consistency?}
+    \label{thm:ce-clt}
+    \todo{require unique solution?}
+    Let $\G_{\psi}$ form a natural exponential family with densities $g_{\psi}(x) = \frac{h(x)}{Z(\psi)} \exp \left( \psi^{T}T(x)\right) $ w.r.t. $\mu$. Let $\G, \G^{\ast}$ be two other probability measures such that $\G \ll \G^{\ast}$ and let $W = \frac{\d \G^{\ast}}{\d \G}$ be the normalized importance sampling weights. 
+    Suppose further that 
+    \begin{enumerate}[label={\bfseries(A{\arabic*})}]
+        \item\label{it:exist-unique-psice} $G_{\hpce} T = \hat\G_{N} T$ $\mu$-a.s. has a unique solution $\hpce$,
+        \item\label{it:zdot-ll} $\psi \mapsto \nabla_\psi \log Z(\psi)$ is locally Lipschitz around $\psi_{\text{CE}}$,
+        \item\label{it:w-t-wt-L2} $W,T$ and $WT$ possess finite second moments  w.r.t. $\G$ and
+        \item\label{it:FI-psd} the Fisher information $I(\psi_{\text{CE}})$ is positive definite.
+        \item\label{it:ce-regularity} regularity conditions \todo{choose correct ones to make $I(\psi) = - \ddot z(\psi) $}
+    \end{enumerate}
+
     Then
     $$
-        \sqrt{N} \left(\hat\psi_\text{CE} - \psi_{\text{CE}}\right) \Dto \mathcal N \left(0, V\right)
+        \sqrt{N} \left(\hat\psi_\text{CE} - \psi_{\text{CE}}\right) \Dto \mathcal N \left(0, V_{\text{CE}}\right)
     $$
     where 
     $$
-    V_{\text{CE}} = I(\psi_{\text{CE}})^{-1}  \text{Cov}_{\G} \left( W (T - \G_{\pce}T) \right) I(\psi_{\text{CE}})^{-1},
+    V_{\text{CE}} = B_\ce M_\ce B_\ce,%I(\psi_{\text{CE}})^{-1}  \text{Cov}_{\G} \left( W (T - \G_{\pce}T) \right) I(\psi_{\text{CE}})^{-1},
     $$
-    and $W = \frac{\d\G^{\ast}}{\d \G}$ are the normalized weights.
-    Moreover $\G (W(T - \G_{\pce}T))) = 0$, so we may estimate $V_{\text{CE}}$ consistently by 
+    with 
+    \begin{align*}
+        B_{\ce} &= I(\pce)^{-1}, \\
+        M_{\ce} &= \cov_{\G} \left( W (T - \G_{\pce}T) \right).
+    \end{align*}
+    Moreover $\G (W(T - \G_{\pce}T))) = 0$, so we may estimate $V_{\text{CE}}$ consistently by plug-in:
     $$
     \hat V_{\text{CE}} = I(\hat\psi_{\text{CE}})^{-1}  \left(\sum_{i = 1}^N W^{2}_{i} \left(T(X^{i}) - \G_{\hpce}T \right)\left(T(X^{i}) - \G_{\hpce} T\right)^{T} \right)I(\hat\psi_{\text{CE}})^{-1}.
     $$
 \end{theorem}
 
-\begin{proof}
-    We check that the conditions of the central limit theorem for Z-estimators \cite[Theorem 5.21]{VanderVaart2000Asymptotic} are fulfilled. Let $\dot z(\psi) = \nabla_\psi \log Z(\psi)$ and consider the estimating equations for $\pce$ 
-    $$x\mapsto f_\psi(x) = \nabla_{\psi} \left(w(x)\log g_{\psi}(x)\right) = w(x) T(x) - w(x) \dot z (\psi).$$ 
-    As $\left\lVert f_{\psi_1}(x) - f_{\psi_2}(x)\right\rVert = w(x) \left\lVert \dot z (\psi_1) - \dot z(\psi_2)\right\rVert$ for all $\psi_{1}, \psi_{2}\in \Psi$ and $\G w^2(x) < \infty $ the local Lipschitz condition required by \cite[Theorem 5.21]{VanderVaart2000Asymptotic} is fulfilled.
-
-    Furthermore, as $wT$ is square integrable w.r.t. $\G$, we have 
-    \todo{fix: no triangle equation (squared norm)}
+\begin{proof} We check that the conditions of the central limit theorem for Z-estimators (\Cref{thm:clt_z_est_vdv}) are fulfilled. This proof uses the notation established in \Cref{not:notation-clt}. Consider the estimating equations for $\pce$ 
+    $$x\mapsto f_\psi(x) = \nabla_{\psi} \left(w(x)\log g_{\psi}(x)\right) = w(x) T(x) - w(x) \dot z (\psi),$$ where $w(x)$ are the unnormalized importance sampling weights. 
+    By \ref{it:exist-unique-psice} $\hat G_{N} f_{\hpce} = 0$ $\mu$-a.s., so it remains to show that $\hpce \to \pce$  in probability, which is implied by \cref{thm:ce-consistent} \todo{check}.
+    
+    As $$\left\lVert f_{\psi_1}(x) - f_{\psi_2}(x)\right\rVert = w(x) \left\lVert \dot z (\psi_1) - \dot z(\psi_2)\right\rVert$$ for all $\psi_{1}, \psi_{2}\in \Psi$,  $\G w < \infty $ and \ref{it:zdot-ll} imply the local Lipschitz condition \Cref{eq:clt-vdv-local-lipschitz} in \Cref{thm:clt_z_est_vdv}.
+    Furthermore, by \ref{it:w-t-wt-L2} it holds
+    %\todo{fix: no triangle equation (squared norm)}
     $$
     \G \left\lVert f_\psi \right\rVert^2 \leq \G w^2 \left\lVert \dot z(\psi) \right\rVert ^2  + 2 \lVert \dot z(\psi) \rVert \G \lVert wT\rVert + \G \left\lVert wT\right\rVert^2 < \infty.
     $$
-    Additionally $\psi \mapsto\G f_\psi = (\G w) \dot z (\psi) + \G wT$ is differentiable everywhere, with Jacobian $(\G w) \ddot z(\psi)$, where  $\ddot z(\psi) = \partial_\psi \dot z(\psi)$ is the Hessian of the cumulant generating function.
 
-    Under the proposed regularity conditions we see that 
+    Additionally $\psi \mapsto\G f_\psi = (\G w) \dot z (\psi) + \G wT$ is differentiable everywhere, with Jacobian $(\G w) \ddot z(\psi)$, where  $\ddot z(\psi) = \partial_\psi \dot z(\psi)$ is the Hessian of the cumulant generating function, which equals the negative Fisher information $-I(\pce)$ as $\G_{\psi}, \psi \in \Psi$ form a natural exponential family and the regularity conditions \ref{it:ce-regularity} allow differentiation under the integral.
+    Thus we see that 
     $$
     \G f_{\pce} = \P \left( \dot z(\pce) + T \right) = \dot z (\pce) + \P T = 0,
     $$
-    by definition of $\pce$, so $\text{Cov}_{\G} \left( w(T - \nabla_{\pce} \log Z (\pce)) \right) \text{Cov}_{\G}(f_{\pce}) = \G f_{\pce}f_{\pce}^{T}$ .
-    By \cite[Theorem 5.21]{VanderVaart2000Asymptotic} the asymptotic covariance matrix is 
+    by definition of $\pce$, so $$\text{Cov}_{\G} \left( w(T - \nabla_{\pce} \log Z (\pce)) \right) = \text{Cov}_{\G}(f_{\pce}) = \G f_{\pce}f_{\pce}^{T}.$$
+    As $W = \frac{w}{\G w}$
+    By \cref{eq:clt-vdv} the asymptotic covariance matrix is 
     $$
-    V(\pce) = \frac{\ddot z(\pce)^{-1}}{\G w} \left(\G f_\pce f_\pce^T \right) \frac{\ddot z(\pce^{-1})}{\G w},
+    V_{\ce} = B_{\ce}M_{\ce}B_{ce}
     $$
     which finishes the proof.
 \end{proof}
@@ -548,15 +584,10 @@ The \gls{cem} is routinely used for estimating failure probabilities for rare ev
 \end{align*}
 where $\log w_{\psi} = \log p - \log g_{\psi}$.
 As $\P \log w_{\psi}$ is usually intractable as well, we include it in the optimization problem, utilizing the fact that the mean is the minimizer of the squared distance functional.
-Here the unnormalized weights $w \propto \frac{\d\P}{\d\G}$ may be used, as the unknown integration constant gets absorbed by the unknown mean. In total, \gls{eis} solves
+Here unnormalized weights $w \propto \frac{\d\P}{\d\G}$ may be used, as the unknown integration constant gets absorbed by the unknown mean. In total, \gls{eis} solves
 \begin{align*}
 \left(\psi_{\text{EIS}}, \lambda_{\text{EIS}}\right) &= \argmin_{\psi \in\Psi, \lambda \in \mathbf R} \P \left( \log p - \log g_{\psi} - \lambda \right)^{2}.
 \end{align*}
-Similar to the \gls{cem} this problem is analytically intractable, and so we resort to importance sampling with a proposal $\G$, estimating $\psi_{\text{EIS}}$ by
-$$
-\hat \psi_{\text{EIS}} = \argmin_{\psi} \sum_{i=1}^N W^{i} \left( \log p(X^{i}) - \log g_{\psi}(X^{i}) - \lambda \right)^{2},
-$$
-where $X^{1}, \dots, X^{N} \iid \G$. 
 Under the usual regularity conditions allowing to differentiate under the integral, the estimating equations for $\peis$ read
 \begin{align}
     \label{eq:eis-optimal}
@@ -576,37 +607,81 @@ Thus optimality is achieved if the first term equals the conditional expectation
 \end{align*}
 Thus the optimal $ \left( \peis, \lambda'_{\text{EIS}} \right)$ are given by the best linear prediction of $\log p - \log h$ by the sufficient statistic $T$ under $\P$. Therefore 
 \begin{align*}
-    \peis &= \cov_{\P} \left( T \right)^{-1} \cov_{\P} \left(T, \log p - \log h \right)\\
-    \lambda'_{\text{EIS}} &= \P \log p - \log h.
+    \lambda'_{\text{EIS}} &= \P \log p - \log h\\
+    \peis &= \cov_{\P} \left( T \right)^{-1} \cov_{\P} \left(T, \log p - \log h \right).
 \end{align*}
 Thus the optimal $\peis$ depends on second-order moments of the sufficient statistic, as well as the shape of $\log p$. 
 
-In this setting, $\hpeis$ becomes a weighted linear least squares estimator, which can be calculated analytically after reparameterizing to $\psi' = (\lambda - \log Z(\psi),\psi)$ and $T'(x) = \left(1, T(x)^{T}\right)^{T}$:
+As the moments of $T$ under $\P$ are not available, \gls{eis} proceeds like the \gls{cem} and employs importance sampling with a proposal $\G$, estimating $\psi_{\text{EIS}}$ by
 $$
-\hat\psi'_{\text{EIS}} = \left(\mathbf X^{T} \mathbf X\right)^{-1}\mathbf X^{T} \left( \log p(X^{1}), \dots, \log p(X^{N}) \right)
+\hat \psi_{\text{EIS}} = \argmin_{\psi} \sum_{i=1}^N W^{i} \left( \log p(X^{i}) - \log g_{\psi}(X^{i}) - \lambda \right)^{2},
+$$
+where $X^{1}, \dots, X^{N} \iid \G$. 
+If $g_{\psi}, \psi \in \Psi$ form an exponential family with natural parameter $\psi$, $\hpeis$ becomes a weighted linear least squares estimator after reparameterizing to $\lambda'$ as above.
+Thus we can estimate with the standard weighted least squares estimator
+$$
+\left( \hat\lambda', \hpeis \right) = \left(\mathbf X^{T} \mathbf X\right)^{-1}\mathbf X^{T} \left( \log p(X^{1}), \dots, \log p(X^{N}) \right)
 $$
 where the design matrix $\mathbf X$ is given by
 $$\mathbf X = \text{diag} \left( \sqrt{W_{1}}, \dots, \sqrt{W_{N}} \right)\begin{pmatrix}
-    T'(X^{1})^{T} \\
-    \dots\\
-    T'(X^{N})^{T} \\
+    1 & T(X^{1})^{T} \\
+    \dots&\dots\\
+    1 & T(X^{N})^{T} \\
 \end{pmatrix}.$$
 
+\todo{discuss applicability of CLT}
 
-\begin{theorem}[CLT for \gls{eis} with known \gls{kld}]
-    Assume $\lambda(\psi) = \G^{\ast} \log w_{\psi}$ is know. \todo{+ reg. cond.} Then, as $N$ goes to $\infty$,
+\begin{theorem}[asymptotic normality of $\hpeis$ I]
+    Let $\G_{\psi}$ form a natural exponential family with densities $g_{\psi}(x) = \frac{h(x)}{Z(\psi)} \exp \left( \psi^{T}T(x) \right)$ w.r.t. $\mu$. Let $\G, \G^{\ast}$ be two other probability measures such taht $\G \ll \G^{\ast}$ and let $W = \frac{\d\G^{\ast}}{\d\G}$ be the normalized importance sampling weights. 
+    Assume $\lambda(\psi) = \G^{\ast} \log w_{\psi}$ is known and the following conditions hold:
+    \todo{faster convergence if $\G^{\ast}$ is from same EF?}
+    \begin{enumerate}[label={\bfseries(B\arabic*)}]
+        \item ...
+        \item\label{it:eis-dkl-dkl-to-base-finite} $\Dkl{\G^{\ast}}{\G_{\psi}} < \infty$ for all $\psi$ \todo{prob. suffices locally}
+        \item\label{it:eis-T-l2} $T$ is square integrable w.r.t. $\G^{\ast}$.
+        \item\label{it:eis-dkl-regularity} regularity conditions
+    \end{enumerate}
+    Then, as $N$ goes to $\infty$,
     $$
-    \sqrt{N} \left( \hpeis - \peis \right) \Dto \mathcal N(0, BMB)
+    \sqrt{N} \left( \hpeis - \peis \right) \Dto \mathcal N(0, V_{\eis})
     $$
     where 
     $$
-    B = \left(\text{Cov}_{\P} T\right)^{-1}
+    V_{\eis} = B_{\eis}M_{\eis}B_{\eis}
     $$
-    and 
-    $$
-    M = \G \left(W^{2} \left( \log w_{\psi} - \lambda(\psi) \right)^{2} \left( T - \P T \right)\left( T - \P T \right)^{T}\right).
-    $$
+    with
+    \begin{align*}
+        B_{\eis} &= \left( \cov_{\G^{\ast}} T \right)^{-1},\\
+        M_{\eis}%&= \G \left(W^{2} \left( \log w_{\psi} - \lambda(\psi) \right)^{2} \left( T - \G^{\ast} T \right)\left( T - \G^{\ast} T \right)^{T}\right)\\
+        &= \cov_{\G} \left( W \log w_{\psi}, W T \right).
+    \end{align*}
 \end{theorem}
+
+\begin{proof}
+    This proof follows the same strategy as that for \Cref{thm:ce-clt} and uses the same notation (\Cref{not:notation-clt}). 
+    % verify conditions
+    As $\lambda (\psi) = \G^{\ast} (\log g^{\ast} - \log g_{\psi})$ its gradient is $\nabla_{\psi} \lambda (\psi) = -\G^{\ast} T + \dot z(\psi)$, so the estimating equations for $\peis$ are \todo{regularity for $\nabla \lambda$}
+    $$
+    x \mapsto f_{\psi}(x) = \nabla_{\psi} -\frac{1}{2}w(x)\left(\log w_{\psi} (x) - \lambda(\psi) \right)^{2} = w(x)\left( \log w_{\psi}(x) - \lambda (\psi) \right) \left( T(x) - \G^{\ast} T \right).
+    $$
+    % LL
+    For $\psi_{1}, \psi_{2}\in\Psi$ the Lipschitz condition \cref{eq:clt-vdv-local-lipschitz} are fulfilled, as 
+    \begin{align*}
+    \lVert f_{\psi_{1}}(x) - f_{\psi_{2}}(x)\rVert &= w(x)\lvert \log w_{\psi_{1}}(x) - \lambda(\psi_{1}) - (\log w_{\psi_{2}}(x)  - \lambda(\psi_{2}))\rvert\cdot\lVert T(x) - \G^{\ast}T\rVert   \\
+        &= w(x) \lvert \left( (\psi_{1} - \psi_{2})^{T} \left( T(x) - \G^{\ast} T \right)  \right)\rvert \lVert T(x) - \G^{\ast} \rVert  \\
+        &\leq w(x) \lVert T(x) - \G^{\ast} T\rVert^{2} \lVert \psi_{1} - \psi_{2} \rVert,
+    \end{align*}
+    and $\G w \lVert T - \G^{\ast}T\rVert^{2} = \G^{\ast} \lVert T - \G^{\ast}T\rVert^{2} < \infty$.
+    % Gf_psi0 < infy
+    $\G f_{\peis} = \G^{\ast} $
+    % psi -> Gf_psi differentiable, Jacobian non-singular
+    % \hat G_N f_\hat\psi_N = o_P (N^-1/2)
+    % \hp -> \p
+    % calculate B
+    % calcultae M
+
+    
+\end{proof}
 
 \begin{theorem}
     \todo{think about regularity conditions}
@@ -620,6 +695,7 @@ $$\mathbf X = \text{diag} \left( \sqrt{W_{1}}, \dots, \sqrt{W_{N}} \right)\begin
     $$
 \end{theorem}
 
+% literature review for EIS
 
 \section{Gaussian importance sampling for state space models}
 \label{sec:gaussian_importance_sampling_for_state_space_models}
