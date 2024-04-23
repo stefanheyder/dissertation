@@ -5,7 +5,7 @@
 \newcommand{\hpeis}{{\ensuremath{\hat\psi_{\text{EIS}}}}}
 \newcommand{\Dto}{\stackrel{\mathcal D}{\to}}
 
-\chapter{State space models}
+\chapter{Importance Sampling in State space models}
 \label{cha:state_space_models}
 
 State space models are a versatile class of statistical models which allow to model non-stationary time series data and come along with straight-forward interpretation.
@@ -453,17 +453,34 @@ $$
 $$
  As $\log Z(\psi)$ is the cumulant-generating function of $\G_{\psi}$it is, under appropriate regularity conditions, smooth. Thus the optimal $\psi_{\text{CE}}$ solves
 $$
-\G^{\ast} T = \nabla_{\psi} \log Z(\psi) = \G_{\pce}T,
+\G^{\ast} T = \nabla_{\psi} \log Z(\pce) = \G_{\pce}T,
 $$
 and so reduces to match the moments of the sufficient statistic of the target and proposal.
 Given $\G^{\ast} T$, this system of equations can, in many cases, be solved analytically or by gradient descent algorithms.
 
-While $\G^{\ast} T$ is usually not available, it is itself amenable to importance sampling. Given a proposal $\G$ we may estimate $\G^{\ast} T$ by $\hat\G_N T = \sum_{i = 1}^{N} W^{i} T(X^{i})$ for $X_{1}, \dots, X_{N} \iid \G$ and auto-normalized importance sampling weights $W^{i}$ and in turn estimate $\psi_{\text{CE}}$ by $\hat \psi_{\text{CE}}$ solving
+While $\G^{\ast} T$ is usually not available, it is itself amenable to importance sampling. Given a proposal $\G$ we may estimate $\G^{\ast} T$ by $\hat\G_N T = \sum_{i = 1}^{N} W^{i} T(X^{i})$ for $X^{1}, \dots, X^{N} \iid \G$ and auto-normalized importance sampling weights $W^{i}$ and in turn estimate $\psi_{\text{CE}}$ by $\hat \psi_{\text{CE}}$ solving
 $$
 \G_{\hpce} T = \hat \G_N T.
 $$
 % proof: appeal to vdV, pd ensures that M(\theta) is convex, so global maximum unique and well separated
 Thus $\hat\psi_{\text{CE}}$ is a Z-estimator, and we can analyze its asymptotic behavior using standard results. 
+
+The following theorem of \citep{VanderVaart2000Asymptotic} will be useful in analyzing the asymptotic behavior of the estimators we consider in this thesis. We state it here, using our notation, for completeness.
+
+\begin{theorem}[asymptotic variance of Z-estimators, {\cite[Theorem 5.21]{VanderVaart2000Asymptotic}}]
+    \label{thm:clt_z_est_vdv}
+    For every $\psi$ in an open subset of $\R^{k}$, let $x \mapsto f_{\psi}(x)$ be a measurable vector-valued function such that, for every $\psi_{1}$ and $\psi_{2}$ in a neighborhood of $\psi_{0}$ and a measurable function $\dot f$ with $\G \dot f < \infty$,
+    $$
+    \lVert f_{\psi_{1}}(x) - f_{\psi_{2}}(x)\rVert \leq \dot f(x) \lVert \psi_{1} - \psi_{2}\rVert.
+    $$
+
+    Assume that $\G \lVert f_{\psi_{0}}\rVert < \infty$ and that the map $\psi \mapsto \G f_{\psi}$ is differentiable at $\psi_{0}$, with nonsingular derivative matrix $B^{-1}_{\psi_{0}}$. If $\hat\G_{N} f_{\hat\psi_{N}} = o_{P} \left( N^{-\frac{1}{2}} \right)$, and $\hat\psi_{N} \to \psi_{0}$ in probability, then
+    $$
+    \sqrt{N} \left( \hat\psi_{N} - \psi_{0} \right) \Dto \mathcal N(0, BMB^{T}),
+    $$
+    where $M = \G f_{\psi_{0}} f_{\psi_{0}^{T}}$.
+\end{theorem}
+
 \begin{theorem}[consistency of $\hat \psi_{\text{CE}}$]
 \end{theorem}
 
@@ -533,7 +550,7 @@ where $\log w_{\psi} = \log p - \log g_{\psi}$.
 As $\P \log w_{\psi}$ is usually intractable as well, we include it in the optimization problem, utilizing the fact that the mean is the minimizer of the squared distance functional.
 Here the unnormalized weights $w \propto \frac{\d\P}{\d\G}$ may be used, as the unknown integration constant gets absorbed by the unknown mean. In total, \gls{eis} solves
 \begin{align*}
-\psi_{\text{EIS}}, \lambda_{\text{EIS}} &= \argmin_{\psi \in\Psi, \lambda \in \mathbf R} \P \left( \log p - \log g_{\psi} - \lambda \right)^{2}.
+\left(\psi_{\text{EIS}}, \lambda_{\text{EIS}}\right) &= \argmin_{\psi \in\Psi, \lambda \in \mathbf R} \P \left( \log p - \log g_{\psi} - \lambda \right)^{2}.
 \end{align*}
 Similar to the \gls{cem} this problem is analytically intractable, and so we resort to importance sampling with a proposal $\G$, estimating $\psi_{\text{EIS}}$ by
 $$
@@ -541,13 +558,32 @@ $$
 $$
 where $X^{1}, \dots, X^{N} \iid \G$. 
 Under the usual regularity conditions allowing to differentiate under the integral, the estimating equations for $\peis$ read
+\begin{align}
+    \label{eq:eis-optimal}
+    \P \left(\left( \log p - \log g_{\psi} - \lambda \right) \nabla_{\psi}\log g_{\psi}\right)&=0\\
+    \P \left( \log p - \log g_{\psi} - \lambda \right)&=0,
+\end{align}
+\todo{more explicit with NEF}
+which may be used to derive asymptotics for $\hpeis$. Similar to the \gls{cem} we restrict ourselves here to exponential families where $\log g_{\psi}(x) = \psi^{T}T(x) - \log Z(\psi) + \log h(x)$. In this case \cref{eq:eis-optimal} simplifies to
 \begin{align*}
-    -2 \P \left(\left( \log p - \log g_{\psi} - \lambda \right) \nabla_{\psi}\log g_{\psi}\right)&=0\\
-    -2 \P \left( \log p - \log g_{\psi} - \lambda \right)&=0,
+    \P \left(\left( \log p - \log g_{\psi} - \lambda \right)(T - \G_{\psi} T)\right) &= 0,\\
+    \lambda = \P (\log p - \log g_{\psi}) &= \Dkl{\P}{\G_{\psi}}.
 \end{align*}
-which may be used to derive asymptotics for $\hpeis$. Similar to the \gls{cem} we restrict ourselves here to exponential families where $\log g_{\psi}(x) = \psi^{T}T(x) - \log Z(\psi) + \log h(x)$. In this setting, $\hpeis$ becomes a weighted linear least squares estimator, which can be calculated analytically after reparameterizing to $\psi' = (\lambda - \log Z(\psi),\psi)$ and $T'(x) = \left(1, T(x)^{T}\right)^{T}$:
+As the first term is centered under $\P$, this is equivalent to $\log w_{\psi}$ and $T$ being orthogonal in $L^{2}(\P)$. 
+Thus optimality is achieved if the first term equals the conditional expectation w.r.t. $T$. Unfortunately, this does not allow for an analytical solution of $\peis$. However, we can achieve this by reparameterizing to $\lambda' = \lambda - \log Z(\psi)$. There we obtain a weighted linear least squares problem
+\begin{align*}
+    \min_{\psi \in \Psi, \lambda' \in \R} \P \left(\log p - \log h - \psi^{T}T - \lambda'\right)^{2}.
+\end{align*}
+Thus the optimal $ \left( \peis, \lambda'_{\text{EIS}} \right)$ are given by the best linear prediction of $\log p - \log h$ by the sufficient statistic $T$ under $\P$. Therefore 
+\begin{align*}
+    \peis &= \cov_{\P} \left( T \right)^{-1} \cov_{\P} \left(T, \log p - \log h \right)\\
+    \lambda'_{\text{EIS}} &= \P \log p - \log h.
+\end{align*}
+Thus the optimal $\peis$ depends on second-order moments of the sufficient statistic, as well as the shape of $\log p$. 
+
+In this setting, $\hpeis$ becomes a weighted linear least squares estimator, which can be calculated analytically after reparameterizing to $\psi' = (\lambda - \log Z(\psi),\psi)$ and $T'(x) = \left(1, T(x)^{T}\right)^{T}$:
 $$
-\hat\psi'_{\text{EIS}} = \left(\mathbf X \mathbf X^{T}\right)^{-1}\mathbf X^{T} \left( \log p(X^{1}), \dots, \log p(X^{N}) \right)
+\hat\psi'_{\text{EIS}} = \left(\mathbf X^{T} \mathbf X\right)^{-1}\mathbf X^{T} \left( \log p(X^{1}), \dots, \log p(X^{N}) \right)
 $$
 where the design matrix $\mathbf X$ is given by
 $$\mathbf X = \text{diag} \left( \sqrt{W_{1}}, \dots, \sqrt{W_{N}} \right)\begin{pmatrix}
@@ -556,6 +592,21 @@ $$\mathbf X = \text{diag} \left( \sqrt{W_{1}}, \dots, \sqrt{W_{N}} \right)\begin
     T'(X^{N})^{T} \\
 \end{pmatrix}.$$
 
+
+\begin{theorem}[CLT for \gls{eis} with known \gls{kld}]
+    Assume $\lambda(\psi) = \G^{\ast} \log w_{\psi}$ is know. \todo{+ reg. cond.} Then, as $N$ goes to $\infty$,
+    $$
+    \sqrt{N} \left( \hpeis - \peis \right) \Dto \mathcal N(0, BMB)
+    $$
+    where 
+    $$
+    B = \left(\text{Cov}_{\P} T\right)^{-1}
+    $$
+    and 
+    $$
+    M = \G \left(W^{2} \left( \log w_{\psi} - \lambda(\psi) \right)^{2} \left( T - \P T \right)\left( T - \P T \right)^{T}\right).
+    $$
+\end{theorem}
 
 \begin{theorem}
     \todo{think about regularity conditions}
@@ -569,25 +620,6 @@ $$\mathbf X = \text{diag} \left( \sqrt{W_{1}}, \dots, \sqrt{W_{N}} \right)\begin
     $$
 \end{theorem}
 
-
-\subsection{Comparison}
-
-\begin{itemize}
-    \item discuss variances from CLT
-    \item discuss targets
-    \item numerical stability
-    \item time complexity
-\end{itemize}
-\begin{example}[Failure of \gls{la}]
-  \label{ex:la_failure}
-  Consider the Gaussian scale mixture $\P = \frac{1}{2} \left(\mathcal N (0,1) + \mathcal N(0, \varepsilon^{-2})\right)$ with mode $x^{\ast}=0$. 
-  The \gls{la} is $\G_{\text{LA}} = \mathcal N \left( 0, \frac{1}{\varepsilon^{2} - \varepsilon + 1} \right)$, whose variance goes to $1$ as $\varepsilon$ goes to $0$, so the \gls{la} will miss close to $\frac 1 2$ of the total mass.
-  For $\varepsilon$ small enough, the variance of the \gls{la} will be smaller than $\frac{1}{2\varepsilon^{2}}$, whence the second moment of the weights is infinite and importance sampling fails.
-
-  The \gls{cem} minimizes the KL-divergence between $\P$ and $\G_{\psi}$, is given by $\G_{\text{CE}} = \mathcal N (0, \sigma^{2})$, where $\sigma^{2} = \frac{1}{2}\left( 1 + \varepsilon^{-2} \right)$ is the variance of $\P$.
-  As $\sigma^{2} > \frac{1}{2}\varepsilon^{-2}$, the weights have finite second moment, and importance sampling is consistent.
-  \todo{add proof for $\frac{1}{2}$ to appendix}
-\end{example}
 
 \section{Gaussian importance sampling for state space models}
 \label{sec:gaussian_importance_sampling_for_state_space_models}
@@ -731,8 +763,27 @@ As one can readily see from \Cref{thm:elliptical-conditional} the parameters of 
 \section{Maximum likelihood estimation in \glspl{ssm}}
 \label{sec:maximum_likelihood_estimation}
 
-\section{Simulation studies}
+\section{Comparison of Importance Sampling method}
 \label{sec:simulation_studies}
+
+\subsection{Breakdown of methods}
+
+\subsection{Optimal parameters}
+
+\begin{example}[Failure of \gls{la}]
+  \label{ex:la_failure}
+  Consider the Gaussian scale mixture $\P = \frac{1}{2} \left(\mathcal N (0,1) + \mathcal N(0, \varepsilon^{-2})\right)$ with mode $x^{\ast}=0$. 
+  The \gls{la} is $\G_{\text{LA}} = \mathcal N \left( 0, \frac{1}{\varepsilon^{2} - \varepsilon + 1} \right)$, whose variance goes to $1$ as $\varepsilon$ goes to $0$, so the \gls{la} will miss close to $\frac 1 2$ of the total mass.
+  For $\varepsilon$ small enough, the variance of the \gls{la} will be smaller than $\frac{1}{2\varepsilon^{2}}$, whence the second moment of the weights is infinite and importance sampling fails.
+
+  The \gls{cem} minimizes the KL-divergence between $\P$ and $\G_{\psi}$, is given by $\G_{\text{CE}} = \mathcal N (0, \sigma^{2})$, where $\sigma^{2} = \frac{1}{2}\left( 1 + \varepsilon^{-2} \right)$ is the variance of $\P$.
+  As $\sigma^{2} > \frac{1}{2}\varepsilon^{-2}$, the weights have finite second moment, and importance sampling is consistent.
+  \todo{add proof for $\frac{1}{2}$ to appendix}
+\end{example}
+
+\subsection{Time complexity}
+
+\subsection{Large sample behaviour}
 
 \begin{itemize}
     \item stationary AR(1) process with high auto-correlation, NB observations, different $n$, large $N$, compare ESS, Variances, DKL(?)
