@@ -3,7 +3,8 @@
 \usepackage[T1]{fontenc}
 \usepackage{microtype}
 
-\setlength\parindent{0pt}
+%\setlength\parindent{0pt}
+\usepackage{parskip}
 
 % ****************************************************************************************************
 % 2. Personal data and user ad-hoc commands (insert your own data here)
@@ -78,13 +79,20 @@
 \usepackage{tikzscale}
 \usetikzlibrary{calc}
 \usetikzlibrary{external}
+
+\usepackage{pgfplots}
+\DeclareUnicodeCharacter{2212}{−}
+\usepgfplotslibrary{groupplots,dateplot}
+\usetikzlibrary{patterns,shapes.arrows}
+\pgfplotsset{compat=newest}
 %\tikzexternalize[mode=list and make, prefix=ext-tikz/]
 
 
 % ****************************************************************************************************
 % 4. Setup floats: tables, (sub)figures, and captions
 % ****************************************************************************************************
-\usepackage{tabularx} % better tables
+%\usepackage{tabularx} % better tables
+\usepackage{booktabs} % better tables
 \usepackage{subfig}
 
 % Colors
@@ -166,8 +174,12 @@
 \RestyleAlgo{ruled}
 % todos
 \usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
+\presetkeys%
+    {todonotes}%
+    {inline,backgroundcolor=orange}{}
 
 % cleveref should be loaded last
 \usepackage{cleveref} 
 \crefname{figure}{Figure}{Figures}
 \crefname{notation}{notation}{Notations}
+\crefname{table}{table}{tables}

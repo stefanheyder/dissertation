@@ -6,6 +6,7 @@
 \newcommand{\peis}{{\ensuremath{\psi_{\text{EIS}}}}}
 \newcommand{\hpeis}{{\ensuremath{\hat\psi_{\text{EIS}}}}}
 \newcommand{\Dto}{\stackrel{\mathcal D}{\to}}
+\newcommand{\id}{\operatorname{id}}
 
 \chapter{Importance Sampling in State space models}
 \label{cha:state_space_models}
@@ -314,12 +315,17 @@ A classical result is that the minimum MSE proposal $\G^\ast$ has a closed form,
     \label{prop:minimum_MSE_IS}
     The proposal $\G^{\ast}$ that minimizes the MSE of importance sampling is given by
     $$
-    \G^{\ast}  = \frac{\lvert f \rvert}{\P\left(\lvert f \rvert \right)} \P
+    \G^{\ast}  = \frac{\lvert f \rvert}{\P\left(\lvert f \rvert \right)} \P.
     $$
 \end{proposition}
 Unfortunately, this optimality result has no practical use, indeed if $f$ is positive we'd have to obtain $\P(f)$, the overall target of our endeavor. Additionally, sampling from $\G^{\ast}$ is not guaranteed to be practically feasible. 
 
-If one is not interested in a particular $h$ but rather in an approximation of $\P$, and $\P$ is absolutely continuous with respect to $\G$, then one may view $$\hat \P_N = \frac{1}{N} \sum_{i = 1}^{N} v(X_i) \delta_{X_i}$$ as a particle approximation of $\P$, in the sense that for sufficiently well behaved test functions $f$, $\P (f) \approx \hat\P_{N}(f)$. In this setting \cite{Agapiou2017Importance} shows that the random measure $\hat \P_N$ converges to $\P$ at rate $\mathcal O\left(\frac 1 N\right)$\todo{check} in an appropriate metric.
+If one is not interested in a particular $h$ but rather in an approximation of $\P$, and $\P$ is absolutely continuous with respect to $\G$, then one may view 
+\begin{align}
+\label{eq:is-particle-approximation}
+\hat \P_N = \frac{1}{N} \sum_{i = 1}^{N} v(X_i) \delta_{X_i}
+\end{align}
+as a particle approximation of $\P$, in the sense that for sufficiently well behaved test functions $f$, $\P (f) \approx \hat\P_{N}(f)$. In this setting \cite{Agapiou2017Importance} shows that the random measure $\hat \P_N$ converges to $\P$ at rate $\mathcal O\left(\frac 1 N\right)$\todo{check} in an appropriate metric. 
 
 To perform importance sampling one must be able to evaluate the weights $v$. In a Bayesian setting this is usually infeasible: if $\P$ is a posterior distribution then the integration constant of its density is intractable.
 In this case one can usually evaluate the weights up to a constant, i.e. $w(x) \propto_x \frac{\d \P}{\d \G}(x)$ is available. The missing constant is then $\int w(x) \d \G$ which is itself amenable to importance sampling.
@@ -342,6 +348,17 @@ $$
 Q_{N} = \max_{1\leq i\leq N} W_{i}.
 $$
 This judges whether importance sampling has collapsed to just a few particles and is amenable to Monte-Carlo integration.
+
+In the following sections, we will predominantly take the position that we are interested in the particle approximation $\hat\P_{N}$ of the form \cref{eq:is-particle-approximation} over finding the optimal proposal $\G^{\ast}$ \cref{prop:minimum_MSE_IS} and assume that the importance sampling weights can only be evaluated up to a constant. 
+This has several reasons: First of all, most problems considered in this thesis exist in a Bayesian context where $\P$ is usually a posterior distribution, i.e. $\P = \P^{X|Y=y}$ for some random variables $X$ and $Y$. Should the appropriate densities exist, evaluating the weights amounts to calculating 
+$$
+\rnd{\P^{X| Y= y}}{g(x)} = \frac{p(x|y)}{g(x)} = \frac{p(y|x)p(x)}{g(x)p(y)} \propto \frac{p(y|x)p(x)}{g(x)}.
+$$
+In these situations $p(y) = \int p(x,y)\mathrm d \mu(x)$ is usually intractable. For $\G^{\ast}$ we are in the same situation, where the evaluation of the integration constant $\P \lvert f \rvert$ is infeasible, but the density $f(x)p(x)$ is available.
+% do not focus on a single f
+Second, focusing on the particle approximation allows us to consider multiple test functions $f$, e.g. focus on different marginals of $\P$. 
+% simplify notation: P always target, G always proposal
+Finally, this allows us to simplify the notation used in this thesis. $\P$ will always be the probability measure of interest and $\G$ the proposal. In later parts of this thesis, we will predominantly perform Gaussian importance sampling, i.e. $\G = \mathcal N(\mu, \Sigma)$, hence a handy mnemonic is to think of $\G$ as a \textbf{G}aussian proposal.
 
 \todo{discuss problems/remedies of high dimensional importance sampling}
 
@@ -408,19 +425,19 @@ Additionally, even if \gls{la} works in principle, its \gls{ess} will usually de
 To provide a global approximation to the target, the \gls{cem}\cite{Rubinstein1999CrossEntropy,Rubinstein2004CrossEntropy} selects from a family $ \left( \G_{\psi} \right)_{\psi \in \Psi}$ of proposals the one that minimizes the \gls{kld} to the target. Thus, the \gls{cem} finds $\psi_{\text{CE}}$ which solves the following optimization problem
 
 \begin{align*}
-    \psi_{\text{CE}} &= \argmin_{\psi \in \Psi} \Dkl{\G^{\ast}}{\G_{\psi}} \\
-    &= \argmin_{\psi \in \Psi} \int \log \frac{\d \G^{\ast}}{\d\G_{\psi}} \d \G^{\ast}
+    \psi_{\text{CE}} &= \argmin_{\psi \in \Psi} \Dkl{\P}{\G_{\psi}} \\
+    &= \argmin_{\psi \in \Psi} \int \log \frac{\d \P}{\d\G_{\psi}} \d \P.
 \end{align*}
-where $\G^{\ast}$ is either the optimal proposal from \Cref{prop:minimum_MSE_IS} or $\P$. If $\G^{\ast}$ and $\G_{\psi}$ possess densities $g^{\ast}$ and $g_{\psi}$ w.r.t. some common measure $\mu$, the same for all $\psi$, we may reformulate the optimization problem to maximize the cross-entropy between $g^{\ast}$ and $g_{\psi}$
+If $\P$ and $\G_{\psi}$ possess densities $p$ and $g_{\psi}$ w.r.t. some common measure $\mu$, the same for all $\psi$, we may reformulate the optimization problem to maximize the cross-entropy between $p$ and $g_{\psi}$
 \begin{align}
-    \psi_{\text{CE}} &= \argmin_{\psi \in \Psi} \int  g^{\ast}(x)\log g^{\ast}(x) \d \mu(x) - \int g^{\ast}(x)\log g_{\psi} \d \mu(x) \nonumber\\ 
-    &= \argmax_{\psi \in \Psi} \int g^{\ast}(x) \log g_{\psi}(x) \d \mu(x), \label{eq:ce_argmax}
+    \psi_{\text{CE}} &= \argmin_{\psi \in \Psi} \int  p(x)\log p(x) \d \mu(x) - \int p(x)\log g_{\psi} \d \mu(x) \nonumber\\ 
+    &= \argmax_{\psi \in \Psi} \int p(x) \log g_{\psi}(x) \d \mu(x), \label{eq:ce_argmax}
 \end{align}
-as the first integral does not depend on $\psi$.
+as the first integral does not depend on $\psi$. The assumption of such a dominating measure is not too restrictive: otherwise the \gls{kld} is infinite and the problem is ill-posed.
 
-As $\G^\ast$ is usually intractable, so is $\psi_{\text{CE}}$. However, the integral \cref{eq:ce_argmax} is amenable to importance sampling: Given a proposal $\G$, we may estimate it by
+As $\P$ is usually intractable, so is $\psi_{\text{CE}}$. However, the integral \cref{eq:ce_argmax} is amenable to importance sampling: Given a proposal $\G$, we may estimate it by
 \begin{align}
-\hat\psi_{\text{CE}} &= \argmax_{\psi \in \Psi}\frac 1 N \sum_{i = 1}^N \log  g_\psi (X_i) \label{eq:ce-M-estimator}
+\hat\psi_{\text{CE}} &= \argmax_{\psi \in \Psi} \hat \P_{N} \log g_{\psi} = \argmax_{\psi\in\Psi} \sum_{i = 1}^{N}W^{i}\log g_{\psi}(X^{i}) \label{eq:ce-M-estimator}
 \end{align}
 where $X_1, \dots, X_N \iid \G$. 
 %Thus $\hat \psi_{\text{CE}}$ is an M-estimator and we may analyze its asymptotic behavior by standard methods, see e.g. \cite[Chapter 5]{VanderVaart2000Asymptotic}.
@@ -449,24 +466,23 @@ where $X_1, \dots, X_N \iid \G$.
 %\end{theorem}
 
 % analytical solution, MLE
-An attractive property of the \gls{cem} is that if $\G_{\psi}$ form an exponential family with natural parameter $\psi \in \R^{p}$, the optimal $\psi_{\text{CE}}$ only depends on certain moments of $\G^{\ast}$. Indeed, for $\log g_{\psi}(x) = \log h(x) - \log Z(\psi) + \psi^{T} T(x)$ we have 
+An attractive property of the \gls{cem} is that if $\G_{\psi}$ form an exponential family with natural parameter $\psi \in \R^{p}$, the optimal $\psi_{\text{CE}}$ only depends on certain moments of $\P$. Indeed, for $\log g_{\psi}(x) = \log h(x) - \log Z(\psi) + \psi^{T} T(x)$ we have 
 $$
-\int g^{\ast}(x) \log g_{\psi}(x) \d \mu(x) = \G^{\ast} \log h - \log Z(\psi) + \psi^{T} \G^{\ast} T.
+\int p(x) \log g_{\psi}(x) \d \mu(x) = \P \log h - \log Z(\psi) + \psi^{T} \P T.
 $$
  As $\log Z(\psi)$ is the cumulant-generating function of $\G_{\psi}$it is, under appropriate regularity conditions, smooth. Thus the optimal $\psi_{\text{CE}}$ solves
 $$
-\G^{\ast} T = \nabla_{\psi} \log Z(\pce) = \G_{\pce}T,
+\P T = \nabla_{\psi} \log Z(\pce) = \G_{\pce}T,
 $$
 and so reduces to match the moments of the sufficient statistic of the target and proposal.
-Given $\G^{\ast} T$, this system of equations can, in many cases, be solved analytically or by gradient descent algorithms.
+Given $\P T$, this system of equations can, in many cases, be solved analytically or by gradient descent algorithms.
 
-While $\G^{\ast} T$ is usually not available, it is itself amenable to importance sampling. Given a proposal $\G$ we may estimate $\G^{\ast} T$ by $\hat\G_N T = \sum_{i = 1}^{N} W^{i} T(X^{i})$ for $X^{1}, \dots, X^{N} \iid \G$ and auto-normalized importance sampling weights $W^{i}$ and in turn estimate $\psi_{\text{CE}}$ by $\hat \psi_{\text{CE}}$ solving
+While $\P T$ is usually not available, it is itself amenable to importance sampling. Given a proposal $\G$ we may estimate $\P T$ by $\hat\G_N T = \sum_{i = 1}^{N} W^{i} T(X^{i})$ for $X^{1}, \dots, X^{N} \iid \G$ and auto-normalized importance sampling weights $W^{i}$ and in turn estimate $\psi_{\text{CE}}$ by $\hat \psi_{\text{CE}}$ solving
 $$
-\G_{\hpce} T = \hat \G_N T.
+\hat \G_N T = \G_{\hpce} T.
 $$
 % proof: appeal to vdV, pd ensures that M(\theta) is convex, so global maximum unique and well separated
-Thus $\hat\psi_{\text{CE}}$ is a Z-estimator, and we can analyze its asymptotic behavior using standard results. 
-
+Thus $\hat\psi_{\text{CE}}$ is a Z-estimator, i.e. an estimator that arises from solving a random system of equations, and we can analyze its asymptotic behavior using standard results from the theory of Z-estimators. 
 The following theorem of \citep{VanderVaart2000Asymptotic} will be useful in analyzing the asymptotic behavior of the estimators we consider in this thesis. We state it here, using our notation, for completeness.
 
 \begin{theorem}[asymptotic variance of Z-estimators, {\cite[Theorem 5.21]{VanderVaart2000Asymptotic}}]
@@ -497,7 +513,7 @@ The following theorem of \citep{VanderVaart2000Asymptotic} will be useful in ana
         \item $\dot z (\psi) = \nabla_{\psi}\log Z(\psi) = \G_{\psi} T$ the derivative of the log-normalizing constant $\psi \mapsto \log Z(\psi)$
         \item $\ddot z(\psi) = \partial_{\psi} \dot z(\psi) =\cov_{\G_{\psi}}T$ the Hessian of the log-normalizing constant $\psi \mapsto \log Z(\psi)$
     \end{itemize}
-    The naming of $B$ and $M$ stems from the sandwich estimator \todo{cite white 1982}, where $B$ is the Jacobian of the estimating equations $\G^{\ast}f_{psi} = 0$ and $M$ is the covariance matrix of $f_{\psi}$ under $\G^{\ast}$. 
+    The naming of $B$ and $M$ stems from the sandwich estimator \todo{cite white 1982}, where $B$ is the Jacobian of the estimating equations $\P f_{psi} = 0$ and $M$ is the covariance matrix of $f_{\psi}$ under $\P$. 
 \end{notation}
 
 \begin{theorem}[consistency of $\hat \psi_{\text{CE}}$]
@@ -508,17 +524,17 @@ The following theorem of \citep{VanderVaart2000Asymptotic} will be useful in ana
 \begin{theorem}[asymptotic normality of $\hat \psi_{\text{CE}}$]
     \label{thm:ce-clt}
     \todo{require unique solution?}
-    Let $\G_{\psi}$ form a natural exponential family with densities $g_{\psi}(x) = \frac{h(x)}{Z(\psi)} \exp \left( \psi^{T}T(x)\right) $ w.r.t. $\mu$. Let $\G, \G^{\ast}$ be two other probability measures such that $\G \ll \G^{\ast}$ and let $W = \frac{\d \G^{\ast}}{\d \G}$ be the normalized importance sampling weights. 
+    Let $\G_{\psi}$ form a natural exponential family with densities $g_{\psi}(x) = \frac{h(x)}{Z(\psi)} \exp \left( \psi^{T}T(x)\right) $ w.r.t. $\mu$. Let $\G, \P$ be two other probability measures such that $\G \ll \P$ and let $W = \frac{\d \P}{\d \G}$ be the normalized importance sampling weights. 
     Suppose further that 
     \begin{enumerate}[label={\bfseries(A{\arabic*})}]
-        \item\label{it:exist-unique-psice} $G_{\hpce} T = \hat\G_{N} T$ $\mu$-a.s. has a unique solution $\hpce$,
+        \item\label{it:exist-unique-psice} $\G_{\hpce} T = \hat\P_{N} T$ $\mu$-a.s. has a unique solution $\hpce$,
         \item\label{it:zdot-ll} $\psi \mapsto \nabla_\psi \log Z(\psi)$ is locally Lipschitz around $\psi_{\text{CE}}$,
-        \item\label{it:w-t-wt-L2} $W,T$ and $WT$ possess finite second moments  w.r.t. $\G$ and
-        \item\label{it:FI-psd} the Fisher information $I(\psi_{\text{CE}})$ is positive definite.
-        \item\label{it:ce-regularity} regularity conditions \todo{choose correct ones to make $I(\psi) = - \ddot z(\psi) $}
+        \item\label{it:w-t-wt-L2} $W,T$ and $WT$ possess finite second moments  w.r.t. $\G$,
+        \item\label{it:FI-psd} the Fisher information $I(\psi_{\text{CE}})$ is positive definite and equal to $-\ddot z(\pce)$, additionally $\psi \mapsto I(\psi)$ is continuous, and
+        \item\label{it:ce-regularity} regularity conditions \todo{choose correct ones to make $I(\psi) = - \ddot z(\psi) $}.
     \end{enumerate}
 
-    Then
+    Then, as $N$ goes to $\infty$,
     $$
         \sqrt{N} \left(\hat\psi_\text{CE} - \psi_{\text{CE}}\right) \Dto \mathcal N \left(0, V_{\text{CE}}\right)
     $$
@@ -539,7 +555,7 @@ The following theorem of \citep{VanderVaart2000Asymptotic} will be useful in ana
 
 \begin{proof} We check that the conditions of the central limit theorem for Z-estimators (\Cref{thm:clt_z_est_vdv}) are fulfilled. This proof uses the notation established in \Cref{not:notation-clt}. Consider the estimating equations for $\pce$ 
     $$x\mapsto f_\psi(x) = \nabla_{\psi} \left(w(x)\log g_{\psi}(x)\right) = w(x) T(x) - w(x) \dot z (\psi),$$ where $w(x)$ are the unnormalized importance sampling weights. 
-    By \ref{it:exist-unique-psice} $\hat G_{N} f_{\hpce} = 0$ $\mu$-a.s., so it remains to show that $\hpce \to \pce$  in probability, which is implied by \cref{thm:ce-consistent} \todo{check}.
+    By \ref{it:exist-unique-psice} $\hat \P_{N} f_{\hpce} = 0$ $\mu$-a.s., so it remains to show that $\hpce \to \pce$  in probability, which is implied by \cref{thm:ce-consistent} \todo{check}.
     
     As $$\left\lVert f_{\psi_1}(x) - f_{\psi_2}(x)\right\rVert = w(x) \left\lVert \dot z (\psi_1) - \dot z(\psi_2)\right\rVert$$ for all $\psi_{1}, \psi_{2}\in \Psi$,  $\G w < \infty $ and \ref{it:zdot-ll} imply the local Lipschitz condition \Cref{eq:clt-vdv-local-lipschitz} in \Cref{thm:clt_z_est_vdv}.
     Furthermore, by \ref{it:w-t-wt-L2} it holds
@@ -559,7 +575,12 @@ The following theorem of \citep{VanderVaart2000Asymptotic} will be useful in ana
     $$
     V_{\ce} = B_{\ce}M_{\ce}B_{ce}
     $$
-    which finishes the proof.
+    which shows the asymptotic normality. 
+
+    \todo{consistency - additional conditions?}
+    Estimating $B_{\ce}$ by $\hat B_{\ce}= I(\hpce)$ and $$M_{\ce} = \G W^{2} (T - \G_{\pce}T)(T - \G_{\pce}T)^{T} = \P W (T - \G_{\pce})(T - \G_{\pce})^T$$ by $$\hat M_{\ce} = \hat\P_{N} W \left( T - \G_{\hpce} T \right)\left( T - \G_{\hpce} T \right)^{T}$$
+    yields the stated plug-in estimator. 
+    The promised consistency follows from \ref{it:w-t-wt-L2} and \ref{it:FI-psd}.
 \end{proof}
 
 \begin{example}[univariate Gaussian]
@@ -567,7 +588,7 @@ The following theorem of \citep{VanderVaart2000Asymptotic} will be useful in ana
 \end{example}
 The form of the asymptotic covariance matrix is that of the sandwich estimator \todo{cite Huber}, corrected for the importance sampling with $\G$. This is not surprising: the \gls{cem} performs maximum likelihood estimation where the data $X_{i}$ \todo{sub or superskript} come from the misspecified $\P$. Additionally, we have to correct the variance for performing importance sampling with $\G$, instead of sampling directly from $\P$.
 
-If $\G_\psi$ do not form an exponential family, $\hat\psi_{\text{CE}}$ will still be consistent and asymptotically normal, provided the usual regularity conditions for M-estimators apply.
+If $\G_\psi$ do not form an exponential family, $\hat\psi_{\text{CE}}$ will still be consistent and asymptotically normal, provided the usual regularity conditions for M-estimators apply. \todo{expand a bit}
 
 % break-down in higher dimensions?
 
@@ -577,7 +598,7 @@ If $\G_\psi$ do not form an exponential family, $\hat\psi_{\text{CE}}$ will stil
 The \gls{cem} is routinely used for estimating failure probabilities for rare events \cite{Homem-de-Mello2007Study} \todo{cite more} and has been applied to Bayesian inference \cite{Engel2023Bayesian,Ehre2023Certified} and optimal control problems \cite{Kappen2016Adaptive,Zhang2014Applications}.
 
 \subsection{Efficient importance sampling}
-\gls{eis}\cite{Richard2007Efficient} provides an alternative to the \gls{cem}. Instead of minimizing the \gls{kld} between the target $\G^{\ast}$ and $\G_{\psi}$, \gls{eis} aims at minimizing the variance of the logarithm of importance sampling weights. Thus, \gls{eis} finds $\psi_{EIS}$ which solves 
+\gls{eis}\cite{Richard2007Efficient} provides an alternative to the \gls{cem}. Instead of minimizing the \gls{kld} between the target $\P$ and $\G_{\psi}$, \gls{eis} aims at minimizing the variance of the logarithm of importance sampling weights. Thus, \gls{eis} finds $\psi_{EIS}$ which solves 
 \begin{align*}
 \psi_{EIS} &= \argmin_{\psi \in\Psi} \text{Var}_{\P} \left( \log w_{\psi} \right) \\
     &= \argmin_{\psi \in \Psi} \P (\log w_{\psi} - \P \log w_{\psi})^{2},
@@ -594,8 +615,7 @@ Under the usual regularity conditions allowing to differentiate under the integr
     \P \left(\left( \log p - \log g_{\psi} - \lambda \right) \nabla_{\psi}\log g_{\psi}\right)&=0\\
     \P \left( \log p - \log g_{\psi} - \lambda \right)&=0,
 \end{align}
-\todo{more explicit with NEF}
-which may be used to derive asymptotics for $\hpeis$. Similar to the \gls{cem} we restrict ourselves here to exponential families where $\log g_{\psi}(x) = \psi^{T}T(x) - \log Z(\psi) + \log h(x)$. In this case \cref{eq:eis-optimal} simplifies to
+which may be used to derive asymptotics for $\hpeis$. Similar to the \gls{cem} we restrict ourselves here to natural exponential families where $\log g_{\psi}(x) = \psi^{T}T(x) - \log Z(\psi) + \log h(x)$. In this case \cref{eq:eis-optimal} simplifies to
 \begin{align*}
     \P \left(\left( \log p - \log g_{\psi} - \lambda \right)(T - \G_{\psi} T)\right) &= 0,\\
     \lambda = \P (\log p - \log g_{\psi}) &= \Dkl{\P}{\G_{\psi}}.
@@ -620,30 +640,36 @@ where $X^{1}, \dots, X^{N} \iid \G$.
 If $g_{\psi}, \psi \in \Psi$ form an exponential family with natural parameter $\psi$, $\hpeis$ becomes a weighted linear least squares estimator after reparameterizing to $\lambda'$ as above.
 Thus we can estimate with the standard weighted least squares estimator
 $$
-\left( \hat\lambda', \hpeis \right) = \left(\mathbf X^{T} \mathbf X\right)^{-1}\mathbf X^{T} \left( \log p(X^{1}), \dots, \log p(X^{N}) \right)
+\left( \hat\lambda', \hpeis \right) = \left(\mathbf X^{T}W \mathbf X\right)^{-1}W^{\frac{1}{2}}\mathbf X^{T} \left( \log p(X^{1}), \dots, \log p(X^{N}) \right)
 $$
-where the design matrix $\mathbf X$ is given by
-$$\mathbf X = \text{diag} \left( \sqrt{W_{1}}, \dots, \sqrt{W_{N}} \right)\begin{pmatrix}
+where the design matrix $\mathbf X$ and diagonal weights matrix is given by
+\begin{align*}
+\mathbf X &= \begin{pmatrix}
     1 & T(X^{1})^{T} \\
     \dots&\dots\\
     1 & T(X^{N})^{T} \\
-\end{pmatrix}.$$
+\end{pmatrix},\\
+W &= \text{diag} \left( \sqrt{W_{1}}, \dots, \sqrt{W_{N}} \right).
+\end{align*}
 
 \todo{discuss applicability of CLT}
 
-\begin{theorem}[asymptotic normality of $\hpeis$ I]
-    Let $\G_{\psi}$ form a natural exponential family with densities $g_{\psi}(x) = \frac{h(x)}{Z(\psi)} \exp \left( \psi^{T}T(x) \right)$ w.r.t. $\mu$. Let $\G, \G^{\ast}$ be two other probability measures such taht $\G \ll \G^{\ast}$ and let $W = \frac{\d\G^{\ast}}{\d\G}$ be the normalized importance sampling weights. 
-    Assume $\lambda(\psi) = \G^{\ast} \log w_{\psi}$ is known and the following conditions hold:
-    \todo{faster convergence if $\G^{\ast}$ is from same EF?}
+\begin{theorem}[asymptotic normality of $\hpeis$]
+    \label{thm:clt-eis}
+    Let $\G_{\psi}$ form a natural exponential family with densities $g_{\psi}(x) = \frac{h(x)}{Z(\psi)} \exp \left( \psi^{T}T(x) \right)$ w.r.t. $\mu$. Let $\G, \P$ be two other probability measures such that $\G \ll \P$ and let $W = \frac{\d\P}{\d\G}$ be the normalized importance sampling weights. 
+    Assume $\lambda(\psi) = \P \log w_{\psi}$ is known and the following conditions hold:
+    \todo{faster convergence if $\P$ is from same EF?}
     \begin{enumerate}[label={\bfseries(B\arabic*)}]
         \item ...
-        \item\label{it:eis-dkl-dkl-to-base-finite} $\Dkl{\G^{\ast}}{\G_{\psi}} < \infty$ for all $\psi$ \todo{prob. suffices locally}
-        \item\label{it:eis-T-l2} $T$ is square integrable w.r.t. $\G^{\ast}$.
-        \item\label{it:eis-dkl-regularity} regularity conditions
+        \item\label{it:eis-dkl-dkl-to-base-finite} $\Dkl{\P}{\G_{\psi}} < \infty$ for all $\psi$ \todo{prob. suffices locally},
+        \item\label{it:eis-T-l2} $T$ and $\log w_{\peis}$ are square integrable w.r.t. $\P$,
+        \item\label{it:eis-dkl-regularity} regularity conditions, and
+        \item\label{it:eis-cov-t-spd} $\cov_{\P} (T)$ is positive definite.
     \end{enumerate}
-    Then, as $N$ goes to $\infty$,
+
+    WLOG, assume that $\P T = 0$. Then, as $N$ goes to $\infty$,
     $$
-    \sqrt{N} \left( \hpeis - \peis \right) \Dto \mathcal N(0, V_{\eis})
+    \sqrt{N} \left( \begin{pmatrix}\hat\lambda \\ \hpeis\end{pmatrix} - \begin{pmatrix}\lambda \\ \peis\end{pmatrix} \right) \Dto \mathcal N(0, V_{\eis})
     $$
     where 
     $$
@@ -651,34 +677,84 @@ $$\mathbf X = \text{diag} \left( \sqrt{W_{1}}, \dots, \sqrt{W_{N}} \right)\begin
     $$
     with
     \begin{align*}
-        B_{\eis} &= \left( \cov_{\G^{\ast}} T \right)^{-1},\\
-        M_{\eis}%&= \G \left(W^{2} \left( \log w_{\psi} - \lambda(\psi) \right)^{2} \left( T - \G^{\ast} T \right)\left( T - \G^{\ast} T \right)^{T}\right)\\
-        &= \cov_{\G} \left( W \log w_{\psi}, W T \right).
+        B_{\eis} &= \begin{pmatrix}
+            1 & 0 \\
+            0 & \left(\cov_{\P} T\right)^{-1}
+        \end{pmatrix}\\
+        M_{\eis} &= \G \left(W^{2} \left( \log \frac{p}{h} - \peis^{T}T - \lambda_{\eis}\right)^{2} \begin{pmatrix}
+            1& T^{T}\\
+             T &  TT^{T}
+        \end{pmatrix}
+        \right).
     \end{align*}
+    In particular, the asymptotic variance of $\hpeis$ is
+    $$
+    \left( \cov_{\P} T \right)^{-1} \G\left( W^{2} \left( \log \frac{p}{h} - \peis^{T}T - \lambda_{\eis} \right)^{2} T T ^{T} \right)\left( \cov_{\P} T \right)^{-1}.
+    $$
 \end{theorem}
 
 \begin{proof}
     This proof follows the same strategy as that for \Cref{thm:ce-clt} and uses the same notation (\Cref{not:notation-clt}). 
     % verify conditions
-    As $\lambda (\psi) = \G^{\ast} (\log g^{\ast} - \log g_{\psi})$ its gradient is $\nabla_{\psi} \lambda (\psi) = -\G^{\ast} T + \dot z(\psi)$, so the estimating equations for $\peis$ are \todo{regularity for $\nabla \lambda$}
-    $$
-    x \mapsto f_{\psi}(x) = \nabla_{\psi} -\frac{1}{2}w(x)\left(\log w_{\psi} (x) - \lambda(\psi) \right)^{2} = w(x)\left( \log w_{\psi}(x) - \lambda (\psi) \right) \left( T(x) - \G^{\ast} T \right).
-    $$
-    % LL
-    For $\psi_{1}, \psi_{2}\in\Psi$ the Lipschitz condition \cref{eq:clt-vdv-local-lipschitz} are fulfilled, as 
+    The estimating equations for $\lambda$ and $\peis$ are given by 
+    %As $\lambda (\psi) = \P (\log p - \log g_{\psi})$ its gradient is $\nabla_{\psi} \lambda (\psi) = -\P T + \dot z(\psi)$, so the estimating equations for $\peis$ are \todo{regularity for $\nabla \lambda$}
     \begin{align*}
-    \lVert f_{\psi_{1}}(x) - f_{\psi_{2}}(x)\rVert &= w(x)\lvert \log w_{\psi_{1}}(x) - \lambda(\psi_{1}) - (\log w_{\psi_{2}}(x)  - \lambda(\psi_{2}))\rvert\cdot\lVert T(x) - \G^{\ast}T\rVert   \\
-        &= w(x) \lvert \left( (\psi_{1} - \psi_{2})^{T} \left( T(x) - \G^{\ast} T \right)  \right)\rvert \lVert T(x) - \G^{\ast} \rVert  \\
-        &\leq w(x) \lVert T(x) - \G^{\ast} T\rVert^{2} \lVert \psi_{1} - \psi_{2} \rVert,
+    x \mapsto f_{\lambda,\psi}(x) &= \nabla_{\lambda} -\frac{1}{2}w(x)\left(\log \frac{p(x)}{h(x)} - \psi^{T}T(x) -\lambda \right)^{2} = w(x) \left( \log \frac{p(x)}{h(x)} - \psi^{T}T(x) -\lambda  \right)\begin{pmatrix}
+        1 \\ T(x)
+    \end{pmatrix}.
     \end{align*}
-    and $\G w \lVert T - \G^{\ast}T\rVert^{2} = \G^{\ast} \lVert T - \G^{\ast}T\rVert^{2} < \infty$.
+    % LL
+    For $\lambda_{1}, \lambda_{2}\in\R$ and $\psi_{1}, \psi_{2}\in\Psi$ the Lipschitz condition \cref{eq:clt-vdv-local-lipschitz} are fulfilled, as 
+    \begin{align*}
+    \lVert f_{\lambda_{1}, \psi_{1}} - f_{\lambda_{2}, \psi_{2}} \rVert &= \lvert w(x) \rvert ~\lvert \left( \lambda_{2} - \lambda_{1} + T(x) \left( \psi_{2} - \psi_{1} \right) \right)\rvert ~\left\lVert \begin{pmatrix}
+        1 \\ T(x)
+    \end{pmatrix} \right\rVert \\
+        &\leq \underbrace{\lvert w(x) \rvert \left\lVert \begin{pmatrix} 1 & T^{T}(x) \\ T(x) & T(x) T^T(x) \end{pmatrix} \right\rVert}_{:=\dot f} \lVert \left( \lambda_{2} - \lambda_{1}, \psi_{2} - \psi_{1} \right)\rVert,
+    \end{align*}
+    and $\G \dot f < \infty$ by \ref{it:eis-T-l2}.
+
     % Gf_psi0 < infy
-    $\G f_{\peis} = \G^{\ast} $
+    At the optimal $\lambda_{\eis}, \peis$ it holds
+    \begin{align*}
+    \G f_{\lambda_{\eis},\peis} = \P \left( \log \frac{p}{h} - \peis^{T}T - \lambda_{\eis}  \right) \begin{pmatrix}
+        1 \\ T
+    \end{pmatrix} < \infty,
+    \end{align*}
+    as both $T$ and $\log w(\peis)$ are in $L^{2}(\P)$ by \ref{it:eis-T-l2}.
+    \todo{L2 defnieren}
     % psi -> Gf_psi differentiable, Jacobian non-singular
+    By the assumed regularity conditions, $(\lambda,\psi) \mapsto \G f_{\lambda, \psi}$ is differentiable, with Jacobian
+    \begin{align*}
+    B_{\eis}^{-1} = \partial_{\lambda,\psi}\G f_{\lambda,\psi} &= \P \begin{pmatrix}
+        1 \\ T
+    \end{pmatrix} \begin{pmatrix}
+        1 & T^{T}
+    \end{pmatrix}\\
+        &= \P \left( \begin{pmatrix}
+            1 & T^{T} \\
+            T & TT^{T}
+        \end{pmatrix} \right) = \begin{pmatrix}
+            1 & 0 \\
+            0 & \cov_{\P} (T)
+        \end{pmatrix},
+    \end{align*}
+    as $\P T = 0$.
     % \hat G_N f_\hat\psi_N = o_P (N^-1/2)
+
+    As $\hpeis$ solves the estimating equations, we have $\hat\G_{N} f_{\hpeis} = 0 = o_{P} \left( N^{-\frac{1}{2}} \right)$. It remains to show that $\hpeis \to \peis$ in probability. 
+    \todo{show it}
     % \hp -> \p
     % calculate B
     % calcultae M
+
+    Finally, as $\G f_{\lambda_{\eis},\peis}=0$, 
+
+    $$
+    M_{\eis} = \G \left(f_{\lambda_{\eis},\peis} f_{\lambda_{\eis},\peis}^T = \G w^{2} \left( \log \frac{p(x)}{h(x)} - \peis^{T}T - \lambda_{\eis}\right)^{2} \begin{pmatrix}
+        1 & T^{T} \\
+        T & TT^{T}
+    \end{pmatrix}\right)
+    $$
 
     
 \end{proof}
@@ -841,6 +917,94 @@ As one can readily see from \Cref{thm:elliptical-conditional} the parameters of 
 
 \section{Comparison of Importance Sampling method}
 \label{sec:simulation_studies}
+
+\begin{example}[univariate Gaussian, $\sigma^{2}$ fixed]
+    \label{ex:univ-gaussian-s2-fixed}
+    Consider the probability space $ \left( \R, \mathcal B(\R), \P \right)$ where $\P = p\lambda$ for the Lebesgue measure $\lambda$ which is symmetric around $0$, i.e. $p(-x) = p(x)$ for $\lambda$-a.e. $x\in\R$ and possesses up to third order moments.
+    Let $\G=\P$, so $W\equiv1$ and let $\G_{\psi} = \mathcal N \left( \sigma\psi, \sigma^{2} \right)$ be the single parameter natural exponential family of Gaussians with fixed variance $\sigma^{2} > 0$. Then 
+    $$
+    \log g_{\psi}(x) = \psi T(x) - \frac{\psi^{2}}{2} + \log h(x),
+    $$
+    where $T(x) = \frac{x}{\sigma}$ and $h(x)$ is the density of $\mathcal N(0, \sigma^{2})$ w.r.t. Lebesgue measure. 
+    Note that $T$ is centered under $\P$.
+
+    By symmetry, both $\pce$ and $\peis$ are equal to $0$. 
+    Then $I(\psi) = 1$ for all $\psi$, so 
+    \begin{align}
+    \label{eq:ce-gaussian-mean-var}
+        V_{\ce} = \cov_{\P}(T) = \frac{\tau^{2}}{\sigma^{2}},
+    \end{align}
+    where $\tau^{2}=\P \operatorname{id}^{2}$ is the second moment of $\P$. 
+    Additionally, $B_{\eis} = (\cov_{\P}(T))^{-1} = \frac{\sigma^{2}}{\tau^{2}}$ and
+    \begin{align*}
+    M_{\eis} &= \cov_{\P} \left( (\log \frac{p(x)}{h(x)} - \lambda_{\eis})T\right) \\
+        &= \cov_{\P} \left(\left( \log p - \log h - \P (\log p - \log h) \right) T \right) \\
+        &= \frac{1}{\sigma^{2}}\int p(x) x^{2}\left(\log p(x) + \frac{x^{2}}{2\sigma^{2}} - \P\left(\log p(x) + \frac{\tau^{2}}{2\sigma^{2}}\right)\right)^{2} \d x.
+    \end{align*}
+    Thus
+    $$
+    V_{\eis} = B_{\eis}M_{\eis}B_{\eis}= \sigma^{2}\frac{\gamma}{\tau^{4}},
+    $$
+    where $\gamma = \int p(x) x^{2}\left(\log p(x) + \frac{x^{2}}{2\sigma^{2}} - \P(\log p(x) + \frac{\tau^{2}}{2\sigma^{2}})\right)^{2} \d x.$
+    
+    If $\P = \mathcal N(0, \tau^{2})$ is a normal distribution, this reduces to
+    \begin{align*}
+        V_{\eis} &= \frac{5}{2} \left( \frac{\tau^{2}}{\sigma^{2}} - 1 \right)^{2} \frac{\sigma^{2}}{\tau^{2}} = \frac{5}{2} \frac{\left( V_{\ce} - 1\right)^{2}}{V_{\ce}}
+    \end{align*}
+    and so for $\tau^{2} = \sigma^{2}$ $\hpeis$ converges faster than the standard $\mathcal O( N^{-\frac{1}{2}})$ rate. Indeed in this case $\hpeis = \peis$ a.s. for $N > 1$ see \todo{write example for EIS being exact for exponential families}. 
+
+    As $\sigma^{2} > \frac{\tau^{2}}{2}$ is required for importance sampling to converge for bounded functions, we analyze 
+
+    \begin{figure}
+        \input{tikz/normal_are.tex}
+        \caption{Relative efficiency $ \frac{V_{\ce}}{V_{\eis}}$ for $\tau^{2}=1$ based on $N = 10\,000$ samples}
+    \end{figure}
+    
+    and we show differrent asymptotics for this relative efficiency in \Cref{tab:comparison-asymptotics}. 
+
+    \begin{table}
+        \centering
+        \begin{tabular}{ccc}
+            \toprule
+            & $\sigma^{2}$ fixed, $\tau^{2} \to \infty$ & $\tau^{2}$ fixed, $\sigma^{2} \to \infty$\\
+            \midrule
+            $V_{\ce} / V_{\eis}$ & $\frac{2}{5} \sigma^{2}$ & 0 \\
+            \bottomrule
+        \end{tabular}
+        \caption{Relative asymptotic efficiencies of the \gls{cem} and \gls{eis} for \Cref{ex:univ-gaussian-s2-fixed} and \Cref{ex:univ-gaussian-mu-fixed}.}
+        \label{tab:comparison-asymptotics}
+    \end{table}
+    
+
+    \todo{numerical example: GMM}
+    \todo{interpretation: if variance set too low, CE better. if variance too big EIS better}
+    
+    
+\end{example}
+
+\begin{example}[univariate Gaussian, $\mu$ fixed]
+    \label{ex:univ-gaussian-mu-fixed}
+    Consider the same setup as in \Cref{ex:univ-gaussian-s2-fixed} but let $\G_{\psi} = \mathcal N(0, -\frac{1}{2\psi})$ be the single parameter natural exponential family of Gaussians with fixed mean $\mu=0$. Then
+    $$
+    \log g_{\psi}(x) = \psi T(x) + \frac{1}{2}\log \left( - 2 \psi \right) - \frac{1}{2} \log 2\pi
+    $$
+    for $T(x) = x^{2}$. Then $I(\psi) = \frac{1}{2\psi^{2}} = 2\sigma^{4}$, $\pce = \sigma^{2}$ and $\cov_{\P} (T) = \nu - \sigma^{4}$ for $\nu = \P \operatorname{id}^{4}$ and $\sigma^{2} = \P \id^{2}$. In total
+    \begin{align}
+        V_{\ce} &= \frac{1}{4\sigma^{4}} \left( \frac{\nu}{\sigma^{4}} - 1 \right).
+    \end{align}
+
+    For \gls{eis} we have 
+    \begin{align*}
+    \peis &= \left( \cov_{\P} \id^{2} \right)^{-1} \cov_{\P} \left( \id^{2}, \log p \right) \\
+        &= \left( \nu - \sigma^{4} \right)^{-1} \underbrace{\int p(x)x^{2}\log p(x)\d x}_{=\gamma},
+    \end{align*}
+    so $\sigma^{2}_{\eis}= \frac{\nu - \sigma^{4}}{\gamma}$. 
+
+    Then 
+    \begin{align*}
+        V_{\eis} = \left( \nu - \sigma^{4} \right)^{-2} 
+    \end{align*}
+\end{example}
 
 \subsection{Breakdown of methods}
 
