@@ -126,7 +126,7 @@ This will be a good strategy if the target posterior $p(x|y)$ can be well approx
     A \gls{glssm} is a state space model where states obey the transition equation
     \begin{align}
         \label{eq:glssm_states}
-        X_{t + 1} & = A_{t}X_{t} + u_{t} \varepsilon_{t + 1} &  & t = 0, \dots, n - 1,
+        X_{t + 1} & = A_{t}X_{t} + u_{t} + \varepsilon_{t + 1} &  & t = 0, \dots, n - 1,
     \end{align}
     and observations obey the observation equation
     \begin{align}
@@ -331,23 +331,34 @@ To perform importance sampling one must be able to evaluate the weights $v$. In 
 In this case one can usually evaluate the weights up to a constant, i.e. $w(x) \propto_x \frac{\d \P}{\d \G}(x)$ is available. The missing constant is then $\int w(x) \d \G$ which is itself amenable to importance sampling.
 This leads to the self-normalized importance sampling weights $W_i = \frac{w(X_i)}{\sum_{i = 1}^N w(X_i)}$ and Monte Carlo estimates $\hat \zeta = \sum_{i = 1}^{N} W_i f(X_i)$ and particle approximation $\hat \P_N = \sum_{i = 1}^{N} W_i \delta_{X_i}$.
 
-In both cases one can show that once second moments of $w$ with respect to $\G$ exist the Monte-Carlo estimates are consistent and asymptotically normal at the usual rates, see \cite[Chapter 8]{Chopin2020Introduction}. 
+In both cases one can show that once the second moment of $w$ with respect to $\G$ exists the Monte-Carlo estimates are consistent and asymptotically normal at the usual rates, see \cite[Chapter 8]{Chopin2020Introduction}. 
 However, the finite sample variance of $\hat\zeta$, and thus the practical performance of the procedure, depends on the variance of $w\cdot f$ under $\G$, and thus on the proposal $\G$. \cite{Agapiou2017Importance} show that  the expected mean squared TV distance \todo{check if true} between $\hat \P_N$ and  $\P$ may be bounded, up to a constant, by the second moments of $w$ \todo{more extensive discussion of $\rho$}. In addition, they provide bounds that involve the KL-divergence 
 $$
 \Dkl{\P}{\G} = \int \log \frac{\d \P}{\d \G} \d \P,
 $$
 fostering the intuition that $\G$ should be close to $\P$ for the particle approximation $\hat\P_{N}$ to be close to $\P$.
+
+\cite{Chatterjee2018Sample} provides the following theorem (using our notation), that relates the performance of importance sampling to both the \gls{kld} and the tail behavior of the log weights.
+\begin{theorem}[{\cite[Theorem 1.1]{Chatterjee2018Sample}}]
+    \label{thm:chatterje2018Thm1}
+    If $N = \exp \left( \Dkl{\P}{\G} + t \right)$ for $ t\geq 0$, and $f \in L^{2}(\P)$ then
+    $$
+        \G \left\lvert \P_{N} f - \P f \right\rvert \leq \lVert f \rVert_{2} + 2 \sqrt{ \P \left( \log w > \Dkl{\P}{\G} + \frac{t}{2} \right)}.
+    $$
+    \todo{really $\P$ in the log weights?}
+\end{theorem}
+\citep[Theorem 1.2]{Chatterjee2018Sample} provides a similar result for autonormalised importance sampling.
 \todo{more referenceable defs in this chapter}
 
 To judge the convergence of importance sampling several criteria are discussed in the literature. The classic \gls{ess}\cite{Kong1994Sequential} 
 $$
 \text{ESS} = \frac{1}{\sum_{i = 1}^N W^{2}_{i}}
 $$
-arises from the asymptotic efficiency of importance sampling estimates and is easy to interpret, though care has to be taken in particular settings \todo{find literature}. Assessing convergence through the variance of $\hat \P_{n}$ is, while natural, flawed \cite{Chatterjee2018Sample} and should be avoided. As a remedy \cite{Chatterjee2018Sample} suggest the heuristic $q_{N} = \E Q_{N}$ where
+arises from the asymptotic efficiency of importance sampling estimates and is easy to interpret, though care has to be taken in particular settings \todo{find literature}. Assessing convergence through the variance of $\hat \P_{N}$ is, while natural, flawed \cite{Chatterjee2018Sample} and should be avoided. As a remedy \cite{Chatterjee2018Sample} suggest the heuristic $q_{N} = \E Q_{N}$ where
 $$
 Q_{N} = \max_{1\leq i\leq N} W_{i}.
 $$
-This judges whether importance sampling has collapsed to just a few particles and is amenable to Monte-Carlo integration.
+This judges whether importance sampling has collapsed to just a few particles and is itself amenable to Monte-Carlo integration.
 
 In the following sections, we will predominantly take the position that we are interested in the particle approximation $\hat\P_{N}$ of the form \cref{eq:is-particle-approximation} over finding the optimal proposal $\G^{\ast}$ \cref{prop:minimum_MSE_IS} and assume that the importance sampling weights can only be evaluated up to a constant. 
 This has several reasons: First of all, most problems considered in this thesis exist in a Bayesian context where $\P$ is usually a posterior distribution, i.e. $\P = \P^{X|Y=y}$ for some random variables $X$ and $Y$. Should the appropriate densities exist, evaluating the weights amounts to calculating 
@@ -378,7 +389,7 @@ for $N\in\N$ samples $X^i \iid p(x)$.
 However, the variance of $\hat\lik(\theta)$ is likely to be very high if samples $X^i$ are drawn from the prior distribution $p(x)$ as they are not informed by the observations $y$.
 As $p_\theta(x|y) \propto p_\theta(x,y)$ a more promising approach would be to use samples $X^i \sim p_\theta(x|y)$, but this distribution is usually not available.
 
-While bayesian computational approaches such as MCMC\todo{cite} are able to generate (approximate) samples from this posterior distribution, importance sampling tries to find a distribution close to the target and re-weighs samples to ensure unbiased estimates of $\lik(\theta)$.
+While Bayesian computational approaches such as \gls{mcmc}\cite{Brooks2011Handbook} are able to generate (approximate) samples from this posterior distribution, importance sampling tries to find a distribution close to the target and re-weighs samples to ensure unbiased estimates of $\lik(\theta)$.
 
 \begin{itemize}
     \item importance sampling as a variance reduction technique
@@ -393,7 +404,7 @@ While bayesian computational approaches such as MCMC\todo{cite} are able to gene
     \item related results regarding performance of IS (Chatterje, Agapiou)
 \end{itemize}
 
-\subsection{\acrfull{la}}
+\subsection{\texorpdfstring{\Acrfull{la}}{Laplace approximation}}
 
 \acrfull{la} goes back to Laplace \cite{Laplace1986Memoir} who invented the technique to approximate moments of otherwise intractable distributions. Since \cite{Tierney1986Accurate,Tierney1989Fully} rediscovered its use to approximate posterior means and variances, it has been a staple method for statisticians \todo{cite something}.
 
@@ -421,7 +432,7 @@ Additionally, even if \gls{la} works in principle, its \gls{ess} will usually de
     \item can be solved by KF, even if non log-concave (\todo{think about whether to generalize to non LC, problem might be that sqrt filter does not work})
 \end{itemize}
 
-\subsection{\gls{cem}}
+\subsection{\texorpdfstring{\Acrfull{cem}}{Cross-entropy method}}
 To provide a global approximation to the target, the \gls{cem}\cite{Rubinstein1999CrossEntropy,Rubinstein2004CrossEntropy} selects from a family $ \left( \G_{\psi} \right)_{\psi \in \Psi}$ of proposals the one that minimizes the \gls{kld} to the target. Thus, the \gls{cem} finds $\psi_{\text{CE}}$ which solves the following optimization problem
 
 \begin{align*}
@@ -597,8 +608,11 @@ If $\G_\psi$ do not form an exponential family, $\hat\psi_{\text{CE}}$ will stil
 % applications of CEM
 The \gls{cem} is routinely used for estimating failure probabilities for rare events \cite{Homem-de-Mello2007Study} \todo{cite more} and has been applied to Bayesian inference \cite{Engel2023Bayesian,Ehre2023Certified} and optimal control problems \cite{Kappen2016Adaptive,Zhang2014Applications}.
 
-\subsection{Efficient importance sampling}
-\gls{eis}\cite{Richard2007Efficient} provides an alternative to the \gls{cem}. Instead of minimizing the \gls{kld} between the target $\P$ and $\G_{\psi}$, \gls{eis} aims at minimizing the variance of the logarithm of importance sampling weights. Thus, \gls{eis} finds $\psi_{EIS}$ which solves 
+\subsection{\texorpdfstring{\Acrfull{eis}}{Efficient importance sampling}}
+\gls{eis}\cite{Richard2007Efficient} provides an alternative to the \gls{cem}. Instead of minimizing the \gls{kld} between the target $\P$ and $\G_{\psi}$, \gls{eis} aims at minimizing the variance of the logarithm of importance sampling weights. 
+The work by \citep{Chatterjee2018Sample} suggests that this is worthwhile: %as the upper bound in their Theorems 1.1 and 1.2 involve tail probabilities of the distribution of log weights, which suggests minimizing their variance as well as the mean.
+
+Thus, \gls{eis} finds $\psi_{EIS}$ which solves 
 \begin{align*}
 \psi_{EIS} &= \argmin_{\psi \in\Psi} \text{Var}_{\P} \left( \log w_{\psi} \right) \\
     &= \argmin_{\psi \in \Psi} \P (\log w_{\psi} - \P \log w_{\psi})^{2},
@@ -775,6 +789,49 @@ W &= \text{diag} \left( \sqrt{W_{1}}, \dots, \sqrt{W_{N}} \right).
 
 \section{Gaussian importance sampling for state space models}
 \label{sec:gaussian_importance_sampling_for_state_space_models}
+
+% two types of proposals: direct, SSMs
+For the types of models considered in this thesis, importance sampling is used to infer the posterior distribution. Given a state space model of the form \eqref{def:ssm} and observations $Y = Y_{:n}$, let $\P$ be the distribution of the states $X=X_{:n}$, conditional on $Y$ and $f$ be a function of interest. The task at hand is now to find a suitable proposal $\G$, using the methods presented in the last section. If $n$ is large, the posterior distribution lives in a high dimensional state of dimension $m\cdot n$ so to obtain $\G$ efficiently, we should exploit the available structure. Additionally, we want $\G$ to be tractable, so simulating from it is possible and evaluating the weights $w$ up to a constant is possible. 
+
+The multivariate Gaussian distribution is a good candidate in this setting, as simulating from it is straightforward and its density can be evaluated analytically. However, naively performing the optimal importance sampling methods from the previous section for all multivariate Gaussians is computationally inefficient as the family of distributions has $\mathcal O((n\cdot m)^{2})$ many parameters. We can, however, exploit the available structure of the \gls{ssm} to find parametrizations with fewer parameters. 
+
+% first: Gaussian SSMs
+The first approach \todo{cite} is motivated by the fact that in Gaussian state space models the posterior distribution is again Gaussian, and straightforward to simulate from by, e.g., the FFBS \todo{cite} algorithm. Additionally both the target posterior and the Gaussian proposal are Markov processes. Thus parameterizing the proposals $\G$ by Gaussian state space models may be a fruitful approach.
+For the models we consider in this thesis, the distribution of states is already Gaussian and the observations are conditionally independent given the states. Thus a natural Gaussian state space model to use as a proposal consists of keeping the prior distribution of states, and replacing the distribution of observations with conditionally independent Gaussian distributions and the observations by synthetic ones. By the assumed conditional independence, this model only needs $2 p\cdot n$ many parameters.
+
+In total, this approach considers parametric proposals $\G_{\psi}$ of the form
+\begin{align}
+    \label{eq:glssm-proposal}
+    \G_{\psi} &= \mathcal L(X | Z = z),\\
+    Z_{t} &= B_{t} X_{t} + \eta_{t},\\
+    \eta_{t} &\sim \N \left( 0, \Omega_{t} \right),\\
+    \Omega_{t} &= \diag \left( \omega_{t} \right) = \diag \left( \omega_{t,1}, \dots, \omega_{1,p} \right).
+\end{align}
+where the distribution of $X$ is given by \eqref{eq:glssm_states}, $\psi = \left( z, \omega \right)$ for $z = \left( z_{0}, \dots, z_{n} \right) \in \R^{n \times m}$ and $\omega = \left( \omega_{0}, \dots, \omega_{n} \right) \in \R^{n \times m}$.
+
+% second: Gaussian Markov process 
+% discuss more flexible vs. fewer parameters
+An alternative family of Gaussian proposals, one that to the author's knowledge has not yet been discussed in the literature, is given by directly modeling a Gaussian Markov process on the states $X_{:n}$. Again, this is sensible given the Markov structure of the target and is more flexible than using the posterior of a \gls{glssm} with fixed prior as the proposal. This flexibility, however, comes at the cost of requiring a larger number of parameters. Here we propose with $\G_{\psi}$ where
+
+\begin{align}
+    \label{eq:markov-proposal}
+    \G_{\psi} &= \mathcal L (U) \\
+    U_{0} &\sim \mathcal N(v_{0}, \Xi_{0})\\
+    U_{t} &= C_{t}U_{t - 1} + v_{t} + \nu_{t} \\
+    \nu_{t} &\sim \mathcal N(0,\Xi_{t})
+\end{align}
+for $t = 1, \dots, n$. The number of parameters is $(n + 1)\cdot m$ for the means $v_{0}, \dots, v_{n + 1}$, $n \cdot m^{2}$ for the transition matrices $C_{t}$ and $(n + 1) \frac{m (m - 1)}{2}$ for the covariance matrices of innvoations, totalling $\mathcal O(n\cdot m^{2})$ many parameters. 
+While this may be considerably more parameters for large state dimension $m$, we will see that finding the optimal parameters for the \gls{cem} can be done analytically \todo{cite relevant section}. 
+
+% discuss if there actually is a Gaussian close to the target, see heavy tails etc.
+Using Gaussian proposals, while computationally efficient, also comes with some drawbacks. The whole procedure hinges on the assumption that there is a Gaussian that is, close to the target distribution. In the setting of \glspl{ssm} this is not guaranteed, as the targets may contain multiple modes or heavy tails, features that may, in the worst case, lead to inconsistent importance sampling estimates. At least for the models considered in \Cref{cha:analysis_of_selected_models}, the targets arise as posterior distributions of \gls{lcssm} and as such they are unimodal and have non-heavy tails, i.e. there is a Gaussian distribution such that importance sampling is feasible \todo{rethink, is this really the case}. 
+Additionally, even if there is a Gaussian distribution that facilitates consistent importance sampling, finding it in practice may be complicated, as the \gls{la}, \gls{cem} and \gls{eis} have deteriorating performance (in terms of \gls{ess} and convergence) with increasing dimension \todo{ref to chapter, check that I also present that there}.
+
+% SSMs may utilize KF/KS to perform importance sampling
+% LA: cite Koopman paper
+% CE: two variants 
+% EIS: cite papers, MEIS NEIS
+
 
 Most models in this thesis can be viewed as an inverse problem of the form
 
