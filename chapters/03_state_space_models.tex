@@ -610,7 +610,10 @@ The \gls{cem} is routinely used for estimating failure probabilities for rare ev
 
 \subsection{\texorpdfstring{\Acrfull{eis}}{Efficient importance sampling}}
 \gls{eis}\cite{Richard2007Efficient} provides an alternative to the \gls{cem}. Instead of minimizing the \gls{kld} between the target $\P$ and $\G_{\psi}$, \gls{eis} aims at minimizing the variance of the logarithm of importance sampling weights. 
-The work by \citep{Chatterjee2018Sample} suggests that this is worthwhile: %as the upper bound in their Theorems 1.1 and 1.2 involve tail probabilities of the distribution of log weights, which suggests minimizing their variance as well as the mean.
+\todo{Chatterje paper}
+
+
+%The work by \citep{Chatterjee2018Sample} suggests that this is worthwhile: %as the upper bound in their Theorems 1.1 and 1.2 involve tail probabilities of the distribution of log weights, which suggests minimizing their variance as well as the mean.
 
 Thus, \gls{eis} finds $\psi_{EIS}$ which solves 
 \begin{align*}
@@ -629,43 +632,76 @@ Under the usual regularity conditions allowing to differentiate under the integr
     \P \left(\left( \log p - \log g_{\psi} - \lambda \right) \nabla_{\psi}\log g_{\psi}\right)&=0\\
     \P \left( \log p - \log g_{\psi} - \lambda \right)&=0,
 \end{align}
-which may be used to derive asymptotics for $\hpeis$. Similar to the \gls{cem} we restrict ourselves here to natural exponential families where $\log g_{\psi}(x) = \psi^{T}T(x) - \log Z(\psi) + \log h(x)$. In this case \cref{eq:eis-optimal} simplifies to
+which we will use to derive asymptotics for $\hpeis$. 
+
+Similar to the \gls{cem} we restrict our in-depth analysis to natural exponential family proposals where $\log g_{\psi}(x) = \psi^{T}T(x) - \log Z(\psi) + \log h(x)$. In this case \cref{eq:eis-optimal} simplifies to
 \begin{align*}
-    \P \left(\left( \log p - \log g_{\psi} - \lambda \right)(T - \G_{\psi} T)\right) &= 0,\\
+    \P \left(\left( \log p - \psi^{T}T + \log Z(\psi) - \log h - \lambda \right)(T - \G_{\psi} T)\right) &= 0,\\
     \lambda = \P (\log p - \log g_{\psi}) &= \Dkl{\P}{\G_{\psi}}.
 \end{align*}
 As the first term is centered under $\P$, this is equivalent to $\log w_{\psi}$ and $T$ being orthogonal in $L^{2}(\P)$. 
-Thus optimality is achieved if the first term equals the conditional expectation w.r.t. $T$. Unfortunately, this does not allow for an analytical solution of $\peis$. However, we can achieve this by reparameterizing to $\lambda' = \lambda - \log Z(\psi)$. There we obtain a weighted linear least squares problem
+%Thus optimality is achieved if the first term equals the conditional expectation w.r.t. $T$. j
+Unfortunately, this formulation does not allow for an analytical solution of $\peis$, the problematic term being $\log Z(\psi)$, leading to an implicit equation for $\psi$. However, we can achieve an explicit equation by reparameterizing to $\lambda' = \lambda - \log Z(\psi)$, which results in a weighted linear least squares problem
 \begin{align*}
     \min_{\psi \in \Psi, \lambda' \in \R} \P \left(\log p - \log h - \psi^{T}T - \lambda'\right)^{2}.
 \end{align*}
-Thus the optimal $ \left( \peis, \lambda'_{\text{EIS}} \right)$ are given by the best linear prediction of $\log p - \log h$ by the sufficient statistic $T$ under $\P$. Therefore 
-\begin{align*}
-    \lambda'_{\text{EIS}} &= \P \log p - \log h\\
+Thus the optimal $ \left( \peis, \lambda'_{\text{EIS}} \right)$ are given by the best linear prediction of $\log p - \log h$ by the sufficient statistic $T$ under $\P$. Therefore, if $\cov_{\P} T$ is non-singular, 
+\begin{align}
+    \lambda'_{\text{EIS}} &= \P \log p - \log h \nonumber{}\\
+    \label{eq:peis-analytical}
     \peis &= \cov_{\P} \left( T \right)^{-1} \cov_{\P} \left(T, \log p - \log h \right).
-\end{align*}
-Thus the optimal $\peis$ depends on second-order moments of the sufficient statistic, as well as the shape of $\log p$. 
+\end{align}
+Notice that $\peis$ depends on second-order moments of the sufficient statistic $T$, as well as the shape of $\log p$, whereas the optimal parameter for the \gls{cem} $\pce$ depends only on the first-order moments of $T$. 
 
-As the moments of $T$ under $\P$ are not available, \gls{eis} proceeds like the \gls{cem} and employs importance sampling with a proposal $\G$, estimating $\psi_{\text{EIS}}$ by
+As the optimal $\peis$ depends on several unknown quantities, \gls{eis} proceeds like the \gls{cem} and employs importance sampling with a proposal $\G$, estimating $\psi_{\text{EIS}}$ by
 $$
-\hat \psi_{\text{EIS}} = \argmin_{\psi} \sum_{i=1}^N W^{i} \left( \log p(X^{i}) - \log g_{\psi}(X^{i}) - \lambda \right)^{2},
+\left(\hat \lambda,\hat \psi_{\text{EIS}}\right) = \argmin_{\lambda,\psi} \sum_{i=1}^N W^{i} \left( \log p(X^{i}) - \log g_{\psi}(X^{i}) - \lambda \right)^{2},
 $$
 where $X^{1}, \dots, X^{N} \iid \G$. 
-If $g_{\psi}, \psi \in \Psi$ form an exponential family with natural parameter $\psi$, $\hpeis$ becomes a weighted linear least squares estimator after reparameterizing to $\lambda'$ as above.
-Thus we can estimate with the standard weighted least squares estimator
+If $\G_{\psi}, \psi \in \Psi$ form an exponential family with natural parameter $\psi$, this optimization problem turns into a weighted least squares problem, so we can estimate $\peis$ with the standard weighted least squares estimator
 $$
-\left( \hat\lambda', \hpeis \right) = \left(\mathbf X^{T}W \mathbf X\right)^{-1}W^{\frac{1}{2}}\mathbf X^{T} \left( \log p(X^{1}), \dots, \log p(X^{N}) \right)
+\left( \hat\lambda', \hpeis \right) = \left(\mathbf X^{T}W\mathbf X\right)^{-1}\mathbf X^{T}W y%
 $$
-where the design matrix $\mathbf X$ and diagonal weights matrix is given by
+where the random design matrix $\mathbf X$ and diagonal weights matrix $W$ are given by
 \begin{align*}
 \mathbf X &= \begin{pmatrix}
     1 & T(X^{1})^{T} \\
     \dots&\dots\\
     1 & T(X^{N})^{T} \\
-\end{pmatrix},\\
-W &= \text{diag} \left( \sqrt{W_{1}}, \dots, \sqrt{W_{N}} \right).
+\end{pmatrix}\\
+\intertext{and}
+W &= \text{diag} \left( W_{1}, \dots, W_{N} \right),
+\end{align*}
+and the observations are 
+\begin{align*}
+y = \left( \log p(X^{1}) - \log h(X^{1}), \dots, \log p(X^{N}) - \log h(X^{N}) \right)^{T} \in \R^{N}.
 \end{align*}
 
+Alternatively, replacing $\P$ by $\hat\P_{N}$ in \Cref{eq:peis-analytical}, we obtain the equivalent formulation
+\begin{align}
+    \label{eq:hpeis-cov}
+    \hpeis = \cov_{\hat\P_{N}} (T)^{-1} \cov_{\hat \P_{N}} \left( T, \log p - \log h \right),
+\end{align}
+as long as $\cov_{\hat \P_{N}} T$ is non-singular.
+
+An attractive feature of \gls{eis} is that if the target $\P$ is a member of the exponential family of proposals, i.e. there is a $\psi\in\Psi$ such that $\P = \G_{\psi}$, then \gls{eis} finds the optimal $\peis = \psi$ a.s. for a finite number of samples.
+
+\begin{proposition}[Finite sample convergence of \gls{eis}]
+    Suppose $\G_{\psi}, \psi \in \Psi \subseteq \R^{k}$ for a natural exponential family w.r.t. Lebesgue measure, where both $\Psi$ and the support of the sufficient statistic $\operatorname{supp} T$ are open in $\R^{k}$. 
+    Furthermore let $\G$ be a probability measure on $\R^{m}$ that is equivalent to $\P$, i.e. $\G \ll \P$ and $\P \ll \G$. 
+
+    If there is a $\psi_{\P} \in \Psi$ such that $\P = \G_{\psi_{\P}}$, then $\hpeis = \psi_{\P}$ a.s. for $N \geq k$. 
+\end{proposition}
+
+\begin{proof}
+   As $\P$ stems from the same exponential family as $\G_{\psi}$, the pseudo-observations are $\log p - \log h = \psi_{\P}^T T - \log Z(\psi_{\P})$. Thus $\cov_{\hat \P_{N}} \left( T, \log p - \log h \right) = \cov_{\hat \P_{N}} \left( T \right)\psi_{\P}$. 
+   If we can show that $\cov_{\hat\P_{N}} T$ is non-singular, \Cref{eq:hpeis-cov} implies that $\hpeis = \psi_{\P}$ a.s.. 
+
+   If $\cov_{\hat \P_{N}} T$ were singular, there would exist a $\psi \in \Psi$ such that $\cov_{\hat \P_{N}} \left( \psi^{T}T \right) = 0$, as $\Psi$ is open and contains $0$. In this case the a.s. non-zero $W^{i}(X^{i}) T(X^{i})$ would lie in the orthogonal complement $\psi^{\perp}$ for all $i = 1, \dots, N$. As the weights are a.s. positive by the assumed equivalence of $\G$ and $\P$, the same holds true for $T(X^{i}), i = 1,\dots, N$.
+   If $N$ is bigger than $k$, this is a contradiction to $\operatorname{supp} T $ being open, so $\cov_{\hat \P_{N}} T$ is non-singular and the result is shown.
+   \todo{think a bit more about this, what if T is not a homeo?}
+    
+\end{proof}
 \todo{discuss applicability of CLT}
 
 \begin{theorem}[asymptotic normality of $\hpeis$]
@@ -1024,9 +1060,19 @@ As one can readily see from \Cref{thm:elliptical-conditional} the parameters of 
     $$
 
     \begin{figure}
+        \centering
+        \begin{subfigure}{.49\textwidth}
+            \resizebox{\textwidth}{!}{%
+                \input{tikz/normal_are_sigma.tex}%
+            }
+        \end{subfigure}
+        \begin{subfigure}{.49\textwidth}
+            \resizebox{\textwidth}{!}{%
+                \input{tikz/normal_are_mu.tex}%
+            }
+        \end{subfigure}
         \label{fig:normal_are}
-        \input{tikz/normal_are.tex}
-        \caption{Relative efficiency $ \frac{V_{\eis}}{V_{\ce}}$ for $\tau^{2}=1$ and varying values of $\sigma^{2}$. For $\sigma^{2}$ close to $\tau^{2}$, $V_{\eis}$ is smaller than $V_{ce}$}
+        \caption{Asymptotic relative efficiency $\frac{V_{\eis}}{V_{\ce}}$ for \Cref{ex:univ-gaussian-s2-fixed} (left hand side) and \Cref{ex:univ-gaussian-mu-fixed} (right hand side). Here $\P = \mathcal N(0, 1)$ is the standard normal and $\G = \mathcal N(\mu, \sigma^{2})$, where either $\sigma^{2}$ is fixed (left) and $\mu$ determined by the \gls{cem} / \gls{eis}, or the other way around (right). Notice the log-scale of the $y$-axis. As $\mu$ or $\sigma^{2}$ get close to their true values, \gls{eis} outperforms the \gls{cem} in terms of asymptotic variance, see {\color{red} todo:  reference to example where EIS is exact.}. As}
     \end{figure}
     
 
