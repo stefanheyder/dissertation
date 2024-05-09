@@ -1013,7 +1013,7 @@ As one can readily see from \Cref{thm:elliptical-conditional} the parameters of 
 \todo{present some models with heavy tails}
 
 
-\section{Maximum likelihood estimation in \glspl{ssm}}
+\section{Maximum likelihood estimation in \texorpdfstring{\glspl{ssm}}{state space models}}
 \label{sec:maximum_likelihood_estimation}
 
 \section{Comparison of Importance Sampling method}
@@ -1048,6 +1048,7 @@ As one can readily see from \Cref{thm:elliptical-conditional} the parameters of 
     $$
     where $\gamma = \int p(x) x^{2}\left(\log p(x) + \frac{x^{2}}{2\sigma^{2}} - \P(\log p(x) + \frac{\tau^{2}}{2\sigma^{2}})\right)^{2} \d x.$
     
+    \paragraph{Normal distribution}
     If $\P = \mathcal N(0, \tau^{2})$ is a normal distribution, this reduces to
     \begin{align*}
         V_{\eis} &= \frac{5}{2} \left( \frac{\tau^{2}}{\sigma^{2}} - 1 \right)^{2} \frac{\sigma^{2}}{\tau^{2}} = \frac{5}{2} \frac{\left( V_{\ce} - 1\right)^{2}}{V_{\ce}}
@@ -1056,23 +1057,24 @@ As one can readily see from \Cref{thm:elliptical-conditional} the parameters of 
 
     For importance sampling to be consistent, it is necessary that $\sigma^{2} > \frac{\tau^{2}}{2}$. The left-hand side of \Cref{fig:normal_are} displays the behavior of the relative efficiency
     $$
-    \frac{V_{\eis}}{V_{\ce}} = \frac{5}{2} \frac{(V_{\ce} - 1)^{2}}{V_{\ce}^{2}} = \frac{5}{2} \left( 1 - \frac{2}{V_{\ce}} + \frac{1}{V_{\ce}^2} \right)
+    \frac{V_{\eis}}{V_{\ce}} = \frac{5}{2} \frac{(V_{\ce} - 1)^{2}}{V_{\ce}^{2}} = \frac{5}{2} \left( 1 - \frac{2}{Vsdf_{\ce}} + \frac{1}{V_{\ce}^2} \right)
     $$
 
     \begin{figure}
         \centering
+
         \begin{subfigure}{.49\textwidth}
             \resizebox{\textwidth}{!}{%
-                \input{tikz/normal_are_sigma.tex}%
+                \input{tikz/are_mu.tex}%
             }
         \end{subfigure}
         \begin{subfigure}{.49\textwidth}
             \resizebox{\textwidth}{!}{%
-                \input{tikz/normal_are_mu.tex}%
+                \input{tikz/are_sigma.tex}%
             }
         \end{subfigure}
         \label{fig:normal_are}
-        \caption{Asymptotic relative efficiency $\frac{V_{\eis}}{V_{\ce}}$ for \Cref{ex:univ-gaussian-s2-fixed} (left hand side) and \Cref{ex:univ-gaussian-mu-fixed} (right hand side). Here $\P = \mathcal N(0, 1)$ is the standard normal and $\G = \mathcal N(\mu, \sigma^{2})$, where either $\sigma^{2}$ is fixed (left) and $\mu$ determined by the \gls{cem} / \gls{eis}, or the other way around (right). Notice the log-scale of the $y$-axis. As $\mu$ or $\sigma^{2}$ get close to their true values, \gls{eis} outperforms the \gls{cem} in terms of asymptotic variance, see {\color{red} todo:  reference to example where EIS is exact.}. As}
+        \caption{Asymptotic relative efficiency $\frac{V_{\eis}}{V_{\ce}}$ for the normal distribution from \Cref{ex:univ-gaussian-s2-fixed} (left hand side) and \Cref{ex:univ-gaussian-mu-fixed} (right hand side). Here $\P = \mathcal N(0, 1)$ is the standard normal distribution and $\G = \mathcal N(\mu, \sigma^{2})$, where either $\sigma^{2}$ is fixed (left) and $\mu$ determined by the \gls{cem} / \gls{eis}, or the other way around (right). Notice the log scale of the $y$-axis. As $\mu$ or $\sigma^{2}$ get close to their true values, \gls{eis} outperforms the \gls{cem} in terms of asymptotic variance, see {\color{red} todo:  reference to example where EIS is exact.}. As}
     \end{figure}
     
 
@@ -1089,10 +1091,11 @@ As one can readily see from \Cref{thm:elliptical-conditional} the parameters of 
     %    \label{tab:comparison-asymptotics}
     %\end{table}
     
+    \paragraph{Gaussian location mixture}
+    Consider now the case where $\P = \frac{1}{2} \mathcal N(-1, \omega^{2}) + \frac{1}{2}\mathcal N(1, \omega^{2})$ is a Gaussian location mixture. The second moment is $\tau^{2} = 1 + \omega^{2} = -\frac{1}{2\pce}$. Unfortunately, there is no closed-form expression for many of the terms required for the analysis \gls{eis}. Instead, we resort to a simulation study to determine the asymptotic variances and relative efficiencies.
 
     \todo{numerical example: GMM}
     \todo{interpretation: if variance set too low, CE better. if variance too big EIS better}
-    
     
 \end{example}
 
@@ -1105,14 +1108,15 @@ As one can readily see from \Cref{thm:elliptical-conditional} the parameters of 
     \log g_{\psi}(x) = \psi T(x) + \frac{1}{2}\log \left( - 2 \psi \right) - \frac{1}{2} \log 2\pi
     $$
     for $T(x) = (x - \mu)^{2}$. Thus $\P T = \tau^{2} + \mu^{2}$ and $\cov_{\P} T = \nu - \tau^{4} + 4\tau^{2}\mu^{2}$ where $\nu = \P \operatorname{id}^{4}$ and $\tau^{2} = \P \id^{2}$. 
-    \paragraph{\Acrlong{cem}}
+    %\paragraph{\Acrlong{cem}}
+
     By matching moments, we obtain $\pce = -\frac{1}{2(\tau^{2} + \mu^{2})}$ and $I(\pce) = \frac{1}{2\pce^{2}} = 2(\tau^{2} + \mu^{2})^{2}$. In total 
     \begin{align}
         V_{\ce} &= \frac{1}{4 (\tau^{2} + \mu^{2})^{4}} \left( \nu - \tau^{4} + 4\tau^{2}\mu^{2} \right)
     \end{align}
 
-    \paragraph{\Acrlong{eis}}
-    Here
+    %\paragraph{\Acrlong{eis}}
+    For \gls{eis},
     \begin{align*}
     \peis &= \left( \cov_{\P} T \right)^{-1} \cov_{\P} \left( T, \log p \right) \\
         &= \left( \nu - \tau^{4} + 4\tau^{2}\mu^{2} \right)^{-1} \underbrace{\int p(x)((x-\mu)^{2}-\tau^{2} - \mu^{2})(\log p(x) - \P\log p(x)) \d x}_{=\gamma}.
@@ -1124,19 +1128,20 @@ As one can readily see from \Cref{thm:elliptical-conditional} the parameters of 
     \end{align*}
 
     \paragraph{Normal distribution}
-
     Consider now the normal distribution $\P = \mathcal N (0, \tau^{2})$ where $\nu = 3 \tau^{4}$ and $\gamma = -\tau^{2}$, so 
     \begin{align*}
-        \peis &= \frac{-\tau^{2}}{2\tau^{2} \left( \tau^{2} + 2\mu^{2} \right)} = \frac{-1}{2(\tau^{2} + 2\mu^{2})},
+        \peis &= \frac{-\tau^{2}}{2\tau^{2} \left( \tau^{2} + 2\mu^{2} \right)} = \frac{-1}{2(\tau^{2} + 2\mu^{2})}.
     \end{align*}
-    so the \gls{eis} proposal has variance $\tau^{2} + 2\mu^{2}$, which is bigger than the variance of $\tau^{2} + \mu^{2}$ optimal for the \gls{cem}.
+    Thus the \gls{eis} proposal uses variance $\sigma^{2}_{\eis} = \tau^{2} + 2\mu^{2}$, which is bigger than the variance of $\sigma^{2}_{\ce} = \tau^{2} + \mu^{2}$ optimal for the \gls{cem}.
 
     In this case the asymptotic variances are
-    \begin{align}
-    \label{eq:asymptotic-vars}
+    \begin{align*}
+    %\label{eq:asymptotic-vars}
         V_{\ce} &= \frac{\tau^{2}(\tau^{2} + 2\mu^{2})}{2 \left( \tau^{2} + \mu^{2} \right)^{4}}\\
-        V_{\eis}&= \frac{1}{4} 78 \left( \frac{1}{2\tau^{2}} + \peis \right)^{2}
-    \end{align}
+        \intertext{and}
+        V_{\eis} &= \frac{\mu^{2} \left(2 \mu^{6} + 45 \mu^{4} \tau^{2} + 15 \tau^{6}\right)}{4 \tau^{4} \left(2 \mu^{2} + \tau^{2}\right)^{4}},
+    \end{align*}
+    see the accompanying source code for their calculation in sympy \todo{ref it}.
 \end{example}
 
 \subsection{Breakdown of methods}
