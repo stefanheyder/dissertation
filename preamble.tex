@@ -87,7 +87,7 @@
 \pgfplotsset{compat=newest}
 \usetikzlibrary{external}
 %\tikzexternalize[mode=list and make, prefix=figures-tikz/]
-\tikzexternalize[prefix=figures-tikz/]
+\tikzexternalize[prefix=tikz/externalized/]
 
 
 % ****************************************************************************************************
@@ -180,6 +180,9 @@
 \presetkeys%
     {todonotes}%
     {inline,backgroundcolor=orange}{}
+\makeatletter
+\renewcommand{\todo}[2][]{\tikzexternaldisable\@todo[#1]{#2}\tikzexternalenable}
+\makeatother
 
 % cleveref should be loaded last
 \usepackage{cleveref} 

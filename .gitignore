@@ -302,3 +302,7 @@ TSWLatexianTemp*
 #*Notes.bib
 
 .vscode
+
+
+# tikz-externalized
+tikz/externalized
