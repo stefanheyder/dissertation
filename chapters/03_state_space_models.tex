@@ -1174,7 +1174,7 @@ In applications, e.g. the model studied in \Cref{cha:analysis_of_selected_models
     % what is analysed
     %% posterior marginal means and variances
     Each of these proposals is a Gaussian distribution on $\R^{(n+1)\times m}$, either given as the posterior of a \gls{glssm} (\gls{la}, \gls{eis}) or by directly specifying its precision matrix (\gls{cem}). 
-    To assess the speed of convergence of the \gsl{cem} and \gls{eis} we estimate the mean squared error of means and variances of the $(n+1) \times m$ univariate marginals as $N$, the number of samples used to obtain $\hpce$ or $\hpeis$, grows. For the true value we take the univariate means and variances obtained in the previous step, i.e. with $N_{\text{true}}$ many samples. 
+    To assess the speed of convergence of the \gls{cem} and \gls{eis} we estimate the mean squared error of means and variances of the $(n+1) \times m$ univariate marginals as $N$, the number of samples used to obtain $\hpce$ or $\hpeis$, grows. For the true value we take the univariate means and variances obtained in the previous step, i.e. with $N_{\text{true}}$ many samples. 
     We then simulate $M$ times $N$ samples from $\G_{\la}$ and use them to estimate $\pce$ / $\peis$ respectively, using the same seed. 
     Additionally, we perform a bias-variance decomposition to see where the estimation error originates. 
 
