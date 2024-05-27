@@ -46,22 +46,24 @@ An additional advantage, that will become more explicit in \Cref{sec:modelling_e
 For notational convenience we will write $X_{s:t} = \left(X_s, \dots, X_{t}\right)$ for the vector that contains all states from $s$ to $t$, dropping the first index if we consider the whole set of observations up to time $t$, so $X_{:t} = X_{0:t}$.
 Similarly we set $Y_{s:t} = \left(Y_s, \dots, Y_{t}\right)$ and $Y_{:t} = Y_{0:t}$.
 
-\todo{picutre of dependency structure}
+\todo{picture of dependency structure}
 
 \begin{remark}
     Contrary to the standard definition of a \gls{ssm}, our \Cref{def:ssm} allows $Y_t$ to depend on $Y_{t - 1}$.
     This is not a limitation of the standard definition: given a \gls{ssm} of the form in \Cref{def:ssm} we can transform it to the standard form by choosing states $(X_t, Y_t) \in \mathcal X \times \mathcal Y$ and observations $Y_t \in \mathcal Y$ such that the \gls{ssm} becomes a stochastic process on $ \left( \mathcal X \times \mathcal Y\right) \times \mathcal Y$.
 
-    Additionally, most computations and inferences in this thesis will be conditioned on a single set of observations $Y$. As such $Y$ may be treated as fixed and $Y_{t}$ only depends on $X_{t}$. The only exception to this is in simulation studies where we sample from the joint distribution of $(X, Y)$.
+    Additionally, most computations and inferences in this thesis will be conditioned on a single set of observations $Y$. We thus adopt a Bayesian perspective and as such $Y$ may be treated as a fixed and $Y_{t}$ only depends on $X_{t}$. We will not be interested in frequentist properties of the models concerning repeated sampling of $Y$. The only exception to this is in simulation studies where we sample from the joint distribution of $(X, Y)$. 
+    \todo{do we really need this here?}
 
     As the models considered in \Cref{cha:analysis_of_selected_models} will make extensive use of \glspl{ssm} with this dependency structure we opt to use this non-standard definition here.
 
     In most models we consider in this thesis we use $\mathcal X = \R^m$, $\mathcal Y = \R^p$ or $\mathcal Y = \Z^p$ so that $\mathcal X$ is $m$ dimensional and $\mathcal Y$ is $p$ dimensional and equip these spaces with the usual Borel $\sigma$-Algebras.
 \end{remark}
 
-Most models that I consider in this thesis will admit densities for the state transitions w.r.t. a common dominating measure $\mu_{\mathcal X}$ and similar for the observations w.r.t. a (potentially different) domination measure $\mu_{\mathcal Y}$. \todo{check whether there are models that violate this}
+Most models that we consider in this thesis will admit densities for the state transitions w.r.t. a common dominating measure $\mu_{\mathcal X}$ and similar for the observations w.r.t. a (potentially different) dominating measure $\mu_{\mathcal Y}$. \todo{check whether there are models that violate this}
 
 \begin{notation}[Densities, conditional densities]
+    \label{not:densities}
     I will use the standard abuse of notation for densities that makes the type of density \glqq{}obvious\grqq{} from the arguments used.
     This means that $p(x)$ is the density for all states $X$, $p(x_t|x_{t - 1})$ the conditional density of $X_t|X_{t - 1}$ and similarly for observations: $p(y|x)$ is the density of all observations $Y$ conditional on all states $X$.
 
@@ -90,7 +92,7 @@ Given data $(y_t)_{t = 0, \dots, n - 1}$ that may be modeled with a \gls{ssm} th
 
 The first step, \cref{it:model_choice}, requires that the practitioner specifies a joint probability distribution for the states and observations (\Cref{sec:modelling_epidemiological_dessiderata_with_state_space_models}).
 Due to the assumed dependency structure this boils down to specifying transition kernels for the states and observations.
-The setting \Cref{def:ssm} is too abstract to perform inference in so further assumptions on the types of distributions for the latent states and observations are needed.
+The setting \Cref{def:ssm} is too abstract to perform inference in, so further assumptions on the types of distributions for the latent states and observations are needed.
 In this chapter we will discuss \gls{glssm}  (\Cref{sec:linear_gaussian_state_space_models}), where both the posterior distribution and the likelihood are analytically available. For the epidemiological application we have in mind these are however insufficient due to the non-linear behaviour of incidences and the low count per region (\Cref{sec:dessiderata}).
 Such observations are better modeled with distributions on the natural numbers, i.e. with a Poisson or negative binomial distribution, leading to the class of logconcave Gaussian state space models (\Cref{sec:logconcave_gaussian_state_space_models}).
 
@@ -116,16 +118,6 @@ This will be a good strategy if the target posterior $p(x|y)$ can be well approx
 \section{Linear Gaussian state space models}
 \label{sec:linear_gaussian_state_space_models}
 
-\begin{itemize}
-    \item joint model is gaussian
-    \item filtering distribution obtained by Kalman filter
-    \item smoothing distribution obtained by Kalman smoother
-    \item variants: sqrt filter / precision filter
-    \item gaussian likelihood analytically available, MLE can be found by numerical methods (gradient descent or EM, depending on problem)
-    \item computation is efficient: linear in time dimension $n$
-    \item $Y_{t + 1}$ may also depend on $Y_{t}$ as we will target the conditional distribution anyways
-\end{itemize}
-
 \gls{glssm} are the working horses of most methods used in this thesis because they are analytically tractable and computationally efficient. Indeed for fixed dimension of states $m$ and observations $p$ the runtime of algorithms that we consider in this thesis is $\mathcal O(n)$.
 
 \begin{definition}[\gls{glssm}]
@@ -140,44 +132,116 @@ This will be a good strategy if the target posterior $p(x|y)$ can be well approx
         \label{eq:glssm_observations}
         Y_{t} & = B_{t}X_{t} + v_{t} + \eta_{t} &  & t = 0, \dots, n.
     \end{align}
-    Here $A_{t} \in \mathbf{R}^{m \times m}$ and $B_{t} \in \mathbf{R}^{p \times m}$ are matrices the specify the systems dynamics. The \textbf{innovations} $\varepsilon_{t + 1}$ and \textbf{measurement noise} $\eta_{t}$ are independent from one another and from the starting value $X_{0} \sim \mathcal N (\E X_{0}, \Sigma_{0})$. Furthermore, $\varepsilon_{t+1} \sim \mathcal N(0, \Sigma_{t})$ and $\eta_{t}\sim \mathcal N(0, \Omega)$ are centered Gaussian random variables and $u_{t + 1} \in \R^{m}, t = 1, \dots, n-1$, $v_{t} \in \R^{p}, t = 0, \dots, n$ are deterministic biases.
+    Here $A_{t} \in \mathbf{R}^{m \times m}$ and $B_{t} \in \mathbf{R}^{p \times m}$ are matrices that specify the systems dynamics. The \textbf{innovations} $\varepsilon_{t + 1}$ and \textbf{measurement noise} $\eta_{t}$ are independent from one another and from the starting value $X_{0} \sim \mathcal N (\E X_{0}, \Sigma_{0})$. Furthermore, $\varepsilon_{t+1} \sim \mathcal N(0, \Sigma_{t})$ and $\eta_{t}\sim \mathcal N(0, \Omega)$ are centered Gaussian random variables and $u_{t} \in \R^{m}, t = 0, \dots, n - 1$, $v_{t} \in \R^{p}, t = 0, \dots, n$ are deterministic biases.
 \end{definition}
 
-The defining feature of a \gls{glssm} is that its joint distribution is Gaussian.
+The defining feature of a \gls{glssm} is that the joint distribution of $(X,Y)$ is Gaussian, as $(X,Y)$ may be written as an affine combination of the jointly Gaussian $(X_{0}, \varepsilon_{1}, \dots, \varepsilon_{n}, \eta_{0}, \dots, \eta_{n})$. 
 
-\begin{lemma}
-    A state space model can be written as a \gls{glssm} if and only if its joint distribution is Gaussian.
+As the joint distribution of $(X, Y)$ is Gaussian, so are conditional distributions of states given any set of observations.
+
+\begin{lemma}[Gaussian conditional distributions]
+    \label{lem:gaussian_conditional}
+    Let $(X,Y)$ be jointly Gaussian with distribution $\mathcal N \left( \mu, \Sigma \right)$ where 
+    $$
+    \mu = \left(\mu_{X}, \mu_{Y}\right)
+    $$
+    and 
+    $$
+    \Sigma = \begin{pmatrix}
+        \Sigma_{XX} & \Sigma_{XY} \\
+        \Sigma_{YX} & \Sigma_{YY}
+    \end{pmatrix},
+    $$
+    for non-singular $\Sigma_{YY}$. 
+    
+    Then $X|Y = y$ is also a Gaussian distribution with conditional expectation
+    $$
+    \mu_{X|Y = y} = \E \left( X | Y = y \right) = \mu_{X} + \Sigma_{XY}\Sigma_{YY}^{-1} \left( y - \mu_{Y} \right)
+    $$
+    and conditional covariance matrix 
+    $$
+    \Sigma_{X| Y =y} = \cov \left( X | Y = y \right) = \Sigma_{XX} - \Sigma_{XY} \Sigma_{YY}^{-1} \Sigma_{YX}.
+    $$
+    
+    In particular, if $Y = BX + \varepsilon$ for a matrix $A \in \mathbf R^{p\times m}$ and $\R^{p} \ni \varepsilon \sim \mathcal N(0, \Omega)$ independent of $X$, then, as 
+    $\mu_Y = A \mu_{X}$, $\Sigma_{XY} = \Sigma_{YX}^T = \Sigma_{XX}A^{T}$ and $\Sigma_{YY} = A \Sigma_{XX} A^{T} + \Omega$, we have
+    $$
+        \mu_{X|Y = y} = \mu_{X} + K (y - \mu_{y})
+    $$
+    and 
+    $$
+    \Sigma_{X|Y = y} = \dots
+    $$
+    with $K = $.
 \end{lemma}
 \begin{proof}
-    \todo{technicailty: distringuish between a.s. version}
+    For the first statement see \cite[Chapter 4, Lemma 1]{Durbin2012Time}. For the second statement 
 \end{proof}
 
-As the joint distribution of $(X, Y)$ is Gaussian, so are conditional distributions of states given observations. Two such distributions are of interest: the \textbf{filtering distribution} is the conditional distribution of $X_{t}$ given all observations until time $t$, that is $Y_{0:t}$. When $t < n$ this is distinct from the \textbf{smoothing distribution}, i.e. the distribution of $X_{t}$ given all observations $Y$.
+Let us denote by $\hat X_{t | s}$ the conditional mean of $X_{t}$ given observations $Y_{:s}$ and by $\Xi_{t | s}$ the conditional covariance matrix of $X_{t}$ given $Y_{:s}$. Then $X_{t} | Y_{:s} \sim \mathcal N \left( \hat X_{t|s}, \Xi_{t|s} \right)$. For a given $t$, three values of $s$ are of interest: If $s = t - 1$ determining this conditional distribution is called a \textbf{prediction problem}, if $s = t$ this is a \textbf{filtering problem} and if $s = n$ a \textbf{smoothing problem}, and we call the distributions we seek the \textbf{predictive, filtering} or \textbf{smoothing distribution} respectively. 
+Similarly we define $\hat Y_{t|s} = \E \left( Y_{t} \middle| Y_{:s} \right)$ to be the conditional expectation of $Y_{t}$ given $Y_{:s}$, note that $\hat Y_{t|s} = Y_{t}$ if $s \geq t$. Finally, let $\Psi_{t|s} = \cov \left( Y_{t} | Y_{:s} \right)$ be the conditional covariance matrix of $Y_{t}$ given $Y_{:s}$. Again $\Psi_{t|s} = 0$ if $s \geq t$. 
+
+As the joint distribution of states is Gaussian, these conditional expectations are given by the \acrfull{blup} of $X_{t}$ $Y_{:s}$. \todo{cite}
+
 \todo{Note that the filtering distributions does not specify a valid joint distribution for the states, but the smoothing does.}
 
-Both distributions may be obtained efficiently using the celebrated Kalman filter and smoother algorithms \todo{cite correclty}.
+These distributions may be obtained efficiently using the celebrated Kalman filter and smoother algorithms \todo{cite correclty}, which we state here for completeness.
 
 \begin{algorithm}
     \caption{Kalman filter}
-    \KwIn{observations $y = (y_{0}, \dots, y_{n})$, \gls{glssm}}
-    \KwOut{filtered expectations $\hat X_{t|t}$, covariance matrices $\Xi_{t|t}$, log likelihood $\log p(y)$}
-    \emph{Initialization}\;
-    $\hat y_{0|-1} = B_{0}\hat X_{0|-1} + v_{t}$\;
-    $\Psi_{0|-1} = B_{0} \Sigma_{0}B_{0}^{T} + \Omega_{0}$\;
-    \emph{Prediction}\;
-    \emph{Filter}\;
+    \label{alg:kalman_filter}
+    \begin{algorithmic}
+        \Require \gls{glssm} (\Cref{def:glssm}), observations $Y_{0}, \dots, Y_{n}$.
+        \Statex
+        \State $A_{-1} \gets I \in \mathbf R^{m\times m}$ \Comment{Identity Matrix}
+        \State $u_{-1} \gets \mathbf 0 \in \mathbf R^{m}$ 
+        \State $\hat X_{-1|-1} \gets \E X_0$
+        \State $\Xi_{0|-1} \gets \Sigma_{0}$
+        \Statex
+        \For{$t \gets 0, \dots, n$}
+            \Statex
+            \State $\hat X_{t| t - 1} \gets A_{t-1} \hat X_{t-1|t-1} + u_{t-1}$ \Comment{prediction}
+            \State $\Xi_{t | t - 1} \gets A_{t - 1} \Xi_{t - 1 | t - 1 } A_{t - 1}^{T} + \Sigma_{t}$ 
+            \State $\hat Y_{t|t - 1} \gets B_{t}\hat X_{t | t - 1} + v_{t}$
+            \State $\Psi_{t|t - 1} \gets B_{t}\Xi_{t | t - 1} B_{t}^T + \Omega_{t}$
+            \Statex
+            \State $K_t \gets \Xi_{t | t - 1} B_{t}^T \Psi_{t | t - 1} ^{-1}$ \Comment{filtering}
+            \State $\hat X_{t | t} \gets \hat X_{t | t - 1} + K_t (Y_{t} - \hat Y_{t | t - 1})$
+            \State $\Xi_{t| t } \gets \Xi_{t | t - 1} - K_t \Psi_{t| t - 1} K_t^T$
+        \EndFor
+    \end{algorithmic}
 \end{algorithm}
-
+\todo{make n, n-1 consistent (ISSSM uses from 0 to n)}
+In \Cref{alg:kalman_filter} every time point $t = 0, \dots, n$ is processed in the same way, with a two-step procedure: first we predict the new observation $Y_{t}$ based on $Y_{:t-1}$. Using the linearity of the system as well as the assumed conditional independence, this is achieved by applying the system dynamics to the current conditional expectation and covariance matrices. After $Y_{t}$ has been observed, we can update the conditional distribution of the states by appealing to \Cref{lem:gaussian_conditional}.
 \begin{algorithm}
     \caption{Kalman smoother}
-    \KwIn{observations $y = (y_{0}, \dots, y_{n})$, \gls{glssm}}
-    \KwOut{filtered expectations $\hat X_{t|t}$ and covariance matrices $\Xi_{t|t}$}
-    \emph{Initialization}\;
-    $\hat y_{0|-1} = B_{0}\hat x_{0|-1} + v_{t}$\;
-    $\Psi_{0|-1} = B_{0} \Sigma_{0}B_{0}^{T} + \Omega_{0}$\;
-    \emph{Prediction}\;
-    \emph{Filter}\;
+    \label{alg:kalman_smoother}
+    \begin{algorithmic}
+        \Require todo
+    \end{algorithmic}
 \end{algorithm}
+
+%\begin{algorithm}
+%    \caption{Kalman filter}
+%    \KwIn{observations $y = (y_{0}, \dots, y_{n})$, \gls{glssm}}
+%    \KwOut{filtered expectations $\hat X_{t|t}$, covariance matrices $\Xi_{t|t}$, log likelihood $\log p(y)$}
+%    \emph{Initialization}\;
+%    $\hat y_{0|-1} = B_{0}\hat X_{0|-1} + v_{t}$\;
+%    $\Psi_{0|-1} = B_{0} \Sigma_{0}B_{0}^{T} + \Omega_{0}$\;
+%    \emph{Prediction}\;
+%    \emph{Filter}\;
+%\end{algorithm}
+
+%\begin{algorithm}
+%    \caption{Kalman smoother}
+%    \KwIn{observations $y = (y_{0}, \dots, y_{n})$, \gls{glssm}}
+%    \KwOut{filtered expectations $\hat X_{t|t}$ and covariance matrices $\Xi_{t|t}$}
+%    \emph{Initialization}\;
+%    $\hat y_{0|-1} = B_{0}\hat x_{0|-1} + v_{t}$\;
+%    $\Psi_{0|-1} = B_{0} \Sigma_{0}B_{0}^{T} + \Omega_{0}$\;
+%    \emph{Prediction}\;
+%    \emph{Filter}\;
+%\end{algorithm}
 
 Notice that the Kalman filter calculates the likelihood $p(y)$ while filtering --- this is possible because of the dependency structure of the state space model --- this makes inference via maximum likelihood possible in \gls{glssm}s.
 
@@ -187,9 +251,9 @@ The Kalman smoother computes the marginal distributions $X_{t} | Y$ for $t = 0, 
 
 \begin{algorithm}
     \caption{Forwards filter, backwards smoother \cite[Proposition 1]{Fruhwirth-Schnatter1994Data}}
-    \KwIn{TODO}
-    \KwOut{TODO}
-    \emph{Something}\;
+    \begin{algorithmic}
+        \Require TODO
+    \end{algorithmic}
 \end{algorithm}
 
 The modeling capacity of \gls{glssm} is, however, limited: most interesting phenomena follow neither linear dynamics nor are well modeled by a Gaussian distribution.
@@ -246,7 +310,7 @@ We now generalize \cref{def:glssm} to allow for non-gaussian observations by rep
 \begin{definition}[\gls{lcssm}]
     A \textbf{\gls{lcssm}} is a state space model where states obey the transition equation 
     $$
-    X_{t + 1} = A_{t}X_{t} + u_{t}\varepsilon_{t + 1}
+    X_{t + 1} = A_{t}X_{t} + u_{t} + \varepsilon_{t + 1}
     $$
     and the conditional distribution of $Y_{t}$ given $X_{t}$ comes from an exponential family with respect to a base measure $\mu_{t}$, i.e.
     $$
