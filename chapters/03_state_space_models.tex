@@ -907,75 +907,126 @@ For the types of models considered in this thesis, importance sampling is used t
 The multivariate Gaussian distribution is a good candidate in this setting, as simulating from it is straightforward and its density can be evaluated analytically. However, naively performing the optimal importance sampling methods from the previous section for all multivariate Gaussians is computationally inefficient as the family of distributions has $\mathcal O((n\cdot m)^{2})$ many parameters. We can, however, exploit the available structure of the \gls{ssm} to find parametrizations with fewer parameters. 
 
 % first: Gaussian SSMs
-The first approach \todo{cite} is motivated by the fact that in Gaussian state space models the posterior distribution is again Gaussian, and straightforward to simulate from by, e.g., the FFBS \todo{cite} algorithm. Additionally both the target posterior and the Gaussian proposal are Markov processes. Thus parameterizing the proposals $\G$ by Gaussian state space models may be a fruitful approach.
-For the models we consider in this thesis, the distribution of states is already Gaussian and the observations are conditionally independent given the states. Thus a natural Gaussian state space model to use as a proposal consists of keeping the prior distribution of states, and replacing the distribution of observations with conditionally independent Gaussian distributions and the observations by synthetic ones. By the assumed conditional independence, this model only needs $2 p\cdot n$ many parameters.
+The first approach \todo{cite} is motivated by the fact that the target posterior is again a Markov process, as are posteriors in \glspl{glssm}. Additionally, the posterior distribution in \gls{glssm}s is again Gaussian, and straightforward to simulate from by, e.g., the FFBS \todo{cite} algorithm. Thus parameterizing the proposals $\G$ by the posterior of a suitably chosen \gls{glssm} may be a fruitful approach.
+For the models we consider in this thesis, the distribution of states is already Gaussian and the observations are conditionally independent given the states. Thus a natural \gls{glssm} to use as a proposal consists of keeping the prior distribution of states and replacing the distribution of observations with conditionally independent Gaussian distributions and the actual observations by synthetic ones. By the assumed conditional independence, this model only needs $2 p\cdot (n + 1)$ many parameters, $p\cdot (n + 1)$ for the synthetic observations and $p\cdot (n + 1)$ for their variances. We term this approach the \textbf{\gls{glssm}-approach} to importance sampling.
 
-In total, this approach considers parametric proposals $\G_{\psi}$ of the form
+In total, the \gls{glssm}-approach considers parametric proposals $\G_{\psi}$ of the form
 \begin{align}
+    \begin{split}
     \label{eq:glssm-proposal}
     \G_{\psi} &= \mathcal L(X | Z = z),\\
-    Z_{t} &= B_{t} X_{t} + \eta_{t},\nonumber\\
-    \eta_{t} &\sim \mathcal N \left( 0, \Omega_{t} \right),\nonumber\\
-    \Omega_{t} &= \diag \left( \omega^{2}_{t} \right) = \diag \left( \omega^{2}_{t,1}, \dots, \omega^{2}_{1,p} \right).\nonumber
+    Z_{t} &= B_{t} X_{t} + \eta_{t},\\
+    \eta_{t} &\sim \mathcal N \left( 0, \Omega_{t} \right),\\
+    \Omega_{t} &= \diag \left( \omega^{2}_{t} \right) = \diag \left( \omega^{2}_{t,1}, \dots, \omega^{2}_{1,p} \right).
+    \end{split}
 \end{align}
-where the distribution of $X$ is given by \eqref{eq:glssm_states}, $\psi = \left( z, \omega \right)$ for $z = \left( z_{0}, \dots, z_{n} \right) \in \R^{n \times m}$ and $\omega^{2} = \left( \omega^{2}_{0}, \dots, \omega^{2}_{n} \right) \in \R^{n \times m}$. Alternatively the parametrization $\psi = \left( z \oslash \omega^{2}, - 1 \oslash \left( 2 \omega^{2} \right) \right)$ may also be used, where $\oslash$ is the Hadamard division. Simulation from $\G_{\psi}$ is then efficiently implemented by the FFBS algorithm, as $\G_{\psi}$ is the smoothing distribution of a \gls{glssm}. 
+where the distribution of $X$ is given by \eqref{eq:glssm_states}, $\psi = \left( z, \omega^{2} \right)$ for $z = \left( z_{0}, \dots, z_{n} \right) \in \R^{n \times m}$ and $\omega^{2} = \left( \omega^{2}_{0}, \dots, \omega^{2}_{n} \right) \in \R^{n \times m}$. Alternatively the natural parametrization $\psi = \left( z \oslash \omega^{2}, - 1 \oslash \left( 2 \omega^{2} \right) \right)$ may also be used, where $\oslash$ is the Hadamard, i.e. entry-wise, division. Simulation from $\G_{\psi}$ may be efficiently implemented by the FFBS algorithm, as $\G_{\psi}$ is the smoothing distribution of a \gls{glssm}. 
+
+% weights
+In this setting, the importance sampling weights are given by 
+$$
+w(x) = \frac{p(x|y)}{g(x|z)} = \frac{p(y|x)p(x)}{g(z|x)p(x)} \frac{g(z)}{p(y)} \propto \prod_{t = 0}^n \frac{p(y_{t}|x_{t})}{g(z_{t})|x_{t}},
+$$
+% Signals
+so they can be computed efficiently. Additionally, as \todo{add signal restriction above} $p(y_{t}|x_{t})$ and $g(z_{t}|x_{t})$ depend on $x_{t}$ only through the signal $s_{t} = B_{t}x_{t}$, we have 
+$$
+w(x) \propto \frac{p(y_{t}|s_{t})}{g(z_{t})|s_{t}},
+$$
+which implies that auto-normalized weights may be calculated by using the signal smoother \cite[Theorem 2]{Jungbacker2007Monte}.
+\todo{introduce LCSSM with linear signals above}
+As \citeauthor{Durbin2012Time} \cite[Section 4.5.3]{Durbin2012Time} argue, it is often computationally more efficient to treat only on the signals $\left(S_{t}\right)_{t=0,\dots,n}$ instead of the states $ \left( X_{t}  \right)_{t = 0, \dots, n}$, the idea being that the dimension of $S_{t}$, $p$, is usually much smaller than that of $X_{t}$, $m$. 
+
+% sample from states still possbile if doingo nly signals, weights don't change
+As the joint distribution of $(X, S)$ is a Gaussian distribution, by \Cref{lem:gaussian_conditional} $X|S = s$ is again Gaussian \todo{add degernate case to gaussian conditional lemma}, with known conditional mean and covariance matrix and density $p(x|s) = g(x|s)$. If $(\tilde X_{t})_{t=0,\dots,n}$ is a draw from this conditional distribution a quick calculation reveals that a.s. $B_{t} \tilde X_{t} = S_{t}$, and so, as expected, the weights $w(\tilde X)$ are a.s. constant and given by (up to the integration constant) $\prod_{t = 0}^{n}\frac{p(y_{t}|s_{t})}{g(y_{t}|s_{t})}$. Producing a draw from this conditional distribution can be achieved by the FFBS algorithm \Cref{alg:ffbs}, as $(X, S)$ form a \gls{glssm} with degenerate observation covariance matrices $\Omega_{t} = 0$.
+
+By the assumed conditional independence of observations given signals, we have
+$$
+p(x, s|y) \propto p(x|s) p(s|y),
+$$
+and so if one is interested in the states, rather than the signals, importance sampling with the proposal \Cref{eq:glssm-proposal} can be achieved in a two-step procedure: first sample from $g(s|z)$, then run the FFBS algorithm to sample from $g(x|s) = p(x|s)$ using the same weights for MC-integration. 
+
+% degenerate distribution, exponential family of proposals for signals
+
+
+An attractive property of the \gls{glssm}-approach is that the proposals it generates form an exponential family.
+
+\begin{proposition}[Exponential family of proposals]
+    \label{prop:exponential_family_posterior}
+    Suppose $\omega^{2} > 0$.
+    In this case the family of conditional distributions \Cref{eq:glssm-proposal} form an exponential family
+
+    \begin{align*}
+        g(x|z) & = h(x) \exp \left( \left\langle \psi, T(x) \right\rangle - \log Z (\psi)\right)
+    \end{align*}
+    where
+    \begin{align*}
+      \psi &= \left( \psi_{1}, \psi_{2} \right) = \left( \bar\Sigma^{-1} \bar\mu, -\frac{1}{2} \Omega^{-1}\right) \\
+      \intertext{and }
+      h(x) &= \frac{1}{\sqrt{(2\pi)^{m} \det \Sigma}}\exp \left( - \frac{1}{2} x^{T} \Sigma^{-1}x \right) \\
+      \log Z (\psi) &= \frac{1}{2} \left( \log \det \left( I - \Sigma \,\diag \left( 2 \psi_{2} \right)  \right)  + \bar\mu^{T}\bar\Sigma^{-1}\bar\mu \right) \\
+      &= \frac{1}{2} \log \det \left(I - \Sigma \, \diag\left(2\psi_{2}\right)\right) + \frac{1}{2} \psi_{1}^{T} \left( \Sigma^{-1} - \diag (2\psi_{2}) \right)  \psi_{1}\\
+      T(x) &= \left( x, x x ^T \right).
+    \end{align*}
+
+    Note that $\psi_{1} = \Sigma ^{-1} \mu + B^{T}\Omega^{-1}z \in \Sigma^{-1}\mu + \operatorname{im} B^{T} \subseteq \R^{m}$ making the exponential family curved if $\operatorname{rank} B < m$.
+
+    If $B$ has full rank $m$, the Fisher information in this model is given by
+    $$
+    I \left( \psi_{1}, \psi_{2} \right) = \begin{pmatrix}
+        \Sigma^{-1} + \Omega^{-1} & - 2 \diag(\psi_{1}) \\
+        -2 \diag(\psi_{1}) & -2 \left( \Sigma^{-1} + \Omega^{-1} \right)^{-1} \otimes \left( \Sigma^{-1} + \Omega^{-1} \right)^{-1}
+    \end{pmatrix}
+    $$
+    where $\otimes$ is the Hadamard product.
+\end{proposition}
+\begin{proof}
+    \todo{proof it}
+\end{proof}
+\todo{initroduce signals, importance sampling only w.r.t. signals. What if signal covariance matrix is degenerated?}
+\todo{probably cite something about curved exponential families, e.g. Brown1986Fundamentals}
+
+The \gls{glssm}-approach is the standard approach for finding the \gls{la} in \gls{lcssm} \cite{Durbin1997Monte,Durbin2012Time,Jungbacker2007Monte} and also leads to efficient implementation for \gls{eis} \cite{Koopman2019Modified}. However, as will become apparent in the later part of this section, this approach is infeasible for the \gls{cem} if $n$ is large. 
 
 % second: Gaussian Markov process 
 % discuss more flexible vs. fewer parameters
-An alternative family of Gaussian proposals, one that to the author's knowledge has not yet been discussed in the literature, is given by directly modeling a Gaussian Markov process on the states $X_{:n}$. Again, this is sensible given the Markov structure of the target and is more flexible than using the posterior of a \gls{glssm} with fixed prior as the proposal. This flexibility, however, comes at the cost of requiring a larger number of parameters. Here we propose with $\G_{\psi}$ where
+An alternative family of Gaussian proposals, is given by directly modeling a Gaussian Markov process on the states $X_{:n}$. Again, this is sensible given the Markov structure of the target. This parametrization is more flexible than using the posterior of a \gls{glssm} with fixed prior as the proposal. This flexibility, however, comes at the cost of requiring a larger number of parameters. Here we propose with $\G_{\psi}$ where
 \begin{align}
+    \begin{split}
     \label{eq:markov-proposal}
     \G_{\psi} &= \mathcal L (U) \\
-    U_{0} &\sim \mathcal N(v_{0}, \Xi_{0})\nonumber\\
-    U_{t} &= C_{t}U_{t - 1} + v_{t} + \nu_{t} \nonumber\\
-    v_{t} \in \R^{m}\nonumber, &C_{t} \in \R^{m\times m}\\
-    \nu_{t} &\sim \mathcal N(0,\Xi_{t}) \nonumber
+    U_{0} &\sim \mathcal N(v_{0}, \Xi_{0})\\
+    U_{t} &= C_{t}U_{t - 1} + v_{t} + \nu_{t} \\
+    v_{t} \in \R^{m}, &C_{t} \in \R^{m\times m}\\
+    \nu_{t} &\sim \mathcal N(0,\Xi_{t}) \\
+    &\Xi_{t}\in\R^{m \times m} \text{ positive definite}
+    \end{split}
 \end{align}
 for $t = 1, \dots, n$, with $U_{0}$ and $\nu_{1}, \dots, \nu_{n}$ independent. The number of parameters is $(n + 1)\cdot m$ for the means $v_{0}, \dots, v_{n + 1}$, $n \cdot m^{2}$ for the transition matrices $C_{t}$ and $(n + 1) \frac{m (m - 1)}{2}$ for the covariance matrices of innvoations, totalling $\mathcal O(n\cdot m^{2})$ many parameters. 
-While this may be considerably more parameters for large state dimension $m$, we will see that finding the optimal parameters for the \gls{cem} can be done analytically \todo{cite relevant section}. Simulation from $\G_{\psi}$ is achieved by a simple recursion. 
+While these are considerably more parameters for large state dimension $m$, we will see that finding the optimal parameters for the \gls{cem} can be done analytically \todo{cite relevant section}. Simulation from $\G_{\psi}$ is achieved by a simple recursion. 
+This approach, which we term the \textbf{Markov-approach}, was originally proposed by \citeauthor{Richard2007Efficient} in \cite{Richard2007Efficient} for general unnormalized transition kernels as \gls{eis} proposals.
 
 % discuss if there actually is a Gaussian close to the target, see heavy tails etc.
-Using Gaussian proposals, while computationally efficient, also comes with some drawbacks. The whole procedure hinges on the assumption that there is a Gaussian that is, close to the target distribution. In the setting of \glspl{ssm} this is not guaranteed, as the targets may contain multiple modes or heavy tails, features that may, in the worst case, lead to inconsistent importance sampling estimates. At least for the models considered in \Cref{cha:analysis_of_selected_models}, the targets arise as posterior distributions of \gls{lcssm} and as such they are unimodal and have non-heavy tails, i.e. there is a Gaussian distribution such that importance sampling is feasible \todo{rethink, is this really the case}. 
-Additionally, even if there is a Gaussian distribution that facilitates consistent importance sampling, finding it in practice may be complicated, as the proposals generated by the \gls{la}, \gls{cem} and \gls{eis} have deteriorating performance (in terms of \gls{ess} and convergence) with increasing dimension \todo{ref to chapter, check that I also present that there}.
+Using Gaussian proposals, while computationally efficient, also comes with some drawbacks. The whole procedure hinges on the assumption that there is a Gaussian that is, close to the target distribution. In the setting of \glspl{ssm} this is not guaranteed, as the targets may contain multiple modes or heavy tails, features that may, in the worst case, lead to inconsistent importance sampling estimates. At least for the models considered in \Cref{cha:analysis_of_selected_models}, the targets arise as posterior distributions of \gls{lcssm} and as such they are unimodal and have non-heavy tails, i.e. there is a Gaussian distribution such that importance sampling is feasible \todo{rethink, is this really the case, for LCSSM it depends on log-partition function of observations}. 
+Additionally, even if there is a Gaussian distribution that facilitates consistent importance sampling, finding it in practice may be complicated, as the proposals generated by the \gls{la}, \gls{cem} and \gls{eis} have deteriorating performance for fixed sample size $N$ (in terms of \gls{ess} and convergence) with increasing dimension \todo{ref to chapter, check that I also present that there}.
 
+We now give a concise overview over how to perform the \gls{la} and \gls{eis} for \gls{lcssm}, but refer the reader for more details to the respective literature.
+The \gls{la} \todo{...}
 % SSMs may utilize KF/KS to perform importance sampling
 % LA: cite Koopman paper
-% CE: two variants 
 % EIS: cite papers, MEIS NEIS
 
 
-Most models in this thesis can be viewed as an inverse problem of the form
-
+% CE: two variants 
+%% GLSSM approach fails: 
+For the \gls{cem}, using the \gls{glssm}-approach turns out to be difficult numerically. To see this, let us ignore the Markov-structure for the time being. The \gls{cem} then consists of finding $\psi = (z, \omega^{2})$ such that \Cref{eq:glssm-proposal} maximizes the cross entropy with the target $\P^{X|Y=y}$. Using \Cref{lem:gaussian_conditional}, we see that the conditional distribution of $X$ given $Z=z$, $\G_{\psi}$, is a Gaussian distribution with mean $\tilde \mu = \dots$  \todo{calc} and covariance matrix $ \left( \Sigma ^{-1} + B^{T}\Omega^{-1}B\right)^{-1}$ for $\Omega = \diag \left( \omega^{2} \right)$. Thus 
 \begin{align*}
-    \mathbf{R}^{n\cdot m} \ni X & \sim \mathcal N(\mu, \Sigma) \\
-    Y|X                         & \sim Y|BX \sim p(y|s)
+\max_{z, \omega^{2}} \int p(x|y) \log g_{\psi}(x|z) \mathrm dx &= \max_{\tilde\mu, \omega^{2}} \int p(x|y) \left( - \frac{1}{2} (x - \tilde \mu) \right)
+&= \argmax_{}
 \end{align*}
-and the state space formulation allows for efficient computation of, e.g., $p(y|x)$.
-To perform importance sampling for the smoothing distribution $p(x|y)$ we want to have close tractable approximations, that also depend on few parameters, ideally only $\mathcal O(n)$ many.
+%% Markov works better
 
-\todo{paragraph about laplace approximation for the posterior}
-
-In total we want to perform importance sampling with proposal distributions $g(x|z)$ given by Gaussian linear models of the form
-
-\begin{align*}
-    X    & \sim \mathcal N(\mu, \Sigma) \\
-    Z    & = BX + \eta                  \\
-    \eta & \sim \mathcal N(0, \Omega).
-\end{align*}
-The dependency structure of the state space model implies that $\Omega$ should be a blockdiagonal matrix with at most $n \cdot m^{2}$ many non-zero entries.
-If, additionally, the observations $y_{t}$ are conditionally independent given $x_{t}$, i.e. if $p(y_{t}|s_{t}) = \prod_{i = 1}^{p} p(y_{t}^{i}|s_{t}^i)$, then $\Omega$ is a diagonal matrix with only $\mathcal O(n \cdot m)$ many non-zero entries.
-
-The proposal distribution $g(x|z)$ is then parameterized by the synthetic observations $z$ and the entries of $\Omega$ and we denote this set of parameters by $\psi = (z, \Omega)$.
-The following results on this distribution will be useful when analysing Gaussian importance sampling.
-
-\todo{move to other subsection}
-The Laplace approximation chooses $\psi_{\text{LA}}$ such that the mode of $g(x|z)$ and the curvature at the mode match that of the true posterior, while the CE-method and EIS choose $\psi_{\text{CE}}$ and $\psi_{\text{EIS}}$ the solutions to associated optimization problems.
-
-This means that we can treat all three methods in the same framework, facilitating comparison between the resulting three importance sampling proposals.
-
-
-\subsection{Gaussian smoothing proposals}
-\label{subsec:gaussian_smoothing_proposals}
+\begin{tcolorbox}[title={Decide whether to keep and where to move}]
+    
 In this section, we analyze the properties of Gaussian proposals for importance sampling in \glspl{ssm} that exploit the available Markov property of states. As mentioned in the introduction to this section, these proposals are conditional distributions $\P^{X|Z=z}$ where $ \mathbf{R}^{m} \ni X \sim \mathcal N \left( \mu, \Sigma \right)$ and $Z = BX + \eta \in \mathbf{R}^{p}$ where $\eta\sim\mathcal N(0, \Omega)$ is independent of $X$. Standard results from linear regression theory imply that the conditional distribution in question is again a Gaussian distribution, $X|Z=z \sim \mathcal N(\bar \mu, \bar \Sigma)$ with mean
 \begin{align}
     \bar \mu    & = \mu + \Sigma B^{T} \left( B \Sigma B^{T} + \Omega \right)^{-1} (z - B \mu), \label{eq:posterior_mean_1} \\
@@ -986,37 +1037,10 @@ In this section, we analyze the properties of Gaussian proposals for importance 
 \end{align}
 Note that \Cref{eq:posterior_mean_1,eq:posterior_cov_1} are more general, requiring only $B \Sigma B + \Omega$ be invertible, while the others require both $\Sigma$ and $\Omega$ to be invertible, see \cite[Lemma 7.1]{Chopin2020Introduction} for further discussion.
 
-\begin{proposition}[Exponential family of smoothing distribution]
-    \label{prop:exponential_family_posterior}
-    Suppose $\Omega$ is invertible.
-    In this case the family of conditional distributions $X|Z=z$ parameterized by $z$ and $\Omega$ form an exponential family
+\end{tcolorbox}
 
-    \begin{align*}
-        p(x|z) & = h(x) \exp \left( \left\langle \eta, T(x) \right\rangle - A(\eta)\right)
-    \end{align*}
-    where the parameters are 
-    \begin{align*}
-      \eta &= \left( \eta_{1}, \eta_{2} \right) = \left( \bar\Sigma^{-1} \bar\mu, -\frac{1}{2} \Omega^{-1}\right) \\
-      \intertext{and }
-      h(x) &= \frac{1}{\sqrt{(2\pi)^{m} \det \Sigma}}\exp \left( - \frac{1}{2} x^{T} \Sigma^{-1}x \right) \\
-      A(\eta) &= \frac{1}{2} \left( \log \det \left( I - \Sigma \,\diag \left( 2 \eta_{2} \right)  \right)  + \bar\mu^{T}\bar\Sigma^{-1}\bar\mu \right) \\
-      &= \frac{1}{2} \log \det \left(I - \Sigma \, \diag\left(2\eta_{2}\right)\right) + \frac{1}{2} \eta_{1}^{T} \left( \Sigma^{-1} - \diag (2\eta_{2}) \right)  \eta_{1}\\
-      T(x) &= \left( x, x x ^T \right).
-    \end{align*}
-
-    Note that $\eta_{1} = \Sigma ^{-1} \mu + B^{T}\Omega^{-1}z \in \Sigma^{-1}\mu + \operatorname{im} B^{T} \subseteq \R^{m}$ making the exponential family curved if $\operatorname{rank} B < m$.
-
-    If $B$ has full rank $m$, the Fisher information in this model is given by
-    $$
-    I \left( \eta_{1}, \eta_{2} \right) = \begin{pmatrix}
-        \Sigma^{-1} + \Omega^{-1} & - 2 \diag(\eta_{1}) \\
-        -2 \diag(\eta_{1}) & -2 \left( \Sigma^{-1} + \Omega^{-1} \right)^{-1} \circ \left( \Sigma^{-1} + \Omega^{-1} \right)^{-1}
-    \end{pmatrix}
-    $$
-    where $\circ$ is the Hadamard product.
-\end{proposition}
-\todo{probably cite something about curved exponential families, e.g. Brown1986Fundamentals}
-
+\begin{tcolorbox}[title={decide what to do}]
+    
 \subsection{Analysis of optimal parameters}
 \label{subsec:analysis_of_optimal_parameters}
 
@@ -1059,6 +1083,7 @@ Analyzing the multi-step behavior of these iterative estimates is more complex, 
 \end{proof}
 
 \todo{interpret this in a sensible way, probably EIS more numerically stable}
+\end{tcolorbox}
 
 \section{Accouting for multimodality and heavy tails}
 \label{sec:accouting_for_multimodality_and_heavy_tails}
