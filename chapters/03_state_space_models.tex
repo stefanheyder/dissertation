@@ -17,6 +17,15 @@
 
 \chapter{Importance Sampling in State space models}
 \label{cha:state_space_models}
+\begin{tcolorbox}[title={Contributions of this chapter}]
+    \begin{itemize}
+        \item asymptotics for CE/EIS
+        \item CE method for SSMs
+        \item comparison of CE and EIS, theoretically
+        \item simulation studies for the comparison
+    \end{itemize}
+\end{tcolorbox}
+\newpage
 
 State space models are a versatile class of statistical models which allow to model non-stationary time series data and come along with straight-forward interpretation.
 The main idea of these models is to introduce unobserved \textbf{latent states} whose joint distribution is given by a Markov process and model the observed time series conditional on theses states.
@@ -90,13 +99,13 @@ Given data $(y_t)_{t = 0, \dots, n - 1}$ that may be modeled with a \gls{ssm} th
     \item\label{it:smoothing_problem} Infer about the latent states $X$ from the observations $Y$ by determining, either analytically or through simulation, the smoothing distribution $X|Y$.
 \end{enumerate}
 
-The first step, \cref{it:model_choice}, requires that the practitioner specifies a joint probability distribution for the states and observations (\Cref{sec:modelling_epidemiological_dessiderata_with_state_space_models}).
+The first step, \Cref{it:model_choice}, requires that the practitioner specifies a joint probability distribution for the states and observations (\Cref{sec:modelling_epidemiological_dessiderata_with_state_space_models}).
 Due to the assumed dependency structure this boils down to specifying transition kernels for the states and observations.
 The setting \Cref{def:ssm} is too abstract to perform inference in, so further assumptions on the types of distributions for the latent states and observations are needed.
 In this chapter we will discuss \gls{glssm}  (\Cref{sec:linear_gaussian_state_space_models}), where both the posterior distribution and the likelihood are analytically available. For the epidemiological application we have in mind these are however insufficient due to the non-linear behaviour of incidences and the low count per region (\Cref{sec:dessiderata}).
 Such observations are better modeled with distributions on the natural numbers, i.e. with a Poisson or negative binomial distribution, leading to the class of logconcave Gaussian state space models (\Cref{sec:logconcave_gaussian_state_space_models}).
 
-Regarding the second step, \cref{it:model_fitting}, a frequentist practitioner will want to perform maximum likelihood inference on $\theta$.
+Regarding the second step, \Cref{it:model_fitting}, a frequentist practitioner will want to perform maximum likelihood inference on $\theta$.
 While asymptotic confidence intervals for $\theta$ can be derived both theoretically and practically \cite[Chapter 7]{Durbin2012Time}, they are, in the context of this thesis, usually of little interest.
 We choose to view this fitting as an Empirical Bayes procedure and our main practial interest lies in analyzing the posterior distribution $X|Y$.
 
@@ -132,7 +141,7 @@ This will be a good strategy if the target posterior $p(x|y)$ can be well approx
         \label{eq:glssm_observations}
         Y_{t} & = B_{t}X_{t} + v_{t} + \eta_{t} &  & t = 0, \dots, n.
     \end{align}
-    Here $A_{t} \in \mathbf{R}^{m \times m}$ and $B_{t} \in \mathbf{R}^{p \times m}$ are matrices that specify the systems dynamics. The \textbf{innovations} $\varepsilon_{t + 1}$ and \textbf{measurement noise} $\eta_{t}$ are independent from one another and from the starting value $X_{0} \sim \mathcal N (\E X_{0}, \Sigma_{0})$. Furthermore, $\varepsilon_{t+1} \sim \mathcal N(0, \Sigma_{t})$ and $\eta_{t}\sim \mathcal N(0, \Omega)$ are centered Gaussian random variables and $u_{t} \in \R^{m}, t = 0, \dots, n - 1$, $v_{t} \in \R^{p}, t = 0, \dots, n$ are deterministic biases.
+    Here $A_{t} \in \mathbf{R}^{m \times m}$ and $B_{t} \in \mathbf{R}^{p \times m}$ are matrices that specify the systems dynamics. The \textbf{innovations} $\varepsilon_{t + 1}$ and \textbf{measurement noise} $\eta_{t}$ are independent from one another and from the starting value $X_{0} \sim \mathcal N (\E X_{0}, \Sigma_{0})$. Furthermore, $\varepsilon_{t+1} \sim \mathcal N(0, \Sigma_{t})$ and $\eta_{t}\sim \mathcal N(0, \Omega_{t})$ are centered Gaussian random variables and $u_{t} \in \R^{m}, t = 0, \dots, n - 1$, $v_{t} \in \R^{p}, t = 0, \dots, n$ are deterministic biases.
 \end{definition}
 
 The defining feature of a \gls{glssm} is that the joint distribution of $(X,Y)$ is Gaussian, as $(X,Y)$ may be written as an affine combination of the jointly Gaussian $(X_{0}, \varepsilon_{1}, \dots, \varepsilon_{n}, \eta_{0}, \dots, \eta_{n})$. 
@@ -279,7 +288,7 @@ We start to move away from linear Gaussian models by allowing observations that 
 
 The distribution of observations is never Gaussian - all statisticians may hope for is that the data-generating mechanism is close enough to a Gaussian distribution that inferences made carry over.
 For epidemiological models, Gaussian distributions are appropriate if incidences are high, e.g. during large outbreaks in a whole country. 
-When case numbers are small, the discrete nature of incidences is better captured by a distribution on $\mathbf N_{0}$, and standard distributions used are the Poisson and negative binomial distributions, see \todo{auto/cref?}.
+When case numbers are small, the discrete nature of incidences is better captured by a distribution on $\mathbf N_{0}$, and standard distributions used are the Poisson and negative binomial distributions, see \todo{auto/Cref?}.
 Both the Poisson and negative binomial belong to the class of exponential family distributions. As such, their densities have a simple structure, allowing only for a linear interaction between the natural parameter and the densities argument. We refer to \cite{Brown1986Fundamentals} for a comprehensive treatment of exponential families and use their definitions throughout this chapter.
 
 \begin{definition}[exponential family]
@@ -311,10 +320,10 @@ Exponential families have the attractive property that they are log-concave in t
     As $\log p_{\theta}(y) = - \log Z(\theta) + \theta^{T} y$ it suffices to show that $\log Z(\theta)$ is convex. However, $\log Z(\theta)$ is the cumulant generating function of the base measure $\mu$ which is known to be convex \todo{more reasoning? differentiate under integral, check if dominated convergence applies, or look for a ref}.
 \end{proof}
 
-We now generalize \cref{def:glssm} to allow for non-gaussian observations by replacing the observation equation \cref{eq:glssm_observations} by more general exponential families.
+We now generalize \Cref{def:glssm} to allow for non-gaussian observations by replacing the observation equation \Cref{eq:glssm_observations} by more general exponential families.
 
-\begin{definition}[\gls{lcssm}]
-    A \textbf{\gls{lcssm}} is a state space model where states obey the transition equation 
+\begin{definition}[\acrfull{lcssm}]
+    A \textbf{\acrfull{lcssm}} is a \gls{ssm} where states obey the transition equation 
     $$
     X_{t + 1} = A_{t}X_{t} + u_{t} + \varepsilon_{t + 1}
     $$
@@ -324,16 +333,20 @@ We now generalize \cref{def:glssm} to allow for non-gaussian observations by rep
     $$
     for suitable functions $h_{t}, Z_{t}, \eta_{t}, T_{t}$. 
 
+    If, additionally, matrices $B_{t} \in \R^{p \times m}$ exist, such that for the signal $s_{t} = B_{t}x_{t} \in \R^{p}$ it holds
+    $$
+    p(y_{t}|x_{t}) = \prod_{i =1}^p h^{i}_{t}(y^{i}_{t}) Z^{i}_{t} (s_{t}) \exp \left( \eta^{i}_{t} (s^{i}_{t}) T(y^{i}_{t}) \right),
+    $$
+    for functions $h_{t}^{i}: \R \to \R, Z^{i}_{t}: \R \to \R, \eta^{i}_{t}: \R\to\R, T: \R\to\R$, $i = 1, \dots p$, we say the \gls{lcssm} has a \textbf{linear signal}.
+
     \todo{LCSSM only logconcave observations would suffice, then EF is just an instance of this}
 \end{definition}
 
 \begin{remark}
-    To simplify notation we will drop in our notation the dependence of $h$, $Z$, and $T$ on $t$ and assume that the base measure $\mu_t$ is the same for all relevant $t$.
+    To simplify notation we will usually assume that the functions $h, Z$ and $T$ are the same for all $t$ (and $i$, if the \gls{lcssm} has a linear signal) and drop in our notation the dependence of $h$, $Z$, and $T$ on $t$ (and $i$). Similarly we assume that the base measure $\mu_t$ is the same for all relevant $t$.
 \end{remark}
 
-
-
-As in the previous chapter, after having observed $Y$, one is interested in the conditional distribution of states $X$, given $Y$. If the observations are not Gaussian, this is a difficult task as the distribution is not analytically tractable. Instead approximations, e.g. the \gls{la} (see \cref{cha:laplace_approximation}, or simulation based inference, e.g. importance sampling or MCMC-methods, are used. Similarly, fitting hyperparameters $\theta$ by maximum likelihood inference becomes more difficult as evaluating $\ell(\theta) = p(y) = \int p(x,y) \d x$ is not analyically avaiable, thus requiring numerical or simulation methods for evaluation and  gradient descent or EM-techniques for optimization (\todo{really EM?}.
+As in the previous chapter, after having observed $Y$, one is interested in the conditional distribution of states $X$, given $Y$. If the observations are not Gaussian, this is a difficult task as the distribution is not analytically tractable. Instead approximations, e.g. the \gls{la} (see \Cref{cha:laplace_approximation}), or simulation based inference, e.g. importance sampling or MCMC-methods, are used. Similarly, fitting hyperparameters $\theta$ by maximum likelihood inference becomes more difficult as evaluating $\ell(\theta) = p(y) = \int p(x,y) \d x$ is not analyically avaiable, thus requiring numerical or simulation methods for evaluation and  gradient descent or EM-techniques for optimization (\todo{really EM?}.
 
 In this thesis we will use importance sampling methods, which are the focus of the next section. 
 
@@ -435,10 +448,10 @@ Q_{N} = \max_{1\leq i\leq N} W_{i}.
 $$
 This judges whether importance sampling has collapsed to just a few particles and is itself amenable to Monte-Carlo integration.
 
-In the following sections, we will predominantly take the position that we are interested in the particle approximation $\hat\P_{N}$ of the form \cref{eq:is-particle-approximation} over finding the optimal proposal $\G^{\ast}$ \cref{prop:minimum_MSE_IS} and assume that the importance sampling weights can only be evaluated up to a constant. 
+In the following sections, we will predominantly take the position that we are interested in the particle approximation $\hat\P_{N}$ of the form \Cref{eq:is-particle-approximation} over finding the optimal proposal $\G^{\ast}$ \Cref{prop:minimum_MSE_IS} and assume that the importance sampling weights can only be evaluated up to a constant. 
 This has several reasons: First of all, most problems considered in this thesis exist in a Bayesian context where $\P$ is usually a posterior distribution, i.e. $\P = \P^{X|Y=y}$ for some random variables $X$ and $Y$. Should the appropriate densities exist, evaluating the weights amounts to calculating 
 $$
-\rnd{\P^{X| Y= y}}{g(x)} = \frac{p(x|y)}{g(x)} = \frac{p(y|x)p(x)}{g(x)p(y)} \propto \frac{p(y|x)p(x)}{g(x)}.
+\rnd{\P^{X| Y= y}}{\G}(x) = \frac{p(x|y)}{g(x)} = \frac{p(y|x)p(x)}{g(x)p(y)} \propto \frac{p(y|x)p(x)}{g(x)}.
 $$
 In these situations $p(y) = \int p(x,y)\mathrm d \mu(x)$ is usually intractable. For $\G^{\ast}$ we are in the same situation, where the evaluation of the integration constant $\P \lvert f \rvert$ is infeasible, but the density $f(x)p(x)$ is available.
 % do not focus on a single f
@@ -499,13 +512,8 @@ The main advantage of the \gls{la} is that fast to obtain and, for sufficiently 
 For the \glspl{ssm} we consider in this thesis, the numerical methods can be implemented using the Kalman filter and smoother \cite{Shephard1997Likelihood,Durbin1997Monte}, even in the degenerate case where $H$ is indefinite \cite{Jungbacker2007Monte}.
 \todo{incorporate some of the citations from How good is your LA}
 
-However, as the \gls{la} is a local approximation, it may be an inappropriate description of the global behavior of the target, see \cref{ex:la_failure} for a breakdown of \gls{la}. 
+However, as the \gls{la} is a local approximation, it may be an inappropriate description of the global behavior of the target, see \Cref{ex:la_failure} for a breakdown of \gls{la} and the simulation studies presented in \Cref{sec:simulation_studies}. 
 Additionally, even if \gls{la} works in principle, its \gls{ess} will usually degenerate quickly once the dimension increases whereas the \gls{cem} and \gls{eis} do so at a slower pace.
-
-\begin{itemize}
-    \item approximate at mode, problematic if posterior is not unimodal (but then gaussian approximation probably not worth it)
-    \item can be solved by KF, even if non log-concave (\todo{think about whether to generalize to non LC, problem might be that sqrt filter does not work})
-\end{itemize}
 
 \subsection{\texorpdfstring{\Acrfull{cem}}{Cross-entropy method}}
 To provide a global approximation to the target, the \gls{cem}\cite{Rubinstein1999CrossEntropy,Rubinstein2004CrossEntropy} selects from a family $ \left( \G_{\psi} \right)_{\psi \in \Psi}$ of proposals the one that minimizes the \gls{kld} to the target. Thus, the \gls{cem} finds $\psi_{\text{CE}}$ which solves the following optimization problem
@@ -514,18 +522,19 @@ To provide a global approximation to the target, the \gls{cem}\cite{Rubinstein19
     \psi_{\text{CE}} &= \argmin_{\psi \in \Psi} \Dkl{\P}{\G_{\psi}} \\
     &= \argmin_{\psi \in \Psi} \int \log \frac{\d \P}{\d\G_{\psi}} \d \P.
 \end{align*}
-If $\P$ and $\G_{\psi}$ possess densities $p$ and $g_{\psi}$ w.r.t. some common measure $\mu$, the same for all $\psi$, we may reformulate the optimization problem to maximize the cross-entropy between $p$ and $g_{\psi}$
+If $\P$ and $\G_{\psi}$ possess densities $p$ and $g_{\psi}$ w.r.t. some common measure $\mu$, the same for all $\psi$, we may reformulate the optimization problem to maximize the cross-entropy between $p$ and $g_{\psi}$ instead:
 \begin{align}
     \psi_{\text{CE}} &= \argmin_{\psi \in \Psi} \int  p(x)\log p(x) \d \mu(x) - \int p(x)\log g_{\psi} \d \mu(x) \nonumber\\ 
-    &= \argmax_{\psi \in \Psi} \int p(x) \log g_{\psi}(x) \d \mu(x), \label{eq:ce_argmax}
+    &= \argmax_{\psi \in \Psi} \int p(x) \log g_{\psi}(x) \d \mu(x), \label{eq:ce_argmax}.
 \end{align}
-as the first integral does not depend on $\psi$. The assumption of such a dominating measure is not too restrictive: otherwise the \gls{kld} is infinite and the problem is ill-posed.
+Note that the first integral does not depend on $\psi$. The assumption of such a dominating measure is not restrictive: otherwise the \gls{kld} is infinite. 
 
-As $\P$ is usually intractable, so is $\psi_{\text{CE}}$. However, the integral \cref{eq:ce_argmax} is amenable to importance sampling: Given a proposal $\G$, we may estimate it by
-\begin{align}
-\hat\psi_{\text{CE}} &= \argmax_{\psi \in \Psi} \hat \P_{N} \log g_{\psi} = \argmax_{\psi\in\Psi} \sum_{i = 1}^{N}W^{i}\log g_{\psi}(X^{i}) \label{eq:ce-M-estimator}
-\end{align}
-where $X_1, \dots, X_N \iid \G$. 
+%
+%As $\P$ is usually intractable, so is $\psi_{\text{CE}}$. However, the integral \Cref{eq:ce_argmax} is amenable to importance sampling: Given a proposal $\G$, we may estimate it by
+%\begin{align}
+%\hat\psi_{\text{CE}} &= \argmax_{\psi \in \Psi} \hat \P_{N} \log g_{\psi} = \argmax_{\psi\in\Psi} \sum_{i = 1}^{N}W^{i}\log g_{\psi}(X^{i}) \label{eq:ce-M-estimator}
+%\end{align}
+%where $X_1, \dots, X_N \iid \G$. 
 %Thus $\hat \psi_{\text{CE}}$ is an M-estimator and we may analyze its asymptotic behavior by standard methods, see e.g. \cite[Chapter 5]{VanderVaart2000Asymptotic}.
 %
 %\todo{rework this: consistency for non-EF proposals (there use VdV and potentially technical assumptions, then special case of EF with Brown)}
@@ -560,12 +569,12 @@ $$
 $$
 \P T = \nabla_{\psi} \log Z(\pce) = \G_{\pce}T,
 $$
-and so reduces to match the moments of the sufficient statistic of the target and proposal.
+and so reduces the task at hand to match the moments of the sufficient statistic of the target and proposal.
 Given $\P T$, this system of equations can, in many cases, be solved analytically or by gradient descent algorithms.
 
-While $\P T$ is usually not available, it is itself amenable to importance sampling. Given a proposal $\G$ we may estimate $\P T$ by $\hat\G_N T = \sum_{i = 1}^{N} W^{i} T(X^{i})$ for $X^{1}, \dots, X^{N} \iid \G$ and auto-normalized importance sampling weights $W^{i}$ and in turn estimate $\psi_{\text{CE}}$ by $\hat \psi_{\text{CE}}$ solving
+While $\P T$ is usually not available, it is itself amenable to importance sampling. Given a proposal $\G$ we may estimate $\P T$ by $\hat\P_N T = \sum_{i = 1}^{N} W^{i} T(X^{i})$ for $X^{1}, \dots, X^{N} \iid \G$ and auto-normalized importance sampling weights $W^{i}$ and in turn estimate $\psi_{\text{CE}}$ by $\hat \psi_{\text{CE}}$ solving
 $$
-\hat \G_N T = \G_{\hpce} T.
+\hat \P_N T = \G_{\hpce} T.
 $$
 % proof: appeal to vdV, pd ensures that M(\theta) is convex, so global maximum unique and well separated
 Thus $\hat\psi_{\text{CE}}$ is a Z-estimator, i.e. an estimator that arises from solving a random system of equations, and we can analyze its asymptotic behavior using standard results from the theory of Z-estimators. 
@@ -579,7 +588,7 @@ The following theorem of \citep{VanderVaart2000Asymptotic} will be useful in ana
     \lVert f_{\psi_{1}}(x) - f_{\psi_{2}}(x)\rVert \leq \dot f(x) \lVert \psi_{1} - \psi_{2}\rVert \tag{LL}.
     \end{align}
 
-    Assume that $\G \lVert f_{\psi_{0}}\rVert < \infty$ and that the map $\psi \mapsto \G f_{\psi}$ is differentiable at $\psi_{0}$, with nonsingular derivative matrix $B^{-1}$. If $\hat\G_{N} f_{\hat\psi_{N}} = o_{P} \left( N^{-\frac{1}{2}} \right)$, and $\hat\psi_{N} \to \psi_{0}$ in probability, then
+    Assume that $\G \lVert f_{\psi_{0}}\rVert < \infty$ and that the map $\psi \mapsto \G f_{\psi}$ is differentiable at $\psi_{0}$, with nonsingular derivative matrix $B^{-1}$. Let $X_{1}, \dots, X_{N} \iid \G$ and $\hat \G_{N} = \sum_{i = 1}^{N} \delta_{X_{i}}$. If $\hat\psi_{N}$ fulfills $\hat\G_{N} f_{\hat\psi_{N}} = o_{P} \left( N^{-\frac{1}{2}} \right)$, and $\hat\psi_{N} \to \psi_{0}$ in probability, then
     \begin{align}
         \label{eq:clt-vdv}
         \sqrt{N} \left( \hat\psi_{N} - \psi_{0} \right) \Dto \mathcal N(0, BMB^{T}),
@@ -599,7 +608,7 @@ The following theorem of \citep{VanderVaart2000Asymptotic} will be useful in ana
         \item $\dot z (\psi) = \nabla_{\psi}\log Z(\psi) = \G_{\psi} T$ the derivative of the log-normalizing constant $\psi \mapsto \log Z(\psi)$
         \item $\ddot z(\psi) = \partial_{\psi} \dot z(\psi) =\cov_{\G_{\psi}}T$ the Hessian of the log-normalizing constant $\psi \mapsto \log Z(\psi)$
     \end{itemize}
-    The naming of $B$ and $M$ stems from the sandwich estimator \todo{cite white 1982}, where $B$ is the Jacobian of the estimating equations $\P f_{psi} = 0$ and $M$ is the covariance matrix of $f_{\psi}$ under $\P$. 
+    The naming of $B$ and $M$ stems from the sandwich estimator \cite{White1982Maximum}, where $B$ is the Jacobian of the estimating equations $\P f_{\psi} = 0$ and $M$ is the covariance matrix of $f_{\psi}$ under $\P$. 
 \end{notation}
 
 \begin{theorem}[consistency of $\hat \psi_{\text{CE}}$]
@@ -641,7 +650,7 @@ The following theorem of \citep{VanderVaart2000Asymptotic} will be useful in ana
 
 \begin{proof} We check that the conditions of the central limit theorem for Z-estimators (\Cref{thm:clt_z_est_vdv}) are fulfilled. This proof uses the notation established in \Cref{not:notation-clt}. Consider the estimating equations for $\pce$ 
     $$x\mapsto f_\psi(x) = \nabla_{\psi} \left(w(x)\log g_{\psi}(x)\right) = w(x) T(x) - w(x) \dot z (\psi),$$ where $w(x)$ are the unnormalized importance sampling weights. 
-    By \ref{it:exist-unique-psice} $\hat \P_{N} f_{\hpce} = 0$ $\mu$-a.s., so it remains to show that $\hpce \to \pce$  in probability, which is implied by \cref{thm:ce-consistent} \todo{check}.
+    By \ref{it:exist-unique-psice} $\hat \P_{N} f_{\hpce} = 0$ $\mu$-a.s., so it remains to show that $\hpce \to \pce$  in probability, which is implied by \Cref{thm:ce-consistent} \todo{check}.
     
     As $$\left\lVert f_{\psi_1}(x) - f_{\psi_2}(x)\right\rVert = w(x) \left\lVert \dot z (\psi_1) - \dot z(\psi_2)\right\rVert$$ for all $\psi_{1}, \psi_{2}\in \Psi$,  $\G w < \infty $ and \ref{it:zdot-ll} imply the local Lipschitz condition \Cref{eq:clt-vdv-local-lipschitz} in \Cref{thm:clt_z_est_vdv}.
     Furthermore, by \ref{it:w-t-wt-L2} it holds
@@ -657,7 +666,7 @@ The following theorem of \citep{VanderVaart2000Asymptotic} will be useful in ana
     $$
     by definition of $\pce$, so $$\text{Cov}_{\G} \left( w(T - \nabla_{\pce} \log Z (\pce)) \right) = \text{Cov}_{\G}(f_{\pce}) = \G f_{\pce}f_{\pce}^{T}.$$
     As $W = \frac{w}{\G w}$
-    By \cref{eq:clt-vdv} the asymptotic covariance matrix is 
+    By \Cref{eq:clt-vdv} the asymptotic covariance matrix is 
     $$
     V_{\ce} = B_{\ce}M_{\ce}B_{ce}
     $$
@@ -709,7 +718,7 @@ Under the usual regularity conditions allowing to differentiate under the integr
 \end{align}
 which we will use to derive asymptotics for $\hpeis$. 
 
-Similar to the \gls{cem} we restrict our in-depth analysis to natural exponential family proposals where $\log g_{\psi}(x) = \psi^{T}T(x) - \log Z(\psi) + \log h(x)$. In this case \cref{eq:eis-optimal} simplifies to
+Similar to the \gls{cem} we restrict our in-depth analysis to natural exponential family proposals where $\log g_{\psi}(x) = \psi^{T}T(x) - \log Z(\psi) + \log h(x)$. In this case \Cref{eq:eis-optimal} simplifies to
 \begin{align*}
     \P \left(\left( \log p - \psi^{T}T + \log Z(\psi) - \log h - \lambda \right)(T - \G_{\psi} T)\right) &= 0,\\
     \lambda = \P (\log p - \log g_{\psi}) &= \Dkl{\P}{\G_{\psi}}.
@@ -721,6 +730,7 @@ Unfortunately, this formulation does not allow for an analytical solution of $\p
     \min_{\psi \in \Psi, \lambda' \in \R} \P \left(\log p - \log h - \psi^{T}T - \lambda'\right)^{2}.
 \end{align*}
 Thus the optimal $ \left( \peis, \lambda'_{\text{EIS}} \right)$ are given by the best linear prediction of $\log p - \log h$ by the sufficient statistic $T$ under $\P$. Therefore, if $\cov_{\P} T$ is non-singular, 
+\todo{do we need T in lambda?}
 \begin{align}
     \lambda'_{\text{EIS}} &= \P \log p - \log h \nonumber{}\\
     \label{eq:peis-analytical}
@@ -829,7 +839,7 @@ An attractive feature of \gls{eis} is that if the target $\P$ is a member of the
     \end{pmatrix}.
     \end{align*}
     % LL
-    For $\lambda_{1}, \lambda_{2}\in\R$ and $\psi_{1}, \psi_{2}\in\Psi$ the Lipschitz condition \cref{eq:clt-vdv-local-lipschitz} are fulfilled, as 
+    For $\lambda_{1}, \lambda_{2}\in\R$ and $\psi_{1}, \psi_{2}\in\Psi$ the Lipschitz condition \Cref{eq:clt-vdv-local-lipschitz} are fulfilled, as 
     \begin{align*}
     \lVert f_{\lambda_{1}, \psi_{1}} - f_{\lambda_{2}, \psi_{2}} \rVert &= \lvert w(x) \rvert ~\lvert \left( \lambda_{2} - \lambda_{1} + T(x) \left( \psi_{2} - \psi_{1} \right) \right)\rvert ~\left\lVert \begin{pmatrix}
         1 \\ T(x)
@@ -866,7 +876,7 @@ An attractive feature of \gls{eis} is that if the target $\P$ is a member of the
     as $\P T = 0$.
     % \hat G_N f_\hat\psi_N = o_P (N^-1/2)
 
-    As $\hpeis$ solves the estimating equations, we have $\hat\G_{N} f_{\hpeis} = 0 = o_{P} \left( N^{-\frac{1}{2}} \right)$. It remains to show that $\hpeis \to \peis$ in probability. 
+    As $\hpeis$ solves the estimating equations, we have $\hat\P_{N} f_{\hpeis} = 0 = o_{P} \left( N^{-\frac{1}{2}} \right)$. It remains to show that $\hpeis \to \peis$ in probability. 
     \todo{show it}
     % \hp -> \p
     % calculate B
@@ -949,39 +959,65 @@ and so if one is interested in the states, rather than the signals, importance s
 
 
 An attractive property of the \gls{glssm}-approach is that the proposals it generates form an exponential family.
+\todo{define spd}
 
 \begin{proposition}[Exponential family of proposals]
     \label{prop:exponential_family_posterior}
-    Suppose $\omega^{2} > 0$.
-    In this case the family of conditional distributions \Cref{eq:glssm-proposal} form an exponential family
-
+    Suppose $\R^{p} \ni S \sim \mathcal N(\mu, \Sigma)$ with positive definite $\Sigma$ and $Z = S + \eta$ with $\eta \sim \mathcal N(0, \Omega)$ independent of $S$.
+    Then the conditional distributions of $S | Z = z$ forms an exponential family with parameter $\psi = \left(\Omega^{-1}z, \Omega^{-1} \right) \in \Psi = \R^{p} \times \operatorname{SPD}_{p}$  densities
     \begin{align*}
-        g(x|z) & = h(x) \exp \left( \left\langle \psi, T(x) \right\rangle - \log Z (\psi)\right)
+        g(s|z) &= \frac{h(s)}{Z(\psi)} \exp \left( \left\langle \psi, \begin{pmatrix}s\\ss^{T}\end{pmatrix}  \right\rangle _{\R^{p}\times \operatorname{SPD}_{p}} \right),
     \end{align*}
-    where
+    where 
     \begin{align*}
-      \psi &= \left( \psi_{1}, \psi_{2} \right) = \left( \bar\Sigma^{-1} \bar\mu, -\frac{1}{2} \Omega^{-1}\right) \\
-      \intertext{and }
-      h(x) &= \frac{1}{\sqrt{(2\pi)^{m} \det \Sigma}}\exp \left( - \frac{1}{2} x^{T} \Sigma^{-1}x \right) \\
-      \log Z (\psi) &= \frac{1}{2} \left( \log \det \left( I - \Sigma \,\diag \left( 2 \psi_{2} \right)  \right)  + \bar\mu^{T}\bar\Sigma^{-1}\bar\mu \right) \\
-      &= \frac{1}{2} \log \det \left(I - \Sigma \, \diag\left(2\psi_{2}\right)\right) + \frac{1}{2} \psi_{1}^{T} \left( \Sigma^{-1} - \diag (2\psi_{2}) \right)  \psi_{1}\\
-      T(x) &= \left( x, x x ^T \right).
+        h(s) &= g(s) \\
+        \log Z(\psi) &= -\frac{1}{2}\log\det (\Sigma^{-1} - 2\psi_{2}) - \frac{1}{2} \log \det (-2 \psi_{2}) \\
+                    &\phantom{=}-\frac{1}{2} \left( -\frac{1}{2} \psi_{2}^{-1}\psi_{1} - \mu \right)^{T}\left(\Sigma^{-1} - 2 \psi_{2}\right) \left(  -\frac{1}{2} \psi_{2}^{-1}\psi_{1} - \mu \right) +  \psi^{T}_{1}\psi_{2}^{-1}\psi_{1}\\
+        T(s) &= \begin{pmatrix} s \\ ss^{T} \end{pmatrix}.
     \end{align*}
 
-    Note that $\psi_{1} = \Sigma ^{-1} \mu + B^{T}\Omega^{-1}z \in \Sigma^{-1}\mu + \operatorname{im} B^{T} \subseteq \R^{m}$ making the exponential family curved if $\operatorname{rank} B < m$.
-
-    If $B$ has full rank $m$, the Fisher information in this model is given by
-    $$
-    I \left( \psi_{1}, \psi_{2} \right) = \begin{pmatrix}
-        \Sigma^{-1} + \Omega^{-1} & - 2 \diag(\psi_{1}) \\
-        -2 \diag(\psi_{1}) & -2 \left( \Sigma^{-1} + \Omega^{-1} \right)^{-1} \otimes \left( \Sigma^{-1} + \Omega^{-1} \right)^{-1}
-    \end{pmatrix}
-    $$
-    where $\otimes$ is the Hadamard product.
 \end{proposition}
+
 \begin{proof}
-    \todo{proof it}
+    By Bayes' theorem, we have 
+    $$
+    \log g(s|z) = \log g(z|s) + \log g(s) - \log g(z),
+    $$
+    and, as $g(z|s)$ is the density of a normal distribution with mean $s$ and covariance matrix $\Omega$, 
+    \begin{align*}
+        \log g(z|s) & = \frac{1}{2} \log \det \Omega^{-1} - \frac{p}{2} \log (2 \pi) - \frac{1}{2} (z - s)^{T}\Omega^{-1}(z - s) \\
+                    & = \frac{1}{2} \log \det \Omega^{-1} - \frac{p}{2} \log (2 \pi) - \frac{1}{2} z^{T}\Omega^{-1}z + z^{T}\Omega^{-1}s - \frac{1}{2} \operatorname{trace} \left(\Omega^{-1}ss^{T} \right) \\
+                    & = \frac{1}{2} \log \det \Omega^{-1} - \frac{p}{2} \log (2 \pi) - \frac{1}{2} z^{T}\Omega^{-1}z + \left\langle \Omega^{-1}z, s \right\rangle_{\R^{p}} + \left\langle -\frac{1}{2}\Omega^{-1}, ss^{T} \right\rangle_{\R^{p\times p}},
+    \end{align*}
+    where $\langle \cdot, \cdot \rangle_{\R^{p}}$ is the Euclidean inner product, and $\langle \cdot, \cdot \rangle_{\R^{p \times p}}$ is the Frobenius inner product.
+    For $\psi = (\psi_{1}, \psi_{2}) = (\Omega^{-1}z, -\frac{1}{2}\Omega^{-1})$, we have $z = - \frac{1}{2}\psi_{2}^{-1} \psi_{1}$, so
+    \begin{align*}
+        \log g(z) &= \frac{1}{2}\log\det (\Sigma^{-1} -2\psi_{2}) - \frac{p}{2} \log (2\pi) - \frac{1}{2} \left( -\frac{1}{2} \psi_{2}^{-1}\psi_{1} - \mu \right)^{T}\left(\Sigma^{-1} - 2 \psi_{2}\right) \left(  -\frac{1}{2} \psi_{2}^{-1}\psi_{1} - \mu \right), 
+    \end{align*}
+    which depends only on $\psi$ and constants. Similarly,
+    \begin{align*}
+        \log\det \Omega^{-1} &= \log\det (-2 \psi_{2})\\
+        \intertext{and}
+        -\frac{1}{2}z^{T}\Omega^{-1}z &= -\frac 1 2 z^{T}\Omega^{-1} \Omega \Omega^{-1}z = \psi^{T}_{1}\psi_{2}^{-1}\psi_{1},
+    \end{align*}
+    may be expressed through $\psi$.
+    Putting everything together we obtain
+    \begin{align*}
+        \log g(s|z) &= \log h(s) - \log Z(\psi) + \left\langle \psi, T(s) \right\rangle_{\R^{p} \times \R^{p\times p}},\\
+        \intertext{where}
+        \log Z(\psi) &= \log g(z) - \frac{1}{2}\log\det \Omega^{-1} + \frac{p}{2} \log (2\pi) - \frac{1}{2}z^{T}\Omega^{-1}z\\
+                    &= -\frac{1}{2}\log\det (\Sigma^{-1} - 2\psi_{2}) - \frac{1}{2} \log \det (-2 \psi_{2}) \\
+                    &\phantom{=}-\frac{1}{2} \left( -\frac{1}{2} \psi_{2}^{-1}\psi_{1} - \mu \right)^{T}\left(\Sigma^{-1} - 2 \psi_{2}\right) \left(  -\frac{1}{2} \psi_{2}^{-1}\psi_{1} - \mu \right) +  \psi^{T}_{1}\psi_{2}^{-1}\psi_{1},
+    \end{align*}
+    as was promised.
 \end{proof}
+
+\begin{remark}[extension to independent observations, states, and Markov-structure]
+\Cref{prop:exponential_family_posterior} is formulated for the signal $S$ instead of states $X$ and general noise covariance $\Omega$. It is straightforward to see, that restricting $\Omega$ to a diagonal matrix with entries $\omega_{i}^2 > 0, i=1,\dots, p$ amounts to replacing $\psi_{2}$ by $-\frac{1}{2} \left( \frac{1}{\omega^{2}_{1}}, \dots, \frac{1}{\omega^{2}_{p}}\right)$, $T(s)$ by $(s, s \otimes s)$ and occurrences of $\psi_{2}$ in $Z(\psi)$ by $\operatorname{diag} \psi_{2}$. The inner product then becomes the Euclidean inner product on $\R^{2p}$. 
+
+As for the extension to states $X$ where $S = BX$ for some matrix $B \in \R^{p \times m}$, we may perform the same calculations as in the proof of \Cref{prop:exponential_family_posterior}, replacing $s$ by $Bx$. The sufficient statistic becomes $(Bx)(Bx)^{T}$ and the cumulant function $Z(\psi)$ becomes more involved. As \Cref{prop:exponential_family_posterior} requires $\cov S$ to have full rank, $B \cov (X) B^{T}$ needs to have rank $p$, which would be fulfilled if, e.g. $\text{rk}~B = p$ and $\text{Cov} X$ has full rank. The condition would be violated if we have repeated measurements of the same quantity, e.g. $s_{i} = s_{j}$ for $i \neq j$. Then the support of the exponential family has lower dimension than the parameter space $\Psi$, leading to a non-minimal exponential family, which could be made minimal be reparametrization, see e.g. \cite[Theorem 1.9]{Brown1986Fundamentals}.
+\end{remark}
+
 \todo{initroduce signals, importance sampling only w.r.t. signals. What if signal covariance matrix is degenerated?}
 \todo{probably cite something about curved exponential families, e.g. Brown1986Fundamentals}
 
@@ -1273,8 +1309,8 @@ we let $m = 1$ in \Cref{ex:negbinom-ar1} and fix $n$ to \todo{...}.
 We then simulate once from the marginal distribution of $Y$ and perform the \gls{la} to a prespecified precision $\epsilon$ and maximum number of iterations $n_{\text{iter}}$, obtaining a proposal distribution $\G_{\la}$. Using a large number of samples $N_{\text{true}}$ from this proposal we find the optimal $\G_{\ce}$ and $\G_{\eis}$ using the same desired precision and number of iterations as for the \gls{la}. For the remainder of this section, we ignore sampling variation in these proposals and treat them as exact. 
 
 %% posterior marginal means and variances
-To determine the non-asymptotic sampling behavior we now perform the above procedure again, using only $N \ll N_{\text{true}}$ many samples for both procedures, obtaining proposals $\hat\G^{N}_{\ce}$ and $\hat \G^{N}_{\eis}$. As the full proposals are Gaussian distributions on $\R^{(n+1)\times m}$, either given as the posterior of a \gls{glssm} (\gls{la}, \gls{eis}) or by mean and Cholesky root of the precision matrix(\gls{cem}). 
-This procedure is repeated $M$ times for every sample size $N$ considered, with different initial random seeds, obtaining $\hat\G^{N,i}_{\ce}$ and $\hat \G^{N,i}_{\eis}$ for $i = 1, \dots, M$.
+To determine the non-asymptotic sampling behavior we now perform the above procedure again, using only $N \ll N_{\text{true}}$ many samples for both procedures, obtaining proposals $\hat\P^{N}_{\ce}$ and $\hat \P^{N}_{\eis}$. As the full proposals are Gaussian distributions on $\R^{(n+1)\times m}$, either given as the posterior of a \gls{glssm} (\gls{la}, \gls{eis}) or by mean and Cholesky root of the precision matrix(\gls{cem}). 
+This procedure is repeated $M$ times for every sample size $N$ considered, with different initial random seeds, obtaining $\hat\P^{N,i}_{\ce}$ and $\hat \P^{N,i}_{\eis}$ for $i = 1, \dots, M$.
 
 To assess the speed of convergence of the \gls{cem} and \gls{eis} we then estimate the mean squared error of means and variances of the $(n+1) \times m$ univariate marginals as $N$, the number of samples used to obtain $\hpce$ or $\hpeis$, grows. For the true value, we take the univariate means and variances of $\G_{\ce}$ and $\G_{\eis}$ respectively. Additionally, we perform a bias-variance decomposition to see where the estimation error originates. 
 
