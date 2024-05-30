@@ -935,12 +935,12 @@ where the distribution of $X$ is given by \eqref{eq:glssm_states}, $\psi = \left
 % weights
 In this setting, the importance sampling weights are given by 
 $$
-w(x) = \frac{p(x|y)}{g(x|z)} = \frac{p(y|x)p(x)}{g(z|x)p(x)} \frac{g(z)}{p(y)} \propto \prod_{t = 0}^n \frac{p(y_{t}|x_{t})}{g(z_{t})|x_{t}},
+w(x) = \frac{p(x|y)}{g(x|z)} = \frac{p(y|x)p(x)}{g(z|x)p(x)} \frac{g(z)}{p(y)} \propto \prod_{t = 0}^n \frac{p(y_{t}|x_{t})}{g(z_{t}|x_{t})},
 $$
 % Signals
 so they can be computed efficiently. Additionally, as \todo{add signal restriction above} $p(y_{t}|x_{t})$ and $g(z_{t}|x_{t})$ depend on $x_{t}$ only through the signal $s_{t} = B_{t}x_{t}$, we have 
 $$
-w(x) \propto \frac{p(y_{t}|s_{t})}{g(z_{t})|s_{t}},
+w(x) \propto \prod_{t = 0}^{n}\frac{p(y_{t}|s_{t})}{g(z_{t}|s_{t})},
 $$
 which implies that auto-normalized weights may be calculated by using the signal smoother \cite[Theorem 2]{Jungbacker2007Monte}.
 \todo{introduce LCSSM with linear signals above}
@@ -994,7 +994,9 @@ The \gls{la} \todo{...}
 
 % CE: two variants 
 %% GLSSM approach fails: 
-For the \gls{cem}, using the \gls{glssm}-approach turns out to be difficult numerically. To see this, let us ignore the Markov-structure for the time being. The \gls{cem} then consists of finding $\psi = (z, \omega^{2})$ such that \Cref{eq:glssm-proposal} maximizes the cross entropy with the target $\P^{X|Y=y}$. Using \Cref{lem:gaussian_conditional}, we see that the conditional distribution of $X$ given $Z=z$, $\G_{\psi}$, is a Gaussian distribution with mean $\tilde \mu = \dots$  \todo{calc} and covariance matrix $ \left( \Sigma ^{-1} + B^{T}\Omega^{-1}B\right)^{-1}$ for $\Omega = \diag \left( \omega^{2} \right)$. Thus 
+For the \gls{cem}, using the \gls{glssm}-approach turns out to be difficult numerically. For a rough argument, let us ignore the Markov structure of the model for a moment. As the \gls{cem} matches moments of the target and proposal, applying it to fit model \eqref{eq:glssm-proposal} amounts to match the moments of $\G_{\psi}$ to those of the target posterior $\mathcal L (X | Y = y)$ in the \gls{ssm}. Unfortunately, the covariance of $\G_{\psi}$ is given by $ \left( \Sigma^{-1} + B^{T}\Omega^{-1} B \right)^{-1}$, where $\Sigma$ is the covariance of all states, $B = \operatroname{block-diag} (B_{0}, \dots, B_{n})$ and $\Omega = \operatorname{block-diag} \left( \Omega_{0}, \dots, \Omega_{n} \right)$. Choosing the diagonal matrix $\Omega$ such that the covariance of $\G_{\psi}$ matches this expression is numerically expensive: we either need to invert the large (dimension $(n + 1)m \times (n + 1)m$) covariance matrix, or solve numerically for the $(n + 1)p$ parameters. The problem at hand is that we cannot decouple this into $(n + 1)$ equations of dimension $p$, as all entries of the $(\Sigma^{-1} + B^{T}\Omega^{-1} B)^{-1}$ depend on all entries of $\Omega$. 
+
+To make matters more concrete, \gls{cem} finds $\psi = (z, \omega^{2})$ such that model \eqref{eq:glssm-proposal} maximizes the cross entropy with the target $\P^{X|Y=y}$. Using \Cref{lem:gaussian_conditional}, we see that the conditional distribution of $X$ given $Z=z$, $\G_{\psi}$, is a Gaussian distribution with mean $\tilde \mu = \dots$  \todo{calc} and covariance matrix $ \left( \Sigma ^{-1} + B^{T}\Omega^{-1}B\right)^{-1}$ for $\Omega = \diag \left( \omega^{2} \right)$. Thus 
 \begin{align*}
 \max_{z, \omega^{2}} \int p(x|y) \log g_{\psi}(x|z) \mathrm dx &= \max_{\tilde\mu, \omega^{2}} \int p(x|y) \left( - \frac{1}{2} (x - \tilde \mu) \right)
 &= \argmax_{}
