@@ -958,66 +958,6 @@ and so if one is interested in the states, rather than the signals, importance s
 % degenerate distribution, exponential family of proposals for signals
 
 
-An attractive property of the \gls{glssm}-approach is that the proposals it generates form an exponential family.
-\todo{define spd}
-
-\begin{proposition}[Exponential family of proposals]
-    \label{prop:exponential_family_posterior}
-    Suppose $\R^{p} \ni S \sim \mathcal N(\mu, \Sigma)$ with positive definite $\Sigma$ and $Z = S + \eta$ with $\eta \sim \mathcal N(0, \Omega)$ independent of $S$.
-    Then the conditional distributions of $S | Z = z$ forms an exponential family with parameter $\psi = \left(\Omega^{-1}z, \Omega^{-1} \right) \in \Psi = \R^{p} \times \operatorname{SPD}_{p}$  densities
-    \begin{align*}
-        g(s|z) &= \frac{h(s)}{Z(\psi)} \exp \left( \left\langle \psi, \begin{pmatrix}s\\ss^{T}\end{pmatrix}  \right\rangle _{\R^{p}\times \operatorname{SPD}_{p}} \right),
-    \end{align*}
-    where 
-    \begin{align*}
-        h(s) &= g(s) \\
-        \log Z(\psi) &= -\frac{1}{2}\log\det (\Sigma^{-1} - 2\psi_{2}) - \frac{1}{2} \log \det (-2 \psi_{2}) \\
-                    &\phantom{=}-\frac{1}{2} \left( -\frac{1}{2} \psi_{2}^{-1}\psi_{1} - \mu \right)^{T}\left(\Sigma^{-1} - 2 \psi_{2}\right) \left(  -\frac{1}{2} \psi_{2}^{-1}\psi_{1} - \mu \right) +  \psi^{T}_{1}\psi_{2}^{-1}\psi_{1}\\
-        T(s) &= \begin{pmatrix} s \\ ss^{T} \end{pmatrix}.
-    \end{align*}
-
-\end{proposition}
-
-\begin{proof}
-    By Bayes' theorem, we have 
-    $$
-    \log g(s|z) = \log g(z|s) + \log g(s) - \log g(z),
-    $$
-    and, as $g(z|s)$ is the density of a normal distribution with mean $s$ and covariance matrix $\Omega$, 
-    \begin{align*}
-        \log g(z|s) & = \frac{1}{2} \log \det \Omega^{-1} - \frac{p}{2} \log (2 \pi) - \frac{1}{2} (z - s)^{T}\Omega^{-1}(z - s) \\
-                    & = \frac{1}{2} \log \det \Omega^{-1} - \frac{p}{2} \log (2 \pi) - \frac{1}{2} z^{T}\Omega^{-1}z + z^{T}\Omega^{-1}s - \frac{1}{2} \operatorname{trace} \left(\Omega^{-1}ss^{T} \right) \\
-                    & = \frac{1}{2} \log \det \Omega^{-1} - \frac{p}{2} \log (2 \pi) - \frac{1}{2} z^{T}\Omega^{-1}z + \left\langle \Omega^{-1}z, s \right\rangle_{\R^{p}} + \left\langle -\frac{1}{2}\Omega^{-1}, ss^{T} \right\rangle_{\R^{p\times p}},
-    \end{align*}
-    where $\langle \cdot, \cdot \rangle_{\R^{p}}$ is the Euclidean inner product, and $\langle \cdot, \cdot \rangle_{\R^{p \times p}}$ is the Frobenius inner product.
-    For $\psi = (\psi_{1}, \psi_{2}) = (\Omega^{-1}z, -\frac{1}{2}\Omega^{-1})$, we have $z = - \frac{1}{2}\psi_{2}^{-1} \psi_{1}$, so
-    \begin{align*}
-        \log g(z) &= \frac{1}{2}\log\det (\Sigma^{-1} -2\psi_{2}) - \frac{p}{2} \log (2\pi) - \frac{1}{2} \left( -\frac{1}{2} \psi_{2}^{-1}\psi_{1} - \mu \right)^{T}\left(\Sigma^{-1} - 2 \psi_{2}\right) \left(  -\frac{1}{2} \psi_{2}^{-1}\psi_{1} - \mu \right), 
-    \end{align*}
-    which depends only on $\psi$ and constants. Similarly,
-    \begin{align*}
-        \log\det \Omega^{-1} &= \log\det (-2 \psi_{2})\\
-        \intertext{and}
-        -\frac{1}{2}z^{T}\Omega^{-1}z &= -\frac 1 2 z^{T}\Omega^{-1} \Omega \Omega^{-1}z = \psi^{T}_{1}\psi_{2}^{-1}\psi_{1},
-    \end{align*}
-    may be expressed through $\psi$.
-    Putting everything together we obtain
-    \begin{align*}
-        \log g(s|z) &= \log h(s) - \log Z(\psi) + \left\langle \psi, T(s) \right\rangle_{\R^{p} \times \R^{p\times p}},\\
-        \intertext{where}
-        \log Z(\psi) &= \log g(z) - \frac{1}{2}\log\det \Omega^{-1} + \frac{p}{2} \log (2\pi) - \frac{1}{2}z^{T}\Omega^{-1}z\\
-                    &= -\frac{1}{2}\log\det (\Sigma^{-1} - 2\psi_{2}) - \frac{1}{2} \log \det (-2 \psi_{2}) \\
-                    &\phantom{=}-\frac{1}{2} \left( -\frac{1}{2} \psi_{2}^{-1}\psi_{1} - \mu \right)^{T}\left(\Sigma^{-1} - 2 \psi_{2}\right) \left(  -\frac{1}{2} \psi_{2}^{-1}\psi_{1} - \mu \right) +  \psi^{T}_{1}\psi_{2}^{-1}\psi_{1},
-    \end{align*}
-    as was promised.
-\end{proof}
-
-\begin{remark}[extension to independent observations, states, and Markov-structure]
-\Cref{prop:exponential_family_posterior} is formulated for the signal $S$ instead of states $X$ and general noise covariance $\Omega$. It is straightforward to see, that restricting $\Omega$ to a diagonal matrix with entries $\omega_{i}^2 > 0, i=1,\dots, p$ amounts to replacing $\psi_{2}$ by $-\frac{1}{2} \left( \frac{1}{\omega^{2}_{1}}, \dots, \frac{1}{\omega^{2}_{p}}\right)$, $T(s)$ by $(s, s \otimes s)$ and occurrences of $\psi_{2}$ in $Z(\psi)$ by $\operatorname{diag} \psi_{2}$. The inner product then becomes the Euclidean inner product on $\R^{2p}$. 
-
-As for the extension to states $X$ where $S = BX$ for some matrix $B \in \R^{p \times m}$, we may perform the same calculations as in the proof of \Cref{prop:exponential_family_posterior}, replacing $s$ by $Bx$. The sufficient statistic becomes $(Bx)(Bx)^{T}$ and the cumulant function $Z(\psi)$ becomes more involved. As \Cref{prop:exponential_family_posterior} requires $\cov S$ to have full rank, $B \cov (X) B^{T}$ needs to have rank $p$, which would be fulfilled if, e.g. $\text{rk}~B = p$ and $\text{Cov} X$ has full rank. The condition would be violated if we have repeated measurements of the same quantity, e.g. $s_{i} = s_{j}$ for $i \neq j$. Then the support of the exponential family has lower dimension than the parameter space $\Psi$, leading to a non-minimal exponential family, which could be made minimal be reparametrization, see e.g. \cite[Theorem 1.9]{Brown1986Fundamentals}.
-\end{remark}
-
 \todo{initroduce signals, importance sampling only w.r.t. signals. What if signal covariance matrix is degenerated?}
 \todo{probably cite something about curved exponential families, e.g. Brown1986Fundamentals}
 
