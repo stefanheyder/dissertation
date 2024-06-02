@@ -1,0 +1,28 @@
+
+\section{Accouting for multimodality and heavy tails}
+\label{sec:accouting_for_multimodality_and_heavy_tails}
+Performing importance sampling with the Gaussian models discussed so far will work well only if the smoothing distribution  $p(x|y)$ is well approximated by a Gaussian distribution. However, a Gaussian distribution is a very specific kind of distribution, in particular, it is an unimodal distribution
+%that is constant on elliptical contours 
+and has light tails \todo{check for correct wording}.
+
+If the smoothing distribution violates any of these assumptions, importance sampling with the models presented so far is likely to fail, i.e. requiring large sample sizes for both finding the optimal importance sampling parameter $\hat \psi$ as well as the final importance sampling evaluation.
+
+There are however techniques to keep most of the computational efficiency discussed in the above sections to address both multimodality as well as heavy tails.
+
+We start with heavier than gaussian tails: the textbook example of a heavy tailed distribution is the multivariate $t$-distribution with density
+$$
+    \dots .
+$$
+for degrees of freedom  $\nu > 1$ \todo{?}, location $\mu$ and scale matrix $\Sigma$. When $\nu > 2$ then this distribution has mean $\mu$ and if $\nu > 3$ it has covariance matrix $?$ \todo{check}.
+
+The main properties necessary to facilitate Gaussian importance sampling strategies above are that the distribution $p(x|y)$ is analytically tractable and simulation from it is possible. These properties still hold for the multivariate $t$-distribution and, in fact, for the even larger class of elliptical distributions:
+
+\begin{theorem}[Conditional distribution of elliptical distributions]
+    \label{thm:elliptical-conditional}
+    \todo{cite the correct book}
+\end{theorem}
+
+As one can readily see from \Cref{thm:elliptical-conditional} the parameters of the smoothing distribution $p(x|y)$ if $p(x,y)$ follows an elliptical distribution is again elliptical and its parameters only depend on quantities that are computed by the Kalman smoother. \todo{elaborate}
+
+\todo{present some models with heavy tails}
+

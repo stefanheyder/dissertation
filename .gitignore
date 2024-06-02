@@ -306,3 +306,6 @@ TSWLatexianTemp*
 
 # tikz-externalized
 tikz/externalized
+
+# latex-build
+build
