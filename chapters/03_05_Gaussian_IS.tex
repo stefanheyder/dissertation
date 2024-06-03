@@ -142,6 +142,8 @@ An alternative family of Gaussian proposals is given by directly modeling a Gaus
 for $t = 1, \dots, n$, with $U_{0}$ and $\nu_{1}, \dots, \nu_{n}$ independent. The number of parameters in $$\psi= \left( v, C_{1}, \dots, C_{n}, \Xi_{0}, \dots, \Xi_{n} \right)$$ is $(n + 1)\cdot m$ for the mean $v$, $n \cdot m^{2}$ for the transition matrices $C_{t}$ and $(n + 1) \frac{m (m - 1)}{2}$ for the covariance matrices of innovations, totaling $\mathcal O(n\cdot m^{2})$ many parameters. 
 While these are considerably more parameters than for the \gls{glssm}-approach for large state dimension $m$, we will see in the later part of this section that finding the optimal parameters for the \gls{cem} can be done analytically. Simulation from $\G_{\psi}$ is achieved by a simple recursion. 
 
+\todo{calculate weights feasible}
+
 This approach, which we term the \textbf{Markov-approach}, was originally proposed by \citeauthor{Richard2007Efficient} in \cite{Richard2007Efficient} for general unnormalized transition kernels as \gls{eis} proposals. However, because of its lower number of parameters, one should favor the \gls{glssm}-approach for \gls{eis} that operates on the signals, \cite{Koopman2019Modified}.
 
 The Markov structure of model \eqref{eq:markov-proposal} implies that the precision matrix of $\G_{\psi}$ is sparse, i.e. it has a block-tridiagonal form. This is a well-known property of the precision matrix of Gaussian random vectors, as the following two Lemmas show. For a general treatment, we refer the reader to \cite[Chapters 3 and 5]{Lauritzen1996Graphical}.
@@ -241,8 +243,9 @@ $$
 Rearranging terms, we end up with the reverse-time Markov-process
 \begin{align}
 \label{eq:rev_time_u}
-    U_{t - 1} = L^{-T}_{t - 1, t - 1} L_{t, t - 1}^T U_{t} +L^{-T}_{t - 1, t - 1} Z_{t - 1}.
+    U_{t - 1} = L^{-T}_{t - 1, t - 1} L_{t, t - 1}^T U_{t} +L^{-T}_{t - 1, t - 1} Z_{t - 1},
 \end{align}
+where $Z_{t - 1}$ is, by construction, independent of $U_{t}$.
 
 % show how to estimate Cholesky root analytically -> Schäfer
 We now turn our attention to applying the \gls{cem} to model \eqref{eq:markov-proposal}. Following a similar argument as in the discussion surrounding \Cref{eq:cem_reparametrization}, we see that it suffices to choose $P$, the precision matrix of $U$, such that it minimizes
@@ -275,16 +278,50 @@ To make this rigorous, let us apply the following result (stated in our notation
 For the problem at hand, the sparsity pattern is given by the non-zero entries of $L$ depicted in \Cref{eq:L_structure} and the matrices $\Gamma_{s_{i}, s_{i}}$ are sub-matrices of the covariances $\cov \left( X_{t - 1}, X_{t} \right)$, for $t = 1, \dots, n$ and $\cov \left( X_{n} \right)$. 
 
 Putting everything together, we may apply the \gls{cem} to estimate $\psi$ in model \eqref{eq:markov-proposal} in the following way: Given importance samples $X^{1}, \dots, X^{N}$ and associated unnormalized weights $w^{1}, \dots, w^{N}$, we $v$ by 
-$$
+\begin{align}
+\label{eq:hat_v}
 \hat v = \frac{\sum_{i = 1}^N w^{i}X^{i}}{\sum_{i = 1}^N w^{i}}
-$$
+\end{align}
 and the empirical covariance matrices
-\begin{align*}
-\widehat{\cov} \left( X_{t - 1}, X_{t} \right) &= \frac{\sum_{i = 1}^N w^{i}(X_{t-1:t}^{i} - \hat v_{t-1:t}) (X_{t-1:t}^{i} - \hat v_{t-1:t})^{T}}{\sum_{i = 1}^N w^{i}}\\
+\begin{align}
+    \label{eq:empirical_covs}
+    \widehat{\cov} \left( X_{t - 1}, X_{t} \right) &= \frac{\sum_{i = 1}^N w^{i}(X_{t-1:t}^{i} - \hat v_{t-1:t}) (X_{t-1:t}^{i} - \hat v_{t-1:t})^{T}}{\sum_{i = 1}^N w^{i}}\\
 \widehat{\cov} \left( X_{n}\right) &= \frac{\sum_{i = 1}^N w^{i}(X_{n}^{i} - \hat v_{n}) (X_{n}^{i} - \hat v_{n})^{T}}{\sum_{i = 1}^N w^{i}}.
-\end{align*}
+\end{align}
 We then determine $\hat L$ from these covariance matrices using \Cref{thm:schafer_cholesky_analytical}.
-This procedure produces a Markov process in reverse time direction, i.e. \Cref{eq:rev_time_u}.
 
+This procedure produces a Markov process in reverse time direction, i.e. \Cref{eq:rev_time_u}, which we may use to perform importance sampling. If we want to adhere to model \Cref{eq:markov-proposal}, we could reverse the time-direction before calculating $\hat L$, i.e. calculate $\widehat{\cov} \left(X_{t}, X_{t - 1}\right)$ and $\widehat{\cov} (X_{0})$ and then apply \Cref{thm:schafer_cholesky_analytical} on $\overset{\leftarrow}X = \left( X_{n}, \dots, X_{0} \right)$, obtaining $\hat L'$ with the same structure as in \Cref{eq:L_structure}.
+Substituting into \Cref{eq:rev_time_u}, we obtain 
+\begin{align*}
+U_{0} &= (\hat L'_{0,0})^{-T} Z_{n} \\
+\intertext{and}
+U_{t} &= (L'_{t, t})^{-T}L_{t - 1, t}^{T} U_{t - 1} + L_{t, t}^{-T}Z_{t}.
+\end{align*}
+Thus we see that for model \eqref{eq:markov-proposal} we obtain $\hat \Xi_{t} = (\hat L'_{t,t})^{-T}(\hat L'_{t,t})^{-1}$ and $\hat C_{t} = (L'_{t, t})^{-T}L_{t - 1, t}^{T}$.
+\begin{algorithm}
+    \caption{The \gls{cem} for the Markov proposal \eqref{eq:markov-proposal} - reverse time}
+    \label{alg:cem-markov-proposal-rev-time}
+    \begin{algorithmic}
+        \Require \gls{lcssm} (\Cref{def:lcssm}), observations $Y_{0}, \dots, Y_{n}$, initial samples $X^{1}, \dots, X^{N}$, initial unnormalized weights $w^{1}, \dots, w^{N}$ 
+        \Statex
+        \State estimate $\hat v$ \Comment{\Cref{eq:hat_v}}
+        \State estimate $\widehat{\cov} (X_{t - 1}, X_{t}), t=1, \dots, n$, $\widehat\cov (X_{n})$ \Comment{\Cref{eq:empirical_covs}}
+        \State determine $\hat L$ \Comment{\Cref{thm:schafer_cholesky_analytical}}
+        \Statex
+        \State \textbf{return} $\hat v$, $\hat L$
+    \end{algorithmic}
+\end{algorithm}
 
-% evaluation of log lik
+\begin{algorithm}
+    \caption{The \gls{cem} for the Markov proposal \eqref{eq:markov-proposal} - forward time}
+    \label{alg:cem-markov-proposal-forward-time}
+    \begin{algorithmic}
+        \Require \gls{lcssm} (\Cref{def:lcssm}), observations $Y_{0}, \dots, Y_{n}$, initial samples $X^{1}, \dots, X^{N}$, initial unnormalized weights $w^{1}, \dots, w^{N}$ 
+        \Statex
+        \State estimate $\hat v$ \Comment{\Cref{eq:hat_v}}
+        \State estimate $\widehat{\cov} (X_{t}, X_{t-1}), t=1, \dots, n$, $\widehat\cov (X_{0})$ \Comment{\Cref{eq:empirical_covs}}
+        \State determine $\hat L'$ \Comment{\Cref{thm:schafer_cholesky_analytical}}
+        \Statex
+        \State \textbf{return} $\hat v$, $\hat L$
+    \end{algorithmic}
+\end{algorithm}
