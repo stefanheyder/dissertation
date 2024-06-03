@@ -68,10 +68,13 @@ The \gls{la} \todo{...}
 For the \gls{cem}, using the \gls{glssm}-approach turns out to be difficult numerically. For a high-level argument of why this is true, let us ignore the Markov structure of the model for the moment. As the \gls{cem} matches moments of the target and proposal, applying it to fit model \eqref{eq:glssm-proposal} amounts to matching the moments of $\G_{\psi}$ to those of the target posterior $\mathcal L (X | Y = y)$ in the \gls{ssm}. Unfortunately, the covariance of $\G_{\psi}$ is given by $ \left( \Sigma^{-1} + B^{T}\Omega^{-1} B \right)^{-1}$, where $\Sigma$ is the covariance of all states, $B = \bdiag (B_{0}, \dots, B_{n})$ and $\Omega = \bdiag \left( \Omega_{0}, \dots, \Omega_{n} \right)$. Choosing the diagonal matrix $\Omega$ such that the covariance of $\G_{\psi}$ matches this expression is numerically expensive: we either need to invert the large (dimension $(n + 1)m \times (n + 1)m$) covariance matrix, or solve numerically for the $(n + 1)p$ parameters. The problem at hand is that we cannot decouple this into $(n + 1)$ equations of dimension $p$ as we did for \gls{eis}, because all entries of $(\Sigma^{-1} + B^{T}\Omega^{-1} B)^{-1}$ depend on all entries of $\Omega$. 
 
 To make matters more concrete, the \gls{cem} finds $\psi = (z, \omega^{2})$ such that model \eqref{eq:glssm-proposal} maximizes the cross entropy with the target $\P^{X|Y=y}$. For simplicity, let us assume that $m = p$, $B$ is the identity and we only observe a single $y$. Using \Cref{lem:gaussian_conditional}, we see that when $X\sim\mathcal N(\mu, \Sigma)$, the conditional distribution of $X$ given $Z=z$, $\G_{\psi}$, is a Gaussian distribution with mean $\tilde \mu =  \mu + \Sigma \left( \Sigma  + \Omega \right)^{-1} \left( z - \mu \right)$  and covariance matrix $\tilde\Sigma = \left( \Sigma ^{-1} + \Omega^{-1}\right)^{-1}$ for $\Omega = \diag \left( \omega^{2} \right)$, where $\omega^{2} > 0$. Assuming that $\Sigma$ is non-singular, we can reparameterize the objective function of the \gls{cem} by $\tilde \mu$,
-\begin{align*}
-\max_{z, \omega^{2}} \int p(x|y) \log g_{\psi}(x|z) \mathrm dx &= \max_{\tilde\mu, \omega^{2}} \int p(x|y) \left( - \frac{1}{2} (x - \tilde \mu)^{T} \tilde \Sigma ^{-1} \left( x - \tilde \mu \right)  - \frac{1}{2} \log\det \tilde \Sigma \right)  \d x\\
+\begin{align}
+    \label{eq:cem_reparametrization}
+    \begin{split}
+    \max_{z, \omega^{2}} \int p(x|y) \log g_{\psi}(x|z) \mathrm dx &= \max_{\tilde\mu, \omega^{2}} \int p(x|y) \left( - \frac{1}{2} (x - \tilde \mu)^{T} \tilde \Sigma ^{-1} \left( x - \tilde \mu \right)  - \frac{1}{2} \log\det \tilde \Sigma \right)  \d x\\
 &= \max_{\tilde \mu, \omega^{2}} - \frac{1}{2} (\gamma - \tilde \mu)^{T}\tilde \Sigma ^{-1} ( \gamma - \tilde \mu) - \frac{1}{2} \operatorname{trace} \left( \tilde \Sigma^{-1} \Gamma \right) - \frac{1}{2} \log\det\tilde\Sigma,
-\end{align*}
+    \end{split}
+\end{align}
 where $\gamma = \E \left( X | Y = y \right)$ and $\Gamma = \cov \left( X | Y = y \right)$. 
 Thus the optimal $\tilde \mu$ is $\gamma$ and to find $\omega^{2}$ we have to minimize 
 $$
@@ -136,12 +139,12 @@ An alternative family of Gaussian proposals is given by directly modeling a Gaus
     \Xi_{t}&\in\R^{m \times m} \text{positive semi-definite}
     \end{split}
 \end{align}
-for $t = 1, \dots, n$, with $U_{0}$ and $\nu_{1}, \dots, \nu_{n}$ independent. The number of parameters in $\psi= \left( v, C_{1}, \dots, C_{n}, \Xi_{0}, \dots, \Xi_{n} \right)$ is $(n + 1)\cdot m$ for the mean $v$, $n \cdot m^{2}$ for the transition matrices $C_{t}$ and $(n + 1) \frac{m (m - 1)}{2}$ for the covariance matrices of innovations, totaling $\mathcal O(n\cdot m^{2})$ many parameters. 
+for $t = 1, \dots, n$, with $U_{0}$ and $\nu_{1}, \dots, \nu_{n}$ independent. The number of parameters in $$\psi= \left( v, C_{1}, \dots, C_{n}, \Xi_{0}, \dots, \Xi_{n} \right)$$ is $(n + 1)\cdot m$ for the mean $v$, $n \cdot m^{2}$ for the transition matrices $C_{t}$ and $(n + 1) \frac{m (m - 1)}{2}$ for the covariance matrices of innovations, totaling $\mathcal O(n\cdot m^{2})$ many parameters. 
 While these are considerably more parameters than for the \gls{glssm}-approach for large state dimension $m$, we will see in the later part of this section that finding the optimal parameters for the \gls{cem} can be done analytically. Simulation from $\G_{\psi}$ is achieved by a simple recursion. 
 
 This approach, which we term the \textbf{Markov-approach}, was originally proposed by \citeauthor{Richard2007Efficient} in \cite{Richard2007Efficient} for general unnormalized transition kernels as \gls{eis} proposals. However, because of its lower number of parameters, one should favor the \gls{glssm}-approach for \gls{eis} that operates on the signals, \cite{Koopman2019Modified}.
 
-The Markov structure of model \eqref{eq:markov-proposal} implies that the precision matrix of $\G_{\psi}$ is sparse, i.e. it has a block-tridiagonal form. This is a well-known property of the precision matrix of Gaussian random vectors, as the following two Lemmas show. For a general treatment, we refer the reader to \cite[Chapter 3]{Lauritzen1996Graphical}.
+The Markov structure of model \eqref{eq:markov-proposal} implies that the precision matrix of $\G_{\psi}$ is sparse, i.e. it has a block-tridiagonal form. This is a well-known property of the precision matrix of Gaussian random vectors, as the following two Lemmas show. For a general treatment, we refer the reader to \cite[Chapters 3 and 5]{Lauritzen1996Graphical}.
 
 \begin{lemma}
     \label{lem:gaussian_precision}
@@ -187,6 +190,101 @@ The Markov structure of model \eqref{eq:markov-proposal} implies that the precis
 Applying \Cref{lem:gaussian_precision_zeros} to model \eqref{eq:markov-proposal}, we see that its precision matrix $P$ is sparse, i.e. it is a block-tri-diagonal matrix, as $U_{t} \perp U_{s} | U_{-t,-s}$ for $\lvert t - s\rvert > 1$ and $U_{-t,-s}$ being the vector of all $U_{0}, \dots, U_{n}$ except for $U_{t}, U_{s}$. Thus, the only entries of $P$ that are potentially non-zero are those whose row and column correspond to $(U_{t}, U_{t})$ for $t = 0, \dots, n$, $(U_{t}, U_{t - 1})$ and $(U_{t - 1}, U_{t})$ for $t=1, \dots, n$. 
 
 % show Cholesky root of precision matrix is also sparse -> Katzfuss (or refs therein), Lauritzen, Bernstein?, same as Schäfer paper?
+The sparsity of $P$ implies that $P = LL^{T}$ has a sparse Cholesky root $L$, which will make computations efficient. 
+To see that $L$ is sparse, we apply the following Theorem from the theory of Gaussian-Markov-Random-fields (GMRF), i.e. Gaussian models whose dependency structure is given by a graph, which is here slightly adapted to our setting and notation.
+\begin{theorem}[{\cite[Theorem 12.14]{Gelfand2010Discrete}}] 
+    \label{thm:gelfand_gmrf}
+    Let $X = (X_{0}, \dots, X_{n}) \in \R^{(n + 1)m}$ be a GMRF wrt to the labeled graph $G$, with mean $\mu$ and symmetric positive-definite precision matrix $P$. Let $L$ be the Cholesky factor of $P$ and define for $0 \leq t < s \leq n$ the future of $t$ except $s$ as 
+    $$
+        F(t,s) = \{t + 1, \dots, s - 1, s+ 1, n\}.
+    $$
+    Then
+    $$
+        X_{t} \perp X_{s} | X_{F(t,s)} \Leftrightarrow L_{t,s} = 0.
+    $$
+\end{theorem}
+In the preceding theorem $X_{F(t,s)}$ is the vector of all $X_{u}$ for $u\in F(t,s)$ and $L_{t,s} \in \R^{m\times m}$ is the sub-matrix of $L$  whose rows correspond to $X_{t}$ and columns to $X_{s}$. 
+From \Cref{thm:gelfand_gmrf} we immediately obtain the following:
+
+\begin{corollary}[sparsity of $L$ in model \eqref{eq:markov-proposal}]
+    \label{cor:sparsity_L}
+    Let $U \sim \G_{\psi}$ as in \Cref{eq:markov-proposal}, $P \succ 0$ be the precision matrix of $U$ and $L$ be the Cholesky root of $P$. 
+    Then $L$ is a lower-block-diagonal matrix, with at most $n\,m^{2} + (n + 1)\,m\frac{m - 1}{2}$ non-zero entries:
+
+    
+    \begin{align}
+        \label{eq:L_structure}
+    L = \begin{pmatrix}
+        L_{0,0} & 0 & \cdots & \cdots & \cdots & 0 & 0 \\
+        L_{1, 0} & L_{1,1} & 0 & \cdots & \cdots & 0 & 0\\
+        0 & L_{2,1} & L_{2,2} & 0 & \cdots & 0 & 0 \\
+        \vdots & \ddots & \ddots  & \ddots & \ddots & 0 & 0 \\
+        0 & 0& 0& \cdots& L_{n-1, n- 2}& L_{n - 1, n - 1} & 0 \\
+        0 & 0 & 0 & \cdots & 0 & L_{n, n - 1} & L_{n,n} 
+    \end{pmatrix},
+    \end{align}
+    where $L_{t,t} \in \R^{m\times m}, t = 0, \dots, n$ are lower triangular matrices and $L_{t,t-1}\in\R^{m \times m}, t = 1, \dots, n$ are square matrices.
+\end{corollary}
+
+From $L$ in \Cref{cor:sparsity_L} we obtain an iterative method of sampling from $\G_{\psi}$: If $v + U \sim \G_{\psi}$, then, as $\cov U = \left( L L^{T} \right)^{-1} = L^{-T}L^{-1}$, it holds that $L^{T}U \sim \mathcal N(0, I)$ follows a standard normal distribution. Thus to simulate from $\G_{\psi}$ we may solve
+$$
+L^{T}U = Z 
+$$
+where $Z = \left( Z_{0}, \dots, Z_{n} \right) \sim \mathcal N(0, I)$. Using the structure available in $L$, we see that this is equivalent to first solving
+$$
+L_{n,n}^T U_{n} = Z_{n}
+$$
+and then recursively solving for $t = n, \dots, 1$
+$$
+L_{t -1 , t -1}^T U_{t - 1} + L_{t, t - 1}^{T} U_{t} = Z_{t - 1}.
+$$
+Rearranging terms, we end up with the reverse-time Markov-process
+\begin{align}
+\label{eq:rev_time_u}
+    U_{t - 1} = L^{-T}_{t - 1, t - 1} L_{t, t - 1}^T U_{t} +L^{-T}_{t - 1, t - 1} Z_{t - 1}.
+\end{align}
+
 % show how to estimate Cholesky root analytically -> Schäfer
-% simulation & time-reversal
+We now turn our attention to applying the \gls{cem} to model \eqref{eq:markov-proposal}. Following a similar argument as in the discussion surrounding \Cref{eq:cem_reparametrization}, we see that it suffices to choose $P$, the precision matrix of $U$, such that it minimizes
+\begin{align}
+\label{eq:markov_ce_target}
+\frac{1}{2} \operatorname{trace} \left( P \hat\Gamma \right) - \frac{1}{2}\log\det P
+\end{align}
+where $\hat\Gamma$ is the importance sampling estimate of the joint covariance matrix of all states $X$. Here $P$ is restricted to precision matrices that may arise in model \eqref{eq:markov-proposal}, i.e., by \Cref{cor:sparsity_L}, $P = LL^{T}$ where $L$ possess structure as in \eqref{eq:L_structure}. 
+At first glance, this problem seems more involved than \Cref{eq:gamma_post}: after all, we now depend on the whole covariance matrix $\hat\Gamma$. 
+However, it turns out that the sparsity we enforce in $L$ allows us to compute analytically the optimal $\hat L$  that minimizes 
+\Cref{eq:markov_ce_target}. Additionally, due to the Markov-structure of our proposal, $\hat L$ depends only on the block-tri-diagonal component of $\hat \Gamma$, i.e. only the covariances $\cov(X_{t - 1}, X_{t})$ and $\cov (X_{n})$ are required. This is sensible - all information about the Markov transitions is encoded in these covariances if we assume that $X$ is a Gaussian Markov process.
+
+To make this rigorous, let us apply the following result (stated in our notation).
+\begin{theorem}[{\cite[Theorem 2.1]{Schafer2021Sparse}}]
+    \label{thm:schafer_cholesky_analytical}
+    Let $\Gamma$ be a positive-definite matrix of size $n\times n$. Given a lower-triangular sparsity set $S \subset \{1, \dots, n\}^{2}$, i.e. $i \geq j$ for all $(i,j) \in S$, let 
+    $$
+    \hat L = \argmin_{L \in \mathcal S} \Dkl{\mathcal N (0, \Theta)}{\mathcal N \left( 0, (LL^{T})^{-1} \right)}
+    $$
+    be the Cholesky root of the closest Gaussian with sparsity $\mathcal S = \{A \in \R^{n \times n}: A_{i,j} \neq 0 \Rightarrow (i,j) \in S\}$. 
+
+    Then the following holds:
+    The nonzero entries of the $i$-th column of $\hat L$ are given by 
+    
+    $$
+    L_{s_{i}, i} = \frac{\Gamma_{s_{i}, s_{i}}^{-1} e_{1}}{\sqrt{e_{1}^{T}\Gamma_{s_{i}, s_{i}}^{-1} e_{1}}},
+    $$
+    where $s_{i} = \{j : (i,j) \in S\}$, $\Gamma_{s_{i}, s_{i}}$ is the restriction of $\Gamma$ to the set of indices $s_{i}$ and $e_{1} \in\R^{\lvert s_{i}\rvert}$ is the first unit vector.
+\end{theorem}
+For the problem at hand, the sparsity pattern is given by the non-zero entries of $L$ depicted in \Cref{eq:L_structure} and the matrices $\Gamma_{s_{i}, s_{i}}$ are sub-matrices of the covariances $\cov \left( X_{t - 1}, X_{t} \right)$, for $t = 1, \dots, n$ and $\cov \left( X_{n} \right)$. 
+
+Putting everything together, we may apply the \gls{cem} to estimate $\psi$ in model \eqref{eq:markov-proposal} in the following way: Given importance samples $X^{1}, \dots, X^{N}$ and associated unnormalized weights $w^{1}, \dots, w^{N}$, we $v$ by 
+$$
+\hat v = \frac{\sum_{i = 1}^N w^{i}X^{i}}{\sum_{i = 1}^N w^{i}}
+$$
+and the empirical covariance matrices
+\begin{align*}
+\widehat{\cov} \left( X_{t - 1}, X_{t} \right) &= \frac{\sum_{i = 1}^N w^{i}(X_{t-1:t}^{i} - \hat v_{t-1:t}) (X_{t-1:t}^{i} - \hat v_{t-1:t})^{T}}{\sum_{i = 1}^N w^{i}}\\
+\widehat{\cov} \left( X_{n}\right) &= \frac{\sum_{i = 1}^N w^{i}(X_{n}^{i} - \hat v_{n}) (X_{n}^{i} - \hat v_{n})^{T}}{\sum_{i = 1}^N w^{i}}.
+\end{align*}
+We then determine $\hat L$ from these covariance matrices using \Cref{thm:schafer_cholesky_analytical}.
+This procedure produces a Markov process in reverse time direction, i.e. \Cref{eq:rev_time_u}.
+
+
 % evaluation of log lik
