@@ -120,6 +120,10 @@ Thus, even in the very simple univariate Gaussian setting, for every $N$ there i
 % all of these even worse if dimension grows
 In higher-dimensional settings, e.g. when applying the \gls{cem} to \glspl{ssm}, we expect this phenomenon to occur even more often. In the extreme case of independent marginals, i.e. when $\Sigma$ is a diagonal matrix, \Cref{eq:gamma_post} reduces to $(n + 1)p$ many decoupled equations, where $\hat \Gamma_{i,i}, i =1, \dots, (n + 1)p$ are independent. If all $q_{i} = \P \left(\Gamma_{i,i} > \Sigma_{i,i}\right)$ are identical to $q \in (0, 1)$, e.g. because $\Sigma$ and $\Omega$ are multiples of the identity, the number of failures follows a $\operatorname{Binom} \left( (n + 1)p, q \right)$ distribution, so that even small $q$ may lead to a non-negligible number of failures if the number of observations is high. 
 
+% numerical scheme to solve eq.
+Finally, in the multivariate setting, the system \eqref{eq:gamma_post} has no analytical solution. Instead, we have to resort to numerical methods to find a solution $\Omega$. Unfortunately, even evaluating the right-hand side of \eqref{eq:gamma_post} requires $\mathcal O(m^3)$ operations, as we have to invert $\Sigma + \Omega$. Additionally, we cannot hope to reuse a singular-value, LR, or eigenvalue-decomposition for further evaluations, as $\Sigma$ and $\Omega$ are not guaranteed to be jointly diagonalizable.
+In the \gls{ssm} context we may use the Kalman-smoother to compute the marginal variances, but have to re-run the smoother for every evaluation. 
+
 If we admit noise variance $\infty$ in our optimization, then $\Gamma > 1$ implies that the \gls{cem} chooses this as the estimate, i.e. $\G_{\hpce}$ is $\mathcal N(0, 1)$, which is equal to the prior. We can interpret this as having a missing observation, which, going back to the \gls{ssm} context, the Kalman-filter \Cref{alg:kalman_filter} can handle with only simple modifications, see e.g. \cite[Section 4.10]{Durbin2012Time}. However, if there are a lot of failures, the optimally chosen $\G_{\hpce}$ will still be close to the prior distribution of states $X$, and importance sampling is unlikely to be effective. Hence, we turn to another approach that allows to apply the \gls{cem} to \glspl{ssm}.
 
 \subsection{The Markov-approach}
@@ -132,14 +136,14 @@ An alternative family of Gaussian proposals is given by directly modeling a Gaus
     \label{eq:markov-proposal}
     \G_{\psi} &= \mathcal L (U + v), \\
     v &\in \R^{(n + 1)m}, \\
-    U_{0} &\sim \mathcal N(0, \Xi_{0}),\\
-    U_{t} &= C_{t}U_{t - 1} + \nu_{t}, \\
+    U_{0} &\sim \mathcal N(0, R_{0}R_{0}^T),\\
+    U_{t} &= C_{t}U_{t - 1} + R_{t}\nu_{t}, \\
     C_{t} &\in \R^{m\times m},\\
-    \nu_{t} &\sim \mathcal N(0,\Xi_{t}), \\
-    \Xi_{t}&\in\R^{m \times m} \text{positive semi-definite}
+    \nu_{t} &\sim \mathcal N(0,I), \\
+    \R_{t}&\in\R^{m \times m} \text{lower triangular, positive diagonal}
     \end{split}
 \end{align}
-for $t = 1, \dots, n$, with $U_{0}$ and $\nu_{1}, \dots, \nu_{n}$ independent. The number of parameters in $$\psi= \left( v, C_{1}, \dots, C_{n}, \Xi_{0}, \dots, \Xi_{n} \right)$$ is $(n + 1)\cdot m$ for the mean $v$, $n \cdot m^{2}$ for the transition matrices $C_{t}$ and $(n + 1) \frac{m (m - 1)}{2}$ for the covariance matrices of innovations, totaling $\mathcal O(n\cdot m^{2})$ many parameters. 
+for $t = 1, \dots, n$, with $U_{0}$ and $\nu_{1}, \dots, \nu_{n}$ independent. The number of parameters in $$\psi= \left( v, C_{1}, \dots, C_{n}, R_{0}, \dots, R_{n} \right)$$ is $(n + 1)\cdot m$ for the mean $v$, $n \cdot m^{2}$ for the transition matrices $C_{t}$ and $(n + 1) \frac{m (m - 1)}{2}$ for the Cholesky roots of innovation covariances, totaling $\mathcal O(n\cdot m^{2})$ many parameters. 
 While these are considerably more parameters than for the \gls{glssm}-approach for large state dimension $m$, we will see in the later part of this section that finding the optimal parameters for the \gls{cem} can be done analytically. 
 
 This approach, which we term the \textbf{Markov-approach}, was originally proposed by \citeauthor{Richard2007Efficient} in \cite{Richard2007Efficient} for general unnormalized transition kernels as \gls{eis} proposals. However, because of its lower number of parameters, one should favor the \gls{glssm}-approach for \gls{eis} that operates on the signals, \cite{Koopman2019Modified}.
@@ -254,7 +258,7 @@ where $Z_{t}$ is, by construction, independent of $U_{t}$. Thus for model \eqref
 \begin{align}
     \label{eq:parameters_markov_from_L}
     \begin{split}
-    \Xi_{t} &= L^{-T}_{t,t}L^{-1}_{t,t} \text{ for } t = 0, \dots, n\\
+    R_{t} &= L^{-T}_{t,t} \text{ for } t = 0, \dots, n\\
     C_{t} &= L^{-T}_{t,t} L_{t-1, t }^T \text{ for } t =1, \dots, n.
     \end{split}
 \end{align}
@@ -287,9 +291,10 @@ To make this argument rigorous, let us apply the following result (stated in our
     Then the following holds:
     The nonzero entries of the $i$-th column of $\hat L$ are given by 
     
-    $$
-    L_{s_{i}, i} = \frac{\Gamma_{s_{i}, s_{i}}^{-1} e_{1}}{\sqrt{e_{1}^{T}\Gamma_{s_{i}, s_{i}}^{-1} e_{1}}},
-    $$
+    \begin{align}
+    \label{eq:schafer_gamma}
+        L_{s_{i}, i} &= \frac{\Gamma_{s_{i}, s_{i}}^{-1} e_{1}}{\sqrt{e_{1}^{T}\Gamma_{s_{i}, s_{i}}^{-1} e_{1}}},
+    \end{align}
     where $s_{i} = \{j : (i,j) \in S\}$, $\Gamma_{s_{i}, s_{i}}$ is the restriction of $\Gamma$ to the set of indices $s_{i}$ and $e_{1} \in\R^{\lvert s_{i}\rvert}$ is the first unit vector.
 \end{theorem}
 For the problem at hand, the sparsity pattern $\mathcal S $is given by the non-zero entries of $L$ depicted in \Cref{eq:L_structure} and the matrices $\Gamma_{s_{i}, s_{i}}$ are sub-matrices of the covariances $\cov \left( \left(X_{t-1}, X_{t}\right) | Y\right)$, for $t = 1, \dots, n$ and $\cov \left( X_{0} | Y\right)$, i.e. we let $\Theta = \cov \left(\overset{\leftarrow}X| Y\right)$ in \Cref{thm:schafer_cholesky_analytical}. 
@@ -311,25 +316,114 @@ These steps are summarized in \Cref{alg:cem-markov-proposal}.
 \begin{algorithm}
     \caption{The \gls{cem} for the Markov proposal \eqref{eq:markov-proposal}}
     \label{alg:cem-markov-proposal}
-    \begin{algorithmic}
-        \Require \gls{lcssm} (\Cref{def:lcssm}), observations $Y$, initial estimate $\hat\psi^0 = \left( v^{0}, C^{0}, \Xi^{0}\right)$
+    \begin{algorithmic}[1]
+        \Require \gls{lcssm} (\Cref{def:lcssm}), observations $Y$, initial estimate $\hat\psi^0 = \left( v^{0}, C^{0}, R^{0}\right)$, sample size $N$
         \State set $l = 0$
         \Repeat 
-            \State sample $U^{1} + v^{l}, \dots, U^{N} + v^{l} \iid \G_{\hat\psi^{l}}$ with fixed seed \Comment{\Cref{eq:markov-proposal}}
-            \State determine unnormalized weights $w^{1}, \dots, w^{N}$ \Comment{\Cref{eq:weights_markov}}
-            \State estimate $\hat v^{l + 1}$ \Comment{\Cref{eq:hat_v}}
-            \State estimate $\widehat{\cov} (U_{t}, U_{t-1}), t=1, \dots, n$, $\widehat\cov (U_{0})$ \Comment{\Cref{eq:empirical_covs}}
-            \State determine $\hat L^{l + 1}$ \Comment{\Cref{thm:schafer_cholesky_analytical}}
-            \State determine transitions $C^{l + 1}$ and innovations $\Xi^{l + 1}$ from $\hat L^{l + 1}$ \Comment{\Cref{eq:parameters_markov_from_L}}
-            \State set $\hat\psi^{l + 1} = \left( \hat v^{l + 1}, C^{l + 1}, \Xi^{l + 1}\right)$
+            \State\label{step:cem-simulate} sample $U^{1} + v^{l}, \dots, U^{N} + v^{l} \iid \G_{\hat\psi^{l}}$ with fixed seed \Comment{\Cref{eq:markov-proposal}} 
+            \State\label{step:cem-weights} determine unnormalized weights $w^{1}, \dots, w^{N}$ \Comment{\Cref{eq:weights_markov}}
+            \State\label{step:cem-est_v} estimate $\hat v^{l + 1}$ \Comment{\Cref{eq:hat_v}} 
+            \State\label{step:cem-est_cov} estimate $\widehat{\cov} (U_{t}, U_{t-1}), t=1, \dots, n$, $\widehat\cov (U_{0})$ \Comment{\Cref{eq:empirical_covs}}
+            \State\label{step:cem-L} determine $\hat L^{l + 1}$ \Comment{\Cref{thm:schafer_cholesky_analytical}}
+            \State\label{step:cem-C_R} determine $C^{l + 1}$ and $R^{l + 1}$ from $\hat L^{l + 1}$ \Comment{\Cref{eq:parameters_markov_from_L}}
+            \State\label{step:est_phi} set $\hat\psi^{l + 1} = \left( \hat v^{l + 1}, C^{l + 1}, R^{l + 1}\right)$ 
             \State set $l = l + 1$
         \Until{$\hat\psi^{l}$ converged}
         \State \textbf{return} $\hpce = \hat \psi^{l}$
     \end{algorithmic}
 \end{algorithm}
 
-% initial value
-To run \Cref{alg:cem-markov-proposal} we require an initial value for $\hat\psi^{0}
-% fixed seed
+% initial value: could also use LA/EIS
+To run \Cref{alg:cem-markov-proposal} we require an initial value for $\hat\psi^{0}$. If a suitable $\hat\psi^{0}$ is not available, we can obtain one from the \gls{la} by sampling $X^{1}, \dots, X^{N}$ from the \gls{la} and performing steps \ref{step:cem-est_v} to \ref{step:cem-est_phi} from the loop.
+Alternatively, we could also directly base our initial value on the smoothing distribution of the \gls{glssm} that the \gls{la} is based on. The Kalman smoother (\Cref{alg:kalman_smoother}) provides us with the analytically available covariances $\cov \left( X_{t}, X_{t - 1} | Z = z \right)$ and the marginal covariance $\cov \left( X_{0} | Z = z \right)$ can be computed as well. 
+
+% convergence: number of iterations, rel. change in psi
+The convergence criteria in \Cref{alg:cem-markov-proposal} is similar to that used for \gls{eis}: we stop until the absolute or entry-wise relative difference of $\hat\psi^{l}$ and $\hat \psi^{l + 1}$ is smaller than a predetermined threshold, or a fixed number of iterations has passed. For the matrices involved, we use the Frobenius norm and the Euclidean distance for the mean $v$. 
+\todo{why not on cholesky root of $\Xi$?}
+
+In \Cref{step:cem-simulate} we use the standard praxis of \glspl{crn} to ensure numerical convergence. This is similar to \gls{eis} and the maximum likelihood estimates from \Cref{sec:maximum_likelihood_estimation}.
+
 % runtime
-% no degeneracy
+We give an overview of the time and space complexities of each line in \Cref{alg:cem-markov-proposal} in \Cref{tab:cem-time-space-complexity}
+The total time complexity of single iteration of \Cref{alg:cem-markov-proposal} is $\mathcal O \left( N\,n\,m^{2} + n\,m^{4}\right)$ and its space complexity is $\mathcal O \left( N\,n\,m + n\,m^{2}\right)$. Let us elaborate on the complexities of each step:
+\begin{enumerate}
+    \item[\Cref{step:cem-simulate}] Generate $N$ i.i.d. samples from model \eqref{eq:markov-proposal}, where each simulation requires $\mathcal O(n)$ matrix-vector multiplications of dimension $m$. 
+    \item[\Cref{step:cem-weights}] To evaluate the weights, \Cref{eq:weights_markov}, we have to evaluate for every sample $\mathcal O(n)$-times the density of a $m$-variate Gaussian distribution, while this usually has time-complexity $\mathcal O(m^{3})$, we have access to the Cholesky root $R_{t}$, making, so this step has time-complexity $\mathcal O(m^{2})$. In \Cref{eq:weights_markov} we also need to compute $p(y_{t}|x_{t})$ and $p(x_{t}|x_{t - 1})$. Assuming conditional independence of observations, $p(y_{t}|x_{t}) = \prod_{i = 1}^{m}p(y_{t}^i|(B_{t}x_{t})^{i})$, evaluating the first term requires only $\mathcal O(m^{2})$ operations. For the second term, if we allow pre-computation of the Cholesky roots of innovations off-line (in $\mathcal O(m^{3})$ time), this step reduces to $\mathcal O(m^{2})$ as well.  
+    \item[\Cref{step:cem-est_v}] Calculating the weighted mean $\hat v \in\R^{(n+1)m}$, \Cref{eq:hat_v}, requires $\mathcal O(N\,n\,m)$ operations.
+    \item[\Cref{step:cem-est_cov}] Calculating the weighted covariance matrices, \Cref{eq:empirical_covs}, requires $(n+1)$ times $N$ many $m\times 1$ with $1 \times m$ vectors. 
+    \item[\Cref{step:cem-L}] To determine $L_{t,t}$ and $L_{t - 1, t}$ we have to solve $m$ times the linear systems of equations given in \Cref{eq:schafer_gamma}, where the dimension of the system is $2m,\dots, m + 1$. This requires $\mathcal O(m^{4})$ many operations, and we have to perform it for every one of the $n + 1$ time points. The result is $L$ with sparsity structure given by \Cref{eq:L_structure}, which has $\mathcal O (n m^{2})$ many non-zero entries.
+    \item[\Cref{step:cem-C_R}] For each of the $\mathcal O(n)$ many $C_{t}$ and $R_{t}$ we have to invert a triangular matrix of dimension $m$. 
+\end{enumerate}
+
+\begin{table}
+    \centering
+    \begin{tabular}{lcc}
+        \toprule
+        step & time complexity & space complexity \\
+        \midrule 
+        simulation (\Cref{step:cem-simulate}) & $\mathcal O \left( N\,n\,m^{2}\right)$ & $\mathcal O \left( N\,n\,m \right)$\\
+        weights (\Cref{step:cem-weights}) & $\mathcal O (N\,n\,m^{2})$ & $\mathcal O \left( N \right)$\\
+        estimating $v$ (\Cref{step:cem-est_v}) & $\mathcal O (N\,n\,m)$ & $\mathcal O \left( n\,m \right)$\\
+        estimating covariances (\Cref{step:cem-est_cov}) & $\mathcal O (N\,n\,m^{2})$ & $\mathcal O \left( n\,m \right)$\\
+        determining $L$ (\Cref{step:cem-L}) & $\mathcal O (n\,m^{4})$ & $\mathcal O (n \,m^{2})$\\
+        determining $C$ and $R$ (\Cref{step:cem-C_R}) & $\mathcal O (n\,m^{3})$ & $\mathcal O (n\,m^{2})$\\
+        \bottomrule
+    \end{tabular}
+    \caption{Time and space complexities of individual steps in \Cref{alg:cem-markov-proposal}.}
+    \label{tab:cem-time-space-complexity}
+\end{table}
+
+An efficient implementation of \Cref{alg:cem-markov-proposal} can improve on some of the other steps involved. There is no need to calculate the $C_{t}$ and $R_{t}$ matrices explicitly, instead we can calculate $C_{t}U_{t - 1}$ efficiently by solving the linear system $L^{T}_{t,t}\left(C_{t}U_{t - 1}\right) = L_{t - 1, t}^TU_{t - 1}t$ by back-substitution, as $L^{T}_{t,t}$ is an upper triangular matrix. Similarly, to compute $R_{t}Z_{t}$ we solve $L^{T}_{t,t}\left( R_{t} Z_{t}\right) = Z_{t}$ by back-substitution. However, the main bottleneck for the time-complexity of \Cref{alg:cem-markov-proposal} is determining $L$ with time complexity $\mathcal O (n\,m^{4})$, which we have not been able to improve upon. \todo{gains by succesive block matrix inversion?}
+
+% if space complexity is problematic, can compute weights first with fixed seed and then iterate forwards
+If the main bottleneck for space lies in the $\mathcal O(N\,n\,m)$ simulation part, we may reduce this by simulating twice from model \eqref{eq:markov-proposal} using \glspl{crn}, and only storing the samples for a single time step (dimension $\mathcal O (N\,m)$) in each simulation. In the first pass, we only calculate the weights, and in the second pass, we calculate $\hat v$ and the required covariance matrices. For this, we only need the $2N$ samples from time $t$ and $t + 1$, i.e. $\mathcal O(N\,m)$ space. This reduces the space complexity to $\mathcal O(N\,m + n\,m^{2})$. 
+
+We demonstrate these improvements in \Cref{alg:cem-markov-proposal-fast}. Additionally, we calculate the weights on the log scale for numerical stability.
+
+\begin{algorithm}
+    \begin{algorithmic}
+        \Require \gls{lcssm} (\Cref{def:lcssm}), observations $Y$, initial estimate $\hat\psi^0 = \left( v^{0}, L^{0}\right)$, sample size $N$
+        \State set $l = 0$
+        \Repeat 
+            \State simulate $Z^{1}_0, \dots, Z^{N}_0 \iid \mathcal N(0, I)$ 
+            \State set $U^{i}_0 = (L^{l}_{0,0})^{-T}Z_{0}^{i}$ \Comment{backsubstitution}
+            \State set $X_{0}^{i} = v^{l}_{0} + U^{i}_0$ 
+            \State set $\log w^{i} = \log p(y_{0}|X_{0}^{i}) + \log p(X_{0}^i) + \frac{1}{2} \lVert Z^{i}_0\rVert^{2}$ \Comment{$\log g(X_{0}^{i}) = -\frac{1}{2}\lVert Z^{i}_{0}\rVert^{2}_2 + C$ }
+            \State store current RNG state
+            \For {$t \gets 1, \dots, n$}
+                \State simulate $Z^{1}_t, \dots, Z^{N}_t \iid \mathcal N(0, I)$ 
+                \State set $U^{i}_t = (L^{l}_{t,t})^{-T}(L_{t - 1, t}^{l})^{T}U^{i}_{t - 1} + (L^{l}_{t,t})^{-T}Z_{t}^{i}$ \Comment{backsubstitution}
+                \State set $X_{t}^{i} = v^{l}_{t} + U^{i}_t$ 
+                \State set $\log w^{i} = \log w^{i} + \log p(y_{t}|X_{t}^{i}) + \log p(X_{t}^i|X_{t - 1}^i) + \frac{1}{2} \lVert Z^{i}_t\rVert^{2}$ 
+            \EndFor
+            \State set $\log w^{i} = \log w^{i} - \max_{i = 1,\dots, N} \log w^{i}$ \Comment{ensure $\log w^{i} \leq 0$}
+            \State set $w^{i} = \exp (\log w^{i})$
+            \State set $W^{i} = \frac{w^{i}}{\sum_{i = 1}^N w^{i}}$ \Comment{auto-normalized weights}
+            \State set $v^{l + 1}_0 = \sum_{i = 1}^{N}W^{i}X_{0}^i$
+            \State restore RNG state
+            \For {$t \gets 1, \dots, n$}
+                \State simulate $Z^{1}_t, \dots, Z^{N}_t \iid \mathcal N(0, I)$ 
+                \State set $U^{i}_t = (L^{l}_{t,t})^{-T}(L^{l}_{t - 1, t})^{T}U^{i}_{t - 1} + (L^{l}_{t,t})^{-T}Z_{t}^{i}$ \Comment{backsubstitution}
+                \State set $X_{t}^{i} = v^{l}_{t} + U^{i}_t$ 
+                \State set $v^{l + 1}_t = \sum_{i = 1}^{N} W^{i}X^{i}_t$
+                \State set $\widehat\cov \left( X_{t - 1}, X_{t} \right) = \sum_{i = 1}^N W^{i} \left( X^{i}_{t-1:t} - v^{l}_{t-1:t} \right)\left( X^{i}_{t-1:t} - v^{l}_{t-1:t} \right)^{T}$
+            \EndFor
+            \State determine $\hat L^{l + 1}$ \Comment{\Cref{thm:schafer_cholesky_analytical}}
+            \State set $\hat\psi^{l + 1} = \left( \hat v^{l + 1}, \hat L^{l + 1}\right)$ 
+            \State set $l = l + 1$
+        \Until{$\hat\psi^{l}$ converged}
+        \State \textbf{return} $\hpce = \hat \psi^{l}$
+        
+    \end{algorithmic}
+    \caption{Time and space improved version of \Cref{alg:cem-markov-proposal}. Instructions involving the free index $i$ are to be performed for all $i = 1, \dots, N$ samples.}
+    \label{alg:cem-markov-proposal-fast}
+\end{algorithm}
+
+The advantage of \Cref{alg:cem-markov-proposal,alg:cem-markov-proposal-fast} over applying the \gls{cem} to the \gls{glssm} model \eqref{eq:glssm-proposal} are multiple: First of all, as long as the involved covariance matrices are positive definite, the two algorithms produce valid proposals, i.e. they do not have the degeneracy problem we observed in \Cref{subsec:glssm-approach}.
+% no numerical issues w/ determining optimal parameters
+Additionally, determining the optimal parameters $(v,C,R)$ or $(v,L)$ is numerically stable, involving only inversion of small matrices. Compare this with solving \Cref{eq:gamm_post}, where we need to employ a numerical scheme to solve for the diagonal entries of $\Omega$.
+% sampling faster 
+
+% problems: large state dimension: both $L$ and number of parameters
+
+% potential solution: directly estimate C + R?
