@@ -1,7 +1,19 @@
 \section{Comparison of Importance Sampling method}
 \label{sec:simulation_studies}
 
-Now that we have gathered \todo{...}
+We now have three tools to produce Gaussian importance sampling proposals: the \gls{la}, the \gls{cem} and \gls{eis}. Naturally, we want to choose the optimal tool for the problem at hand. In this section, we investigate under which circumstances which method is to be preferred over the others. To judge the performance of each method, we will discuss the following quality criteria:
+\begin{itemize}
+    % speed of convergence, i.e. asymptotic variance
+    % performance at the optimum
+    % computation time - though not hard, only theoretical
+    % numerical stability (?)
+    \item time and space complexity of the method,
+    \item speed of stochastic convergence, as indicated by the asymptotic variance, for the \gls{cem} and \gls{eis},
+    \item speed of numerical convergence, as indicated by the number of iterations until \Cref{alg:cem-markov-proposal-fast,alg:eis} reach numerical convergence for fixed sample size $N$ and precision $\epsilon$, and
+    \item performance of the optimal proposal, as measured by the efficiency factor. 
+\end{itemize}
+Let us elaborate on these criteria. Time and space complexity allow us to compare the methods theoretically, i.e. be independent of implementation details. The speed of stochastic convergence is relevant as well: The smaller the asymptotic variance, the smaller we can choose the sample size $N$ and thus decrease computation time. Similarly, numerical convergence directly affects computation time. \todo{reformulate this paragraph nicer} Finally, if one method has vastly better performance at the optimum, we might be willing to spend more time offline once to save time later when we use the proposal to perform inference. 
+
 \begin{example}[univariate Gaussian, $\sigma^{2}$ fixed]
     \label{ex:univ-gaussian-s2-fixed}
     Consider the probability space $ \left( \R, \mathcal B(\R), \P \right)$ where $\P = p\lambda$ for the Lebesgue measure $\lambda$ which is symmetric around $0$, i.e. $p(-x) = p(x)$ for $\lambda$-a.e. $x\in\R$ and possesses up to third order moments.
