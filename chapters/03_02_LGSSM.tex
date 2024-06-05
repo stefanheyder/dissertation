@@ -73,7 +73,7 @@ As the joint distribution of states is Gaussian, these conditional expectations 
 These distributions may be obtained efficiently using the celebrated Kalman filter and smoother algorithms \todo{cite correclty}, which we state here for completeness.
 
 \begin{algorithm}
-    \caption{Kalman filter}
+    \caption{Kalman filter, with runtime $\mathcal O(n(m^{2} + p^{3}))$}
     \label{alg:kalman_filter}
     \begin{algorithmic}
         \Require \gls{glssm} (\Cref{def:glssm}), observations $Y_{0}, \dots, Y_{n}$.
@@ -111,28 +111,6 @@ If ... one may use the information filter, that operates on the precision matric
         \Require todo
     \end{algorithmic}
 \end{algorithm}
-
-%\begin{algorithm}
-%    \caption{Kalman filter}
-%    \KwIn{observations $y = (y_{0}, \dots, y_{n})$, \gls{glssm}}
-%    \KwOut{filtered expectations $\hat X_{t|t}$, covariance matrices $\Xi_{t|t}$, log likelihood $\log p(y)$}
-%    \emph{Initialization}\;
-%    $\hat y_{0|-1} = B_{0}\hat X_{0|-1} + v_{t}$\;
-%    $\Psi_{0|-1} = B_{0} \Sigma_{0}B_{0}^{T} + \Omega_{0}$\;
-%    \emph{Prediction}\;
-%    \emph{Filter}\;
-%\end{algorithm}
-
-%\begin{algorithm}
-%    \caption{Kalman smoother}
-%    \KwIn{observations $y = (y_{0}, \dots, y_{n})$, \gls{glssm}}
-%    \KwOut{filtered expectations $\hat X_{t|t}$ and covariance matrices $\Xi_{t|t}$}
-%    \emph{Initialization}\;
-%    $\hat y_{0|-1} = B_{0}\hat x_{0|-1} + v_{t}$\;
-%    $\Psi_{0|-1} = B_{0} \Sigma_{0}B_{0}^{T} + \Omega_{0}$\;
-%    \emph{Prediction}\;
-%    \emph{Filter}\;
-%\end{algorithm}
 
 Notice that the Kalman filter calculates the likelihood $p(y)$ while filtering --- this is possible because of the dependency structure of the state space model --- this makes inference via maximum likelihood possible in \gls{glssm}s.
 

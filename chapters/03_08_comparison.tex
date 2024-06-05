@@ -40,8 +40,41 @@ In the \gls{lcssm} setting \gls{eis} may produce invalid proposals, as estimates
 % CE failure?
 The \gls{cem} presented in \Cref{subsec:markov-approach} (\Cref{alg:cem-markov-proposal-fast}) depends on the fact that the covariance matrix of the posterior $\cov \left( X | Y = y \right)$ is \gls{spd}, i.e. non-singular. This might be violated if, e.g., the model contains seasonal components whose associated innovations have variance $0$. In this case, the Cholesky roots involved will not be unique. Still \Cref{alg:cem-markov-proposal-fast} provides a globally optimal solution, though it may not be unique. 
 
-\subsection{Time and space complexity}
-As the \gls{la} is based on the Kalman-smoother, the time-complexity of a single iteration is $\mathcal O(n\,m^{3})$, which may be improved to  $\mathcal O(n\,p^{3})$ if the efficient signal smoother is applicable. The \gls{cem} and \gls{eis} need to generate $N$ samples from the current proposal. For the \gls{cem} this amounts to $\mathcal O(N\,n\, m^{2})$ operations (see \Cref{subsec:markov-approach}). For \gls{eis}, using the \gls{ffbs} requires $\mathcal O (N\,n\,m^2 + n\,m^{3})$ operations: the innovations share the same covariance matrices, so their Cholesky roots may be computed for all samples at once. While simulation is more expensive for \gls{eis}, obtaining the mode parameters is more efficient, requiring only $\mathcal O(n(N\,p^2 + p^{3}))$ operations for constructing the $n$ $p\times p$ design matrices and estimating the optimal parameters. In total  
+\subsection{Computational complexity}
+Throughout this section, we assume that the model in question is a \gls{lcssm} with linear signal (c.f. \Cref{def:lcssm}) to simplify the treatment. This benefits the \gls{la} and \gls{eis} approaches, as they may then be implemented in terms of the simulation and signal smoother. If the observation dimension $p$ is smaller than that of states $m$, this is more efficient and we'll assume this as well.
+An overview of computational complexities is given in \Cref{tab:comparison-time-space-complexity}. Note that most operations can be parallelized in one way or the other, e.g. sampling from the proposals, and so the time-complexities are not necessarily indicative of real-world-performance. Still they provide theoretical insight into the performance of the three methods considered.
+
+\begin{table}
+    \centering
+    \begin{tabular}{lccc}
+        \toprule 
+        method & single iteration (time) & single iteration (space) & simulation (time)\\
+        \midrule
+        \gls{la} & $\mathcal O (n \,p^{3})$ & $\mathcal O (np^{2})$ & $\mathcal O(n (p^{3} + m^{3} + N\,m^{2}))$ \\
+        \gls{eis} & $\mathcal O (n(m^{2} + p^{3} + N\,p^{2}))$ & $\mathcal O (N\,p + n(p^{2} + m^{2}))$ & $\mathcal O(n (p^{3} + m^{3} + N\,m^{2}))$\\
+        \gls{cem} & $\mathcal O (N \,n\, m^{4})$& $\mathcal O (Nm + nm^{2})$ & $\mathcal O (N\,n\,m^{2})$\\
+        \bottomrule
+    \end{tabular}
+    \caption{Computational complexities of importance sampling algorithms.}
+    \label{tab:comparison-time-space-complexity}
+\end{table}
+
+% of fitting 
+Let us begin with a discussion of the computational complexity involved in finding the optimal parameters, $\psi_{\la}, \hat\psi_{\eis}$ and $\hat\psi_{ce}$. Here we focus on a single iteration and treat the number of iterations empirically in \Cref{subsec:numerical-convergence}.
+
+As the \gls{la} is based on the Kalman-smoother, the time complexity of a single iteration is $\mathcal O(n(m^{2} + p^{3}))$. The \gls{cem} and \gls{eis} need to generate $N$ samples from the current proposal. For the \gls{cem} this amounts to $\mathcal O(N\,n\, m^{2})$ operations (see \Cref{subsec:markov-approach}). For \gls{eis}, using the simulation smoother \cite{Durbin2002Simple} requires $\mathcal O (n(m^{2} + p^{3} + N\,p^2))$ operations: we need to run the Kalman filter once, while preparing the matrices required for the simulation smoother. Then, provided Cholesky roots of the innovation covariance matrices $\Sigma_{t}$ are already available, only matrix-vector multiplications are necessary for the simulation smoother. Obtaining the \gls{eis} model parameters is efficient, requiring only $\mathcal O(n(N\,p^2 + p^{3}))$ operations for constructing the $n$ $p\times p$ design matrices and estimating the optimal parameters. 
+
+% of simulation 
+Another concern is the time required to generate $N$ samples from the fitted model. For both the \gls{la} and \gls{eis} this requires using either the simulation smoother or the FFBS algorithm. This necessitates inverting $p\times p$ matrices in the Kalman filter and $m \times m$ matrices when simulating the states. Fortunately, these steps can be performed offline, after which the simulation of a single sample requires only $\mathcal O(n)$ matrix-vector multiplications. The \gls{cem} simulation is based on applying \Cref{eq:markov-proposal}, which only requires $\mathcal O(n\,m^{2})$ time per sample. 
+
+% of space
+Concerning space complexity, the \gls{la} has to run the Kalman filter with $\mathcal O(n (p^{2} + m^{2}))$ space and store $\mathcal O(n p)$ parameters. 
+\gls{eis} has the same space requirement, but needs additional $\mathcal O(Np)$ storage for the simulated signals. As the weights $w_{t}$ in \gls{eis} depend only on the current signals $S^{1}_{t}, \dots, S^{N}_{t}$, they may be discarded afterwards. See \Cref{subsec:markov-approach} for the derivation of the $\mathcal O(Nm + nm^{2})$ space requirement of the \gls{cem}.
+
+% interpretation
+The \gls{la} has the fastest and most space-efficient iteration of the three methods, because it does not require simulation of $N$ samples. This makes it an ideal candidate as an initial guess for the other two methods. 
+% compare EIS vs. CEM
+While theoretically, the \gls{cem} performs sampling faster than the other two methods, for large numbers of samples $N$ the difference is negligible because the additional computations only have to be performed once. 
 
 \subsection{Asymptotic variance}
 \begin{example}[univariate Gaussian, $\sigma^{2}$ fixed]
@@ -170,6 +203,7 @@ As the \gls{la} is based on the Kalman-smoother, the time-complexity of a single
 \end{example}
 
 \subsection{Numerical convergence}
+\label{subsec:numerical-convergence}
 
 \subsection{\texorpdfstring{\gls{ess} at the optimum}{ESS at the optimum}}
 
