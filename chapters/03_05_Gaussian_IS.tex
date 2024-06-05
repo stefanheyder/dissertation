@@ -58,6 +58,16 @@ The \gls{glssm}-approach is the standard approach for finding the \gls{la} in \g
 
 We now give a concise overview over how to perform the \gls{la} and \gls{eis} for \gls{lcssm}, but refer the reader for more details to the respective literature.
 The \gls{la} \todo{...}
+
+\begin{algorithm}
+    \caption{The \gls{la} for \gls{lcssm}}
+    \label{alg:la}
+\end{algorithm}
+
+\begin{algorithm}
+    \caption{\gls{eis} for \gls{lcssm}}
+    \label{alg:eis}
+\end{algorithm}
 % SSMs may utilize KF/KS to perform importance sampling
 % LA: cite Koopman paper
 % EIS: cite papers, MEIS NEIS
@@ -258,10 +268,13 @@ where $Z_{t}$ is, by construction, independent of $U_{t}$. Thus for model \eqref
 \begin{align}
     \label{eq:parameters_markov_from_L}
     \begin{split}
-    R_{t} &= L^{-T}_{t,t} \text{ for } t = 0, \dots, n\\
+    R_{t} &= L^{-T}_{t,t} \text{ for } t = 0, \dots, n,\\
     C_{t} &= L^{-T}_{t,t} L_{t-1, t }^T \text{ for } t =1, \dots, n.
     \end{split}
 \end{align}
+\begin{tcolorbox}[title={improve: order to $\mathcal O(m^{3})$}]
+    show that if covariance is SPD, then there is a unique MP with those marginal covariances (just calculate C and R). Then this MP is the optimal one, much faster to calculate (Cholesky decomposition of cov(xt, xt-1))
+\end{tcolorbox}
 Here we see why we chose to use $\overset{\leftarrow}U$ in \Cref{cor:sparsity_L}: had we applied \Cref{thm:gelfand_gmrf} to $U$ directly yields a Markov process in reverse time.
 
 % show how to estimate Cholesky root analytically -> Schäfer
@@ -340,7 +353,7 @@ These steps are summarized in \Cref{alg:cem-markov-proposal}.
             \State\label{step:cem-est_cov} estimate $\widehat{\cov} (U_{t}, U_{t-1}), t=1, \dots, n$, $\widehat\cov (U_{0})$ \Comment{\Cref{eq:empirical_covs}}
             \State\label{step:cem-L} determine $\hat L^{l + 1}$ \Comment{\Cref{thm:schafer_cholesky_analytical}}
             \State\label{step:cem-C_R} determine $C^{l + 1}$ and $R^{l + 1}$ from $\hat L^{l + 1}$ \Comment{\Cref{eq:parameters_markov_from_L}}
-            \State\label{step:est_phi} set $\hat\psi^{l + 1} = \left( \hat v^{l + 1}, C^{l + 1}, R^{l + 1}\right)$ 
+            \State\label{step:cem-est_phi} set $\hat\psi^{l + 1} = \left( \hat v^{l + 1}, C^{l + 1}, R^{l + 1}\right)$ 
             \State set $l = l + 1$
         \Until{$\hat\psi^{l}$ converged}
         \State \textbf{return} $\hpce = \hat \psi^{l}$

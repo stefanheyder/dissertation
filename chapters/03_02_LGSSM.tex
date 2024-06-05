@@ -141,10 +141,11 @@ To ensure numerical stability in these algorithms, the square root filter and sm
 The Kalman smoother computes the marginal distributions $X_{t} | Y$ for $t = 0, \dots, n-1$ and, owing to the Markov structure of the states, these are enough to specify the joint distribution $X|Y$, allowing to simulate from it.
 
 \begin{algorithm}
-    \caption{Forwards filter, backwards smoother \cite[Proposition 1]{Fruhwirth-Schnatter1994Data}}
     \begin{algorithmic}
         \Require TODO
     \end{algorithmic}
+    \caption{Forwards filter, backwards smoother \cite[Proposition 1]{Fruhwirth-Schnatter1994Data}}
+    \label{alg:ffbs}
 \end{algorithm}
 
 The modeling capacity of \gls{glssm} is, however, limited: most interesting phenomena follow neither linear dynamics nor are well modeled by a Gaussian distribution.
