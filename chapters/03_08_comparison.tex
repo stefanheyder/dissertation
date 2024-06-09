@@ -129,25 +129,23 @@ Let us note that we are comparing the efficiencies of parameters $\psi$, not tho
     \begin{figure}
         \centering
 
-        \begin{subfigure}{.49\textwidth}
-            \resizebox{\textwidth}{!}{%
-                \input{tikz/are_mu.tex}%
-            }
-        \end{subfigure}
-        \begin{subfigure}{.49\textwidth}
-            \resizebox{\textwidth}{!}{%
-                \input{tikz/are_sigma.tex}%
-            }
-        \end{subfigure}
+        \resizebox{\textwidth}{!}{%
+            \input{tikz/are.tex}%
+        }
         \label{fig:normal_are}
-        \caption{Asymptotic relative efficiency $\frac{V_{\eis}}{V_{\ce}}$ for the normal distribution from \Cref{ex:univ-gaussian-s2-fixed} (left hand side) and \Cref{ex:univ-gaussian-mu-fixed} (right hand side). Here $\P = \mathcal N(0, 1)$ is the standard normal distribution and $\G = \mathcal N(\mu, \sigma^{2})$, where either $\sigma^{2}$ is fixed (left) and $\mu$ determined by the \gls{cem} / \gls{eis}, or the other way around (right). Notice the log scale of the $y$-axis. As $\mu$ or $\sigma^{2}$ get close to their true values, \gls{eis} outperforms the \gls{cem} in terms of asymptotic variance, see {\color{red} todo:  reference to example where EIS is exact.}. As}
+        \caption{Asymptotic relative efficiency $\frac{V_{\eis}}{V_{\ce}}$ for the normal distribution from \Cref{ex:univ-gaussian-s2-fixed} (left hand side) and \Cref{ex:univ-gaussian-mu-fixed} (right hand side). Here $\P$ is either the standard normal distribution, a Gaussian location mixture, or a Gaussian scale mixture. $\G_{\psi}$ is the normal distribution $\mathcal N(\mu, \sigma^{2})$, where either $\sigma^{2}$ is fixed (left) and $\mu$ determined by the \gls{cem} / \gls{eis}, or the other way around (right). Notice the log scale of the $y$-axis. As $\mu$ or $\sigma^{2}$ get close to their true values, \gls{eis} outperforms the \gls{cem} in terms of asymptotic variance, see \Cref{prop:eis-finite-sample}. {\color{red} todo: clean up figure legend / linetype}}
     \end{figure}
     
     \paragraph{Gaussian location mixture}
-    Consider now the case where $\P = \frac{1}{2} \mathcal N(-1, \omega^{2}) + \frac{1}{2}\mathcal N(1, \omega^{2})$ is a Gaussian location mixture. The second moment is $\tau^{2} = 1 + \omega^{2} = -\frac{1}{2\pce}$. Unfortunately, there is no closed-form expression for many of the terms required for the analysis \gls{eis}. Instead, we resort to a simulation study to determine the asymptotic variances and relative efficiencies.
-
+    Consider now the case where $\P = \frac{1}{2} \mathcal N(-1, \omega^{2}) + \frac{1}{2}\mathcal N(1, \omega^{2})$ is a Gaussian location mixture. The second moment is $\tau^{2} = 1 + \omega^{2} = -\frac{1}{2\pce}$. Unfortunately, there is no closed-form expression for many of the terms required for the analysis \gls{eis}. Instead, we resort to a simulation study to determine the asymptotic variances and relative efficiencies for three different values of $\omega^{2} \in \{0.1, 0.5, 1.0\}$. 
     
-    \paragraph{}
+    To this end we draw $M = 100$ times from the distribution of $\hpce$ and $\hpeis$, where we use $N=1000$ samples from the tractable $\P$ as importance samples. We only iterate a single time for both procedures. From individual estimates, we estimate the asymtpotic variances $V_{\ce}$ and $V_{\eis}$ by the respective empirical variances, and determine the relative efficiency of \gls{eis} over the \gls{cem} as $ \frac{V_{\eis}}{V_{\ce}}$. Again, we vary the fixed variance of the proposals, $\sigma^{2}$, from $\frac{1}{2}$ to $3$. We display the resulting relative efficiencies in the left-hand subfigure of \Cref{fig:normal_are}. 
+    \todo{discuss MC error of this estimate, small enough to leave off of plots?}
+    
+    \paragraph{Gaussian scale mixture}
+    Similar to the last example we now consider $\P = \frac{1}{2} \left(\mathcal N \left( 0, 1 \right) + \mathcal N (0, \\rho^{2}) \right)$ for $\rho^{2} \in \{0.01, 0.1, 0.5\}$, a scale mixture similar to the one seen in \Cref{ex:la_failure}. 
+    We estimate the asymptotic variances $V_{\ce}$ and $V_{\eis}$ in the same way as for the Gaussian location mixture, with $M=100$ estimates using $N=1000$ samples each. 
+    \todo{make notation similar to that example?}
     \todo{interpretation: if variance set too low, CE better. if variance too big EIS better}
     \todo{add scale mixture similar to example LA failure before}
     
@@ -182,7 +180,7 @@ Let us note that we are comparing the efficiencies of parameters $\psi$, not tho
     \end{align*}
 
     \paragraph{Normal distribution}
-    Consider now the normal distribution $\P = \mathcal N (0, \tau^{2})$ where $\nu = 3 \tau^{4}$ and $\gamma = -\tau^{2}$, so 
+    Consider again the normal distribution $\P = \mathcal N (0, \tau^{2})$ where $\nu = 3 \tau^{4}$ and $\gamma = -\tau^{2}$, so 
     \begin{align*}
         \peis &= \frac{-\tau^{2}}{2\tau^{2} \left( \tau^{2} + 2\mu^{2} \right)} = \frac{-1}{2(\tau^{2} + 2\mu^{2})}.
     \end{align*}
@@ -197,6 +195,16 @@ Let us note that we are comparing the efficiencies of parameters $\psi$, not tho
     \end{align*}
     see the accompanying source code for their calculation in sympy \todo{ref it}.
 \end{example}
+
+\begin{figure}
+    \centering
+
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/rho.tex}%
+    }
+    \label{fig:normal_rho}
+    \caption{{\color{red} TODO}}
+\end{figure}
 
 \subsection{Numerical convergence}
 \label{subsec:numerical-convergence}

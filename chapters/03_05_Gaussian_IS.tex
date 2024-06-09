@@ -275,6 +275,9 @@ where $Z_{t}$ is, by construction, independent of $U_{t}$. Thus for model \eqref
 \begin{tcolorbox}[title={improve: order to $\mathcal O(m^{3})$}]
     show that if covariance is SPD, then there is a unique MP with those marginal covariances (just calculate C and R). Then this MP is the optimal one, much faster to calculate (Cholesky decomposition of cov(xt, xt-1))
 \end{tcolorbox}
+\begin{tcolorbox}[title={improve: use simulation / signal smoother}]
+    signal smoother is much more efficient than FFBS, estimating mean of Xs is straight forward. For covariance matrices we have to run Kalman smoother backwards for all signals sampled, then weigh with weights. should reduce variance, especially if dimension of signal is high
+\end{tcolorbox}
 Here we see why we chose to use $\overset{\leftarrow}U$ in \Cref{cor:sparsity_L}: had we applied \Cref{thm:gelfand_gmrf} to $U$ directly yields a Markov process in reverse time.
 
 % show how to estimate Cholesky root analytically -> Schäfer
