@@ -23,7 +23,7 @@ Let us start with a classical example in which the \gls{la} fails to produce con
   \label{ex:la_failure}
   Consider the Gaussian scale mixture $\P = \frac{1}{2} \left(\mathcal N (0,1) + \mathcal N(0, \varepsilon^{-2})\right)$ with mode $x^{\ast}=0$. 
   The \gls{la} is $\G_{\text{LA}} = \mathcal N \left( 0, \frac{1}{\varepsilon^{2} - \varepsilon + 1} \right)$, whose variance goes to $1$ as $\varepsilon$ goes to $0$, so the \gls{la} will miss close to $\frac 1 2$ of the total mass.
-  For $\varepsilon$ small enough, the variance of the \gls{la} will be smaller than $\frac{1}{2\varepsilon^{2}}$, whence the second moment of the weights is infinite and importance sampling fails.
+  For $\varepsilon$ small enough, the variance of the \gls{la} will be smaller than $\frac{1}{2\varepsilon^{2}}$, whence the second moment of the weights is infinite and importance sampling with $\G_{\text{LA}}$ is inconsistent.
 
   The \gls{cem} minimizes the KL-divergence between $\P$ and $\G_{\psi}$, is given by $\G_{\text{CE}} = \mathcal N (0, \sigma^{2})$, where $\sigma^{2} = \frac{1}{2}\left( 1 + \varepsilon^{-2} \right)$ is the variance of $\P$.
   As $\sigma^{2} > \frac{1}{2}\varepsilon^{-2}$, the weights have finite second moment, and importance sampling with $\G_{\ce}$ is consistent.
@@ -144,6 +144,7 @@ Let us note that we are comparing the efficiencies of parameters $\psi$, not tho
     
     \paragraph{Gaussian scale mixture}
     Similar to the last example we now consider $\P = \frac{1}{2} \left(\mathcal N \left( 0, 1 \right) + \mathcal N (0, \\rho^{2}) \right)$ for $\rho^{2} \in \{0.01, 0.1, 0.5\}$, a scale mixture similar to the one seen in \Cref{ex:la_failure}. 
+    Here $\tau^{2} = \frac{1}{2} + \frac{\rho^{2}}{2}$. 
     We estimate the asymptotic variances $V_{\ce}$ and $V_{\eis}$ in the same way as for the Gaussian location mixture, with $M=100$ estimates using $N=1000$ samples each. 
     \todo{make notation similar to that example?}
     \todo{interpretation: if variance set too low, CE better. if variance too big EIS better}
@@ -202,8 +203,20 @@ Let us note that we are comparing the efficiencies of parameters $\psi$, not tho
     \resizebox{\textwidth}{!}{%
         \input{tikz/rho.tex}%
     }
-    \label{fig:normal_rho}
     \caption{{\color{red} TODO}}
+    % Interpretation
+    % as $mu$ grows, almost always EF goes down, exception: scale mixture w/ small rho
+    \label{fig:rho}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/rho_mu.tex}%
+    }
+    \caption{{\color{red}} TODO}
+    \label{fig:rho_mu}
+
 \end{figure}
 
 \subsection{Numerical convergence}
