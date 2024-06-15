@@ -9,4 +9,4 @@ commit_yesterday:
     git commit --amend --date="yesterday 8PM" --no-edit
 
 clean:
-    rm thesis.{acn,aux,auxlock,bbl,bcf,fdb_latexmk,fls,glo,ist,log,out,run.xml,synctex.gz,toc}
+    rm thesis.{acn,aux,auxlock,bbl,bcf,fdb_latexmk,fls,glo,ist,log,out,run.xml,synctex.gz,toc,bbl-SAVE-ERROR,bcf-SAVE-ERROR}

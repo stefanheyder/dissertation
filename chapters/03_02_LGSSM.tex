@@ -63,12 +63,8 @@ As the joint distribution of $(X, Y)$ is Gaussian, so are conditional distributi
 
 \end{proof}
 
-Let us denote by $\hat X_{t | s}$ the conditional mean of $X_{t}$ given observations $Y_{:s}$ and by $\Xi_{t | s}$ the conditional covariance matrix of $X_{t}$ given $Y_{:s}$. Then $X_{t} | Y_{:s} \sim \mathcal N \left( \hat X_{t|s}, \Xi_{t|s} \right)$. For a given $t$, three values of $s$ are of particular interest: If $s = t - 1$ determining this conditional distribution is called a \textbf{prediction problem}, if $s = t$ this is a \textbf{filtering problem} and if $s = n$ a \textbf{smoothing problem}, and we call the distributions we seek the \textbf{predictive, filtering} or \textbf{smoothing distribution} respectively. 
+Let us denote by $\hat X_{t | s}$ the conditional expectation of $X_{t}$ given a set of observations $Y_{:s}$ and by $\Xi_{t | s}$ the conditional covariance matrix of $X_{t}$ given $Y_{:s}$. Then $X_{t} | Y_{:s} \sim \mathcal N \left( \hat X_{t|s}, \Xi_{t|s} \right)$. For a given $t$, three values of $s$ are of particular interest: If $s = t - 1$ determining this conditional distribution is called a \textbf{prediction problem}, if $s = t$ this is a \textbf{filtering problem} and if $s = n$ a \textbf{smoothing problem}, and we call the distributions we seek the \textbf{predictive, filtering} or \textbf{smoothing distribution} respectively. 
 Similarly we define $\hat Y_{t|s} = \E \left( Y_{t} \middle| Y_{:s} \right)$ to be the conditional expectation of $Y_{t}$ given $Y_{:s}$, note that $\hat Y_{t|s} = Y_{t}$ if $s \geq t$. Finally, let $\Psi_{t|s} = \cov \left( Y_{t} | Y_{:s} \right)$ be the conditional covariance matrix of $Y_{t}$ given $Y_{:s}$. Again $\Psi_{t|s} = 0$ if $s \geq t$. 
-
-As the joint distribution of states is Gaussian, these conditional expectations are given by the \acrfull{blup} of $X_{t}$ $Y_{:s}$. \todo{cite}
-
-\todo{Note that the filtering distributions does not specify a valid joint distribution for the states, but the smoothing does.}
 
 These distributions may be obtained efficiently using the celebrated Kalman filter (\Cref{alg:kalman_filter}) and smoother (\Cref{alg:kalman_smoother}) algorithms, which we state here for completeness.
 \todo{KF + KS literature review, historical comment}
@@ -78,26 +74,21 @@ These distributions may be obtained efficiently using the celebrated Kalman filt
     \label{alg:kalman_filter}
     \begin{algorithmic}
         \Require \gls{glssm} (\Cref{def:glssm}), observations $Y_{0}, \dots, Y_{n}$.
-        \Statex
         \State $A_{-1} \gets I \in \mathbf R^{m\times m}$ \Comment{Identity Matrix}
         \State $u_{-1} \gets \mathbf 0 \in \mathbf R^{m}$ 
         \State $\hat X_{-1|-1} \gets \E X_0$
         \State $\Xi_{0|-1} \gets \Sigma_{0}$
-        \Statex
         \For{$t \gets 0, \dots, n$}
-            \Statex
             \State $\hat X_{t| t - 1} \gets A_{t-1} \hat X_{t-1|t-1} + u_{t-1}$ \Comment{prediction}
             \State $\Xi_{t | t - 1} \gets A_{t - 1} \Xi_{t - 1 | t - 1 } A_{t - 1}^{T} + \Sigma_{t}$ 
             \State $\hat Y_{t|t - 1} \gets B_{t}\hat X_{t | t - 1} + v_{t}$
             \State $\Psi_{t|t - 1} \gets B_{t}\Xi_{t | t - 1} B_{t}^T + \Omega_{t}$
-            \Statex
             \State $K_t \gets \Xi_{t | t - 1} B_{t}^T \Psi_{t | t - 1} ^{-1}$ \Comment{filtering}
             \State $\hat X_{t | t} \gets \hat X_{t | t - 1} + K_t (Y_{t} - \hat Y_{t | t - 1})$
             \State $\Xi_{t| t } \gets \Xi_{t | t - 1} - K_t \Psi_{t| t - 1} K_t^T$
         \EndFor
     \end{algorithmic}
 \end{algorithm}
-\todo{make n, n-1 consistent (ISSSM uses from 0 to n)}
 In \Cref{alg:kalman_filter} every time point $t = 0, \dots, n$ is processed in the same way, with a two-step procedure: first we predict the new observation $Y_{t}$ based on $Y_{:t-1}$. Using the linearity of the system as well as the assumed conditional independence, this is achieved by applying the system dynamics to the current conditional expectation and covariance matrices. After $Y_{t}$ has been observed, we can update the conditional distribution of the states by appealing to \Cref{lem:gaussian_conditional}.
 For a rigorous derivation of the Kalman filter, we refer the reader to \cite[Chapter 4]{Durbin2012Time} or the excellent monograph of \citeauthor{Schneider1986Kalmanfilter}, \cite{Schneider1986Kalmanfilter}. 
 

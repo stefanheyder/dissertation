@@ -1,27 +1,19 @@
 \section{Logconcave Gaussian state space models}
 \label{sec:logconcave_gaussian_state_space_models}
 
-\begin{itemize}
-    \item replace gaussian observations with log concave observations
-    \item motivation for logconcave distributions: posterior has unique mode, because up to constants $\log p(x | y) = - \frac{1}{2} (x - \mu)^T \Sigma^{-1} (x - \mu) + \log p(y | x) $ so $\log p(x|y)$ is concave
-    \item not restricted to same type of distribution per time step (though in ISSSM it will be)
-    \item Laplace approximation sensible for these types of models: single mode
-    \item special case: exponential family distributions
-\end{itemize}
-
-The distribution of observations is never Gaussian - all statisticians may hope for is that the data-generating mechanism is close enough to a Gaussian distribution that inferences made carry over.
-For epidemiological models, Gaussian distributions are appropriate if incidences are high, e.g. during large outbreaks in a whole country. 
-When case numbers are small, the discrete nature of incidences is better captured by a distribution on $\mathbf N_{0}$, and standard distributions used are the Poisson and negative binomial distributions, see \todo{auto/Cref?}.
-Both the Poisson and negative binomial belong to the class of exponential family distributions. As such, their densities have a simple structure, allowing only for a linear interaction between the natural parameter and the densities argument. We refer to \cite{Brown1986Fundamentals} for a comprehensive treatment of exponential families and use their definitions throughout this chapter.
+The distribution of observations is never Gaussian - all we may hope for is that the data-generating mechanism is close enough to a Gaussian distribution that inferences made in the Gaussian model carry over.
+For epidemiological models, Gaussian distributions may be appropriate if incidences are high, e.g. during large outbreaks in a whole country. 
+When case numbers are small, the discrete nature of incidences is better captured by a distribution on $\mathbf N_{0}$, and standard distributions used are the Poisson and negative binomial distributions, see e.g. \cite{Lloyd-Smith2005Superspreadinga}.
+Both the Poisson and negative binomial belong to the class of exponential family distributions. As such, their densities have a convenient structure, allowing only for a linear interaction between the natural parameter and the densities argument. We refer to \cite{Brown1986Fundamentals} for a comprehensive treatment of exponential families and use their definitions throughout this section.
 
 \begin{definition}[exponential family]
     Let $\mu$ be a $\sigma$-finite measure on $\R^{p}$ and denote by 
-    $$\Theta = \left\{\theta \in \R^{p} : \int \exp \left( \theta^{T} x \right) \d\mu(y) < \infty\right\}$$
+    $$\Theta = \left\{\theta \in \R^{p} : \int \exp \left( \theta^{T} y \right) \d\mu(y) < \infty\right\}$$
     the set of parameters $\theta$ such that the moment-generating function of $\mu$ is finite. 
     For every $\theta \in \Theta$ $$p_{\theta}(y) = Z(\theta)^{-1} \exp (\theta^{T} y)$$ defines a probability density with respect to the measure $\mu$, where $$Z(\theta) = \int \exp \left( \theta^{T} x \right) \d\mu(y)$$ is the normalizing constant. 
     We call both the densities $p_{\theta}$ and induced probability measures $$ \P_{\theta} (A) = \int_{A} p_{\theta}(y) \d \mu(y),$$ for measurable $A \subset \R^{p}$, a \textbf{standard exponential family}.
 
-    Conversely, let $\P_{\theta}, \theta \in \Theta$ be a given parametric family of probability measures on some space $\mathcal Y$ that is absolutely continuous with respect to a common dominating measure $\mu$. Suppose there exists a reparametrization $\eta : \Theta \to \R^{p}$, a statistic $T: \mathcal Y \to \R^{p}$ and functions $Z: \Theta\to \R$, $h:\mathcal Y \to \R$ exist, such that
+    Conversely, let $\P_{\theta}, \theta \in \Theta$ be a given parametric family of probability measures on some space $\mathcal Y$ that is absolutely continuous with respect to a common dominating measure $\mu$. Suppose there exist a reparametrization $\eta : \Theta \to \R^{p}$, a statistic $T: \mathcal Y \to \R^{p}$ and functions $Z: \Theta\to \R$, $h:\mathcal Y \to \R$, such that
     $$
         p_{\theta}(y) = \frac{\d \P_{\theta}}{\d \mu} = Z(\theta) h(y) \exp \left(\eta(\theta)^{T}T(y)\right),
     $$
@@ -29,21 +21,17 @@ Both the Poisson and negative binomial belong to the class of exponential family
     % potentially more: canonical parameter/statistic/observation, regular, full, minimal, convex support
 \end{definition}
 
-\todo{necessary?}
-\begin{definition}[curved exponential family]
-
-\end{definition}
-    
-Exponential families have the attractive property that they are log-concave in their parameters. As such the Fisher-information is always positive semidefinite, which will be crucial in defining surrogate Gaussian models in \todo{later section}.
+Exponential families have the attractive property that they are log-concave in their parameters. As such the Fisher-information is always positive semidefinite, which will be crucial in defining surrogate Gaussian models in \Cref{sec:gaussian_importance_sampling_for_state_space_models}.
 \begin{lemma}[log-concavity of exponential family distributions]
-    Let $p_{\theta}, \theta \in \Theta$ be a natural dimensional exponential family and $\Theta$ open in $\R^{p}$. In this case $\theta \to \log p_{\theta}(y)$ is concave for every $y \in \R^{p}$.
+    Let $p_{\theta}, \theta \in \Theta$ be a natural $p$-dimensional exponential family and $\Theta$ open in $\R^{p}$. In this case $\theta \to \log p_{\theta}(y)$ is concave for every $y \in \R^{p}$.
 \end{lemma}
 
 \begin{proof}
-    As $\log p_{\theta}(y) = - \log Z(\theta) + \theta^{T} y$ it suffices to show that $\log Z(\theta)$ is convex. However, $\log Z(\theta)$ is the cumulant generating function of the base measure $\mu$ which is known to be convex \todo{more reasoning? differentiate under integral, check if dominated convergence applies, or look for a ref}.
+    As $\log p_{\theta}(y) = - \log Z(\theta) + \theta^{T} y$ it suffices to show that $\log Z(\theta)$ is convex. However, 
+    $$\theta \mapsto \log Z(\theta) = \log \int \exp \left( \theta^{T}y \right) \mathrm d \mu(y)$$ is the cumulant generating function of the base measure $\mu$, which is convex \cite[p. 148]{Billingsley1995Probabilitya}.
 \end{proof}
 
-We now generalize \Cref{def:glssm} to allow for non-gaussian observations by replacing the observation equation \Cref{eq:glssm_observations} by more general exponential families.
+We now generalize \Cref{def:glssm} to allow for non-Gaussian observations by replacing the observation equation \Cref{eq:glssm_observations} by more general exponential families.
 
 \begin{definition}[\acrfull{lcssm}]
     \label{def:lcssm}
@@ -63,27 +51,13 @@ We now generalize \Cref{def:glssm} to allow for non-gaussian observations by rep
     $$
     for functions $h_{t}^{i}: \R \to \R, Z^{i}_{t}: \R \to \R, \eta^{i}_{t}: \R\to\R, T: \R\to\R$, $i = 1, \dots p$, we say the \gls{lcssm} has a \textbf{linear signal}.
 
-    \todo{LCSSM only logconcave observations would suffice, then EF is just an instance of this}
+    %\todo{LCSSM only logconcave observations would suffice, then EF is just an instance of this}
 \end{definition}
 
 \begin{remark}
     To simplify notation we will usually assume that the functions $h, Z$ and $T$ are the same for all $t$ (and $i$, if the \gls{lcssm} has a linear signal) and drop in our notation the dependence of $h$, $Z$, and $T$ on $t$ (and $i$). Similarly we assume that the base measure $\mu_t$ is the same for all relevant $t$.
 \end{remark}
 
-As in the previous chapter, after having observed $Y$, one is interested in the conditional distribution of states $X$, given $Y$. If the observations are not Gaussian, this is a difficult task as the distribution is not analytically tractable. Instead approximations, e.g. the \gls{la} (see \Cref{cha:laplace_approximation}), or simulation based inference, e.g. importance sampling or MCMC-methods, are used. Similarly, fitting hyperparameters $\theta$ by maximum likelihood inference becomes more difficult as evaluating $\ell(\theta) = p(y) = \int p(x,y) \d x$ is not analyically avaiable, thus requiring numerical or simulation methods for evaluation and  gradient descent or EM-techniques for optimization (\todo{really EM?}.
+As in the previous chapter, after having observed $Y$, one is interested in the conditional distribution of states $X$, given $Y$. If the observations are not Gaussian, this is a difficult task as the distribution is not analytically tractable. Instead approximations, e.g. the \gls{la} (\Cref{cha:laplace_approximation}), or simulation-based inference, e.g. importance sampling (\Cref{sec:importance_sampling,sec:gaussian_importance_sampling_for_state_space_models}), sequential Monte Carlo \cite{Chopin2020Introduction} or MCMC-methods \cite{Brooks2011Handbook} are used. Similarly, fitting hyperparameters $\theta$ by maximum likelihood inference becomes more difficult as evaluating $\ell(\theta) = p(y) = \int p(x,y) \d x$ is not analyically available, thus requiring numerical or simulation methods for evaluation and gradient descent or EM-techniques for optimization, see \Cref{sec:maximum_likelihood_estimation}.
 
-In this thesis we will use importance sampling methods, which are the focus of the next section. 
-
-\todo{move this to the LA section}
-Under appropriate assumptions on the observation distributions, the \gls{la} is given by a (possibly degenerate) \gls{glssm} \cite{Durbin1997Monte, Shephard1997Likelihood}, though the derivations and computations are more involved in the nonlinear case or if the observation densities are not log-concave.
-
-\begin{theorem}[\gls{la} of \gls{lcssm}]
-    
-\end{theorem}
-
-\todo{this paragraph to modelling chapter}
-The Poisson distribution arises from the law of small numbers: if there is a large population where every individual has, independently, a small probability of becoming infected in a small window of time then the total number of infections in that window of time is well approximated by the Poisson distribution.
-Indeed, the law of small numbers remains valid for small dependencies \cite{Ross2011Fundamentalsa,Arratia1990Poisson}.
-However, incidences observed from the SARS-CoV-2 epidemic tend to follow a negative binomial distribution \cite{Chan2021Count}. 
-
-
+In this thesis, we will focus on importance sampling methods, which are the focus of the next section.
