@@ -1,0 +1,26 @@
+\section{Dessiderata for epidemiological models}
+\label{sec:dessiderata}
+
+\begin{itemize}
+    \item we want models to be able to include as much data as possible, while still being numerically tractable 
+\end{itemize}
+
+\todo{this paragraph to modelling chapter}
+The Poisson distribution arises from the law of small numbers: if there is a large population where every individual has, independently, a small probability of becoming infected in a small window of time then the total number of infections in that window of time is well approximated by the Poisson distribution.
+Indeed, the law of small numbers remains valid for small dependencies \cite{Ross2011Fundamentalsa,Arratia1990Poisson}.
+However, incidences observed from the SARS-CoV-2 epidemic tend to follow a negative binomial distribution \cite{Chan2021Count}. 
+
+
+
+
+\paragraph{Regional dependencies and effects}
+\begin{itemize}
+    \item German case data are reported on Landkreis level, performing analysis of each individual is not sensible 
+    \item inhabitants travel between regions, and measures were taken on on regional level as well
+    \item effects are not really spatial: euclidean distance is not so much of an issue but how closely connected regions are (give some examples)
+    \item also want to account for other regional effects such as different socio-economic settings ... 
+\end{itemize}
+
+\paragraph{Temporal correlation}
+
+\paragraph{Interpretability}
