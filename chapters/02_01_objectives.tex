@@ -1,19 +1,27 @@
 \section{Objectives of epidemiological modelling}
 
-
-
-\paragraph{Monitoring}
-%monitoring is real-time scenario, interested in current developments, i.e. recent past and near future. complicated by potentially slow reporting, data revisions
-%informs decision makers on whether measures should be taken
-%ForecastHub(s) provide platform that creates ensemble forecast to obtain better predictions \cite{Bracher2022National,Bracher2021Preregistered,Ray2020Ensemble,Sherratt2022Predictive}
+Before considering the mathematical modeling of epidemics, let us make clear what the goals of our investigation are. In this thesis, we are interested in providing models that are informed by real-world data, allow us to learn about the past, current or future state of the epidemic and whose results are, ideally, easy to communicate to non-experts, e.g. political stakeholders.
+These time scales can be translated into the following three tasks for epidemiological modeling.
 
 \paragraph{Retrospective Analysis}
-%evaluation of measures taken, want interpretation as causal as possible
-%informs decision makes on which measures were effective and how much
-%difficult due to usual reasons: poor data quality, observational data, causual structure difficult, early/late adoption makes timing of measurements difficult
-%cite some papers that did this \cite{Flaxman2020Estimating,Brauner2021Inferring,Khazaei2023Using}
+Here we are interested in an ex-post analysis of a period of interest in the past. The goal here is either to infer intrinsic epidemiological quantities, such as the time-varying reproduction number $R_{t}$ \cite{Abbott2020Estimating} or to evaluate the performance of \glspl{npi} taken \cite{Flaxman2020Estimating,Brauner2021Inferring,Khazaei2023Using}. The results of this analysis may inform future decisions on which countermeasures to implement, and as such we want a causal link between the \acrshortpl{npi} prescribed and the reduction in reported cases. Naturally, this is a difficult objective to accomplish due to several aspects. The data at our disposal is observational and there are several quality issues, see \Cref{sec:data}. Additionally, the interplay between \acrshortpl{npi} and change in the behavior of the population is intricate, where voluntary behavioral change may precede the enforced social distancing \cite{Gupta2020Mandated}. 
+For some examples focusing on the efficacy of \acrshortpl{npi}, we refer the reader to the excellent articles \cite{Flaxman2020Estimating,Brauner2021Inferring,Khazaei2023Using}, especially the discussion and limitation sections therein. 
+In these types of analyses, we can assume that all data related to that period is as complete as it will be. 
+Methods used to perform these analyses range from estimating parameters for each day individually, e.g. using the EpiEstim \cite{Cori2021EpiEstim} method \cite{Abbott2020Estimating}, to constructing complex Bayesian mechanistic \cite{Flaxman2020Estimating} and hierarchical models \cite{Brauner2021Inferring,Khazaei2023Using}. 
+% methods
+%% Flaxman: Bayesian mechanistic model w/ partial pooling of interventions 
+%% Brauner: Flaxman + incidences, more data, priors on epi parameters, NPI difference across countries
+%% Khazei: Bayesian hierarchical model
+%% Abbott: EpiEstim, each day separately
 
-\paragraph{Scenario Modelling}
+\paragraph{Monitoring}
+For monitoring, we are interested in real-time inference about the current state of the epidemic. This includes the recent past and near future and may include now- and forecasts of cases, hospitalizations or deaths. Here data is not yet final, and inference is complicated by slow reporting and data revisions, see \Cref{sec:data}. The results of monitoring can be used to inform current policy, i.e. whether current \acrshortpl{npi} should be lifted or new ones enforced. Most online dashboards that emerged at the beginning of the pandemic fall into this category. The result of monitoring may either be an estimate of an epidemiological indicator, but may also consist of short-term forecasts. Examples of the former include the daily reproduction number estimates of the \acrshort{rki} \cite{AnDerHeiden2020Schatzung}, the Helmholtz Centre for Infection Research's dashboard \cite{Khailaie2021Development} or the dashboard of the authors team \cite{Hotz2020Monitoring}.
+While some of these dashboards also provide forecasts of cases, a more concerted effort of forecasts is provided by the U.S. ForecastHub \cite{Ray2020Ensemble}, its German/Polish \cite{Bracher2021Preregistered,Bracher2022National} and EU/EFTA \cite{Sherratt2022Predictive} equivalents. These collaborative platforms gathered real-time forecasts of \acrshort{c19} cases and deaths in the upcoming four weeks, based on an ensemble that aggregates predictions from several models provided by expert modelers. In a real-time setting, these forecasts can be evaluated which may inform practitioners as to which model to prefer. 
+For forecasting, methods range from classical time series analysis methods \cite{Arroyo-Marioli2021Tracking} to compartmental models \cite{Khailaie2021Development} and computationally intensive agent-based models \cite{Adamik2020Mitigation}.
 
-%concerns itself with modelling the impact that variants, seasonality etc. have in specific scenarios 
-%find out whether there is already paper of ECDC to cite
+\paragraph{Scenario Modeling}
+Scenario modeling concerns itself with the impact that changes of current circumstances, e.g. variants, seasonality, policies, vaccination or \acrshortpl{npi}, have on public health outcomes. Contrary to monitoring, the goal is to quantify the influence over longer periods with scenarios reaching multiple months into the future. The parameters of scenarios are assumed to be uncertain as well, making the task at hand challenging. These forecasts are difficult to evaluate, as the scenario specifications rely on assumptions that are hard to verify in practice. Nevertheless, these scenarios help policymakers make informed decisions \cite{Borchering2023Public}.
+% methods?
+\\[2\textheight]
+
+In this thesis, we will forego scenario modelling
