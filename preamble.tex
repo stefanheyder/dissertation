@@ -44,8 +44,7 @@
 %  %backref=true,%
 %  natbib=true % natbib compatibility mode (\citep and \citet still work)
 %}{biblatex}
-\usepackage[backend=biber,bibencoding=utf8,language=auto,style=numeric-comp,sorting=nyt,maxbibnames=3,natbib=true]{biblatex}
-
+\usepackage[backend=biber,bibencoding=utf8,language=auto,style=authoryear-comp,sorting=nyt,maxbibnames=1,natbib=true,giveninits=true]{biblatex}
 \usepackage{amsmath}
 \usepackage{amsthm}
 
@@ -174,7 +173,7 @@
 
 
 % glossaries and acronyms
-\usepackage[acronym]{glossaries}
+\usepackage[toc,acronym]{glossaries}
 \glsdisablehyper
 % algorithms
 \usepackage{algorithm}
@@ -186,6 +185,7 @@
     {inline,backgroundcolor=orange}{}
 \makeatletter
 \renewcommand{\todo}[2][]{\tikzexternaldisable\@todo[#1]{#2}\tikzexternalenable}
+\newcommand{\todoTH}[2][]{\tikzexternaldisable\@todo[backgroundcolor=red,#1]{#2}\tikzexternalenable}
 \makeatother
 
 % cleveref should be loaded last

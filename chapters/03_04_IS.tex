@@ -22,20 +22,21 @@ Contrary to \gls{smc}, the global importance sampling approach we discuss in \Cr
 
 This chapter proceeds with a general treatment of importance sampling. Subsequently, we will focus our attention on methods to obtain good importance sampling proposals. 
 
-Suppose we have a function $h: \mathcal X \to \R$ whose integral w.r.t. to some measure $\mu$, $$\zeta = \int_{\mathcal X} h(x) \d\mu(x),$$ we want to compute.
+Suppose we have a function $h: \mathcal X \to \R$ whose integral w.r.t. to some measure $\mu$, $$\zeta = \int_{\mathcal X} h(x) \d\mu(x),$$ we want to compute \todoTH{comment on existence}.
 Furthermore, suppose that we can write
 $$
     \int_{\mathcal X} h(x) \d \mu(x) = \int_{\mathcal X} f(x) \d \P(x) = \P (f)
 $$
+\todoTH{$\P [f]$ operator schreibweise everywhere}
 for a probability measure $\P$ and function $f: \mathcal X \to \R$, e.g. because $\P = p \mu$ and $h(x) = f(x) p(x)$ $\mu$-a.s. .
-Let $\G$ be another measure on $\mathcal X$ such that $f\P$ is absolutely continuous with respect to $\G$, $f\P \ll \G$, and let $v = \frac{\d f\P}{\d\G}$ be the corresponding Radon-Nikodym derivative. Then
+Let $\G$ be a another probability measure on $\mathcal X$ such that $f\P$ is absolutely continuous with respect to $\G$, $f\P \ll \G$, and let $v = \frac{\d f\P}{\d\G}$ be the corresponding Radon-Nikodym derivative. Then
 $$
-    \zeta = \int_{\mathcal X} h(x) \d x = \int_{\mathcal X} f(x) \d \P(x) = \int_{\mathcal X} v(x)\d\G(x)
+    \zeta = \int_{\mathcal X} h(x) \d \mu(x) = \int_{\mathcal X} f(x) \d \P(x) = \int_{\mathcal X} v(x)\d\G(x)
 $$
-which suggests to estimate $\zeta$ by Monte-Carlo integration: $$\hat \zeta = \frac 1 N \sum_{i=1}^{N} v(X^{i})$$ for $X^{i} \iid \G$, $i = 1, \dots, N$. Here we call $\hat \zeta$ the importance sampling estimate of $\zeta$.
+which suggests to estimate $\zeta$ by Monte-Carlo integration: $$\hat \zeta = \frac 1 N \sum_{i=1}^{N} v(X^{i})$$ for $X^{i} \iid \G$, $i = 1, \dots, N$. Here we call $\hat \zeta$ the importance sampling estimate of $\zeta$. \todoTH{comment on Xs not being iid in control variates}
 
 The Monte-Carlo variance of $\hat \zeta$ is $\frac{\var \left(v(X^{i})\right)}{N}$, and so naturally we want $\var \left(v(X^{i})\right)$ to be small to ensure fast convergence of $\hat \zeta$. As $v$ depends on the proposal $\G$, and we have the flexibility to choose $\G$, importance sampling acts as a variance reduction technique. 
-A classical result is that the minimum MSE proposal $\G^\ast$ has a closed form, which can be shown by a simple application of Jensen's inequality. 
+A classical result is that the minimum MSE proposal $\G^\ast$ has a closed form. Indeed it is given by the total variation measure of $f\P$, renormalized to be a probability measure, which can be shown by a simple application of Jensen's inequality. 
 \begin{proposition}[{\cite[Proposition 8.2]{Chopin2020Introduction}}][minimum MSE proposal]
     \label{prop:minimum_MSE_IS}
     The proposal $\G^{\ast}$ that minimizes the MSE of importance sampling is given by
@@ -48,13 +49,13 @@ Unfortunately, this optimality result has no practical use, indeed if $f$ is pos
 If one is not interested in a particular function $f$, we may instead think of
 \begin{align}
 \label{eq:is-particle-approximation}
-\hat \P_N = \frac{1}{N} \sum_{i = 1}^{N} v(X_i) \delta_{X_i}
+\hat \P_N = \frac{1}{N} \sum_{i = 1}^{N} w(X_i) \delta_{X_i},
 \end{align}
-as a particle approximation of $\P$, in the sense that for sufficiently well behaved test functions $f$, $\P (f) \approx \hat\P_{N}(f)$. In this setting \cite{Agapiou2017Importance} shows that the random measure $\hat \P_N$ converges to $\P$ at usual rate $\mathcal O\left(\frac 1 {\sqrt{N}}\right)$ in an appropriate metric on the space of random probability measures. 
+where $w = \frac{\d\P}{\d\G}$, as a particle approximation of $\P$, in the sense that for sufficiently well behaved test functions $f$, $\P (f) \approx \hat\P_{N}(f)$. In this setting \cite{Agapiou2017Importance} shows that the random measure $\hat \P_N$ converges to $\P$ at usual rate $\mathcal O\left(\frac 1 {\sqrt{N}}\right)$ in an appropriate metric on the space of random probability measures. 
 
-To perform importance sampling one must be able to evaluate the weights $v$. In a Bayesian setting, this is usually infeasible: if $\P$ is a posterior distribution then the integration constant of its density is intractable.
-In this case, one can usually evaluate the weights up to a constant, i.e. $w(x) \propto_x \frac{\d \P}{\d \G}(x)$ is available. The missing constant is then $\int w(x) \d \G$ which is itself amenable to importance sampling.
-This leads to the self-normalized importance sampling weights $W_i = \frac{w(X_i)}{\sum_{i = 1}^N w(X_i)}$ and Monte Carlo estimates $\hat \zeta = \sum_{i = 1}^{N} W_i f(X_i)$ and particle approximation $\hat \P_N = \sum_{i = 1}^{N} W_i \delta_{X_i}$.
+To perform importance sampling one must be able to evaluate the weights $w$\todoTH{make w, W, v consistent}. In a Bayesian setting, this is usually infeasible: if $\P$ is a posterior distribution then the integration constant of its density is intractable.
+In this case, one can usually evaluate the weights up to a constant, i.e. $w(x) \propto_x \frac{\d \P}{\d \G}(x)$ \todoTH{propto einführen} is available. The missing constant is then $\int w(x) \d \G$ which is itself amenable to importance sampling.
+\todoTH{more explicit} This leads to the self-normalized importance sampling weights $W_i = \frac{w(X_i)}{\sum_{i = 1}^N w(X_i)}$ and Monte Carlo estimates $\hat \zeta = \sum_{i = 1}^{N} W_i f(X_i)$ and particle approximation $\hat \P_N = \sum_{i = 1}^{N} W_i \delta_{X_i}$.
 
 In both cases, one can show that once the second moment of $w$ w.r.t. $\G$ 
 $$
@@ -65,10 +66,12 @@ However, the finite sample variance of $\hat\zeta$, and thus the practical perfo
 $$
 \Dkl{\P}{\G} = \int \log \frac{\d \P}{\d \G} \d \P \leq \log \rho
 $$
+\todoTH{more rigorous, include proof of resutls which are necessary to understand reasoning. Here: existence of dP/dG}
 fostering the intuition that $\G$ should be close to $\P$ for the particle approximation $\hat\P_{N}$ to be close to $\P$.
 
 \cite{Chatterjee2018Sample} provides the following theorem (using our notation), that relates the performance of importance sampling to both the \gls{kld} and the tail behavior of the log weights.
 \begin{theorem}[{\cite[Theorem 1.1]{Chatterjee2018Sample}}]
+    \todoTH{fix this Thm}
     \label{thm:chatterje2018Thm1}
     If $N = \exp \left( \Dkl{\P}{\G} + t \right)$ for $ t\geq 0$, and $f \in L^{2}(\P)$ then
     $$
@@ -82,10 +85,11 @@ To judge whether importance sampling has converged, several criteria are discuss
 $$
 \text{ESS} = \frac{1}{\sum_{i = 1}^N W^{2}_{i}}
 $$
-arises from an analysis of the asymptotic efficiency of importance sampling estimates and is easy to interpret. Assessing convergence through the variance of $\hat \P_{N}$ is, while natural, flawed \cite{Chatterjee2018Sample} and should be avoided. As a remedy \cite{Chatterjee2018Sample} suggest the heuristic $q_{N} = \E Q_{N}$ where
+arises from an analysis of the asymptotic efficiency of importance sampling estimates and is easy to interpret. Assessing convergence through the empirical variance of $\hat \zeta$ is, while seemingly natural, flawed \cite{Chatterjee2018Sample} \todoTH{more explicit \& intructive} and should be avoided. As a remedy \cite{Chatterjee2018Sample} suggest the heuristic $q_{N} = \E Q_{N}$ where
 $$
 Q_{N} = \max_{1\leq i\leq N} W_{i}.
 $$
+\todoTH{more details}
 This judges whether importance sampling has collapsed to just a few particles and is itself amenable to Monte-Carlo integration.
 
 In the following sections, we will predominantly take the position that we are interested in finding a good particle approximation $\hat\P_{N}$ of the form \Cref{eq:is-particle-approximation} over finding the optimal proposal $\G^{\ast}$ \Cref{prop:minimum_MSE_IS} and assume that the importance sampling weights can only be evaluated up to a constant. 
@@ -94,9 +98,9 @@ This has several reasons: First of all, most problems considered in this thesis 
 $$
 \rnd{\P^{X| Y= y}}{\G}(x) = \frac{p(x|y)}{g(x)} = \frac{p(y|x)p(x)}{g(x)p(y)} \propto \frac{p(y|x)p(x)}{g(x)}.
 $$
-In these situations $p(y) = \int p(x,y)\mathrm d \mu(x)$ is usually intractable. For $\G^{\ast}$ we are in the same situation, where the evaluation of the integration constant $\P \lvert f \rvert$ is infeasible, but the density $f(x)p(x)$ is available.
+In these situations $p(y) = \int p(x,y)\d x$ is usually intractable. For $\G^{\ast}$ we are in the same situation, where the evaluation of the integration constant $\P \lvert f \rvert$ is infeasible, but the density $\lvert f(x)\rvert p(x)$ is available.
 % do not focus on a single f
-Second, focusing on the particle approximation allows us to consider multiple test functions $f$, e.g. focus on different marginals of $\P$. 
+Second, focusing on the particle approximation allows us to consider multiple test functions $f$, e.g. focus on different marginals of $\P$, which is usually what practitioners are interested in. 
 % simplify notation: P always target, G always proposal
 Finally, this allows us to simplify the notation used in this thesis. $\P$ will always be the probability measure of interest and $\G$ the proposal. In later parts of this thesis, we will predominantly perform Gaussian importance sampling, i.e. $\G = \mathcal N(\mu, \Sigma)$, hence a handy mnemonic is to think of $\G$ as a \textbf{G}aussian proposal.
 
@@ -111,7 +115,8 @@ The method is based on a second-order Taylor series expansion of the log target 
 \end{align}
 where $H$ is the Hessian of $\log p$ evaluated at $\hat x$. As $\log p (\hat x)$ does not depend on $x$, the right-hand side can be seen (up to additive constants) as the density of a Gaussian distribution with mean $\hat x$ and covariance matrix $\Sigma = - H^{-1}$. Thus using $\G = \mathcal N (\hat x, -H^{-1})$ as a proposal in importance sampling seems promising. 
 % degenerate case when $H$ is not PSD
-If $\hat x$ is the unique global mode of $p$, $H$ is negative definite and the \gls{la} yields an actual Gaussian distribution. 
+If $\hat x$ is the unique global mode of $p$ and $H$ is negative definite, the \gls{la} yields an actual Gaussian distribution. 
+\todo{else?}
 % numerics
 To obtain the \acrshort{la} in practice, a Newton-Raphson scheme may be used, which conveniently tracks $H$ as well. 
 
@@ -133,9 +138,12 @@ To provide a global approximation to the target, the \gls{cem}\cite{Rubinstein19
 \end{align*}
 If $\P$ and $\G_{\psi}$ possess densities $p$ and $g_{\psi}$ w.r.t. some common measure $\mu$, the same for all $\psi$, we may reformulate the optimization problem to maximize the cross-entropy between $p$ and $g_{\psi}$ instead:
 \begin{align}
-    \psi_{\text{CE}} &= \argmin_{\psi \in \Psi} \int  p(x)\log p(x) \d \mu(x) - \int p(x)\log g_{\psi} \d \mu(x) \nonumber\\ 
-    &= \argmax_{\psi \in \Psi} \int p(x) \log g_{\psi}(x) \d \mu(x), \label{eq:ce_argmax}.
+    \begin{split}
+    \psi_{\text{CE}} &= \argmin_{\psi \in \Psi} \int  p(x)\log p(x) \d \mu(x) - \int p(x)\log g_{\psi} \d \mu(x) \\ 
+    &= \argmax_{\psi \in \Psi} \int p(x) \log g_{\psi}(x) \d \mu(x)
+    \end{split} \label{eq:ce_argmax}.
 \end{align}
+\todoTH{discuss existence, borderline cases}
 Note that the first integral does not depend on $\psi$. The assumption of such a dominating measure is not restrictive: otherwise the \gls{kld} is infinite. 
 
 %
@@ -170,7 +178,8 @@ Note that the first integral does not depend on $\psi$. The assumption of such a
 %\end{theorem}
 
 % analytical solution, MLE
-An attractive property of the \gls{cem} is that if $\G_{\psi}$ form an exponential family with natural parameter $\psi \in \R^{p}$, the optimal $\psi_{\text{CE}}$ only depends on certain moments of $\P$. Indeed, for $\log g_{\psi}(x) = \log h(x) - \log Z(\psi) + \psi^{T} T(x)$ we have 
+\todo{make theorem, proof}
+An attractive property of the \gls{cem} is that if $\G_{\psi}$ form an exponential family with natural parameter $\psi \in \R^{p}$, the optimal $\psi_{\text{CE}}$ only depends on the expected value $\P [T]$. Indeed, for $\log g_{\psi}(x) = \log h(x) - \log Z(\psi) + \psi^{T} T(x)$ we have 
 $$
 \int p(x) \log g_{\psi}(x) \d \mu(x) = \P \log h - \log Z(\psi) + \psi^{T} \P T.
 $$
@@ -220,10 +229,12 @@ The following theorem of \citep{VanderVaart2000Asymptotic} will be useful in ana
     The naming of $B$ and $M$ stems from the sandwich estimator \cite{White1982Maximum}, where the bread $B$ is the Jacobian of the estimating equations $\P f_{\psi} = 0$ and the meat $M$ is the covariance matrix of $f_{\psi}$ under $\P$, thus making a \glqq{}meat sandwich\grqq{}.
 \end{notation}
 
+\todo{discussion on relevance and novelty of these results}
 \begin{theorem}[consistency of $\hat \psi_{\text{CE}}$]
     \label{thm:ce-consistent}
     \todo{from van der Vaart/Casella Berger}
 \end{theorem}
+
 
 \begin{theorem}[asymptotic normality of $\hat \psi_{\text{CE}}$]
     \label{thm:ce-clt}
@@ -277,7 +288,7 @@ The following theorem of \citep{VanderVaart2000Asymptotic} will be useful in ana
     As $W = \frac{w}{\G w}$
     By \Cref{eq:clt-vdv} the asymptotic covariance matrix is 
     $$
-    V_{\ce} = B_{\ce}M_{\ce}B_{ce}
+    V_{\ce} = B_{\ce}M_{\ce}B_{\ce}
     $$
     which shows the asymptotic normality. 
 

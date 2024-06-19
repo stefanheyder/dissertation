@@ -4,7 +4,7 @@
 The distribution of observations is never Gaussian - all we may hope for is that the data-generating mechanism is close enough to a Gaussian distribution that inferences made in the Gaussian model carry over.
 For epidemiological models, Gaussian distributions may be appropriate if incidences are high, e.g. during large outbreaks in a whole country. 
 When case numbers are small, the discrete nature of incidences is better captured by a distribution on $\mathbf N_{0}$, and standard distributions used are the Poisson and negative binomial distributions, see e.g. \cite{Lloyd-Smith2005Superspreadinga}.
-Both the Poisson and negative binomial belong to the class of exponential family distributions. As such, their densities have a convenient structure, allowing only for a linear interaction between the natural parameter and the densities argument. We refer to \cite{Brown1986Fundamentals} for a comprehensive treatment of exponential families and use their definitions throughout this section.
+Both the Poisson and negative binomial belong to the class of exponential family distributions. As such, their densities have a convenient structure, allowing only for a linear interaction between the \todoTH{decide between natural and canonical} natural parameter and the densities argument. We refer to \cite{Brown1986Fundamentals} for a comprehensive treatment of exponential families and use their definitions throughout this section.
 
 \begin{definition}[exponential family]
     Let $\mu$ be a $\sigma$-finite measure on $\R^{p}$ and denote by 
@@ -23,7 +23,7 @@ Both the Poisson and negative binomial belong to the class of exponential family
 
 Exponential families have the attractive property that they are log-concave in their parameters. As such the Fisher-information is always positive semidefinite, which will be crucial in defining surrogate Gaussian models in \Cref{sec:gaussian_importance_sampling_for_state_space_models}.
 \begin{lemma}[log-concavity of exponential family distributions]
-    Let $p_{\theta}, \theta \in \Theta$ be a natural $p$-dimensional exponential family and $\Theta$ open in $\R^{p}$. In this case $\theta \to \log p_{\theta}(y)$ is concave for every $y \in \R^{p}$.
+    Let $p_{\theta}, \theta \in \Theta$ be a natural $p$-dimensional exponential family and $\Theta$ open in $\R^{p}$. In this case $\theta \mapsto \log p_{\theta}(y)$ is concave for every $y \in \R^{p}$.
 \end{lemma}
 
 \begin{proof}
@@ -31,14 +31,15 @@ Exponential families have the attractive property that they are log-concave in t
     $$\theta \mapsto \log Z(\theta) = \log \int \exp \left( \theta^{T}y \right) \mathrm d \mu(y)$$ is the cumulant generating function of the base measure $\mu$, which is convex \cite[p. 148]{Billingsley1995Probabilitya}.
 \end{proof}
 
-We now generalize \Cref{def:glssm} to allow for non-Gaussian observations by replacing the observation equation \Cref{eq:glssm_observations} by more general exponential families.
+We now generalize \Cref{def:glssm} to allow for non-Gaussian observations by replacing the observation equation \Cref{eq:glssm_observations} with more general exponential families.
 
 \begin{definition}[\acrfull{lcssm}]
     \label{def:lcssm}
-    A \textbf{\acrfull{lcssm}} is a \gls{ssm} where states obey the transition equation 
+    \todoTH{decide on lcssm / pgssm, origin of term?} A \textbf{\acrfull{lcssm}} is a \gls{ssm} where states obey the transition equation 
     $$
     X_{t + 1} = A_{t}X_{t} + u_{t} + \varepsilon_{t + 1}
     $$
+    \todoTH{independence of eps}
     and the conditional distribution of $Y_{t}$ given $X_{t}$ comes from an exponential family with respect to a base measure $\mu_{t}$, i.e.
     $$
     p (y_{t}|x_{t}) = h_{t}(y_{t}) Z_{t}(x_{t}) \exp \left( \eta_{t}(x_{t})^{T} T_{t}(y_{t}) \right)
@@ -47,9 +48,9 @@ We now generalize \Cref{def:glssm} to allow for non-Gaussian observations by rep
 
     If, additionally, matrices $B_{t} \in \R^{p \times m}$ exist, such that for the signal $s_{t} = B_{t}x_{t} \in \R^{p}$ it holds
     $$
-    p(y_{t}|x_{t}) = \prod_{i = 1}^p h^{i}_{t}(y^{i}_{t}) Z^{i}_{t} (s_{t}) \exp \left( \eta^{i}_{t} (s^{i}_{t}) T(y^{i}_{t}) \right),
+    p(y_{t}|x_{t}) = \prod_{i = 1}^p h^{i}_{t}(y^{i}_{t})\, Z^{i}_{t} (s_{t})\, \exp \left( \eta^{i}_{t} (s^{i}_{t})\,T(y^{i}_{t}) \right),
     $$
-    for functions $h_{t}^{i}: \R \to \R, Z^{i}_{t}: \R \to \R, \eta^{i}_{t}: \R\to\R, T: \R\to\R$, $i = 1, \dots p$, we say the \gls{lcssm} has a \textbf{linear signal}.
+    for functions $h_{t}^{i}: \R \to \R, Z^{i}_{t}: \R \to \R, \eta^{i}_{t}: \R\to\R, T: \R\to\R$, $i = 1, \dots p$, we say the \gls{lcssm} has a \textbf{linear signal} \todoTH{origin of term}.
 
     %\todo{LCSSM only logconcave observations would suffice, then EF is just an instance of this}
 \end{definition}
