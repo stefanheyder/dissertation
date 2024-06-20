@@ -21,13 +21,26 @@
 \chapter{Importance Sampling in State Space Models}
 \label{cha:state_space_models}
 \begin{tcolorbox}[title={Contributions}]
-    The main contribution of this chapter consists of a rigorous comparison of two important sampling frameworks: the \Acrfull{cem} and \Acrfull{eis}. Both methods determine optimal importance sampling proposals, but have, until now, been studied in separate communities: the \acem is popular in rare-event estimation and engineering disciplines, while \aeis is popular in the financial time series community. \\[2em]
-    
-    To facilitate this comparison, we prove central limit theorems for both methods (\Cref{subsec:cem,subsec:eis}), derive an efficient algorithm to apply the \acem to state space models (\Cref{subsec:markov-approach}), and extensively compare both methods on theoretical as well as practically relevant properties with instructive univariate and multivariate examples (\Cref{sec:simulation_studies}). \\[2em]
+    The main contribution of this chapter consists of a rigorous comparison of two importance sampling frameworks: the \Acrfull{cem} and \Acrfull{eis}. Both methods determine optimal importance sampling proposals, but have, until now, been studied in separate communities: the \acem is popular in rare-event estimation and engineering disciplines, while \aeis is popular in the financial time series community. 
 
-    We also proof \Cref{prop:eis-finite-sample} \todo{more explicit}. 
+    The contributions of the individual sections are as follows:
 
-    Additionally, we show how one may use state space models to model the desiderata for epidemiological models identified in the last chapter (\Cref{sec:modelling_epidemiological_dessiderata_with_state_space_models}). 
+    \paragraph{\nameref{sec:modelling_epidemiological_dessiderata_with_state_space_models}} 
+
+    \paragraph{\nameref{sec:linear_gaussian_state_space_models}} This section is a condensed introduction to \acrfullpl{glssm} and is loosely based on \citep{Durbin2012Time}.
+
+    \paragraph{\nameref{sec:logconcave_gaussian_state_space_models}}
+
+    \paragraph{\nameref{sec:importance_sampling}}
+    We prove central limit theorems for both methods (\Cref{subsec:cem,subsec:eis}). 
+    We also proof \Cref{prop:eis-finite-sample}. 
+
+    \paragraph{\nameref{sec:gaussian_importance_sampling_for_state_space_models}}
+    derive an efficient algorithm to apply the \acem to state space models (\Cref{subsec:markov-approach})
+
+    \paragraph{\nameref{sec:maximum_likelihood_estimation}}
+
+    \paragraph{\nameref{sec:simulation_studies}} Extensively compare both methods on theoretical as well as practically relevant properties with instructive univariate and multivariate examples (\Cref{sec:simulation_studies}). 
 \end{tcolorbox}
 \newpage
 
@@ -117,7 +130,7 @@ In this chapter, we will discuss \gls{glssm}  (\Cref{sec:linear_gaussian_state_s
 Such observations are better modeled with distributions on the natural numbers, i.e. with a Poisson or negative binomial distribution, both of which are exponential families of distributions. This will lead to the class of \acrfullpl{lcssm} (\Cref{sec:logconcave_gaussian_state_space_models}) which will become the main focus of our study.
 
 Regarding the second step, \Cref{it:model_fitting}, a frequentist practitioner will want to perform maximum likelihood inference on $\theta$.
-While asymptotic confidence intervals for the \gls{mle} $\hat\theta$ can be derived both theoretically and practically \cite[Chapter 7]{Durbin2012Time}, they are, in the context of this thesis, usually of little interest. For these asymptotic frequentist procedures to be meaningful, an appropriate central limit theorem has to hold. However, as the time series we study are non-stationary and the dependence on parameters $\theta$ is allowed to be arbitrary, it is in general not obvious that such a theorem holds for the model under consideration. Instead, we choose to view this fitting as an Empirical Bayes procedure and our main practical interest lies in analyzing the posterior distribution $X|Y$ where we set $\theta$ equal to $\hat\theta$. 
+While asymptotic confidence intervals for the \gls{mle} $\hat\theta$ can be derived both theoretically and practically \citep[Chapter 7]{Durbin2012Time}, they are, in the context of this thesis, usually of little interest. For these asymptotic frequentist procedures to be meaningful, an appropriate central limit theorem has to hold. However, as the time series we study are non-stationary and the dependence on parameters $\theta$ is allowed to be arbitrary, it is in general not obvious that such a theorem holds for the model under consideration. Instead, we choose to view this fitting as an Empirical Bayes procedure and our main practical interest lies in analyzing the posterior distribution $X|Y$ where we set $\theta$ equal to $\hat\theta$. 
 
 
 To obtain the maximum likelihood estimates $\hat\theta$ one needs access to the likelihood
@@ -127,16 +140,16 @@ To obtain the maximum likelihood estimates $\hat\theta$ one needs access to the 
 \end{align}
 which is usually not analytically available.
 Direct numerical evaluation of \Cref{eq:likelihood} is hopeless due to the high dimensionality of the state space $\mathcal X^n$.
-Instead, we will resort to simulation-based inference by importance sampling (see \Cref{sec:importance_sampling}), a Monte-Carlo method that approximates $p(y)$ by constructing a global tractable approximation to the integrand in \Cref{eq:likelihood}. Alternatively, \gls{smc} methods, i.e. particle filters, that perform importance sampling sequentially across the $n + 1$ time steps can be used. We will not follow this approach for reasons described further below, but refer the reader to the excellent reference \cite{Chopin2020Introduction} for an introduction to these methods.
+Instead, we will resort to simulation-based inference by importance sampling (see \Cref{sec:importance_sampling}), a Monte-Carlo method that approximates $p(y)$ by constructing a global tractable approximation to the integrand in \Cref{eq:likelihood}. Alternatively, \gls{smc} methods, i.e. particle filters, that perform importance sampling sequentially across the $n + 1$ time steps can be used. We will not follow this approach for reasons described further below, but refer the reader to the excellent reference \citep{Chopin2020Introduction} for an introduction to these methods.
 
-The performance of these simulations depends crucially on constructing distributions that are close to the posterior $p(x|y)$ but are easy to sample from. To this end, we construct suitable Gaussian state space models (\Cref{sec:gaussian_importance_sampling_for_state_space_models}) in which sampling from the posterior is analytically possible.
-This will be a good strategy if the target posterior $p(x|y)$ can be well approximated by a Gaussian distribution --- otherwise, we may want to account for multiple modes by considering mixtures of Gaussian state space models or account for heavy tails with t-distributed errors (\Cref{sec:accouting_for_multimodality_and_heavy_tails}) \todo{keep this here?}.
+The performance of these simulations depends crucially on our ability to construct distributions that are close to the posterior $p(x|y)$ but are easy to sample from. To this end, we construct either \acrfullpl{glssm} (\Cref{subsec:glssm-approach}) in which sampling from the posterior is analytically possible, or Gaussian Markov processes (\Cref{subsec:markov-approach}) which are directly amenable to simulation.
+%This will be a good strategy if the target posterior $p(x|y)$ can be well approximated by a Gaussian distribution --- otherwise, we may want to account for multiple modes by considering mixtures of Gaussian state space models or account for heavy tails with t-distributed errors (\Cref{sec:accouting_for_multimodality_and_heavy_tails}) \todo{keep this here?}.
 
 As an alternative to the \acrshort{mle} approach, a fully Bayesian approach would regard $\theta$ as random and administer a prior distribution, say with density $p(\theta)$. In this setting, the main interest still lies in determining the posterior distribution of $X|Y=y$, but due to the prior put on $\theta$, its density, should it exist, is now given by
 $$
 p(x|y) = \int p(x,\theta|y) \d \theta,
 $$
-where $p(x,\theta|y)$ is the joint posterior of states and hyperparameters, conditional on observations $y$. To tackle this problem, one may again use importance sampling methods, see e.g. \cite[Chapter 13.1]{Durbin2012Time}, or use \acrshort{mcmc}-methods tailored to \acrshortpl{ssm}, e.g. Particle-\acrshort{mcmc} \cite[Chapter 16]{Chopin2020Introduction}.
+where $p(x,\theta|y)$ is the joint posterior of states and hyperparameters, conditional on observations $y$. To tackle this problem, one may again use importance sampling methods, see e.g. \citep[Chapter 13.1]{Durbin2012Time}, or use \acrshort{mcmc}-methods tailored to \acrshortpl{ssm}, e.g. Particle-\acrshort{mcmc} \citep[Chapter 16]{Chopin2020Introduction}.
 
 \input{chapters/03_01_Modelling.tex}
 \input{chapters/03_02_LGSSM.tex}
