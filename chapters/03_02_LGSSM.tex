@@ -41,32 +41,48 @@ As the joint distribution of $(X, Y)$ is Gaussian, so are conditional distributi
         \Sigma_{YX} & \Sigma_{YY}
     \end{pmatrix},
     $$
-    for non-singular $\Sigma_{YY}$, where $\mu$ and $\Sigma$ are partitioned according to the dimensions of $X$ and $Y$. 
+    where $\mu$ and $\Sigma$ are partitioned according to the dimensions of $X$ and $Y$. 
     
-    Then $X|Y = y$ is also a Gaussian distribution with conditional expectation
-    $$
-    \mu_{X|Y = y} = \E \left( X | Y = y \right) = \mu_{X} + \Sigma_{XY}\Sigma_{YY}^{-1} \left( y - \mu_{Y} \right)
-    $$
-    and conditional covariance matrix 
-    $$
-    \Sigma_{X| Y =y} = \cov \left( X | Y = y \right) = \Sigma_{XX} - \Sigma_{XY} \Sigma_{YY}^{-1} \Sigma_{YX}.
-    $$
+    Then the following holds:
     
-    In particular, let $X\sim \mathcal N(\mu, \Sigma)$ and $Y = BX + \varepsilon$ for a matrix $B \in \mathbf R^{p\times m}$ and $\R^{p} \ni \varepsilon \sim \mathcal N(0, \Omega)$ independent of $X$ where $\Omega \in \R^{p\times p}$ . 
-    Then, as 
-    $\E Y = B \mu$, $\cov \left( X,Y \right) = \cov \left( Y, X \right)^{T}= \Sigma B^{T}$ and $\cov \left( Y \right) = B \Sigma B^{T} + \Omega$, we have
-    $$
-        \E \left( X | Y = y \right) = \mu + K (y - B \mu)
-    $$
-    and 
-    $$
-    \cov \left( X | Y = y \right) = \Sigma - K \Sigma K^{T} = \left( I  -  KB \right) \Sigma,
-    $$
-    as long as $B \Sigma B^{T} + \Omega$ is non-singular.
-    Here $K = \Sigma B^{T} \left( B \Sigma B^{T} + \Omega \right)^{-1}$.
+    \begin{enumerate}
+        \item If $\Sigma_{YY}$ is non-singular, $X|Y = y$ follows a Gaussian distribution with conditional expectation
+            $$
+            \mu_{X|Y = y} = \E \left( X | Y = y \right) = \mu_{X} + \Sigma_{XY}\Sigma_{YY}^{-1} \left( y - \mu_{Y} \right)
+            $$
+            and conditional covariance matrix 
+            $$
+            \Sigma_{X| Y =y} = \cov \left( X | Y = y \right) = \Sigma_{XX} - \Sigma_{XY} \Sigma_{YY}^{-1} \Sigma_{YX}.
+            $$
+
+        \item In particular, let $X\sim \mathcal N(\mu, \Sigma)$ and $Y = BX + \varepsilon$ for a matrix $B \in \mathbf R^{p\times m}$ and $\R^{p} \ni \varepsilon \sim \mathcal N(0, \Omega)$ independent of $X$ where $\Omega \in \R^{p\times p}$ . 
+            Then, as 
+            $\E Y = B \mu$, $\cov \left( X,Y \right) = \cov \left( Y, X \right)^{T}= \Sigma B^{T}$ and $\cov \left( Y \right) = B \Sigma B^{T} + \Omega$, we have
+            $$
+                \E \left( X | Y = y \right) = \mu + K (y - B \mu)
+            $$
+            and 
+            $$
+            \cov \left( X | Y = y \right) = \Sigma - K \Sigma K^{T} = \left( I  -  KB \right) \Sigma,
+            $$
+            as long as $B \Sigma B^{T} + \Omega$ is non-singular.
+            Here $K = \Sigma B^{T} \left( B \Sigma B^{T} + \Omega \right)^{-1}$.
+
+        \item If $\Sigma_{XX}$ is non-singular, then $Y - BX$ is independent of $X$ for $B = \Sigma_{YX} \Sigma_{XX}^{-1}$ and we may write
+            \begin{align*}
+            Y = BX + v + \eta
+            \end{align*}
+            for an $\eta \sim \mathcal N(0, \Omega)$ with covariance matrix $\Omega = \Sigma_{YY} - \Sigma_{YX}\Sigma_{XX}^{-1}\Sigma_{XY}$ independent of $X$, and $v = \mu_{Y} - B \mu_{X}$.
+    \end{enumerate}
+    
 \end{lemma}
 \begin{proof}
-    For the first statement, we refer the reader to \citep[Chapter 4, Lemma 1]{Durbin2012Time}. The second statement follows from substituting the value of $K$.
+    For the first statement, we refer the reader to \citep[Chapter 4, Lemma 1]{Durbin2012Time}. The second statement follows from substituting the value of $K$. The third statement follows from noting that $Y-BX = \begin{pmatrix}
+        -B & I
+    \end{pmatrix} \begin{pmatrix}
+        X \\ Y
+    \end{pmatrix}$ follows a Gaussian distribution. A quick calculation reveals that $$\cov \left( Y- BX, X \right) = \Sigma_{Y,X} - B \Sigma_{XX} = \Sigma_{Y,X} - \Sigma_{Y,X} = 0,$$
+    showing the independence as . Thus $\eta = Y - BX - \delta$ follows a centered Gaussian distribution and equating covariance matrices, we see that $\Omega$ has the desired form.
 \end{proof}
 
 After having observed $Y = y$, our main interest lies in the conditional distribution of states $X$ given $Y= y$, which we could obtain by applying \Cref{lem:gaussian_conditional}, i.e. where $B = \bdiag (B_{0}, \dots, B_{n})$ and $\Omega = \bdiag \left( \Omega_{0}, \dots, \Omega_{n} \right)$. However, this would require inversion of the $(n+1)p\times(n+1)p$ matrix $\left( B\Sigma B + \Omega \right)$ which becomes numerical infeasible quickly. Instead, we can exploit the sequential structure of the \acrshort{glssm}, which will allow us to perform conditioning on only a single observation at a time. 
@@ -99,43 +115,36 @@ These distributions may be obtained efficiently using the celebrated Kalman filt
     \end{algorithmic}
 \end{algorithm}
 
-In \Cref{alg:kalman_filter} every time point $t = 0, \dots, n$ is processed in the same way, with a two-step procedure: first we predict the new observation $Y_{t}$ based on $Y_{:t-1}$. Using the linearity of the system as well as the assumed conditional independence, this is achieved by applying the system dynamics to the current conditional expectation and covariance matrices. After $Y_{t}$ has been observed, we can update the conditional distribution of the states by appealing to \Cref{lem:gaussian_conditional}. Indeed
-\todo{fix this eq. in same style as below}
-\begin{align*}
-p(x_{t}|y_{:t}) &= \int p(x_{t}, x_{t - 1}|y_{:t}) \mathrm d x_{t-1} \\
-    &= \int p(x_{t}|x_{t - 1}, y_{t}) p(x_{t - 1} | y_{:(t-1)})
-\end{align*}
-For a rigorous derivation of the Kalman filter, we refer the reader to \citep[Chapter 4]{Durbin2012Time} or the excellent monograph of \citep{Schneider1986Kalmanfilter}. 
+In \Cref{alg:kalman_filter} every time point $t = 0, \dots, n$ is processed in the same way, with a two-step procedure: first we predict the new observation $Y_{t}$ based on $Y_{:t-1}$. Using the linearity of the system as well as the assumed conditional independence, this is achieved by applying the system dynamics to the current conditional expectation and covariance matrices. After $Y_{t}$ has been observed, we can update the conditional distribution of the states by appealing to \Cref{lem:gaussian_conditional}. For a rigorous derivation of the Kalman filter, we refer the reader to \citep[Chapter 4]{Durbin2012Time} or the excellent monograph of \citep{Schneider1986Kalmanfilter}. 
 
 The Kalman filter is very efficient: each loop iteration requires inversion of the $p \times p$ matrix $\Psi_{t | t - 1}$. Assuming this operation dominates the time complexity, e.g. because $m \approx p$, the time complexity of the Kalman filter is $\mathcal O(n\,m^{3})$, a drastic improvement over the naïve $\mathcal O(n^{3}\,m^{3})$, obtained by applying \Cref{lem:gaussian_conditional} to the joint distribution of $(X,Y)$. Similarly, the space complexity of \Cref{alg:kalman_filter} is $\mathcal O \left( n \left( m^{2} + p^{2} \right) \right)$, and grows only linearly in the number of time steps $n$.
 
 Notice that the Kalman filter iteratively calculates the negative log-likelihood $\ell_{t}$
 $$\ell_{t} = - \log p(y_{:t}) = - \log \sum_{s = 0}^t \log p(y_{s} | y_{:(s - 1)})$$ 
-while filtering --- this is possible because of the dependency structure of the state space model, which makes the increments in $\ell_{t}$ tractable:
+while filtering. This is possible because of the dependency structure of the \acrshort{glssm}, which makes the increments in $\ell_{t}$ tractable, as
 $$
 Y_{s} | Y_{:(s -1)} \sim \mathcal N \left( \hat Y_{s|s-1}, \Psi_{s|s - 1} \right),
 $$
-as 
-\begin{align*}
-    p(y_{s}|y_{:(s - 1)}) &= \int p(y_{s}| x_{s-1}) p(x_{s -1}|y_{:(s-1)})\d x_{s-1}
-\end{align*}
-for $s = 0, \dots, n$ by the assumed conditional independence. Thus, the Kalman filter enables us to perform \acrshort{mle}, giving us access to $\ell_{n}$.
+for $s = 0, \dots, n$, which is shown in the derivation of the Kalman filter. Thus, the Kalman filter enables us to perform \acrshort{mle} by giving us access to $\ell_{n}$.
 
 \todo{historical comment}
 Depending on the situation at hand, one of the many variants of the basic algorithm presented in \Cref{alg:kalman_filter} may be used. If the inversion of $\Psi_{t|t-1}$ is numerically unstable, the filtered covariance matrices $\Xi_{t|t}$ may become numerically non-positive definite. In this case, the square root filter and smoother \citep{Morf1975Squareroot} may be used. It is based on Cholesky roots of the involved covariance matrices, ensuring them to be \acrshort{psd}.
-\todo{comment on other variants}
 
-When the dimension of observations is much larger than that of the states, $p \gg m$, the information filter \citep{Fraser1969Optimum} can be used. Instead of performing operations on the covariance matrices, i.e. $\Xi_{t|t-1}$ and $\Psi_{t|t-1}$, the information filter operates on their inverses, the precision matrices $\Xi_{t|t - 1}^{-1}$ and $\Psi_{t|t-1}^{-1}$. This makes the filtering step more efficient, as the computationnaly most intensive step is the calculation of $\Psi_{t | t- 1}^{-1}$. However the price one pays is that the prediction step now requires inversion of a $m\times m$ matrix, and as such the computational gains only set in when $p$ is sufficiently large compared to $m$ \todo{cite Assimakis information filter vs. kalman filter paper}. Note that for the models we consider in \Cref{cha:analysis_of_selected_models} this is usually not the case. \todo{check that this really holds}
+When the dimension of observations is much larger than that of the states, $p \gg m$, the information filter \citep{Fraser1969Optimum} can be used. Instead of performing operations on the covariance matrices, i.e. $\Xi_{t|t-1}$ and $\Psi_{t|t-1}$, the information filter operates on their inverses, the precision matrices $\Xi_{t|t - 1}^{-1}$ and $\Psi_{t|t-1}^{-1}$ as well as rescaled states $\Xi_{t | t - 1}^{-1}
+\hat X_{t | t - 1}$ and observation $\Psi_{t | t-1}^{-1}\hat Y_{t|t -1}$ estimates. This makes the filtering step more efficient, as the computationnaly most intensive step is the calculation of $\Psi_{t | t- 1}^{-1}$. However the price one pays is that the prediction step now requires inversion of a $m\times m$ matrix, and as such the computational gains only set in when $p$ is sufficiently large compared to $m$ \cite{Assimakis2012Information}. Note that for the models we consider in \Cref{cha:analysis_of_selected_models} this is usually not the case. \todo{check that this really holds}
 
-If the dimensions of the model are so large that calculating the $m\times m$ and $p\times p$ covariance matrices becomes an issue, the simulation based \acrfull{enkf} \cite{Evensen1994Sequential} can be used. Instead of calculating the covariance matrices analytically, the \acrshort{enkf} stores a particle approximation to the Gaussian filtering distribution and iteratively performs a prediction and update step with a particle approximation, similar to the analytical update the Kalman filter performs. Despite being based on linear Gaussian dynamics, the \acrshort{enkf} is successfully employed in many high-dimensional non-linear non Gaussian problems \citep{Katzfuss2016Understanding}. 
+If the dimensions of the model are so large that calculating the $m\times m$ and $p\times p$ covariance matrices becomes an issue, the simulation based \acrfull{enkf} \citep{Evensen1994Sequential} can be used. Instead of calculating the covariance matrices analytically, the \acrshort{enkf} stores a particle approximation to the Gaussian filtering distribution and iteratively performs a prediction and update step with a particle approximation, similar to the analytical update the Kalman filter performs. Despite being based on linear Gaussian dynamics, the \acrshort{enkf} is successfully employed in many high-dimensional non-linear non Gaussian problems \citep{Katzfuss2016Understanding}. 
 
-For non-linear problems of moderate dimension, i.e. those where we replace the right-hand side of both state (\Cref{eq:glssm_states}) and observation (\Cref{eq:glssm_observations}) equations by non-linear functions, other variants such as the \acrfull{ekf} \cite{Jazwinski1970Stochastic} and the \acrfull{ukf} \cite{Julier1997New} may be used. The \acrshort{ekf} applies the Kalman filter to a linearization of the non-linear system around the current conditional means $\hat X_{t| t-1}$ and $\hat X_{t|t}$. If the systems dynamics are highly non-linear, this approximation can fail. Alternatively, the \acrshort{ukf}, which is based on the unscented transform, directly approximates the predicted means and covariance matrix, by constructing a set of deterministic points that are propagated through the systems dynamics. \todo{more on this}
+For non-linear problems of moderate dimension, i.e. those where we replace the right-hand side of both state (\Cref{eq:glssm_states}) and observation (\Cref{eq:glssm_observations}) equations by non-linear functions, other variants such as the \acrfull{ekf} \citep{Jazwinski1970Stochastic} and the \acrfull{ukf} \citep{Julier1997New} may be used. The \acrshort{ekf} applies the Kalman filter to a linearization of the non-linear system around the current conditional means $\hat X_{t| t-1}$ and $\hat X_{t|t}$. If the systems dynamics are highly non-linear, this approximation can fail. Alternatively, the \acrshort{ukf}, which is based on the unscented transform, directly approximates the predicted means and covariance matrix, by constructing a set of deterministic points that are propagated through the systems dynamics. \todo{more on this}
 
-As the applied context of this thesis is in mathematical epidemiology, we also give a short overview of the use \acrshortpl{glssm} for monitoring of \acrshort{c19}. \todo{more on this}
+In the context of \acrshort{c19}, variants of the Kalman filter have been employed to analyse the time-varying behavior of epidemiological parameters. Usually the models start from some theoretical, e.g. compartmental, model of how the epidemic spreads. After time-discretization and possibly linearization, one ends up with a \acrshort{glssm}, to which the Kalman filter or one of its variants may be applied. 
+In \citep{Arroyo-Marioli2021Tracking} the authors construct a simple \acrshort{glssm} to reconstruct the time-varying reproduction number from observed growth factors, exploiting the linear relationship between the two quantities in the SIR compartmental model and using the Kalman filter and smoother to perform inference. 
+\citep{Zhu2021Extended,Song2021Maximum} directly apply the \acrshort{ekf} to time-discretized compartmental models, fitting them either to simulated \citep{Zhu2021Extended} or real \citep{Song2021Maximum} data. Similarly, \citep{Engbert2020Sequential} use the \acrshort{enkf} to fit a stochastic compartmental model to German regional data, where the \acrshort{enkf} allows to deal with the non-linear and non-Gaussian properties on these small spatial scales.
 
 % history: moon
 % epidemiological uses 
 \todo{algorithmen konsistent mit gets und =}
+\todo{algorithmen konsistent t, t -1}
 \begin{algorithm}
     \caption{Kalman smoother. Note that the Kalman filter already outputs the smoothed last state $\hat X_{n|n}$ and covariance $\Xi_{n|n}$.}
     \label{alg:kalman_smoother}
@@ -149,12 +158,40 @@ As the applied context of this thesis is in mathematical epidemiology, we also g
     \end{algorithmic}
 \end{algorithm}
 
-The Kalman smoother (\Cref{alg:kalman_smoother}) computes the marginal distributions $X_{t} | Y$ for $t = 0, \dots, n$. Upon closer inspection, the mean and covariance updates resemble that of the Kalman filter (\Cref{alg:kalman_filter}). This is no coincidence: By the assumed dependence structure, conditional on $X_{t + 1}$, $X_{t}$ is independent of $Y_{s}$, $s > t$. Thus
-$$
-p(x_{t}|y_{:n}) = \int p(x_{t}, x_{t+1}|y_{:n}) \d x_{t + 1} = \int p(x_{t}|x_{t+ 1}, y_{:t})p(x_{t+1}| y_{:n}) \d x,
-$$
-which allows to view the update equations of the Kalman smoother as adding \glqq{}observations\grqq{} $\hat X_{t+1 | n}$ to our model. \todo{more clarity in this}
+The Kalman smoother (\Cref{alg:kalman_smoother}) computes the marginal distributions $X_{t} | Y$ for $t = 0, \dots, n$. Upon closer inspection, the mean and covariance updates resemble that of the Kalman filter (\Cref{alg:kalman_filter}). This is no coincidence: By the assumed dependence structure, we obtain the following lemma, which will allow us to prove the recursions.
+\begin{lemma}[conditional indepdence from future observations]
+    Let $t \in \{0, \dots, n - 1\}$ and $s > t$. In a \acrshort{glssm}, conditional on $X_{t + 1}$, $X_{t}$ is independent of $Y_{s}$, $s > t$. 
+\end{lemma}
+\begin{proof}
+    As $s > t$, we have
+    $$
+    p(x_{t}, y_{s} | x_{t + 1}) = p(y_{s}| x_{t + 1}, x_{t}) p(x_{t} | x_{t + 1}) = p(y_{s} | x_{t + 1}) p(x_{t} | x_{t + 1})
+    $$
+    where the second equality follows from the dependency structure of the model. 
+\end{proof}
 
+We can now sketch the proof for the Kalman smoother recursions, based on the arguments in \citep[Chapter 7.3]{Chopin2020Introduction}. By the preceding lemma, the conditional distribution of $X_{t}$ given $Y_{:n}$ and $X_{t + 1}$ is the same as that given $Y_{:t}$ and $X_{t + 1}$. 
+We may now regard $X_{t + 1} = A_{t}X_{t} + u_{t} + \varepsilon_{t + 1}$ as an additional observation at time $t$, and use the Kalman filter update to determine this conditional distribution:
+$$
+X_{t} | Y_{:t} = y_{:t}, X_{t + 1} = x_{t+1}\sim \mathcal N \left(\hat X_{t|t} + G_{t}(x_{t + 1} - \hat X_{t + 1 | t}), \Xi_{t |t} - G_{t} \Xi_{t + 1 | t} G_{t}^{T} \right).
+$$
+Thus we may write, a.s.,
+\begin{align}
+    \label{eq:kalman-smoother-backwards-recursion}
+    X_{t} &= \hat X_{t|t} + G_{t}(X_{t + 1} - \hat X_{t + 1 | t}) + \xi,
+\end{align}
+for a $\xi \sim \mathcal N \left( 0, \Xi_{t | t} - G_{t} \Xi_{t + 1|t}G_{t} \right)$ which is independent of $Y_{:n}$ and $X_{t + 1}$. 
+Conditional on $Y_{:n}$, the right-hand side has mean 
+$$
+\hat X_{t|t} + G_{t} \left( \hat X_{t + 1 | n} - \hat X_{t + 1 | t} \right)
+$$
+and covariance matrix 
+$$
+G_{t} \Xi_{t + 1 | n} G_{t}^{T} + \Xi_{t | t} - G_{t} \Xi_{t + 1|t} G_{t}^{T} = \Xi_{t|t} - G_{t} \left( \Xi_{t + 1 | t} - \Xi_{t + 1 | n} \right)G_{t} ^{T}
+$$
+as specified by the Kalman smoother (\Cref{alg:kalman_smoother}), as the filtered and predicted states are a.s. constant given $Y_{:t}$ and $\xi$ is independent of $Y_{:n}$. 
+
+Additionally, \Cref{eq:kalman-smoother-backwards-recursion} may be used to generate samples from the joint smoothing distribution. This is useful if one is interested in non-linear functionals of the smoothing distribution, which involves multiple states at once, such as a moving median or maximum. 
 \todo{ffbs erklären}
 \begin{algorithm}
     \begin{algorithmic}
