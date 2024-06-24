@@ -73,6 +73,17 @@ As the joint distribution of $(X, Y)$ is Gaussian, so are conditional distributi
             Y = BX + v + \eta
             \end{align*}
             for an $\eta \sim \mathcal N(0, \Omega)$ with covariance matrix $\Omega = \Sigma_{YY} - \Sigma_{YX}\Sigma_{XX}^{-1}\Sigma_{XY}$ independent of $X$, and $v = \mu_{Y} - B \mu_{X}$.
+        \item Suppose that $(X,Y,Z)$ is jointly normal mean $\mu$ and covariance matrix $\Sigma$, partitioned in the same way. 
+        If the conditional distribution of $X$ given $Y = y$ and $Z = z$ is given by 
+        $$
+        X | Y = y, Z = z \sim \mathcal N(Ky + Gz + \delta, \Xi),
+        $$
+        then the conditional distribution of $X$ given only $Y = y$ is
+        
+        $$
+        X | Y = y \sim \mathcal N \left(Ky + G \mu_{Z| Y= y} + \delta, \Xi + G\cov (Z | Y) G^{T}\right).
+        $$
+        
     \end{enumerate}
     
 \end{lemma}
@@ -82,7 +93,26 @@ As the joint distribution of $(X, Y)$ is Gaussian, so are conditional distributi
     \end{pmatrix} \begin{pmatrix}
         X \\ Y
     \end{pmatrix}$ follows a Gaussian distribution. A quick calculation reveals that $$\cov \left( Y- BX, X \right) = \Sigma_{Y,X} - B \Sigma_{XX} = \Sigma_{Y,X} - \Sigma_{Y,X} = 0,$$
-    showing the independence as . Thus $\eta = Y - BX - \delta$ follows a centered Gaussian distribution and equating covariance matrices, we see that $\Omega$ has the desired form.
+    showing the independence. Thus $\eta = Y - BX - \delta$ follows a centered Gaussian distribution and equating covariance matrices, we see that $\Omega$ has the desired form.
+
+    For the final statement, notice that $\xi = X - KY - GZ - \delta$ fulfills 
+    $$
+    \xi | Y = y, Z = z \sim \mathcal N(0, \Xi)
+    $$
+    which does not depend on $y$ or $z$. Thus the unconditional distribution of $\xi$ is $\mathcal N(0, \Xi)$ as well, and $\xi$ is independent of $(Y, Z)$. Rewriting $X$ in terms of $Y,Z$ and $\xi$, we obtain 
+    $$
+    X = KY + GZ + \delta + \xi,
+    $$
+    and so
+    \begin{align*}
+        \E \left( X | Y = y \right) &= Ky + G \E (Z| Y = y) + \delta,\\
+        \intertext{as well as}
+        \cov \left( X | Y = y \right) &= \cov \left(KY + GZ+\delta +\xi|  Y = y\right) \\
+            &= \cov \left( GZ + \xi | Y = y  \right) \\
+            &= \cov (GZ + \xi) - \cov(GZ + \xi, Y) \Sigma_{YY}^{-1} \cov (Y, GZ + \varepsilon)\\
+            &= G \Sigma_{ZZ}G^{T} + \Xi - G \Sigma_{ZY}\Sigma_{YY}^{-1}\Sigma_{YZ}G^{T}\\
+            &= \Xi + G \cov(Z|Y) G^{T}.
+    \end{align*}
 \end{proof}
 
 After having observed $Y = y$, our main interest lies in the conditional distribution of states $X$ given $Y= y$, which we could obtain by applying \Cref{lem:gaussian_conditional}, i.e. where $B = \bdiag (B_{0}, \dots, B_{n})$ and $\Omega = \bdiag \left( \Omega_{0}, \dots, \Omega_{n} \right)$. However, this would require inversion of the $(n+1)p\times(n+1)p$ matrix $\left( B\Sigma B + \Omega \right)$ which becomes numerical infeasible quickly. Instead, we can exploit the sequential structure of the \acrshort{glssm}, which will allow us to perform conditioning on only a single observation at a time. 
@@ -143,7 +173,7 @@ In \citep{Arroyo-Marioli2021Tracking} the authors construct a simple \acrshort{g
 
 % history: moon
 % epidemiological uses 
-\todo{algorithmen konsistent mit gets und =}
+\todo{algorithmen konsistent mit gets und =, return value}
 \todo{algorithmen konsistent t, t -1}
 \begin{algorithm}
     \caption{Kalman smoother. Note that the Kalman filter already outputs the smoothed last state $\hat X_{n|n}$ and covariance $\Xi_{n|n}$.}
@@ -173,33 +203,40 @@ The Kalman smoother (\Cref{alg:kalman_smoother}) computes the marginal distribut
 We can now sketch the proof for the Kalman smoother recursions, based on the arguments in \citep[Chapter 7.3]{Chopin2020Introduction}. By the preceding lemma, the conditional distribution of $X_{t}$ given $Y_{:n}$ and $X_{t + 1}$ is the same as that given $Y_{:t}$ and $X_{t + 1}$. 
 We may now regard $X_{t + 1} = A_{t}X_{t} + u_{t} + \varepsilon_{t + 1}$ as an additional observation at time $t$, and use the Kalman filter update to determine this conditional distribution:
 $$
-X_{t} | Y_{:t} = y_{:t}, X_{t + 1} = x_{t+1}\sim \mathcal N \left(\hat X_{t|t} + G_{t}(x_{t + 1} - \hat X_{t + 1 | t}), \Xi_{t |t} - G_{t} \Xi_{t + 1 | t} G_{t}^{T} \right).
+X_{t} | Y_{:n} = y_{:n}, X_{t + 1} = x_{t+1}\sim \mathcal N \left(\hat X_{t|t} + G_{t}(x_{t + 1} - \hat X_{t + 1 | t}), \Xi_{t |t} - G_{t} \Xi_{t + 1 | t} G_{t}^{T} \right).
 $$
-Thus we may write, a.s.,
-\begin{align}
-    \label{eq:kalman-smoother-backwards-recursion}
-    X_{t} &= \hat X_{t|t} + G_{t}(X_{t + 1} - \hat X_{t + 1 | t}) + \xi,
-\end{align}
-for a $\xi \sim \mathcal N \left( 0, \Xi_{t | t} - G_{t} \Xi_{t + 1|t}G_{t} \right)$ which is independent of $Y_{:n}$ and $X_{t + 1}$. 
-Conditional on $Y_{:n}$, the right-hand side has mean 
+As $\hat X_{t|t}$ and $\hat X_{t+1|t}$ are linear functions of $Y_{:n}$ (actually $Y_{:t}$), we may apply the last statement of \Cref{lem:gaussian_conditional}, to see that, conditional on $Y_{:n} = y_{:n}$, the distribution of $X_{t}$ is Gaussian with mean
 $$
 \hat X_{t|t} + G_{t} \left( \hat X_{t + 1 | n} - \hat X_{t + 1 | t} \right)
 $$
 and covariance matrix 
 $$
-G_{t} \Xi_{t + 1 | n} G_{t}^{T} + \Xi_{t | t} - G_{t} \Xi_{t + 1|t} G_{t}^{T} = \Xi_{t|t} - G_{t} \left( \Xi_{t + 1 | t} - \Xi_{t + 1 | n} \right)G_{t} ^{T}
+\Xi_{t | t} - G_{t} \Xi_{t + 1|t} G_{t}^{T} + G_{t} \Xi_{t + 1 | n} G_{t}^{T} = \Xi_{t|t} - G_{t} \left( \Xi_{t + 1 | t} - \Xi_{t + 1 | n} \right)G_{t} ^{T}.
 $$
-as specified by the Kalman smoother (\Cref{alg:kalman_smoother}), as the filtered and predicted states are a.s. constant given $Y_{:t}$ and $\xi$ is independent of $Y_{:n}$. 
+These quantities are calculated by the Kalman smoother (\Cref{alg:kalman_smoother}).
 
-Additionally, \Cref{eq:kalman-smoother-backwards-recursion} may be used to generate samples from the joint smoothing distribution. This is useful if one is interested in non-linear functionals of the smoothing distribution, which involves multiple states at once, such as a moving median or maximum. 
+Going back to the proof of the last statement in \Cref{lem:gaussian_conditional}, we see that we may actually write
+\begin{align}
+    \label{eq:kalman-smoother-backwards-recursion}
+    X_{t} &= \hat X_{t|t} + G_{t}(X_{t + 1} - \hat X_{t + 1 | t}) + \xi_{t},
+\end{align}
+for a $\xi_{t} \sim \mathcal N \left( 0, \Xi_{t | t} - G_{t} \Xi_{t + 1|t}G_{t} \right)$ which is independent of $Y_{:n}$ and $X_{t + 1}$.
+This recurrence may be used to generate samples from the joint smoothing distribution, which is useful if one is interested in non-linear functionals of the smoothing distribution that involve multiple states at once, such as a moving median or maximum. 
 \todo{ffbs erklären}
 \begin{algorithm}
     \begin{algorithmic}
-        \Require TODO
+        \Require \acrshort{glssm} (\Cref{def:glssm}), outputs from Kalman filter (\Cref{alg:kalman_filter})
+        \State Simulate $\check X_{n|n} \sim \mathcal N(\hat X_{n|n}, \Xi_{n|n})$
+        \For{$t \gets n-1, \dots, 0$}
+            \State $G_{t} = \Xi_{t|t}A_{t}\Xi^{-1}_{t + 1 | t}$
+            \State Simulate $\xi_{t} \sim \mathcal N(0, \Xi_{t|t} - G_{t}\Xi_{t+1|t}G^{T}_t)$
+            \State Set $\check X_{t|n} = \hat X_{t|t} + G_{t} \left( \check X_{t + 1} - \hat X_{t + 1| t} \right) + \xi_{t}$
+        \EndFor
     \end{algorithmic}
     \caption{Forwards filter, backwards smoother \citep[Proposition 1]{Fruhwirth-Schnatter1994Data}} \label{alg:ffbs}
 \end{algorithm}
 
+\todo{better transition}
 The modeling capacity of \glspl{glssm} is, however, limited: most interesting phenomena follow neither linear dynamics nor are well modeled by a Gaussian distribution.
 Nevertheless, linearization of non-linear dynamics suggests that  \gls{glssm}s may have some use as approximations to these more complicated phenomena, provided they are sufficiently close to Gaussian models, e.g. unimodal and without heavy tails.
 We start to move away from linear Gaussian models by allowing observations that are non-Gaussian.
