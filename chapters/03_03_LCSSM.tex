@@ -1,9 +1,32 @@
-\section{Logconcave Gaussian state space models}
+\section{Partially Gaussian state space models}
 \label{sec:logconcave_gaussian_state_space_models}
 
-The distribution of observations is never Gaussian - all we may hope for is that the data-generating mechanism is close enough to a Gaussian distribution that inferences made in the Gaussian model carry over.
+The distribution of observations is never Gaussian - all we may hope for is that the data-generating mechanism is close enough to a Gaussian distribution that inferences made in an \acrshort{glssm} may carry over.
 For epidemiological models, Gaussian distributions may be appropriate if incidences are high, e.g. during large outbreaks in a whole country. 
-When case numbers are small, the discrete nature of incidences is better captured by a distribution on $\mathbf N_{0}$, and standard distributions used are the Poisson and negative binomial distributions, see e.g. \cite{Lloyd-Smith2005Superspreadinga}.
+When case numbers are small, the discrete nature of incidences is better captured by a distribution on $\mathbf N_{0}$, and standard distributions used are the Poisson and negative binomial distributions, see e.g. \cite{Lloyd-Smith2005Superspreadinga}, see also the discussion in \Cref{sec:modelling_epidemiological_dessiderata_with_state_space_models}. We thus want \acrshortpl{ssm} where observations are allowed to follow these non-Gaussian distributions. 
+
+% argue for keeping states linear and Gaussian
+Concerning the distribution of states, we keep the linear Gaussian assumption, i.e. \Cref{eq:glssm_states}. As argued in \Cref{sec:modelling_epidemiological_dessiderata_with_state_space_models}, \todo{do this there} using Gaussian states and transitions allows for flexible modeling of many epidemiological desiderata. Furthermore, keeping the states Gaussian will enable us to use \acrfull{eis} effectively, by constructing approximations via \acrshort{glssm} which possess the same state dynamics. Alternatively, t-distributed innovations or more general transition kernels could be employed and we refer the interested reader to \citep[Part II]{Durbin2012Time} for a selection of these models. The following definition is that of \citep{Koopman2019Modified}, which itself is an extension of earlier work of \citep{Shephard1994Partial}.
+
+\glsreset{pgssm}
+\begin{definition}[\gls{pgssm}]
+    A \acrfull{pgssm} is a joint distribution for $(X,Y)$ where states $X$ follow \Cref{eq:glssm_states}, i.e. 
+    \begin{align*}
+        X_{t + 1}  &= A_{t}X_{t} + u_{t} + \varepsilon_{t + 1} &  & t = 0, \dots, n - 1,
+    \end{align*}
+    with $X_{0} \sim \mathcal N(0, \Sigma_{0})$, $\varepsilon_{t} \sim \mathcal N (0, \Sigma_{t})$ for $t = 1, \dots, n$ and $X_{0}$, $(\varepsilon_{t})_{t = 1, \dots, n}$ jointly independent. 
+
+    Furthermore, the observations $Y$ are conditionally independent given the states $X$, 
+    $$
+    p(y | x) = \prod_{t = 0}^n p(y_{t} | x_{t}).
+    $$
+    and are allowed to take any arbitrary distribution. 
+\end{definition}
+%% still flexible
+%% its only a prior
+%% will allow for approximation with GLSSM later on
+%% could replace with e.g. t-distributed errors
+
 Both the Poisson and negative binomial belong to the class of exponential family distributions. As such, their densities have a convenient structure, allowing only for a linear interaction between the \todoTH{decide between natural and canonical} natural parameter and the densities argument. We refer to \cite{Brown1986Fundamentals} for a comprehensive treatment of exponential families and use their definitions throughout this section.
 
 \begin{definition}[exponential family]
