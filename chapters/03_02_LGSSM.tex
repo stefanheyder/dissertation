@@ -46,7 +46,7 @@ As the joint distribution of $(X, Y)$ is Gaussian, so are conditional distributi
     Then the following holds:
     
     \begin{enumerate}
-        \item If $\Sigma_{YY}$ is non-singular, $X|Y = y$ follows a Gaussian distribution with conditional expectation
+        \item \label{it:cond_gaussian} If $\Sigma_{YY}$ is non-singular, $X|Y = y$ follows a Gaussian distribution with conditional expectation
             $$
             \mu_{X|Y = y} = \E \left( X | Y = y \right) = \mu_{X} + \Sigma_{XY}\Sigma_{YY}^{-1} \left( y - \mu_{Y} \right)
             $$
@@ -85,10 +85,18 @@ As the joint distribution of $(X, Y)$ is Gaussian, so are conditional distributi
         $$
         
     \end{enumerate}
-    
 \end{lemma}
+
+\begin{remark}[generalized inverse]
+    If $\Sigma_{YY}$ in \Cref{lem:gaussian_conditional} \ref{it:cond_gaussian} is singular, the statement remains true if we choose as $\Sigma_{YY}^{-1}$ a generalized inverse of $\Sigma_{YY}$, see \citep[8.a Note 3]{Rao2002Linear}. A generalized inverse for a matrix $A\in\R^{m \times p}$ is any matrix $A^{-} \in \R^{m \times p}$ such that $AA^{-}A = A$. Given a singular value decomposition $A = UDV^{T}$, we may obtain the Moore-Penrose inverse $A^{\dagger} = V D^{-}U^{T}$ of $A$, which is a generalized inverse of $A$, by inverting the non-zero diagonal elements of $D$. 
+\end{remark}
+
 \begin{proof}
-    For the first statement, we refer the reader to \citep[Chapter 4, Lemma 1]{Durbin2012Time}. The second statement follows from substituting the value of $K$. The third statement follows from noting that $Y-BX = \begin{pmatrix}
+    For the first statement, we refer the reader to \citep[Chapter 4, Lemma 1]{Durbin2012Time}.
+    
+    The second statement follows from substituting the value of $K$. 
+    
+    The third statement follows from noting that $Y-BX = \begin{pmatrix}
         -B & I
     \end{pmatrix} \begin{pmatrix}
         X \\ Y
@@ -130,7 +138,7 @@ These distributions may be obtained efficiently using the celebrated Kalman filt
         \State $A_{-1} \gets I \in \mathbf R^{m\times m}$ \Comment{Identity Matrix}
         \State $u_{-1} \gets \mathbf 0 \in \mathbf R^{m}$ 
         \State $\hat X_{-1|-1} \gets \E X_0$
-        \State $\Xi_{0|-1} \gets \Sigma_{0}$
+        \State $\Xi_{0|-1} \gets \mathbf 0_{m\times m}$
         \State $\ell_{-1} \gets 0$
         \For{$t \gets 0, \dots, n$}
             \State $\hat X_{t| t - 1} \gets A_{t-1} \hat X_{t-1|t-1} + u_{t-1}$ \Comment{prediction}
@@ -221,8 +229,12 @@ Going back to the proof of the last statement in \Cref{lem:gaussian_conditional}
     X_{t} &= \hat X_{t|t} + G_{t}(X_{t + 1} - \hat X_{t + 1 | t}) + \xi_{t},
 \end{align}
 for a $\xi_{t} \sim \mathcal N \left( 0, \Xi_{t | t} - G_{t} \Xi_{t + 1|t}G_{t} \right)$ which is independent of $Y_{:n}$ and $X_{t + 1}$.
-This recurrence may be used to generate samples from the joint smoothing distribution, which is useful if one is interested in non-linear functionals of the smoothing distribution that involve multiple states at once, such as a moving median or maximum. 
-\todo{ffbs erklären}
+This recurrence may be used to generate samples from the joint smoothing distribution, which is useful if one is interested in non-linear functionals of the smoothing distribution that involve multiple states at once, such as a moving median or maximum. It is based on the following decomposition of the smoothing density
+$$
+p(x|y) = p(x_{n}|y) \prod_{t = n - 1}^0 p(x_{t}|x_{t+1}, y_{:t}).
+$$
+The resulting algorithm is called the \gls{ffbs} (\Cref{alg:ffbs}) and was first described in \citep{Fruhwirth-Schnatter1994Data} in the context of a data augmentation algorithm for Bayesian analysis of \acrshort{glssm}. In this paper, the hyperparameters $\theta$ follow an inverse gamma distribution, and one is interested in the posterior marginals of $p(\theta|Y)$, e.g. to determine the posterior marginals of states $p(X|Y)$ using \acrshort{mcint}.
+
 \begin{algorithm}
     \begin{algorithmic}
         \Require \acrshort{glssm} (\Cref{def:glssm}), outputs from Kalman filter (\Cref{alg:kalman_filter})
@@ -236,7 +248,22 @@ This recurrence may be used to generate samples from the joint smoothing distrib
     \caption{Forwards filter, backwards smoother \citep[Proposition 1]{Fruhwirth-Schnatter1994Data}} \label{alg:ffbs}
 \end{algorithm}
 
-\todo{better transition}
-The modeling capacity of \glspl{glssm} is, however, limited: most interesting phenomena follow neither linear dynamics nor are well modeled by a Gaussian distribution.
-Nevertheless, linearization of non-linear dynamics suggests that  \gls{glssm}s may have some use as approximations to these more complicated phenomena, provided they are sufficiently close to Gaussian models, e.g. unimodal and without heavy tails.
+% comment on regularity assumptions
+\begin{remark}[regularity of $\Sigma_{t}$ and $\Omega_{t}$]
+    \label{rem:regular_covs}
+    Throughout this section, we have assumed, either explicitly or implicitly, that the innovation and observation covariance matrices $\Sigma_{t}$ and $\Omega_{t}$ are non-singular, i.e. \acrshort{spd}.
+
+    % filtering
+    For the Kalman filter we require that for every $t$, $\Psi_{t|t-1}$ is non-singular, i.e. that we can apply \Cref{lem:gaussian_conditional} \ref{it:cond_gaussian}. This is fulfilled as soon as $\Omega_{t}$ is non-singular, which is a reasonable assumption in most models. Following the remark after \Cref{lem:gaussian_conditional}, we could also replace $\Psi_{t|t-1}^{-1}$ in \Cref{alg:kalman_filter} by its Moore-Penrose inverse. 
+
+    % smoothing
+    A similar argument can be made for singular $\Xi_{t+1|t}$, where we replace $\Xi_{t+1|t}^{-1}$ by its Moore-Penrose inverse in the Kalman smoother (\Cref{alg:kalman_smoother}) and the \acrshort{ffbs} (\Cref{alg:ffbs}). 
+\end{remark}
+
+% comment on simulation smoother
+
+The attractive feature of \glspl{glssm} is that a large part of inference is analytically feasible: we may calculate the likelihood, smoothing distribution and sample from it. 
+However, the modeling capacity of \glspl{glssm} is limited: most interesting phenomena in the context of this thesis follow neither linear dynamics nor are well modeled by a Gaussian distribution, see also the discussion in \Cref{sec:modelling_epidemiological_dessiderata_with_state_space_models}.
+
+Nevertheless, linearization of non-linear dynamics suggests that \gls{glssm}s may have some use as approximations to these more complicated phenomena, provided they are sufficiently close to Gaussian models, e.g. unimodal and without heavy tails.
 We start to move away from linear Gaussian models by allowing observations that are non-Gaussian.
