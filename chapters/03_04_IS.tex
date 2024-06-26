@@ -1,76 +1,81 @@
-
 \section{Importance Sampling}
 \label{sec:importance_sampling}
-Importance sampling is a simulation technique that allows us to approximate integrals w.r.t a measure of interest, the target, by sampling from a tractable approximation, the proposal, instead, thus performing Monte-Carlo integration. To account for the fact that we did not sample from the correct probability measure, we weight samples according to their importance. As the user has freedom in the choice of approximation (except for some technical conditions), importance sampling also acts as a variance reduction technique with better approximations resulting in smaller Monte-Carlo variance. Thus the role that importance sampling plays is twofold: first, it allows to perform Monte-Carlo integration even if sampling from the target is not possible, and second it allows to do so in an efficient way by choosing, to be defined precisely below, the approximation in an optimal way.
+Importance sampling is a simulation technique that allows us to approximate integrals w.r.t a measure of interest, the target, by sampling from a tractable approximation, the proposal, instead, thus performing Monte-Carlo integration. To account for the fact that we did not sample from the correct probability measure, we weight samples according to their importance. As the user has freedom in the choice of approximation (except for some technical conditions), importance sampling also acts as a variance reduction technique with better approximations resulting in smaller Monte-Carlo variance. Thus the role that importance sampling plays is twofold: first, it enables Monte-Carlo integration even if sampling from the target is not possible, and second it allows us to do so in an efficient way by choosing, to be defined precisely below, the approximation in an optimal way.
 
 Alternative approaches to importance sampling for performing inference in \glspl{ssm} include \gls{mcmc} and \gls{smc}. 
 Recall from the introduction to this chapter that this inference concerns three objectives: maximum likelihood estimation, i.e. evaluation and optimization of the likelihood, access to the posterior distribution $X_{:n} | Y_{:n}$ and prediction of future states and observations. Let us give a concise comparison of these alternative approaches, weighing their advantages and disadvantages over importance sampling, in particular for the \glspl{ssm} that this thesis deals with. 
 
 % MCMC intro
-\gls{mcmc} \cite{Brooks2011Handbook} is a simulation technique that allows to simulation of correlated samples from a target distribution by constructing a Markov chain that has as its invariant distribution the desired distribution. For Metropolis Hastings \gls{mcmc}, one needs access to the density of the sought distribution up to a constant to simulate a step in the Markov chain. While this method is very general, it fails in high dimensions and current research in \gls{mcmc} methods investigates this \todo{quotes} curse of dimensionality \todo{cite something}. 
+\gls{mcmc} \citep{Brooks2011Handbook} is a simulation technique that allows to simulation of correlated samples from a target distribution by constructing a Markov chain that has as its invariant distribution the desired distribution. For Metropolis-Hastings \gls{mcmc}, one needs access to the density of the sought distribution up to a constant to simulate a step in the Markov chain. While this method is very general, it fails in high dimensions and current research in \gls{mcmc} methods investigates this \todo{quotes} curse of dimensionality \todo{citep something}. 
 
 % MCMC vs IS
 \todo{MCMC vs. IS}
 
 % SMC intro
-\gls{smc} \cite{Chopin2020Introduction} or particle filters, use sequential importance sampling to provide a particle approximation to the filtering distributions $X_{t} | Y_{:t}$, essentially decomposing the problem into a $n$ importance sampling steps. 
+\gls{smc} \citep{Chopin2020Introduction} or particle filters, use sequential importance sampling to provide a particle approximation to the filtering distributions $X_{t} | Y_{:t}$, essentially decomposing the problem into a $n$ importance sampling steps. 
 To avoid particle collapse, \gls{smc} is usually equipped with a resampling step once the effective sample size of the current set of particles drops below a specified level. Once the final filtering distribution $X_{n}|Y_{:n}$ is approximated, the smoothing distribution may be obtained in several ways ... \todo{look up Chopin}.
 
 % SMC vs. IS
-Conveniently, \gls{smc} allows us to approximate the likelihood $\ell(\theta)$ for a single parameter by a single pass of the particle filter. However, the discrete nature of resampling makes the approximated likelihood non-continuous, complicating maximum likelihood inference. \cite[Chapter 14]{Chopin2020Introduction} discusses several strategies: the first amounts to importance sampling of the order as discussed in this thesis, where one fixes a reference parameter $\theta_{0}$ to perform importance sampling with $p_{\theta_{0}}(x|y)$ against $p_{\theta}(x|y)$. The second strategy only works in the univariate case and consists of approximating the non-continuous inverse CDFs appearing in the resampling step by continuous ones. Finally, if the dependence on the hyperparameters $\theta$ allows for application of the EM-algorithm, it may be used to perform the optimization. 
+Conveniently, \gls{smc} allows us to approximate the likelihood $\ell(\theta)$ for a single parameter by a single pass of the particle filter. However, the discrete nature of resampling makes the approximated likelihood non-continuous, complicating maximum likelihood inference. \citep[Chapter 14]{Chopin2020Introduction} discusses several strategies: the first amounts to importance sampling of the order as discussed in this thesis, where one fixes a reference parameter $\theta_{0}$ to perform importance sampling with $p_{\theta_{0}}(x|y)$ against $p_{\theta}(x|y)$. The second strategy only works in the univariate case and consists of approximating the non-continuous inverse CDFs appearing in the resampling step by continuous ones. Finally, if the dependence on the hyperparameters $\theta$ allows for application of the EM-algorithm, it may be used to perform the optimization. 
 Contrary to \gls{smc}, the global importance sampling approach we discuss in \Cref{sec:gaussian_importance_sampling_for_state_space_models,sec:maximum_likelihood_estimation} allows us to perform \todo{...}
 
 This chapter proceeds with a general treatment of importance sampling. Subsequently, we will focus our attention on methods to obtain good importance sampling proposals. 
 
-Suppose we have a function $h: \mathcal X \to \R$ whose integral w.r.t. to some measure $\mu$, $$\zeta = \int_{\mathcal X} h(x) \d\mu(x),$$ we want to compute \todoTH{comment on existence}.
+Suppose we have a function $h: \mathcal X \to \R$ whose integral w.r.t. to some measure $\mu$, $$\zeta = \int_{\mathcal X} h(x) \d\mu(x),$$ exists and whose value we want to compute. 
 Furthermore, suppose that we can write
 $$
-    \int_{\mathcal X} h(x) \d \mu(x) = \int_{\mathcal X} f(x) \d \P(x) = \P (f)
+    \int_{\mathcal X} h(x) \d \mu(x) = \int_{\mathcal X} f(x) \d \P(x) = \P [f],
 $$
-\todoTH{$\P [f]$ operator schreibweise everywhere}
+\todoTH{operatorschreibeweise everywehere}
 for a probability measure $\P$ and function $f: \mathcal X \to \R$, e.g. because $\P = p \mu$ and $h(x) = f(x) p(x)$ $\mu$-a.s. .
 Let $\G$ be a another probability measure on $\mathcal X$ such that $f\P$ is absolutely continuous with respect to $\G$, $f\P \ll \G$, and let $v = \frac{\d f\P}{\d\G}$ be the corresponding Radon-Nikodym derivative. Then
 $$
-    \zeta = \int_{\mathcal X} h(x) \d \mu(x) = \int_{\mathcal X} f(x) \d \P(x) = \int_{\mathcal X} v(x)\d\G(x)
+    \zeta = \int_{\mathcal X} h(x) \d \mu(x) = \int_{\mathcal X} f(x) \d \P(x) = \int_{\mathcal X} v(x)\d\G(x),
 $$
-which suggests to estimate $\zeta$ by Monte-Carlo integration: $$\hat \zeta = \frac 1 N \sum_{i=1}^{N} v(X^{i})$$ for $X^{i} \iid \G$, $i = 1, \dots, N$. Here we call $\hat \zeta$ the importance sampling estimate of $\zeta$. \todoTH{comment on Xs not being iid in control variates}
+which suggests to estimate $\zeta$ by simple Monte-Carlo integration: $$\hat \zeta = \frac 1 N \sum_{i=1}^{N} v(X^{i})$$ for $X^{i} \iid \G$, $i = 1, \dots, N$. For this procedure to work, we require that $\hat \zeta$ fulfills a law of large numbers, so we will want $v \in L^{2}(\G)$, where $L^{p}(\nu)$ is the space of $p$-times $\nu$-integrable functions for a measure $\nu$. The i.i.d. assumption could also be dropped, e.g. when we employ antithetic variables, see e.g. \citep[Section 5.3]{Ripley2009Stochastic}.
 
-The Monte-Carlo variance of $\hat \zeta$ is $\frac{\var \left(v(X^{i})\right)}{N}$, and so naturally we want $\var \left(v(X^{i})\right)$ to be small to ensure fast convergence of $\hat \zeta$. As $v$ depends on the proposal $\G$, and we have the flexibility to choose $\G$, importance sampling acts as a variance reduction technique. 
+Here we call $\hat \zeta$ the importance sampling estimate of $\zeta$. 
+
+If $v \in L^{2}(\G)$ and under i.i.d. sampling the Monte-Carlo variance of $\hat \zeta$ is $\frac{\var \left(v(X^{i})\right)}{N}$, and so naturally we want $\var \left(v(X^{i})\right)$ to be small to ensure fast convergence of $\hat \zeta$. As $v$ depends on the proposal $\G$, and we have the flexibility to choose $\G$, importance sampling acts as a variance reduction technique. 
 A classical result is that the minimum MSE proposal $\G^\ast$ has a closed form. Indeed it is given by the total variation measure of $f\P$, renormalized to be a probability measure, which can be shown by a simple application of Jensen's inequality. 
-\begin{proposition}[{\cite[Proposition 8.2]{Chopin2020Introduction}}][minimum MSE proposal]
+\begin{proposition}[{\citep[Proposition 8.2]{Chopin2020Introduction}}][minimum MSE proposal]
     \label{prop:minimum_MSE_IS}
     The proposal $\G^{\ast}$ that minimizes the MSE of importance sampling is given by
     $$
-    \G^{\ast}  = \frac{\lvert f \rvert}{\P\left(\lvert f \rvert \right)} \P.
+    \G^{\ast}  = \frac{\lvert f \rvert}{\P\left[\lvert f \rvert \right]} \P.
     $$
 \end{proposition}
-Unfortunately, this optimality result has no practical use, indeed if $f$ is positive we would need to obtain $\P(f)$ first, the overall target of our endeavor. Additionally, sampling from $\G^{\ast}$ is not guaranteed to be practically feasible. 
+Unfortunately, this optimality result has no practical use, indeed if $f$ is positive we would need to obtain $\P[f]$ first, the overall target of our endeavor. Additionally, sampling from $\G^{\ast}$ is not guaranteed to be practically feasible. 
 
 If one is not interested in a particular function $f$, we may instead think of
 \begin{align}
 \label{eq:is-particle-approximation}
 \hat \P_N = \frac{1}{N} \sum_{i = 1}^{N} w(X_i) \delta_{X_i},
 \end{align}
-where $w = \frac{\d\P}{\d\G}$, as a particle approximation of $\P$, in the sense that for sufficiently well behaved test functions $f$, $\P (f) \approx \hat\P_{N}(f)$. In this setting \cite{Agapiou2017Importance} shows that the random measure $\hat \P_N$ converges to $\P$ at usual rate $\mathcal O\left(\frac 1 {\sqrt{N}}\right)$ in an appropriate metric on the space of random probability measures. 
+where $w = \frac{\d\P}{\d\G}$, as a particle approximation of $\P$, in the sense that for sufficiently well behaved test functions $f$, as $N \to \infty$ $\hat\P_{N}[f]\to \P [f]$. $w_{i} = w(X_{i})$ is called the importance sampling weight of the $i$-th sample.
 
-To perform importance sampling one must be able to evaluate the weights $w$\todoTH{make w, W, v consistent}. In a Bayesian setting, this is usually infeasible: if $\P$ is a posterior distribution then the integration constant of its density is intractable.
-In this case, one can usually evaluate the weights up to a constant, i.e. $w(x) \propto_x \frac{\d \P}{\d \G}(x)$ \todoTH{propto einführen} is available. The missing constant is then $\int w(x) \d \G$ which is itself amenable to importance sampling.
-\todoTH{more explicit} This leads to the self-normalized importance sampling weights $W_i = \frac{w(X_i)}{\sum_{i = 1}^N w(X_i)}$ and Monte Carlo estimates $\hat \zeta = \sum_{i = 1}^{N} W_i f(X_i)$ and particle approximation $\hat \P_N = \sum_{i = 1}^{N} W_i \delta_{X_i}$.
+To perform importance sampling one must be able to evaluate $w$. In the context of \acrshortpl{pgssm} this is usually not possible: if $\P$ is an intractable conditional distribution then the integration constant of its density is not analytically available.
+Still, we can usually evaluate the weights up to a constant, i.e. $w(x) \propto \frac{\d \P}{\d \G}(x)$ is available. The missing constant is then $\int w(x) \d \G$ which is itself amenable to importance sampling: we may estimate it by $\sum_{i = 1}^N w_i$.
+This leads to the so-called self-normalized importance sampling weights $W_i = \frac{w(X_i)}{\sum_{i = 1}^N w(X_i)}$ and Monte Carlo estimates $\hat \zeta = \sum_{i = 1}^{N} W_i f(X_i)$ and particle approximation $\hat \P_N = \sum_{i = 1}^{N} W_i \delta_{X_i}$.
+
+The class for test functions for which this holds depends on $\P$ and $\G$. \citep{Agapiou2017Importance} study the behavior of uniformly bounded test functions $\lVert f \rVert \leq 1$. 
+In this setting \citep{Agapiou2017Importance} shows that the random measure $\hat \P_N$ converges to $\P$ at usual rate $\mathcal O\left(\frac 1 {\sqrt{N}}\right)$ in an appropriate metric on the space of random probability measures. 
+
 
 In both cases, one can show that once the second moment of $w$ w.r.t. $\G$ 
 $$
 \rho = \int w^{2}\d\G = \int w \d \P,
 $$
-exists the Monte-Carlo estimates are consistent and asymptotically normal at the usual rates, see \cite[Chapter 8]{Chopin2020Introduction}. 
-However, the finite sample variance of $\hat\zeta$, and thus the practical performance of the procedure, depends on the variance of $w\cdot f$ under $\G$, and thus on the proposal $\G$. \cite{Agapiou2017Importance} show that the supremum over bounded test function of the expected bias and variance of $\hat \P_N$ may be bounded, up to a constant, by the second moments of $w$. Thus, for bounded functions, $\rho$ provides an upper bound on the speed of convergence of importance sampling. In addition, they provide bounds that involve the KL-divergence 
+exists the Monte-Carlo estimates are consistent and asymptotically normal at the usual rates, see \citep[Chapter 8]{Chopin2020Introduction}. 
+However, the finite sample variance of $\hat\zeta$, and thus the practical performance of the procedure, depends on the variance of $w\cdot f$ under $\G$, and thus on the proposal $\G$. \citep{Agapiou2017Importance} show that the supremum over bounded test function of the expected bias and variance of $\hat \P_N$ may be bounded, up to a constant, by the second moments of $w$. Thus, for bounded functions, $\rho$ provides an upper bound on the speed of convergence of importance sampling. In addition, they provide bounds that involve the KL-divergence 
 $$
 \Dkl{\P}{\G} = \int \log \frac{\d \P}{\d \G} \d \P \leq \log \rho
 $$
 \todoTH{more rigorous, include proof of resutls which are necessary to understand reasoning. Here: existence of dP/dG}
 fostering the intuition that $\G$ should be close to $\P$ for the particle approximation $\hat\P_{N}$ to be close to $\P$.
 
-\cite{Chatterjee2018Sample} provides the following theorem (using our notation), that relates the performance of importance sampling to both the \gls{kld} and the tail behavior of the log weights.
-\begin{theorem}[{\cite[Theorem 1.1]{Chatterjee2018Sample}}]
+\citep{Chatterjee2018Sample} provides the following theorem (using our notation), that relates the performance of importance sampling to both the \gls{kld} and the tail behavior of the log weights.
+\begin{theorem}[{\citep[Theorem 1.1]{Chatterjee2018Sample}}]
     \todoTH{fix this Thm}
     \label{thm:chatterje2018Thm1}
     If $N = \exp \left( \Dkl{\P}{\G} + t \right)$ for $ t\geq 0$, and $f \in L^{2}(\P)$ then
@@ -81,11 +86,11 @@ fostering the intuition that $\G$ should be close to $\P$ for the particle appro
 \end{theorem}
 \citep[Theorem 1.2]{Chatterjee2018Sample} provides a similar result for autonormalised importance sampling.
 
-To judge whether importance sampling has converged, several criteria are discussed in the literature. The classic \gls{ess}\cite{Kong1994Sequential} 
+To judge whether importance sampling has converged, several criteria are discussed in the literature. The classic \gls{ess}\citep{Kong1994Sequential} 
 $$
 \text{ESS} = \frac{1}{\sum_{i = 1}^N W^{2}_{i}}
 $$
-arises from an analysis of the asymptotic efficiency of importance sampling estimates and is easy to interpret. Assessing convergence through the empirical variance of $\hat \zeta$ is, while seemingly natural, flawed \cite{Chatterjee2018Sample} \todoTH{more explicit \& intructive} and should be avoided. As a remedy \cite{Chatterjee2018Sample} suggest the heuristic $q_{N} = \E Q_{N}$ where
+arises from an analysis of the asymptotic efficiency of importance sampling estimates and is easy to interpret. Assessing convergence through the empirical variance of $\hat \zeta$ is, while seemingly natural, flawed \citep{Chatterjee2018Sample} \todoTH{more explicit \& intructive} and should be avoided. As a remedy \citep{Chatterjee2018Sample} suggest the heuristic $q_{N} = \E Q_{N}$ where
 $$
 Q_{N} = \max_{1\leq i\leq N} W_{i}.
 $$
@@ -107,7 +112,7 @@ Finally, this allows us to simplify the notation used in this thesis. $\P$ will 
 \subsection{\texorpdfstring{\Acrfull{la}}{Laplace approximation}}
 \label{subsec:la}
 
-The \acrfull{la} goes back to Laplace \cite{Laplace1986Memoir} who invented the technique to approximate moments of otherwise intractable distributions. Since \cite{Tierney1986Accurate,Tierney1989Fully} rediscovered its use to approximate posterior means and variances, it has been a staple method for approximate inference.
+The \acrfull{la} goes back to Laplace \citep{Laplace1986Memoir} who invented the technique to approximate moments of otherwise intractable distributions. Since \citep{Tierney1986Accurate,Tierney1989Fully} rediscovered its use to approximate posterior means and variances, it has been a staple method for approximate inference.
 The method is based on a second-order Taylor series expansion of the log target density $\log p(x)$ around its mode $\hat x$, i.e. matching mode and curvature. Assuming the density is sufficiently smooth, we have
 \begin{align}
     \label{eq:LA_approximation}
@@ -122,7 +127,7 @@ To obtain the \acrshort{la} in practice, a Newton-Raphson scheme may be used, wh
 
 % advantages / disadvantages
 The main advantage of the \gls{la} is that it is usually fast to obtain and, for sufficiently well-behaved distributions on a moderate dimensional space, provides reasonably high \gls{ess}. Additionally, the Newton-Raphson iterations to find the mode and Hessian are robust and require no simulation, unlike the other methods discussed further below.
-For the \glspl{ssm} we consider in this thesis, the numerical methods can be implemented using the Kalman filter and smoother \cite{Shephard1997Likelihood,Durbin1997Monte}, even in the degenerate case where $H$ is indefinite \cite{Jungbacker2007Monte}, see also \Cref{subsec:glssm-approach}.
+For the \glspl{ssm} we consider in this thesis, the numerical methods can be implemented using the Kalman filter and smoother \citep{Shephard1997Likelihood,Durbin1997Monte}, even in the degenerate case where $H$ is indefinite \citep{Jungbacker2007Monte}, see also \Cref{subsec:glssm-approach}.
 \todo{more theoretical background on LA?}
 
 However, as the \gls{la} is a local approximation, it may be an inappropriate description of the global behavior of the target, see \Cref{ex:la_failure} for a breakdown of \gls{la} and the simulation studies presented in \Cref{sec:simulation_studies}. 
@@ -130,7 +135,7 @@ Additionally, even if \gls{la} works in principle, its \gls{ess} will usually de
 
 \subsection{The \texorpdfstring{\Acrfull{cem}}{Cross-entropy method}}
 \label{subsec:cem}
-To provide a global approximation to the target, the \gls{cem}\cite{Rubinstein1999CrossEntropy,Rubinstein2004CrossEntropy} selects from a family $ \left( \G_{\psi} \right)_{\psi \in \Psi}$ of proposals the one that minimizes the \gls{kld} to the target. Thus, the \gls{cem} finds $\psi_{\text{CE}}$ which solves the following optimization problem
+To provide a global approximation to the target, the \gls{cem}\citep{Rubinstein1999CrossEntropy,Rubinstein2004CrossEntropy} selects from a family $ \left( \G_{\psi} \right)_{\psi \in \Psi}$ of proposals the one that minimizes the \gls{kld} to the target. Thus, the \gls{cem} finds $\psi_{\text{CE}}$ which solves the following optimization problem
 
 \begin{align*}
     \psi_{\text{CE}} &= \argmin_{\psi \in \Psi} \Dkl{\P}{\G_{\psi}} \\
@@ -152,7 +157,7 @@ Note that the first integral does not depend on $\psi$. The assumption of such a
 %\hat\psi_{\text{CE}} &= \argmax_{\psi \in \Psi} \hat \P_{N} \log g_{\psi} = \argmax_{\psi\in\Psi} \sum_{i = 1}^{N}W^{i}\log g_{\psi}(X^{i}) \label{eq:ce-M-estimator}
 %\end{align}
 %where $X_1, \dots, X_N \iid \G$. 
-%Thus $\hat \psi_{\text{CE}}$ is an M-estimator and we may analyze its asymptotic behavior by standard methods, see e.g. \cite[Chapter 5]{VanderVaart2000Asymptotic}.
+%Thus $\hat \psi_{\text{CE}}$ is an M-estimator and we may analyze its asymptotic behavior by standard methods, see e.g. \citep[Chapter 5]{VanderVaart2000Asymptotic}.
 %
 %\todo{rework this: consistency for non-EF proposals (there use VdV and potentially technical assumptions, then special case of EF with Brown)}
 %% M-estimator behaviour 
@@ -198,7 +203,7 @@ $$
 Thus $\hat\psi_{\text{CE}}$ is a Z-estimator, i.e. an estimator that arises from solving a random system of equations, and we can analyze its asymptotic behavior using standard results from the theory of Z-estimators. 
 The following theorem of \citep{VanderVaart2000Asymptotic} will be useful in analyzing the asymptotic behavior of the estimators we consider in this thesis. We state it here, using our notation, for completeness.
 
-\begin{theorem}[asymptotic variance of Z-estimators, {\cite[Theorem 5.21]{VanderVaart2000Asymptotic}}]
+\begin{theorem}[asymptotic variance of Z-estimators, {\citep[Theorem 5.21]{VanderVaart2000Asymptotic}}]
     \label{thm:clt_z_est_vdv}
     For every $\psi$ in an open subset of $\R^{k}$, let $x \mapsto f_{\psi}(x)$ be a measurable vector-valued function such that, for every $\psi_{1}$ and $\psi_{2}$ in a neighborhood of $\psi_{0}$ and a measurable function $\dot f$ with $\G \dot f < \infty$,
     \begin{align}
@@ -226,7 +231,7 @@ The following theorem of \citep{VanderVaart2000Asymptotic} will be useful in ana
         \item $\dot z (\psi) = \nabla_{\psi}\log Z(\psi) = \G_{\psi} T$ the derivative of the log-normalizing constant $\psi \mapsto \log Z(\psi)$
         \item $\ddot z(\psi) = \partial_{\psi} \dot z(\psi) =\cov_{\G_{\psi}}T$ the Hessian of the log-normalizing constant $\psi \mapsto \log Z(\psi)$
     \end{itemize}
-    The naming of $B$ and $M$ stems from the sandwich estimator \cite{White1982Maximum}, where the bread $B$ is the Jacobian of the estimating equations $\P f_{\psi} = 0$ and the meat $M$ is the covariance matrix of $f_{\psi}$ under $\P$, thus making a \glqq{}meat sandwich\grqq{}.
+    The naming of $B$ and $M$ stems from the sandwich estimator \citep{White1982Maximum}, where the bread $B$ is the Jacobian of the estimating equations $\P f_{\psi} = 0$ and the meat $M$ is the covariance matrix of $f_{\psi}$ under $\P$, thus making a \glqq{}meat sandwich\grqq{}.
 \end{notation}
 
 \todo{discussion on relevance and novelty of these results}
@@ -297,7 +302,7 @@ The following theorem of \citep{VanderVaart2000Asymptotic} will be useful in ana
     The promised consistency follows from \ref{it:w-t-wt-L2} and \ref{it:FI-psd}.
 \end{proof}
 
-The form of the asymptotic covariance matrix is that of the sandwich estimator \cite{White1982Maximum}, corrected for the importance sampling with $\G$. This is not surprising: the \gls{cem} performs maximum likelihood estimation where the data come from the misspecified $\P$. Additionally, we have to correct the variance for performing importance sampling with $\G$, instead of sampling directly from $\P$.
+The form of the asymptotic covariance matrix is that of the sandwich estimator \citep{White1982Maximum}, corrected for the importance sampling with $\G$. This is not surprising: the \gls{cem} performs maximum likelihood estimation where the data come from the misspecified $\P$. Additionally, we have to correct the variance for performing importance sampling with $\G$, instead of sampling directly from $\P$.
 
 If $\G_\psi, \psi \in \Psi$ do not form an exponential family, $\hat\psi_{\text{CE}}$ will still be consistent and asymptotically normal, provided the usual regularity conditions for M-estimators apply. 
 
@@ -306,13 +311,13 @@ If $\G_\psi, \psi \in \Psi$ do not form an exponential family, $\hat\psi_{\text{
 % iterative procedure, CRNs
 
 % applications of CEM
-The \gls{cem} is routinely used for estimating failure probabilities for rare events \cite{Homem-de-Mello2007Study} and has been applied to Bayesian inference \cite{Engel2023Bayesian,Ehre2023Certified} and optimal control problems \cite{Kappen2016Adaptive,Zhang2014Applications}.
+The \gls{cem} is routinely used for estimating failure probabilities for rare events \citep{Homem-de-Mello2007Study} and has been applied to Bayesian inference \citep{Engel2023Bayesian,Ehre2023Certified} and optimal control problems \citep{Kappen2016Adaptive,Zhang2014Applications}.
 \todo{more lit. review CEM}
 
 \subsection{\texorpdfstring{\Acrfull{eis}}{Efficient importance sampling}}
 \label{subsec:eis}
-\gls{eis}\cite{Richard2007Efficient} provides an alternative to the \gls{cem}. Instead of minimizing the \gls{kld} between the target $\P$ and $\G_{\psi}$, \gls{eis} aims at minimizing the variance of the logarithm of importance sampling weights. 
-The work by \citep{Chatterjee2018Sample} \cite{Chatterjee2018Sample}, \Cref{thm:chatterje2018Thm1}, suggests that this is worthwhile: the upper bound in their Theorems 1.1 and 1.2 involve tail probabilities of the distribution of log weights, which suggests minimizing their variance as well as the mean.
+\gls{eis}\citep{Richard2007Efficient} provides an alternative to the \gls{cem}. Instead of minimizing the \gls{kld} between the target $\P$ and $\G_{\psi}$, \gls{eis} aims at minimizing the variance of the logarithm of importance sampling weights. 
+The work by \citep{Chatterjee2018Sample} \citep{Chatterjee2018Sample}, \Cref{thm:chatterje2018Thm1}, suggests that this is worthwhile: the upper bound in their Theorems 1.1 and 1.2 involve tail probabilities of the distribution of log weights, which suggests minimizing their variance as well as the mean.
 
 Thus, \gls{eis} finds $\psi_{EIS}$ which solves 
 \begin{align*}

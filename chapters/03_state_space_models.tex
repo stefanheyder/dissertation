@@ -101,6 +101,7 @@ The models that we consider in this thesis will usually admit densities for the 
 \end{notation}
 
 \begin{remark}[dependence on $Y_{t - 1}$, dimensions]
+    \label{rem:dependence_Yt-1}
     Contrary to the standard definition of a \gls{ssm}, our \Cref{def:ssm} allows $Y_t$ to depend on $Y_{t - 1}$.
     As the models considered in \Cref{cha:analysis_of_selected_models} will make extensive use of \glspl{ssm} with this dependency structure we opt to use this non-standard definition here.
     This is not a limitation of the standard definition: given a \gls{ssm} of the form in \Cref{def:ssm} we can transform it to the standard form by choosing states $(X_t, Y_t) \in \mathcal X \times \mathcal Y$ and observations $Y_t \in \mathcal Y$ such that the \gls{ssm} becomes a stochastic process on $ \left( \mathcal X \times \mathcal Y\right) \times \mathcal Y$.
@@ -110,7 +111,7 @@ The models that we consider in this thesis will usually admit densities for the 
     p(x|y) \propto p(x,y) =p (x_0)\prod_{t = 1}^{n} p(x_{t}|x_{t - 1}) \prod_{t = 0}^{n} p(y_t | x_t, y_{t - 1}).
     $$
     Thus, the dependence of $Y_{t}$ on $Y_{t - 1}$ only affects our inferences through $p(y_{t} | x_{t}, y_{t - 1})$, where, as $Y_{t - 1}$ is observed, the argument $y_{t - 1}$ is fixed. 
-    Consequently, all results we present in this chapter that concern only the conditional distribution $X|Y=y$ that apply to \acrshortpl{ssm} where $Y_{t}$ depends only on $X_{t}$ carry over to those given by \Cref{def:ssm}. 
+    Consequently, all results we present in this chapter for \acrshortpl{ssm} where $Y_{t}$ depends only on $X_{t}$ that concern only the conditional distribution $X|Y=y$ carry over to those given by \Cref{def:ssm}. 
 
     In most \acrshortpl{ssm} we consider in this thesis we use $\mathcal X = \R^m$, $\mathcal Y = \R^p$ or $\mathcal Y = \Z^p$ so that $\mathcal X$ is $m$ dimensional and $\mathcal Y$ is $p$ dimensional and equip these spaces with the usual $\sigma$-Algebras. Unless noted otherwise, we use for $\mu_{\mathcal X}$ the $m$-dimensional Lebesgue measure and for $\mu_{\mathcal Y}$ either the $p$-dimensional Lebesgue measure ($\mathcal Y = \R^{p}$) or the $p$-dimensional counting measure ($\mathcal Y = \Z^{p}$).
 \end{remark}

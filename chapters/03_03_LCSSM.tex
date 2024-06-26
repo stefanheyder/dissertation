@@ -3,10 +3,10 @@
 
 The distribution of observations is never Gaussian - all we may hope for is that the data-generating mechanism is close enough to a Gaussian distribution that inferences made in an \acrshort{glssm} may carry over.
 For epidemiological models, Gaussian distributions may be appropriate if incidences are high, e.g. during large outbreaks in a whole country. 
-When case numbers are small, the discrete nature of incidences is better captured by a distribution on $\mathbf N_{0}$, and standard distributions used are the Poisson and negative binomial distributions, see e.g. \cite{Lloyd-Smith2005Superspreadinga}, see also the discussion in \Cref{sec:modelling_epidemiological_dessiderata_with_state_space_models}. We thus want \acrshortpl{ssm} where observations are allowed to follow these non-Gaussian distributions. 
+When case numbers are small, the discrete nature of incidences is better captured by a distribution on $\mathbf N_{0}$, and standard distributions used are the Poisson and negative binomial distributions, see e.g. \citep{Lloyd-Smith2005Superspreadinga}, see also the discussion in \Cref{sec:modelling_epidemiological_dessiderata_with_state_space_models}. We thus want \acrshortpl{ssm} where observations are allowed to follow these non-Gaussian distributions. 
 
 % argue for keeping states linear and Gaussian
-Concerning the distribution of states, we keep the linear Gaussian assumption, i.e. \Cref{eq:glssm_states}. As argued in \Cref{sec:modelling_epidemiological_dessiderata_with_state_space_models}, \todo{do this there} using Gaussian states and transitions allows for flexible modeling of many epidemiological desiderata. Furthermore, keeping the states Gaussian will enable us to use \acrfull{eis} effectively, by constructing approximations via \acrshort{glssm} which possess the same state dynamics. Alternatively, t-distributed innovations or more general transition kernels could be employed and we refer the interested reader to \citep[Part II]{Durbin2012Time} for a selection of these models. The following definition is that of \citep{Koopman2019Modified}, which itself is an extension of earlier work of \citep{Shephard1994Partial}.
+Concerning the distribution of states, we keep the linear Gaussian assumption, i.e. \Cref{eq:glssm_states}. As argued in \Cref{sec:modelling_epidemiological_dessiderata_with_state_space_models}, \todo{do this there} using Gaussian states and transitions allows for flexible modeling of many epidemiological desiderata. Furthermore, keeping the states Gaussian will enable us to use \acrfull{eis} effectively, by constructing approximations via \acrshort{glssm} which possess the same state dynamics. Alternatively, t-distributed innovations or more general transition kernels could be employed and we refer the interested reader to \citep[Part II]{Durbin2012Time} for a selection of these models. The following definition is that of \citep{Koopman2019Modified}, which itself is an extension of earlier work of \citep{Shephard1994Partial}. \citep{Shephard1994Partial} considered only \acrshortpl{ssm} where, conditional on another Markov process $Z = (Z_{t})_{t = 0, \dots, n}$, model is a full \acrshort{glssm}. While this formulation allows for efficient inference if the distribution of $Z$ leads to a tractable conditional distribution $Z| (X, Y)$. As their definition involves a conditional \acrshort{glssm}, the observations still take values in $\R^{p}$, not $\N^{p}$ as is necessary for our endeavors. Thus we opt for the definition presented in \citep{Koopman2019Modified}, where we replace the Gaussian observations (\Cref{eq:glssm_observations}) with arbitrary distributions.
 
 \glsreset{pgssm}
 \begin{definition}[\gls{pgssm}]
@@ -16,18 +16,24 @@ Concerning the distribution of states, we keep the linear Gaussian assumption, i
     \end{align*}
     with $X_{0} \sim \mathcal N(0, \Sigma_{0})$, $\varepsilon_{t} \sim \mathcal N (0, \Sigma_{t})$ for $t = 1, \dots, n$ and $X_{0}$, $(\varepsilon_{t})_{t = 1, \dots, n}$ jointly independent. 
 
-    Furthermore, the observations $Y$ are conditionally independent given the states $X$, 
+    Furthermore, the observations $Y$ form a conditional Markov process, conditional on states $X$, of the following form:
     $$
-    p(y | x) = \prod_{t = 0}^n p(y_{t} | x_{t}).
+    p(y | x) = \prod_{t = 0}^n p(y_{t} | x_{t}, y_{t - 1}).
     $$
-    and are allowed to take any arbitrary distribution. 
+    Here $p(y_{t} | x_{t}, y_{t -1})$ are allowed to take any arbitrary distribution\footnote{Recall that we have not specified $\mu_{\mathcal Y}$, so it is always possible to use $p = \mathbf 1 _{\mathcal Y}$, the constant function.}.
 \end{definition}
-%% still flexible
-%% its only a prior
-%% will allow for approximation with GLSSM later on
-%% could replace with e.g. t-distributed errors
 
-Both the Poisson and negative binomial belong to the class of exponential family distributions. As such, their densities have a convenient structure, allowing only for a linear interaction between the \todoTH{decide between natural and canonical} natural parameter and the densities argument. We refer to \cite{Brown1986Fundamentals} for a comprehensive treatment of exponential families and use their definitions throughout this section.
+It is straightforward to check that a \acrshort{pgssm} is indeed a \acrshort{ssm}. 
+
+\begin{remark}
+    Recalling \Cref{rem:dependence_Yt-1}, if our main interest lies in the conditional distribution $X|Y = y$ for a fixed set of observations $y$, it will suffice to consider models where 
+    $$
+    p(y | x) = \prod_{t = 0}^n p(y_{t} | x_{t})
+    $$
+    holds, and we will do so in the following to enhance readability. At points where this distinction matters, e.g. \todo{add example}, we will give appropriate remarks.
+\end{remark}
+
+Both the Poisson and negative binomial belong to the class of exponential family distributions. As such, their densities have a convenient structure, allowing only for a linear interaction between the natural parameter and the densities argument. We refer to \citep{Brown1986Fundamentals} for a comprehensive treatment of exponential families and use their definitions throughout this section.
 
 \begin{definition}[exponential family]
     Let $\mu$ be a $\sigma$-finite measure on $\R^{p}$ and denote by 
@@ -40,48 +46,88 @@ Both the Poisson and negative binomial belong to the class of exponential family
     $$
         p_{\theta}(y) = \frac{\d \P_{\theta}}{\d \mu} = Z(\theta) h(y) \exp \left(\eta(\theta)^{T}T(y)\right),
     $$
-    then we call $\P_{\theta}, \theta \in \Theta$ and $p_{\theta}, \theta \in \Theta$ a \textbf{$p$-dimensional exponential family}. If $\eta(\theta) = \theta$ we call $\theta$ the canonical parameter. If $T(y) = y$, we call $y$ the canonical observation. By reparametrization (in $\theta$) and sufficiency (in $y$) every $p$-dimensional exponential family can be written as an equivalent standard exponential family, see the elaborations in \cite[Chapter 1]{Brown1986Fundamentals}.
-    % potentially more: canonical parameter/statistic/observation, regular, full, minimal, convex support
+    then we call $\P_{\theta}, \theta \in \Theta$ and $p_{\theta}, \theta \in \Theta$ a \textbf{$p$-dimensional exponential family}. If $\eta(\theta) = \theta$ we call $\theta$ the natural parameter. If $T(y) = y$, we call $y$ the natural observation. By reparametrization (in $\theta$) and sufficiency (in $y$) every $p$-dimensional exponential family can be written as an equivalent standard exponential family, see the elaborations in \citep[Chapter 1]{Brown1986Fundamentals}.
+    % potentially more: natural parameter/statistic/observation, regular, full, minimal, convex support
 \end{definition}
 
 Exponential families have the attractive property that they are log-concave in their parameters. As such the Fisher-information is always positive semidefinite, which will be crucial in defining surrogate Gaussian models in \Cref{sec:gaussian_importance_sampling_for_state_space_models}.
 \begin{lemma}[log-concavity of exponential family distributions]
+    \label{lem:log-concavity}
     Let $p_{\theta}, \theta \in \Theta$ be a natural $p$-dimensional exponential family and $\Theta$ open in $\R^{p}$. In this case $\theta \mapsto \log p_{\theta}(y)$ is concave for every $y \in \R^{p}$.
 \end{lemma}
 
 \begin{proof}
     As $\log p_{\theta}(y) = - \log Z(\theta) + \theta^{T} y$ it suffices to show that $\log Z(\theta)$ is convex. However, 
-    $$\theta \mapsto \log Z(\theta) = \log \int \exp \left( \theta^{T}y \right) \mathrm d \mu(y)$$ is the cumulant generating function of the base measure $\mu$, which is convex \cite[p. 148]{Billingsley1995Probabilitya}.
+    $$\theta \mapsto \log Z(\theta) = \log \int \exp \left( \theta^{T}y \right) \mathrm d \mu(y)$$ is the cumulant generating function of the base measure $\mu$, which is convex \citep[p. 148]{Billingsley1995Probabilitya}.
 \end{proof}
 
-We now generalize \Cref{def:glssm} to allow for non-Gaussian observations by replacing the observation equation \Cref{eq:glssm_observations} with more general exponential families.
+\begin{example}[Poisson \& negative binomial distribution]
+    \label{ex:pois_negbinom}
+    Both the family of Poisson distributions, parameterized by rate $\lambda$ and the negative binomial distribution, parameterized by success probability $p$ with fixed overdispersion $r$ form an exponential family.
 
-\begin{definition}[\acrfull{lcssm}]
+    The log-density of the Poisson distribution with rate $\lambda$, $\operatorname{Pois} (\lambda)$ w.r.t. the counting measure on $\N_{0}$ is 
+    $$
+    \log p_{\lambda} (x) = -\lambda + x\log \lambda - \log x!.
+    $$
+    Thus the Poisson distribution forms an exponential family with natural parameter $\log \lambda$, natural statistic $\id$ (the identity), base measure $h(x) = \frac{1}{x!}$ and log-partition function $Z(\lambda) = \exp \left( -\lambda \right)$. 
+
+    The log-density of the negative binomial distribution with overdispersion parameter $r$ and success probability $p$ $\operatorname{NegBinom} \left( p, r \right)$ is 
+    $$
+    \log p_{r,p}(x) = \log \binom{x + r - 1}{x} + x \log (1 - p) + r \log p.
+    $$
+    For fixed $r$ these distributions form an exponential family with natural parameter $\log (1 - p )$, natural statistic $T = \id$, base measure $h(x) = \log \binom{x + r - 1}{x}$ and log-partition function $Z(p) = r \log p$. 
+
+    In this parametrization the mean of the $\operatorname{NegBinom}(p,r)$ distribution is $\mu = r \frac{1 - p}{p}$ and its variance is $r \frac{1 - p}{p^{2}}$. An alternative parametrization that will become useful \Cref{cha:analysis_of_selected_models} is that by the log mean $\xi = \log \mu$ and overdisperision $r$. As $p = \frac{r}{r + \mu}$, this parametrization has log-density
+    $$
+    \log p_{r,\xi}(x) = \log \binom{x + r - 1}{x} + x \xi  - (r + x) \log (\exp \xi + r) - r \log r,
+    $$
+    which does not form a natural exponential family. However, it retains the log-concavity of \Cref{lem:log-concavity}, as a quick calculation reveals that 
+    $$
+    \partial_{\xi^{2}}^{2} \log p_{r,\xi} (x) = -(r + x) \frac{r \exp (-\xi)}{(r \exp (-\xi) + 1)^{2}} < 0
+    $$
+    for all $x \in \N_{0}$. 
+\end{example}
+
+
+The models we study in \Cref{cha:analysis_of_selected_models} belong, for the most part, \todo{check} to the following subclass of \acrshort{pgssm} models.
+\glsreset{egssm}
+\begin{definition}[\gls{egssm}]
     \label{def:lcssm}
-    \todoTH{decide on lcssm / pgssm, origin of term?} A \textbf{\acrfull{lcssm}} is a \gls{ssm} where states obey the transition equation 
-    $$
-    X_{t + 1} = A_{t}X_{t} + u_{t} + \varepsilon_{t + 1}
-    $$
-    \todoTH{independence of eps}
-    and the conditional distribution of $Y_{t}$ given $X_{t}$ comes from an exponential family with respect to a base measure $\mu_{t}$, i.e.
+    An \acrfull{egssm} is a \acrshort{pgssm} where the conditional distribution of $Y_{t}$ given $X_{t}$ comes from an exponential family with respect to a base measure $\mu_{t}$, i.e.
     $$
     p (y_{t}|x_{t}) = h_{t}(y_{t}) Z_{t}(x_{t}) \exp \left( \eta_{t}(x_{t})^{T} T_{t}(y_{t}) \right)
     $$
-    for suitable functions $h_{t}, Z_{t}, \eta_{t}, T_{t}$. 
+    for suitable functions $h_{t}, Z_{t}, \eta_{t}, T_{t}$. If $Y_{t}$ in the \acrshort{pgssm} is allowed to depend on the previous $Y_{t - 1}$, the functions $h_{t}, Z_{t}, \eta_{t}$ and $T_{t}$ may depend on $y_{t - 1}$. 
 
-    If, additionally, matrices $B_{t} \in \R^{p \times m}$ exist, such that for the signal $s_{t} = B_{t}x_{t} \in \R^{p}$ it holds
+    If, additionally, matrices $B_{t} \in \R^{p \times m}$ exist, such that for the signal $S_{t} = B_{t}X_{t} \in \R^{p}$, $Y_{t}$ only depends on $X_{t}$ through $S_{t}$, i.e. it holds
     $$
     p(y_{t}|x_{t}) = \prod_{i = 1}^p h^{i}_{t}(y^{i}_{t})\, Z^{i}_{t} (s_{t})\, \exp \left( \eta^{i}_{t} (s^{i}_{t})\,T(y^{i}_{t}) \right),
     $$
-    for functions $h_{t}^{i}: \R \to \R, Z^{i}_{t}: \R \to \R, \eta^{i}_{t}: \R\to\R, T: \R\to\R$, $i = 1, \dots p$, we say the \gls{lcssm} has a \textbf{linear signal} \todoTH{origin of term}.
-
-    %\todo{LCSSM only logconcave observations would suffice, then EF is just an instance of this}
+    for functions $h_{t}^{i}: \R \to \R, Z^{i}_{t}: \R \to \R, \eta^{i}_{t}: \R\to\R, T: \R\to\R$, $i = 1, \dots p$, we say the \gls{lcssm} has a \textbf{linear signal}, similar to the treatment in \citep[Part II]{Durbin2012Time}.
 \end{definition}
 
 \begin{remark}
-    To simplify notation we will usually assume that the functions $h, Z$ and $T$ are the same for all $t$ (and $i$, if the \gls{lcssm} has a linear signal) and drop in our notation the dependence of $h$, $Z$, and $T$ on $t$ (and $i$). Similarly we assume that the base measure $\mu_t$ is the same for all relevant $t$.
+    To simplify notation we will usually assume that the functions $h, Z$ and $T$ are the same for all $t$ (and $i$, if the \gls{lcssm} has a linear signal) and drop in our notation the dependence of $h$, $Z$, and $T$ on $t$ (and $i$). Similarly, we assume that the base measure $\mu_t$ is the same for all $t$.
 \end{remark}
 
-As in the previous chapter, after having observed $Y$, one is interested in the conditional distribution of states $X$, given $Y$. If the observations are not Gaussian, this is a difficult task as the distribution is not analytically tractable. Instead approximations, e.g. the \gls{la} (\Cref{cha:laplace_approximation}), or simulation-based inference, e.g. importance sampling (\Cref{sec:importance_sampling,sec:gaussian_importance_sampling_for_state_space_models}), sequential Monte Carlo \cite{Chopin2020Introduction} or MCMC-methods \cite{Brooks2011Handbook} are used. Similarly, fitting hyperparameters $\theta$ by maximum likelihood inference becomes more difficult as evaluating $\ell(\theta) = p(y) = \int p(x,y) \d x$ is not analyically available, thus requiring numerical or simulation methods for evaluation and gradient descent or EM-techniques for optimization, see \Cref{sec:maximum_likelihood_estimation}.
+From \Cref{lem:log-concavity}, we immediately obtain the following results \citep[Section 10.6.4]{Durbin2012Time}
+\begin{lemma}[log-concavity of the smoothing distribution]
+    Consider an \acrshort{egssm}, where $\eta_{t} = \id$ for all $t$.  Then $x \mapsto \log p(x|y)$ is concave for every a.e. $Y = y$. 
+\end{lemma}
+\begin{proof}
+    We may write
+    $$
+    \log p(x|y) = \log p(y|x) + \log p(x) - \log p(y),
+    $$
+    where the last term does not depend on $x$. $\log p(x)$ is concave, as $p(x)$ is the joint density of a multivariate Gaussian distribution. Furthermore 
+    $$
+    \log p(y | x) = \sum_{t = 0}^n \log p(y_{t} | x_{t}, y_{t - 1}),
+    $$
+    which, by \Cref{lem:log-concavity} is concave in $x$. 
+\end{proof}
+
+Notice that the dependence of $Y_{t}$ on $Y_{t - 1}$ does not influence the statement of this lemma, as we are interested in properties of $x \mapsto p(x|y)$.
+
+As in the previous chapter, after having observed $Y$, one is interested in the conditional distribution of states $X$, given $Y$. If the observations are not Gaussian, this is a difficult task as the distribution is not analytically tractable. Instead, approximations, e.g. the \gls{la}, which will exploit the log-concavity developed here or simulation-based inference, e.g. importance sampling (\Cref{sec:importance_sampling,sec:gaussian_importance_sampling_for_state_space_models}), sequential Monte Carlo \citep{Chopin2020Introduction} or MCMC-methods \citep{Brooks2011Handbook} are used. Similarly, fitting hyperparameters $\theta$ by maximum likelihood inference becomes more difficult as evaluating $\ell(\theta) = p(y) = \int p(x,y) \d x$ is not analytically available, thus requiring numerical or simulation methods for evaluation and gradient descent or EM-techniques for optimization, see \Cref{sec:maximum_likelihood_estimation}.
 
 In this thesis, we will focus on importance sampling methods, which are the focus of the next section.
