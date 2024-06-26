@@ -19,7 +19,7 @@ To avoid particle collapse, \gls{smc} is usually equipped with a resampling step
 Conveniently, \gls{smc} allows us to approximate the likelihood $\ell(\theta)$ for a single parameter by a single pass of the particle filter. However, the discrete nature of resampling makes the approximated likelihood non-continuous, complicating maximum likelihood inference. \citep[Chapter 14]{Chopin2020Introduction} discusses several strategies: the first amounts to importance sampling of the order as discussed in this thesis, where one fixes a reference parameter $\theta_{0}$ to perform importance sampling with $p_{\theta_{0}}(x|y)$ against $p_{\theta}(x|y)$. The second strategy only works in the univariate case and consists of approximating the non-continuous inverse CDFs appearing in the resampling step by continuous ones. Finally, if the dependence on the hyperparameters $\theta$ allows for application of the EM-algorithm, it may be used to perform the optimization. 
 Contrary to \gls{smc}, the global importance sampling approach we discuss in \Cref{sec:gaussian_importance_sampling_for_state_space_models,sec:maximum_likelihood_estimation} allows us to perform \todo{...}
 
-This chapter proceeds with a general treatment of importance sampling. Subsequently, we will focus our attention on methods to obtain good importance sampling proposals. 
+This chapter proceeds with a general treatment of importance sampling, loosely based on \citep[Chapter 8]{Chopin2020Introduction} and \citep[Chapter 11]{Durbin2012Time}. Subsequently, we will focus our attention on methods to obtain good importance sampling proposals. 
 
 Suppose we have a function $h: \mathcal X \to \R$ whose integral w.r.t. to some measure $\mu$, $$\zeta = \int_{\mathcal X} h(x) \d\mu(x),$$ exists and whose value we want to compute. 
 Furthermore, suppose that we can write
@@ -32,11 +32,10 @@ Let $\G$ be a another probability measure on $\mathcal X$ such that $f\P$ is abs
 $$
     \zeta = \int_{\mathcal X} h(x) \d \mu(x) = \int_{\mathcal X} f(x) \d \P(x) = \int_{\mathcal X} v(x)\d\G(x),
 $$
-which suggests to estimate $\zeta$ by simple Monte-Carlo integration: $$\hat \zeta = \frac 1 N \sum_{i=1}^{N} v(X^{i})$$ for $X^{i} \iid \G$, $i = 1, \dots, N$. For this procedure to work, we require that $\hat \zeta$ fulfills a law of large numbers, so we will want $v \in L^{2}(\G)$, where $L^{p}(\nu)$ is the space of $p$-times $\nu$-integrable functions for a measure $\nu$. The i.i.d. assumption could also be dropped, e.g. when we employ antithetic variables, see e.g. \citep[Section 5.3]{Ripley2009Stochastic}.
-
-Here we call $\hat \zeta$ the importance sampling estimate of $\zeta$. 
+which suggests to estimate $\zeta$ by simple Monte-Carlo integration: $$\hat \zeta = \frac 1 N \sum_{i=1}^{N} v(X^{i}), $$ the importance sampling estimate of $\zeta$. The importance samples $X^{i}, i = 1, \dots, N$ have distribution $\G$, and will usually be i.i.d.. For this procedure to work, we want $\hat \zeta$ to fulfill a law of large numbers and a central limit theorem, so we will want $v \in L^{2}(\G)$, where $L^{p}(\nu)$ is the space of $p$-times $\nu$-integrable functions for a measure $\nu$. The i.i.d. assumption could also be dropped, e.g. when we employ antithetic variables, see \citep[Section 5.3]{Ripley2009Stochastic}. Here we call $\hat \zeta$ the importance sampling estimate of $\zeta$. 
 
 If $v \in L^{2}(\G)$ and under i.i.d. sampling the Monte-Carlo variance of $\hat \zeta$ is $\frac{\var \left(v(X^{i})\right)}{N}$, and so naturally we want $\var \left(v(X^{i})\right)$ to be small to ensure fast convergence of $\hat \zeta$. As $v$ depends on the proposal $\G$, and we have the flexibility to choose $\G$, importance sampling acts as a variance reduction technique. 
+
 A classical result is that the minimum MSE proposal $\G^\ast$ has a closed form. Indeed it is given by the total variation measure of $f\P$, renormalized to be a probability measure, which can be shown by a simple application of Jensen's inequality. 
 \begin{proposition}[{\citep[Proposition 8.2]{Chopin2020Introduction}}][minimum MSE proposal]
     \label{prop:minimum_MSE_IS}
@@ -47,16 +46,28 @@ A classical result is that the minimum MSE proposal $\G^\ast$ has a closed form.
 \end{proposition}
 Unfortunately, this optimality result has no practical use, indeed if $f$ is positive we would need to obtain $\P[f]$ first, the overall target of our endeavor. Additionally, sampling from $\G^{\ast}$ is not guaranteed to be practically feasible. 
 
-If one is not interested in a particular function $f$, we may instead think of
+If the Radon-Nikodym derivative $w = \frac{\d\P}{\d\G}$ exists, then $v = fw$, which, for the problems we will study, is usually the case. In this case 
+$$
+\hat \zeta = \frac{1}{N} \sum_{i = 1}^N f(X^{i})w(X^{i}),
+$$
+where $w(X_{i})$ is called the importance weight, or just weight, of the $i$-th sample. If the samples is clear from the context we sometimes write $w_{i} = w(X^{i})$. 
+This motivates us to regard
+%If one is not interested in a particular function $f$, we may instead think of
 \begin{align}
 \label{eq:is-particle-approximation}
 \hat \P_N = \frac{1}{N} \sum_{i = 1}^{N} w(X_i) \delta_{X_i},
 \end{align}
-where $w = \frac{\d\P}{\d\G}$, as a particle approximation of $\P$, in the sense that for sufficiently well behaved test functions $f$, as $N \to \infty$ $\hat\P_{N}[f]\to \P [f]$. $w_{i} = w(X_{i})$ is called the importance sampling weight of the $i$-th sample.
+as a particle approximation of $\P$, in the sense that for sufficiently well behaved test functions $f$, as $N \to \infty$ $$
+\hat\P_{N}[f] = \frac{1}{N} \sum_{i = 1}^N f(X^{i})w(X_{i})\to \P [f].
+$$
+We will return to the question of which functions $f$ to consider further below and assume in the following discussion $fw \in L^{2}(\G)$.
 
-To perform importance sampling one must be able to evaluate $w$. In the context of \acrshortpl{pgssm} this is usually not possible: if $\P$ is an intractable conditional distribution then the integration constant of its density is not analytically available.
-Still, we can usually evaluate the weights up to a constant, i.e. $w(x) \propto \frac{\d \P}{\d \G}(x)$ is available. The missing constant is then $\int w(x) \d \G$ which is itself amenable to importance sampling: we may estimate it by $\sum_{i = 1}^N w_i$.
-This leads to the so-called self-normalized importance sampling weights $W_i = \frac{w(X_i)}{\sum_{i = 1}^N w(X_i)}$ and Monte Carlo estimates $\hat \zeta = \sum_{i = 1}^{N} W_i f(X_i)$ and particle approximation $\hat \P_N = \sum_{i = 1}^{N} W_i \delta_{X_i}$.
+To perform importance sampling one must be able to evaluate $w$. In the context of \acrshortpl{pgssm} this is usually not possible: if $\P$ is the intractable conditional distribution of $X|Y$, then the integration constant of its density $p(y)$ is not analytically available.
+Still, we can usually evaluate the weights up to a constant, i.e. $$\tilde w(x) \propto \frac{\d \P}{\d \G}(x)$$ is available. The missing constant is then $\G \tilde w$, which is itself amenable to importance sampling: we may estimate it by $\sum_{i = 1}^N \tilde w(X^{i})$.
+This leads to the so-called self-normalized importance sampling weights $$W_i = \frac{w(X_i)}{\sum_{i = 1}^N w(X_i)}$$ and Monte Carlo estimates $$\hat \zeta = \sum_{i = 1}^{N} W_i f(X_i)$$ and particle approximation $$\hat \P_N = \sum_{i = 1}^{N} W_i \delta_{X_i}.$$
+
+% introduces bias
+Unless $\tilde w$ is degenerate, i.e. constant, $\hat\zeta = \frac{\sum_{i = 1}^N \tilde w (X^{i} f(X^{i}))}{\sum_{i = 1}^{N} \tilde w(X^{i})}$ is a ratio of two non-constant, unbiased estimators and so is itself biased. Nevertheless, applying 
 
 The class for test functions for which this holds depends on $\P$ and $\G$. \citep{Agapiou2017Importance} study the behavior of uniformly bounded test functions $\lVert f \rVert \leq 1$. 
 In this setting \citep{Agapiou2017Importance} shows that the random measure $\hat \P_N$ converges to $\P$ at usual rate $\mathcal O\left(\frac 1 {\sqrt{N}}\right)$ in an appropriate metric on the space of random probability measures. 
