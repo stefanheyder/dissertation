@@ -64,10 +64,17 @@ We will return to the question of which functions $f$ to consider further below 
 
 To perform importance sampling one must be able to evaluate $w$. In the context of \acrshortpl{pgssm} this is usually not possible: if $\P$ is the intractable conditional distribution of $X|Y$, then the integration constant of its density $p(y)$ is not analytically available.
 Still, we can usually evaluate the weights up to a constant, i.e. $$\tilde w(x) \propto \frac{\d \P}{\d \G}(x)$$ is available. The missing constant is then $\G \tilde w$, which is itself amenable to importance sampling: we may estimate it by $\sum_{i = 1}^N \tilde w(X^{i})$.
-This leads to the so-called self-normalized importance sampling weights $$W_i = \frac{w(X_i)}{\sum_{i = 1}^N w(X_i)}$$ and Monte Carlo estimates $$\hat \zeta = \sum_{i = 1}^{N} W_i f(X_i)$$ and particle approximation $$\hat \P_N = \sum_{i = 1}^{N} W_i \delta_{X_i}.$$
+This leads to the so-called self-normalized importance sampling weights 
+$$W_i = \frac{w(X_i)}{\sum_{i = 1}^N w(X_i)},$$
+Monte Carlo estimates 
+$$\hat \zeta = \sum_{i = 1}^{N} W_i f(X_i),$$
+and particle approximation 
+$$\hat \P_N = \sum_{i = 1}^{N} W_i \delta_{X_i}.$$
 
 % introduces bias
-Unless $\tilde w$ is degenerate, i.e. constant, $\hat\zeta = \frac{\sum_{i = 1}^N \tilde w (X^{i} f(X^{i}))}{\sum_{i = 1}^{N} \tilde w(X^{i})}$ is a ratio of two non-constant, unbiased estimators and so is itself biased. Nevertheless, applying 
+Unless $\tilde w$ is degenerate, i.e. constant, $\hat\zeta = \frac{\sum_{i = 1}^N \tilde w (X^{i} f(X^{i}))}{\sum_{i = 1}^{N} \tilde w(X^{i})}$ is a ratio of two non-constant, unbiased estimators and so is itself biased. Nevertheless, noticing that the rescaled denominator $\frac{1}{N} \sum_{i = 1}^{N} \tilde w(X^{i})$ consistently estimates the integration constant $\G \tilde w$, allows us to apply Slutsky's lemma and obtain a central limit theorem for $\hat \zeta$ (recall that we assumed $fw \in L^{2}(\G)$).
+
+% introduce probabilit metrics from Agapiou
 
 The class for test functions for which this holds depends on $\P$ and $\G$. \citep{Agapiou2017Importance} study the behavior of uniformly bounded test functions $\lVert f \rVert \leq 1$. 
 In this setting \citep{Agapiou2017Importance} shows that the random measure $\hat \P_N$ converges to $\P$ at usual rate $\mathcal O\left(\frac 1 {\sqrt{N}}\right)$ in an appropriate metric on the space of random probability measures. 
@@ -86,18 +93,88 @@ $$
 fostering the intuition that $\G$ should be close to $\P$ for the particle approximation $\hat\P_{N}$ to be close to $\P$.
 
 \citep{Chatterjee2018Sample} provides the following theorem (using our notation), that relates the performance of importance sampling to both the \gls{kld} and the tail behavior of the log weights.
-\begin{theorem}[{\citep[Theorem 1.1]{Chatterjee2018Sample}}]
-    \todoTH{fix this Thm}
+\begin{theorem}[{\cite[Theorem 1.1]{Chatterjee2018Sample}}]
     \label{thm:chatterje2018Thm1}
-    If $N = \exp \left( \Dkl{\P}{\G} + t \right)$ for $ t\geq 0$, and $f \in L^{2}(\P)$ then
-    $$
-        \G \left\lvert \P_{N} f - \P f \right\rvert \leq \lVert f \rVert_{2} + 2 \sqrt{ \P \left( \log w > \Dkl{\P}{\G} + \frac{t}{2} \right)}.
-    $$
-    \todo{really $\P$ in the log weights?}
-\end{theorem}
-\citep[Theorem 1.2]{Chatterjee2018Sample} provides a similar result for autonormalised importance sampling.
+     Let $\P$ and $\G$ be probability measures on a measurable space $(\mathcal X, \mathcal B)$ such that $\P \ll \G$ and let $f \in \mathbf L^2(\P)$ be a function with $\lVert f \rVert_{L^{2}(\P)} = \left( \P f^{2} \right)^{1 / 2} < 
+     \infty$. Let $Z$ be an $\mathcal X$ valued random variable with law $\P$. 
+     
+     Let $L = \Dkl{\P}{\G} = \mathbb E \log w(Y)$ be the \acrshort{kld} between $\P$ and $\G$. 
+     
+     Let $X_1, \dots, X_N \iid \G$, let $\hat \P_N = \sum_{i = 1}^N w(X_i) \delta(X_i)$ be the particle approximations of $\P$  based on samples $X_1, \dots, X_N\iid \G$, $N \in \N$. 
+     
+     If the sample size $N = \exp\left( L + t \right)$ for a $t \geq 0$,
+     \begin{align} \label{eq:chatterje-upper-bound}\mathbb E \left\lvert \hat \P_N[f] - \P [f] \right\rvert \leq \lVert f \rVert^2_{L^2(\P)} \left(\exp(-t / 4) + 2 \sqrt{\mathbb P \left( \log w(Z) > L + t / 2 \right)}\right). \end{align}
 
-To judge whether importance sampling has converged, several criteria are discussed in the literature. The classic \gls{ess}\citep{Kong1994Sequential} 
+    Conversely, if $N = \exp \left( L - t \right)$ for $t \geq 0$, then for any $\delta \in (0,1)$ 
+    \begin{align}
+        \label{eq:chatterje-lower-bound}
+    \mathbb P (\hat \P_{N}[ \mathbf 1 ] \geq 1 - \delta) \leq \exp \left( -\frac{t}{2} \right) + \frac{\mathbb P \left( \log w(Z) \leq L -\frac{t}{2} \right)}{ 1- \delta},
+    \end{align}
+    where $\mathbf 1$ is the constant function. 
+
+     Notice the boldface $\mathbb P$ and $\mathbb E$ to differentiate the measures $\P$ and $\G$ from expectations and probabilities with respect to the abstract probability space $\left( \Omega, \mathcal A, \mathbb P \right)$ where the random variables $X_{1}, \dots, X_{N}$ and $Y$ live.
+\end{theorem}
+
+The proof of this theorem is based on splitting $\mathcal X$ into $\{\log w \leq L + \frac{t}{2}\} $ and its complement and straightforward, it may be found in the Appendix of \citep{Chatterjee2018Sample}. \citep[Theorem 1.2]{Chatterjee2018Sample} provides a qualitatively similar result for autonormalised importance sampling.
+
+Let us consider the implications of \Cref{thm:chatterje2018Thm1} by devising heuristics to decide when $\G$ is a good proposal for fixed sample size $N$.
+First of all, as $t = \log N - L$, we have $\exp(- t / 4) =  \frac{\exp (L / 4)}{N^{4}}$, so for large $N$ this term becomes negligible fast, and the interesting term in \Cref{eq:chatterje-upper-bound} is the second one. As $\E \log w(Z) = L$, this term is a tail probability and we can use standard mass-concentration inequalities to analyze its behavior as $t$ (and so $N$) grows. Markov's inequality tells us that 
+$$
+\mathbb P \left( \log w(Z) > L + \frac{t}{2} \right) \leq \frac{L}{L + t / 2} = \frac{2}{1 + \frac{\log N}{L}}.
+$$
+If, additionally, $\log w(Z)$ has finite variance, Tchebyscheff's inequality additionally yields 
+$$
+\mathbb P \left( \log w (Z) > L + \frac{t}{2} \right) \leq \frac{4\operatorname{Var} (\log w(Z))}{t^{2}} = \frac{4\operatorname{Var} (\log w(Z))}{\left( \log N - L \right)^2}.
+$$
+
+In both upper bounds provided by the concentration inequalities, all else being equal, a smaller \acrshort{kld} will yield a tighter bound. However, in Tchebyscheff's inequality, the variance of log weights also plays a role, and will surely be different for different proposals.
+Assuming $\G \ll \P$, we have $ \frac{\d \G}{\d\P} = \frac{1}{w}$ and so 
+$$\mathbb E \exp (- \log w(Z) ) = \mathbb E \frac{1}{w(Z)} = \P \left[\frac{\d \G}{\d\P}\right] = 1,$$
+If the log-weights are bounded from above and below, the following lemma shows that as the variance of $U = -\log w(Z)$ goes to $0$, their mean,
+$$
+\mathbb E U = \mathbb E - \log w(Z) = -\Dkl{\P}{\G}
+$$
+goes to $0$ as well.
+\begin{lemma}
+    \label{lem:bounded-log-variance}
+    For $a,b \in \R$, let $U \in [a,b]$ be a bounded random variable with variance $\sigma^{2}$ and $\mathbb E \exp U = 1$. Let $\mu = \E U$ be the mean of $U$. Then there exists a $\delta \in [a,b]$, such that 
+    $$
+    \mu = -\log \left( 1 + \exp(\delta) \frac{\sigma^{2}}{2} \right).
+    $$
+    In particular, 
+    $$
+    \mu \geq  - \log \left( 1 + \exp(a) \frac{\sigma^{2}}{2} \right).
+    $$
+\end{lemma}
+
+\begin{proof}
+    As $U$ is bounded, all involved expectations exist and are finite. We perform a first-order Taylor expansion of $\exp(U)$, where the random variable $\xi$ is between $U$ and $\mu$:
+    $$
+    1 = \exp(\mu)\mathbb E \exp (U - \mu) = \exp (\mu) \left( 1 + \mathbb E (U - \mu) + \mathbb E\left(\frac{(Z-\mu)^{2}}{2} \exp(\xi)\right) \right).
+    $$
+    Rearranging terms, we obtain 
+    $$
+    \mu = - \log \left( 1 + \mathbb E\left(\frac{(Z-\mu)^{2}}{2} \exp(\xi)\right) \right),
+    $$
+    and as $\xi \in [a, b]$ we have 
+    $$
+    \frac{\sigma^{2}}{2} \exp a \leq \mathbb E\left(\frac{(Z-\mu)^{2}}{2} \exp(\xi)\right) \leq \frac{\sigma^{2}}{2} \exp b.
+    $$
+\end{proof}
+
+\begin{corollary}
+    Let $\P$ and $\G$ be equivalent probability measures with bounded Radon-Nikodym derivative $w = \frac{\d\P}{\d\G} \in [a,b]$, $a, b \in \R$, finite \acrshort{kld} $\Dkl{\P}{\G} =\P [\log w] < \infty$.
+    
+    If $\log w \in L^{2}(\P)$ with variance $\sigma^{2} = \P [(\log w - L)^2]$, then 
+    $$
+    \Dkl{\P}{\G} \leq \log \left(1 + \exp(b) \frac{\sigma^{2}}{2} \right).
+    $$
+\end{corollary}
+\todo{add a comment on the second equation in Thm: min KL also implies that for smaller N we dont run into problems }
+
+Based on this discussion, we see that choosing $\G$ such that either the \acrshort{kld} or the variance of the log-weights is small. Making the variance small has the additional advantage that, at least for bounded log-weights, also implies an upper bound for the \acrshort{kld}. We will return to this train of thought when we discuss optimal ways of performing importance sampling, such as the \acem (minimizing the \acrshort{kld}) and \aeis (minimizing the variance of log-weights) in the following sub-chapters.
+
+In practice we will want to judge whether importance sampling has converged, and there are several criteria available in the literature. The classic \gls{ess}\citep{Kong1994Sequential} 
 $$
 \text{ESS} = \frac{1}{\sum_{i = 1}^N W^{2}_{i}}
 $$
