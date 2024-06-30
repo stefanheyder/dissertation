@@ -76,15 +76,15 @@ Unless $\tilde w$ is degenerate, i.e. constant, $\hat\zeta = \frac{\sum_{i = 1}^
 
 % introduce probabilit metrics from Agapiou
 
+\todo{make Agapiou arguments}
 The class for test functions for which this holds depends on $\P$ and $\G$. \citep{Agapiou2017Importance} study the behavior of uniformly bounded test functions $\lVert f \rVert \leq 1$. 
 In this setting \citep{Agapiou2017Importance} shows that the random measure $\hat \P_N$ converges to $\P$ at usual rate $\mathcal O\left(\frac 1 {\sqrt{N}}\right)$ in an appropriate metric on the space of random probability measures. 
-
 
 In both cases, one can show that once the second moment of $w$ w.r.t. $\G$ 
 $$
 \rho = \int w^{2}\d\G = \int w \d \P,
 $$
-exists the Monte-Carlo estimates are consistent and asymptotically normal at the usual rates, see \citep[Chapter 8]{Chopin2020Introduction}. 
+exists the Monte-Carlo estimates are consistent and asymptotically normal at the usual rates, see \citep[Chapter 8]{Chopin2020Introduction}.
 However, the finite sample variance of $\hat\zeta$, and thus the practical performance of the procedure, depends on the variance of $w\cdot f$ under $\G$, and thus on the proposal $\G$. \citep{Agapiou2017Importance} show that the supremum over bounded test function of the expected bias and variance of $\hat \P_N$ may be bounded, up to a constant, by the second moments of $w$. Thus, for bounded functions, $\rho$ provides an upper bound on the speed of convergence of importance sampling. In addition, they provide bounds that involve the KL-divergence 
 $$
 \Dkl{\P}{\G} = \int \log \frac{\d \P}{\d \G} \d \P \leq \log \rho
@@ -117,12 +117,13 @@ fostering the intuition that $\G$ should be close to $\P$ for the particle appro
 
 The proof of this theorem is based on splitting $\mathcal X$ into $\{\log w \leq L + \frac{t}{2}\} $ and its complement and straightforward, it may be found in the Appendix of \citep{Chatterjee2018Sample}. \citep[Theorem 1.2]{Chatterjee2018Sample} provides a qualitatively similar result for autonormalised importance sampling.
 
-Let us consider the implications of \Cref{thm:chatterje2018Thm1} by devising heuristics to decide when $\G$ is a good proposal for fixed sample size $N$.
+Let us consider the implications of \Cref{thm:chatterje2018Thm1} by devising heuristics to decide when $\G$ is a good proposal for fixed sample size $N$, and assume for simplicity that $ \lVert f \rVert^{2}_{L^{2}(\P)} = 1 $.
 First of all, as $t = \log N - L$, we have $\exp(- t / 4) =  \frac{\exp (L / 4)}{N^{4}}$, so for large $N$ this term becomes negligible fast, and the interesting term in \Cref{eq:chatterje-upper-bound} is the second one. As $\E \log w(Z) = L$, this term is a tail probability and we can use standard mass-concentration inequalities to analyze its behavior as $t$ (and so $N$) grows. Markov's inequality tells us that 
 $$
 \mathbb P \left( \log w(Z) > L + \frac{t}{2} \right) \leq \frac{L}{L + t / 2} = \frac{2}{1 + \frac{\log N}{L}}.
 $$
-If, additionally, $\log w(Z)$ has finite variance, Tchebyscheff's inequality additionally yields 
+
+Second, if, additionally, $\log w(Z)$ has finite variance, Tchebyscheff's inequality yields 
 $$
 \mathbb P \left( \log w (Z) > L + \frac{t}{2} \right) \leq \frac{4\operatorname{Var} (\log w(Z))}{t^{2}} = \frac{4\operatorname{Var} (\log w(Z))}{\left( \log N - L \right)^2}.
 $$
@@ -139,42 +140,46 @@ goes to $0$ as well.
     \label{lem:bounded-log-variance}
     For $a,b \in \R$, let $U \in [a,b]$ be a bounded random variable with variance $\sigma^{2}$ and $\mathbb E \exp U = 1$. Let $\mu = \E U$ be the mean of $U$. Then there exists a $\delta \in [a,b]$, such that 
     $$
-    \mu = -\log \left( 1 + \exp(\delta) \frac{\sigma^{2}}{2} \right).
+    0 \geq \mu = \log \left( 1 - \delta \frac{\sigma^{2}}{2} \right).
     $$
-    In particular, 
+    If, additionally, $\sigma^{2} < \frac{2}{b}$ then 
     $$
-    \mu \geq  - \log \left( 1 + \exp(a) \frac{\sigma^{2}}{2} \right).
+    \mu \geq \log \left( 1 - b \frac{\sigma^{2}}{2} \right).
     $$
 \end{lemma}
 
 \begin{proof}
-    As $U$ is bounded, all involved expectations exist and are finite. We perform a first-order Taylor expansion of $\exp(U)$, where the random variable $\xi$ is between $U$ and $\mu$:
+    As $U$ is bounded, all involved expectations exist and are finite. That $\mu \leq 0$ follows from Jensen's inequality. We perform a first-order Taylor expansion of $\exp(U - \mu)$, where the random variable $\xi$ is between $U - \mu$ and $0$:
     $$
-    1 = \exp(\mu)\mathbb E \exp (U - \mu) = \exp (\mu) \left( 1 + \mathbb E (U - \mu) + \mathbb E\left(\frac{(Z-\mu)^{2}}{2} \exp(\xi)\right) \right).
+    1 = \exp(\mu)\mathbb E \exp (U - \mu) = \exp (\mu) \left( 1 + \mathbb E (U - \mu) + \mathbb E\left(\frac{(U-\mu)^{2}}{2} \exp(\xi)\right) \right).
     $$
-    Rearranging terms, we obtain 
+    Then $\xi' = \xi + \mu \in [a,b]$. 
+    Thus
     $$
-    \mu = - \log \left( 1 + \mathbb E\left(\frac{(Z-\mu)^{2}}{2} \exp(\xi)\right) \right),
+    1 = \exp(\mu) + \mathbb E\left(\frac{(U-\mu)^{2}}{2} \exp(\xi')\right),
     $$
-    and as $\xi \in [a, b]$ we have 
+    and as $\xi' \in [a,b]$, the expectation is in $\left[\exp(a) \frac{\sigma^{2}}{2}, \exp(b) \frac{\sigma^{2}}{2}\right]$, i.e. $\mathbb E\left(\frac{(U-\mu)^{2}}{2} \exp(\xi')\right) = \delta \frac{\sigma^{2}}{2}$ for some $\delta \in [a,b]$. Solving for $\mu$, we get 
     $$
-    \frac{\sigma^{2}}{2} \exp a \leq \mathbb E\left(\frac{(Z-\mu)^{2}}{2} \exp(\xi)\right) \leq \frac{\sigma^{2}}{2} \exp b.
+    \mu = \log \left( 1 - \delta \frac{\sigma^{2}}{2} \right),
     $$
+    as promised.
+
+    The second statement follows from $\delta \leq b$ and the monotonicity of $\log$, where the condition ensures that the argument is positive.
 \end{proof}
 
 \begin{corollary}
     Let $\P$ and $\G$ be equivalent probability measures with bounded Radon-Nikodym derivative $w = \frac{\d\P}{\d\G} \in [a,b]$, $a, b \in \R$, finite \acrshort{kld} $\Dkl{\P}{\G} =\P [\log w] < \infty$.
     
-    If $\log w \in L^{2}(\P)$ with variance $\sigma^{2} = \P [(\log w - L)^2]$, then 
+    If $\log w \in L^{2}(\P)$ with variance $\sigma^{2} = \P [(\log w - L)^2]$, and $\sigma^{2} < \frac{2}{b}$, then 
     $$
-    \Dkl{\P}{\G} \leq \log \left(1 + \exp(b) \frac{\sigma^{2}}{2} \right).
+    \Dkl{\P}{\G} \leq \log \left(1 - \exp(b) \frac{\sigma^{2}}{2} \right).
     $$
 \end{corollary}
 \todo{add a comment on the second equation in Thm: min KL also implies that for smaller N we dont run into problems }
 
 Based on this discussion, we see that choosing $\G$ such that either the \acrshort{kld} or the variance of the log-weights is small. Making the variance small has the additional advantage that, at least for bounded log-weights, also implies an upper bound for the \acrshort{kld}. We will return to this train of thought when we discuss optimal ways of performing importance sampling, such as the \acem (minimizing the \acrshort{kld}) and \aeis (minimizing the variance of log-weights) in the following sub-chapters.
 
-In practice we will want to judge whether importance sampling has converged, and there are several criteria available in the literature. The classic \gls{ess}\citep{Kong1994Sequential} 
+In practice we will want to judge whether for an actual sample $X^{1}, \dots X^{N}$ importance sampling has converged, and there are several criteria available in the literature. The classic \gls{ess}\citep{Kong1994Sequential} 
 $$
 \text{ESS} = \frac{1}{\sum_{i = 1}^N W^{2}_{i}}
 $$
@@ -183,13 +188,13 @@ $$
 Q_{N} = \max_{1\leq i\leq N} W_{i}.
 $$
 \todoTH{more details}
-This judges whether importance sampling has collapsed to just a few particles and is itself amenable to Monte-Carlo integration.
+This judges whether importance sampling has collapsed to just a few particles and is itself amenable to Monte-Carlo integration, though this requires multiple runs of importance sampling and so may be prohibitively expensive in practice.
 
 In the following sections, we will predominantly take the position that we are interested in finding a good particle approximation $\hat\P_{N}$ of the form \Cref{eq:is-particle-approximation} over finding the optimal proposal $\G^{\ast}$ \Cref{prop:minimum_MSE_IS} and assume that the importance sampling weights can only be evaluated up to a constant. 
 \todo{more clearly distinguish arguements for the two assumptions}
-This has several reasons: First of all, most problems considered in this thesis exist in a Bayesian context where $\P$ is usually a posterior distribution, i.e. $\P = \P^{X|Y=y}$ for some random variables $X$ and $Y$. Should the appropriate densities exist, evaluating the weights amounts to calculating 
+This has several reasons: First of all, for most problems considered in this thesis $\P$ is usually a conditional distribution, e.g. $\P = \mathbb P^{X|Y=y}$ for states $X$ and observations $Y$ in the \acrshort{ssm} context. Should the appropriate densities exist, evaluating the weights amounts to calculating 
 $$
-\rnd{\P^{X| Y= y}}{\G}(x) = \frac{p(x|y)}{g(x)} = \frac{p(y|x)p(x)}{g(x)p(y)} \propto \frac{p(y|x)p(x)}{g(x)}.
+\rnd{\mathbb P^{X| Y= y}}{\G}(x) = \frac{p(x|y)}{g(x)} = \frac{p(y|x)p(x)}{g(x)p(y)} \propto \frac{p(y|x)p(x)}{g(x)}.
 $$
 In these situations $p(y) = \int p(x,y)\d x$ is usually intractable. For $\G^{\ast}$ we are in the same situation, where the evaluation of the integration constant $\P \lvert f \rvert$ is infeasible, but the density $\lvert f(x)\rvert p(x)$ is available.
 % do not focus on a single f
@@ -221,14 +226,17 @@ For the \glspl{ssm} we consider in this thesis, the numerical methods can be imp
 However, as the \gls{la} is a local approximation, it may be an inappropriate description of the global behavior of the target, see \Cref{ex:la_failure} for a breakdown of \gls{la} and the simulation studies presented in \Cref{sec:simulation_studies}. 
 Additionally, even if \gls{la} works in principle, its \gls{ess} will usually degenerate quickly once the dimension increases whereas the \gls{cem} and \gls{eis} do so at a slower pace.
 
-\subsection{The \texorpdfstring{\Acrfull{cem}}{Cross-entropy method}}
+\glsreset{cem}
+\subsection{The \texorpdfstring{\Acrfull{cem}}{Cross-Entropy method}}
 \label{subsec:cem}
-To provide a global approximation to the target, the \gls{cem}\citep{Rubinstein1999CrossEntropy,Rubinstein2004CrossEntropy} selects from a family $ \left( \G_{\psi} \right)_{\psi \in \Psi}$ of proposals the one that minimizes the \gls{kld} to the target. Thus, the \gls{cem} finds $\psi_{\text{CE}}$ which solves the following optimization problem
+Recall from our discussion surrounding \Cref{thm:chatterje2018Thm1} that for importance sampling to be effective, we should have a small \acrshort{kld} between the target $\P$ and the proposal $\G$. As the \acrshort{kld} depends on global properties, i.e. the Radon-Nikodym derivative $\rnd{\P}{\G}$, minimizing it should lead to a global approximation of $\P$.
+The \gls{cem}\citep{Rubinstein1999CrossEntropy,Rubinstein2004CrossEntropy} implements this idea and selects from a parametric family $ \left( \G_{\psi} \right)_{\psi \in \Psi}$ of proposals the one that minimizes the \gls{kld} to the target. Thus, the \acrshort{cem} finds $\psi_{\text{CE}}$ which solves the following optimization problem
 
 \begin{align*}
     \psi_{\text{CE}} &= \argmin_{\psi \in \Psi} \Dkl{\P}{\G_{\psi}} \\
     &= \argmin_{\psi \in \Psi} \int \log \frac{\d \P}{\d\G_{\psi}} \d \P.
 \end{align*}
+As the \acrshort{kld} is convex in both arguments, 
 If $\P$ and $\G_{\psi}$ possess densities $p$ and $g_{\psi}$ w.r.t. some common measure $\mu$, the same for all $\psi$, we may reformulate the optimization problem to maximize the cross-entropy between $p$ and $g_{\psi}$ instead:
 \begin{align}
     \begin{split}

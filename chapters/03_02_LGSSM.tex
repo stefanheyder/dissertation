@@ -101,7 +101,7 @@ As the joint distribution of $(X, Y)$ is Gaussian, so are conditional distributi
         -B & I
     \end{pmatrix} \begin{pmatrix}
         X \\ Y
-    \end{pmatrix}$ follows a Gaussian distribution. A quick calculation reveals that $$\cov \left( Y- BX, X \right) = \Sigma_{Y,X} - B \Sigma_{XX} = \Sigma_{Y,X} - \Sigma_{Y,X} = 0,$$
+    \end{pmatrix}$ follows a Gaussian distribution. A quick calculation reveals that $$\cov \left( Y- BX, X \right) = \Sigma_{YX} - B \Sigma_{XX} = \Sigma_{YX} - \Sigma_{YX} = 0,$$
     showing the independence. Thus $\eta = Y - BX - \delta$ follows a centered Gaussian distribution and equating covariance matrices, we see that $\Omega$ has the desired form.
 
     For the final statement, notice that $\xi = X - KY - GZ - \delta$ fulfills 

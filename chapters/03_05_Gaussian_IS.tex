@@ -337,7 +337,7 @@ and the empirical covariance matrices
 We then determine $\hat L$ from these covariance matrices using \Cref{thm:schafer_cholesky_analytical}. 
 These steps are summarized in \Cref{alg:cem-markov-proposal}. 
 
-\begin{tcolorbox}[title={improve: order to $\mathcal O(m^{3})$}]
+\begin{tcolorbox}[title={WIP improve: order to $\mathcal O(m^{3})$}]
     We can implement this more efficiently: Given sequential covariances $\cov (X_{t}, X_{t - 1})$, there exists a Markov process with these covariances (Cholesky roots give $L_{t}$ and $R_{t}$). As the optimal MP only depends on these covariances, we can also minimize KL-divergence to this MP. The KL divergence is thus minimized for this MP. Calculation of $L_{t}$ and $R_{t}$ then only take $\mathcal O((2m)^{3}) = \mathcal O(m^{3})$ instead of the $\mathcal O(m^{3})$ procedure presented until now. 
 \end{tcolorbox}
 \begin{algorithm}
