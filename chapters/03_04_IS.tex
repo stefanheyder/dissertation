@@ -30,14 +30,14 @@ $$
 for a probability measure $\P$ and function $f: \mathcal X \to \R$, e.g. because $\P = p \mu$ and $h(x) = f(x) p(x)$ $\mu$-a.s. .
 Let $\G$ be a another probability measure on $\mathcal X$ such that $f\P$ is absolutely continuous with respect to $\G$, $f\P \ll \G$, and let $v = \frac{\d f\P}{\d\G}$ be the corresponding Radon-Nikodym derivative. Then
 $$
-    \zeta = \int_{\mathcal X} h(x) \d \mu(x) = \int_{\mathcal X} f(x) \d \P(x) = \int_{\mathcal X} v(x)\d\G(x),
+    \zeta = \P [f] = \int_{\mathcal X} f(x) \d \P(x) = \int_{\mathcal X} \left(\rnd{f\P}{\G}\right)\d\G(x) = \G [v]
 $$
-which suggests to estimate $\zeta$ by simple Monte-Carlo integration: $$\hat \zeta = \frac 1 N \sum_{i=1}^{N} v(X^{i}), $$ the importance sampling estimate of $\zeta$. The importance samples $X^{i}, i = 1, \dots, N$ have distribution $\G$, and will usually be i.i.d.. For this procedure to work, we want $\hat \zeta$ to fulfill a law of large numbers and a central limit theorem, so we will want $v \in L^{2}(\G)$, where $L^{p}(\nu)$ is the space of $p$-times $\nu$-integrable functions for a measure $\nu$. The i.i.d. assumption could also be dropped, e.g. when we employ antithetic variables, see \citep[Section 5.3]{Ripley2009Stochastic}. Here we call $\hat \zeta$ the importance sampling estimate of $\zeta$. 
+which suggests to estimate $\zeta$ by Monte-Carlo integration: $$\hat \zeta = \frac 1 N \sum_{i=1}^{N} v(X^{i}), $$ the importance sampling estimate of $\zeta$. The importance samples $X^{i}, i = 1, \dots, N$ have distribution $\G$, and will usually be i.i.d.. For this procedure to work, we want $\hat \zeta$ to fulfill a law of large numbers and a central limit theorem, so we will want $v \in L^{2}(\G)$, where $L^{p}(\nu)$ is the space of $p$-times $\nu$-integrable functions for a measure $\nu$. The i.i.d. assumption could also be dropped, e.g. when we employ antithetic variables, see \citep[Section 5.3]{Ripley2009Stochastic}. Here we call $\hat \zeta$ the importance sampling estimate of $\zeta$. 
 
 If $v \in L^{2}(\G)$ and under i.i.d. sampling the Monte-Carlo variance of $\hat \zeta$ is $\frac{\var \left(v(X^{i})\right)}{N}$, and so naturally we want $\var \left(v(X^{i})\right)$ to be small to ensure fast convergence of $\hat \zeta$. As $v$ depends on the proposal $\G$, and we have the flexibility to choose $\G$, importance sampling acts as a variance reduction technique. 
 
 A classical result is that the minimum MSE proposal $\G^\ast$ has a closed form. Indeed it is given by the total variation measure of $f\P$, renormalized to be a probability measure, which can be shown by a simple application of Jensen's inequality. 
-\begin{proposition}[{\citep[Proposition 8.2]{Chopin2020Introduction}}][minimum MSE proposal]
+\begin{proposition}[{\cite[Proposition 8.2]{Chopin2020Introduction}}][minimum MSE proposal]
     \label{prop:minimum_MSE_IS}
     The proposal $\G^{\ast}$ that minimizes the MSE of importance sampling is given by
     $$
@@ -50,7 +50,7 @@ If the Radon-Nikodym derivative $w = \frac{\d\P}{\d\G}$ exists, then $v = fw$, w
 $$
 \hat \zeta = \frac{1}{N} \sum_{i = 1}^N f(X^{i})w(X^{i}),
 $$
-where $w(X_{i})$ is called the importance weight, or just weight, of the $i$-th sample. If the samples is clear from the context we sometimes write $w_{i} = w(X^{i})$. 
+where $w(X^{i})$ is called the importance weight, or just weight, of the $i$-th sample. If the samples is clear from the context we sometimes write $w^{i} = w(X^{i})$. 
 This motivates us to regard
 %If one is not interested in a particular function $f$, we may instead think of
 \begin{align}
@@ -58,66 +58,67 @@ This motivates us to regard
 \hat \P_N = \frac{1}{N} \sum_{i = 1}^{N} w(X_i) \delta_{X_i},
 \end{align}
 as a particle approximation of $\P$, in the sense that for sufficiently well behaved test functions $f$, as $N \to \infty$ $$
-\hat\P_{N}[f] = \frac{1}{N} \sum_{i = 1}^N f(X^{i})w(X_{i})\to \P [f].
+\hat\P_{N}[f] = \frac{1}{N} \sum_{i = 1}^N f(X^{i})w(X^{i})\to \P [f].
 $$
 We will return to the question of which functions $f$ to consider further below and assume in the following discussion $fw \in L^{2}(\G)$.
 
 To perform importance sampling one must be able to evaluate $w$. In the context of \acrshortpl{pgssm} this is usually not possible: if $\P$ is the intractable conditional distribution of $X|Y$, then the integration constant of its density $p(y)$ is not analytically available.
 Still, we can usually evaluate the weights up to a constant, i.e. $$\tilde w(x) \propto \frac{\d \P}{\d \G}(x)$$ is available. The missing constant is then $\G \tilde w$, which is itself amenable to importance sampling: we may estimate it by $\sum_{i = 1}^N \tilde w(X^{i})$.
 This leads to the so-called self-normalized importance sampling weights 
-$$W_i = \frac{w(X_i)}{\sum_{i = 1}^N w(X_i)},$$
+$$W_i = \frac{w(X^i)}{\sum_{i = 1}^N w(X^i)},$$
 Monte Carlo estimates 
-$$\hat \zeta = \sum_{i = 1}^{N} W_i f(X_i),$$
+$$\hat \zeta = \sum_{i = 1}^{N} W_i f(X^i),$$
 and particle approximation 
-$$\hat \P_N = \sum_{i = 1}^{N} W_i \delta_{X_i}.$$
+$$\hat \P_N = \sum_{i = 1}^{N} W_i \delta_{X^i}.$$
 
 % introduces bias
-Unless $\tilde w$ is degenerate, i.e. constant, $\hat\zeta = \frac{\sum_{i = 1}^N \tilde w (X^{i} f(X^{i}))}{\sum_{i = 1}^{N} \tilde w(X^{i})}$ is a ratio of two non-constant, unbiased estimators and so is itself biased. Nevertheless, noticing that the rescaled denominator $\frac{1}{N} \sum_{i = 1}^{N} \tilde w(X^{i})$ consistently estimates the integration constant $\G \tilde w$, allows us to apply Slutsky's lemma and obtain a central limit theorem for $\hat \zeta$ (recall that we assumed $fw \in L^{2}(\G)$).
+Unless $\tilde w$ is degenerate, i.e. constant, $$\hat\zeta = \frac{\sum_{i = 1}^N \tilde w (X^{i} f(X^{i}))}{\sum_{i = 1}^{N} \tilde w(X^{i})}$$ is a ratio of two non-constant, unbiased estimators and so is itself biased. Nevertheless, noticing that the rescaled denominator $\frac{1}{N} \sum_{i = 1}^{N} \tilde w(X^{i})$ consistently estimates the integration constant $\G \tilde w$, allows us to apply Slutsky's lemma and obtain a central limit theorem for $\hat \zeta$ (recall that we assumed $fw \in L^{2}(\G)$).
 
 % introduce probabilit metrics from Agapiou
+The class for test functions $f$ for which this holds depends on $\P$ and $\G$. \citep{Agapiou2017Importance} study the behavior of uniformly bounded test functions $\lVert f \rVert \leq 1$. For these functions it suffices that $w \in L^{2}(\G)$ to ensure asymptotic normality of $\zeta$. 
+%In this setting they show that the random measure $\hat \P_N$ converges to $\P$ at usual rate $\mathcal O\left(\frac 1 {\sqrt{N}}\right)$ in an appropriate metric on the space of random probability measures. 
+Thus an important quantity is
+$$
+\rho = \frac{1}{(\G \tilde w)^{2}}\G[\tilde w^{2}] = \G [w^{2}] =  \P [w],
+$$
+the second moment of the importance sampling weights. \citep{Agapiou2017Importance} show that the bias 
+$$
+\left| \mathbb E (\hat\P_{N} - \P)[f] \right|
+$$
+and \acrfull{mse}
+$$
+\mathbb E \left( (\hat \P_{N} - \P) [f] \right)^{2}
+$$
+of importance sampling are both, for bounded $f$, $\mathcal O \left(\frac{\rho}{N}\right)$. Here the expectation $\mathbb E$ is with respect to the random particles $X^{1}, \dots, X^{N}$. Consequently, for bounded functions, keeping $ \frac{\rho}{N}$ small produces importance sampling estimates with small bias and \acrshort{mse}. This can be achieved in two ways: either we choose $\G$ \glqq{}close enough\grqq{} to $\P$ to ensure small $\rho$, or we choose $N$ large enough to compensate for a large $\rho$.
 
-\todo{make Agapiou arguments}
-The class for test functions for which this holds depends on $\P$ and $\G$. \citep{Agapiou2017Importance} study the behavior of uniformly bounded test functions $\lVert f \rVert \leq 1$. 
-In this setting \citep{Agapiou2017Importance} shows that the random measure $\hat \P_N$ converges to $\P$ at usual rate $\mathcal O\left(\frac 1 {\sqrt{N}}\right)$ in an appropriate metric on the space of random probability measures. 
-
-In both cases, one can show that once the second moment of $w$ w.r.t. $\G$ 
+Applying Jensen's inequality, we see that
 $$
-\rho = \int w^{2}\d\G = \int w \d \P,
+\Dkl{\P}{\G} = \P [\log w] \leq \log \P[w] = \log\rho,
 $$
-exists the Monte-Carlo estimates are consistent and asymptotically normal at the usual rates, see \citep[Chapter 8]{Chopin2020Introduction}.
-However, the finite sample variance of $\hat\zeta$, and thus the practical performance of the procedure, depends on the variance of $w\cdot f$ under $\G$, and thus on the proposal $\G$. \citep{Agapiou2017Importance} show that the supremum over bounded test function of the expected bias and variance of $\hat \P_N$ may be bounded, up to a constant, by the second moments of $w$. Thus, for bounded functions, $\rho$ provides an upper bound on the speed of convergence of importance sampling. In addition, they provide bounds that involve the KL-divergence 
-$$
-\Dkl{\P}{\G} = \int \log \frac{\d \P}{\d \G} \d \P \leq \log \rho
-$$
-\todoTH{more rigorous, include proof of resutls which are necessary to understand reasoning. Here: existence of dP/dG}
-fostering the intuition that $\G$ should be close to $\P$ for the particle approximation $\hat\P_{N}$ to be close to $\P$.
-
-\citep{Chatterjee2018Sample} provides the following theorem (using our notation), that relates the performance of importance sampling to both the \gls{kld} and the tail behavior of the log weights.
+so small $\rho$ implies a small \acrshort{kld} as well. Conversely, the following theorem of \citeauthor{Chatterjee2018Sample} implies that a small \acrshort{kld} is both sufficient and necessary for importance sampling to perform well.
 \begin{theorem}[{\cite[Theorem 1.1]{Chatterjee2018Sample}}]
     \label{thm:chatterje2018Thm1}
      Let $\P$ and $\G$ be probability measures on a measurable space $(\mathcal X, \mathcal B)$ such that $\P \ll \G$ and let $f \in \mathbf L^2(\P)$ be a function with $\lVert f \rVert_{L^{2}(\P)} = \left( \P f^{2} \right)^{1 / 2} < 
      \infty$. Let $Z$ be an $\mathcal X$ valued random variable with law $\P$. 
      
-     Let $L = \Dkl{\P}{\G} = \mathbb E \log w(Y)$ be the \acrshort{kld} between $\P$ and $\G$. 
+     Let $L = \Dkl{\P}{\G} = \mathbb E \log w(Y)$ be the \acrshort{kld} between $\P$ and $\G$, and let $$\hat \P_N = \sum_{i = 1}^N w(X^i) \delta_{X^i}$$ be the particle approximations of $\P$  based on samples $X^1, \dots, X^N\iid \G$, $N \in \N$. 
      
-     Let $X_1, \dots, X_N \iid \G$, let $\hat \P_N = \sum_{i = 1}^N w(X_i) \delta(X_i)$ be the particle approximations of $\P$  based on samples $X_1, \dots, X_N\iid \G$, $N \in \N$. 
-     
-     If the sample size $N = \exp\left( L + t \right)$ for a $t \geq 0$,
+     If the sample size $N$ is given by $N = \exp\left( L + t \right)$ for a $t \geq 0$,
      \begin{align} \label{eq:chatterje-upper-bound}\mathbb E \left\lvert \hat \P_N[f] - \P [f] \right\rvert \leq \lVert f \rVert^2_{L^2(\P)} \left(\exp(-t / 4) + 2 \sqrt{\mathbb P \left( \log w(Z) > L + t / 2 \right)}\right). \end{align}
 
-    Conversely, if $N = \exp \left( L - t \right)$ for $t \geq 0$, then for any $\delta \in (0,1)$ 
+    Conversely, if $N = \exp \left( L - s \right)$ for $s \geq 0$, then for any $\delta \in (0,1)$ 
     \begin{align}
         \label{eq:chatterje-lower-bound}
-    \mathbb P (\hat \P_{N}[ \mathbf 1 ] \geq 1 - \delta) \leq \exp \left( -\frac{t}{2} \right) + \frac{\mathbb P \left( \log w(Z) \leq L -\frac{t}{2} \right)}{ 1- \delta},
+    \mathbb P (\hat \P_{N}[ \mathbf 1 ] \geq 1 - \delta) \leq \exp \left( -\frac{s}{2} \right) + \frac{\mathbb P \left( \log w(Z) \leq L -\frac{s}{2} \right)}{ 1- \delta},
     \end{align}
-    where $\mathbf 1$ is the constant function. 
+    where $\mathbf 1$ is the constant function $x \mapsto 1$.
 
      Notice the boldface $\mathbb P$ and $\mathbb E$ to differentiate the measures $\P$ and $\G$ from expectations and probabilities with respect to the abstract probability space $\left( \Omega, \mathcal A, \mathbb P \right)$ where the random variables $X_{1}, \dots, X_{N}$ and $Y$ live.
 \end{theorem}
 
-The proof of this theorem is based on splitting $\mathcal X$ into $\{\log w \leq L + \frac{t}{2}\} $ and its complement and straightforward, it may be found in the Appendix of \citep{Chatterjee2018Sample}. \citep[Theorem 1.2]{Chatterjee2018Sample} provides a qualitatively similar result for autonormalised importance sampling.
+The proof of this theorem is based on splitting $\mathcal X$ into $\{\log w \leq L + \frac{t}{2}\} $ and its complement and straightforward, it may be found in the Appendix of \citep{Chatterjee2018Sample}. Theorem 1.2 in the same paper provides a qualitatively similar result for autonormalised importance sampling.
 
-Let us consider the implications of \Cref{thm:chatterje2018Thm1} by devising heuristics to decide when $\G$ is a good proposal for fixed sample size $N$, and assume for simplicity that $ \lVert f \rVert^{2}_{L^{2}(\P)} = 1 $.
+Let us consider the implications of \Cref{thm:chatterje2018Thm1}, starting with \Cref{eq:chatterje-upper-bound}, by devising heuristics to decide when $\G$ is a good proposal for fixed sample size $N$, and assume for simplicity that $ \lVert f \rVert^{2}_{L^{2}(\P)} = 1 $.
 First of all, as $t = \log N - L$, we have $\exp(- t / 4) =  \frac{\exp (L / 4)}{N^{4}}$, so for large $N$ this term becomes negligible fast, and the interesting term in \Cref{eq:chatterje-upper-bound} is the second one. As $\E \log w(Z) = L$, this term is a tail probability and we can use standard mass-concentration inequalities to analyze its behavior as $t$ (and so $N$) grows. Markov's inequality tells us that 
 $$
 \mathbb P \left( \log w(Z) > L + \frac{t}{2} \right) \leq \frac{L}{L + t / 2} = \frac{2}{1 + \frac{\log N}{L}}.
@@ -172,18 +173,38 @@ goes to $0$ as well.
     
     If $\log w \in L^{2}(\P)$ with variance $\sigma^{2} = \P [(\log w - L)^2]$, and $\sigma^{2} < \frac{2}{b}$, then 
     $$
-    \Dkl{\P}{\G} \leq \log \left(1 - \exp(b) \frac{\sigma^{2}}{2} \right).
+    \Dkl{\P}{\G} \leq - \log \left(1 - \exp(b) \frac{\sigma^{2}}{2} \right).
     $$
 \end{corollary}
-\todo{add a comment on the second equation in Thm: min KL also implies that for smaller N we dont run into problems }
+Under the assumptions of this corollary, we see that a small variance of the log-weights implies a small \acrshort{kld}, which in turn implies good importance sampling performance.
 
-Based on this discussion, we see that choosing $\G$ such that either the \acrshort{kld} or the variance of the log-weights is small. Making the variance small has the additional advantage that, at least for bounded log-weights, also implies an upper bound for the \acrshort{kld}. We will return to this train of thought when we discuss optimal ways of performing importance sampling, such as the \acem (minimizing the \acrshort{kld}) and \aeis (minimizing the variance of log-weights) in the following sub-chapters.
+Let us now discuss the implications of \Cref{eq:chatterje-lower-bound}. We see that for large $s$, i.e. $N \ll \exp(L)$, the right-hand side is small, and so the probability that importance sampling fails for the constant function is practically relevant. Thus \citeauthor{Chatterjee2018Sample} recommend to choose $N = \mathcal O( \exp \left( \Dkl{\P}{\G} \right))$. 
 
-In practice we will want to judge whether for an actual sample $X^{1}, \dots X^{N}$ importance sampling has converged, and there are several criteria available in the literature. The classic \gls{ess}\citep{Kong1994Sequential} 
+Based on this discussion, we see that choosing $\G$ such that either the \acrshort{kld} or the variance of the log-weights is small is sensible. Making the variance small has the additional advantage that it, at least for bounded log-weights, also implies an upper bound for the \acrshort{kld}. We will return to this train of thought when we discuss optimal ways of performing importance sampling, such as the \acem (minimizing the \acrshort{kld}) and \aeis (minimizing the variance of log-weights) in the following sub-chapters.
+
+In practice we will want to judge whether for an actual sample $X^{1}, \dots X^{N} \iid \G$ importance sampling has converged, and there are several criteria available in the literature. The classic \gls{ess}\citep{Kong1994Sequential} 
 $$
 \text{ESS} = \frac{1}{\sum_{i = 1}^N W^{2}_{i}}
 $$
-arises from an analysis of the asymptotic efficiency of importance sampling estimates and is easy to interpret. Assessing convergence through the empirical variance of $\hat \zeta$ is, while seemingly natural, flawed \citep{Chatterjee2018Sample} \todoTH{more explicit \& intructive} and should be avoided. As a remedy \citep{Chatterjee2018Sample} suggest the heuristic $q_{N} = \E Q_{N}$ where
+arises from an analysis of the asymptotic efficiency of importance sampling estimates: Consider additional $Y^{1}, \dots, Y^{N}\iid \P$, a test function $f \in L^{2} (\P) \cap L^{2} (\G)$ and assume that $\rho < \infty$. We may then estimate $\zeta = \P f$ in two ways: either by using the importance sampling estimate 
+$$
+\hat \zeta_{\text{IS}} = \hat \P_{N} (f) = \sum_{i = 1}^N W^{i} f(X^{i}),
+$$
+or by standard Monte-Carlo integration 
+$$
+\hat \zeta_{\text{MC}} = \frac{1}{N}\sum_{i = 1}^N f(Y^{i}).
+$$
+\citep{Kong1992Note} applies the delta method to $\var \left( \hat\zeta_{\text{IS}} \right)$, obtaining
+\begin{align*}
+    \var \left( \hat\zeta_{\text{IS}}  \right) \approx \var \left( \hat \zeta_{\text{MC}} \right)\left( 1 + \var \left( w(X)\right) \right),
+\end{align*}
+for $X \sim \G$. Note that this approximation does not depend on the specific $f$ considered, and it is not guaranteed that for large $N$ the remainder goes to $0$, as \citep{Kong1992Note} already mentions. Nevertheless, it allows to interpret 
+$$
+\frac{N}{1 + \var \left( W \right)}
+$$
+as an effective sample size. 
+
+Assessing convergence through the empirical variance of $\hat \zeta$ is, while seemingly natural, flawed \citep{Chatterjee2018Sample} \todoTH{more explicit \& intructive} and should be avoided. As a remedy \citep{Chatterjee2018Sample} suggest the heuristic $q_{N} = \E Q_{N}$ where
 $$
 Q_{N} = \max_{1\leq i\leq N} W_{i}.
 $$
@@ -307,7 +328,7 @@ The following theorem of \citep{VanderVaart2000Asymptotic} will be useful in ana
     \lVert f_{\psi_{1}}(x) - f_{\psi_{2}}(x)\rVert \leq \dot f(x) \lVert \psi_{1} - \psi_{2}\rVert \tag{LL}.
     \end{align}
 
-    Assume that $\G \lVert f_{\psi_{0}}\rVert < \infty$ and that the map $\psi \mapsto \G f_{\psi}$ is differentiable at $\psi_{0}$, with nonsingular derivative matrix $B^{-1}$. Let $X_{1}, \dots, X_{N} \iid \G$ and $\hat \G_{N} = \sum_{i = 1}^{N} \delta_{X_{i}}$. If $\hat\psi_{N}$ fulfills $\hat\G_{N} f_{\hat\psi_{N}} = o_{P} \left( N^{-\frac{1}{2}} \right)$, and $\hat\psi_{N} \to \psi_{0}$ in probability, then
+    Assume that $\G \lVert f_{\psi_{0}}\rVert < \infty$ and that the map $\psi \mapsto \G f_{\psi}$ is differentiable at $\psi_{0}$, with nonsingular derivative matrix $B^{-1}$. Let $X_{1}, \dots, X_{N} \iid \G$ and $\hat \G_{N} = \sum_{i = 1}^{N} \delta_{X^{i}}$. If $\hat\psi_{N}$ fulfills $\hat\G_{N} f_{\hat\psi_{N}} = o_{P} \left( N^{-\frac{1}{2}} \right)$, and $\hat\psi_{N} \to \psi_{0}$ in probability, then
     \begin{align}
         \label{eq:clt-vdv}
         \sqrt{N} \left( \hat\psi_{N} - \psi_{0} \right) \Dto \mathcal N(0, BMB^{T}),
