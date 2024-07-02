@@ -89,7 +89,7 @@ and \acrfull{mse}
 $$
 \mathbb E \left( (\hat \P_{N} - \P) [f] \right)^{2}
 $$
-of importance sampling are both, for bounded $f$, $\mathcal O \left(\frac{\rho}{N}\right)$. Here the expectation $\mathbb E$ is with respect to the random particles $X^{1}, \dots, X^{N}$. Consequently, for bounded functions, keeping $ \frac{\rho}{N}$ small produces importance sampling estimates with small bias and \acrshort{mse}. This can be achieved in two ways: either we choose $\G$ \glqq{}close enough\grqq{} to $\P$ to ensure small $\rho$, or we choose $N$ large enough to compensate for a large $\rho$.
+of importance sampling are both, for bounded $f$, of order $\mathcal O \left(\frac{\rho}{N}\right)$. Here the expectation $\mathbb E$ is with respect to the random particles $X^{1}, \dots, X^{N}$. Consequently, for bounded functions, keeping $ \frac{\rho}{N}$ small produces importance sampling estimates with small bias and \acrshort{mse}. This can be achieved in two ways: either we choose $\G$ \glqq{}close enough\grqq{} to $\P$ to ensure small $\rho$, or we choose $N$ large enough to compensate for a large $\rho$.
 
 Applying Jensen's inequality, we see that
 $$
@@ -182,13 +182,13 @@ Let us now discuss the implications of \Cref{eq:chatterje-lower-bound}. We see t
 
 Based on this discussion, we see that choosing $\G$ such that either the \acrshort{kld} or the variance of the log-weights is small is sensible. Making the variance small has the additional advantage that it, at least for bounded log-weights, also implies an upper bound for the \acrshort{kld}. We will return to this train of thought when we discuss optimal ways of performing importance sampling, such as the \acem (minimizing the \acrshort{kld}) and \aeis (minimizing the variance of log-weights) in the following sub-chapters.
 
-In practice we will want to judge whether for an actual sample $X^{1}, \dots X^{N} \iid \G$ importance sampling has converged, and there are several criteria available in the literature. The classic \gls{ess}\citep{Kong1994Sequential} 
+In practice, we will want to judge whether for an actual sample $X^{1}, \dots X^{N} \iid \G$ importance sampling has converged, and there are several criteria available in the literature. The classic \gls{ess}\citep{Kong1994Sequential} 
 $$
-\text{ESS} = \frac{1}{\sum_{i = 1}^N W^{2}_{i}}
+\text{ESS} = \frac{1}{\sum_{i = 1}^N W^{2}_{i}} \in \left[1, N\right]
 $$
-arises from an analysis of the asymptotic efficiency of importance sampling estimates: Consider additional $Y^{1}, \dots, Y^{N}\iid \P$, a test function $f \in L^{2} (\P) \cap L^{2} (\G)$ and assume that $\rho < \infty$. We may then estimate $\zeta = \P f$ in two ways: either by using the importance sampling estimate 
+arises from an analysis of the asymptotic efficiency of importance sampling estimates: Consider additional $Y^{1}, \dots, Y^{N}\iid \P$, a test function $f \in L^{2} (\P)$ and assume that $\rho < \infty$. We may then estimate $\zeta = \P f$ in two ways: either by using the importance sampling estimate 
 $$
-\hat \zeta_{\text{IS}} = \hat \P_{N} (f) = \sum_{i = 1}^N W^{i} f(X^{i}),
+\hat \zeta_{\text{IS}} = \hat \P_{N} (f) = \sum_{i = 1}^N W_{i} f(X^{i}) = \frac{1}{N} \sum_{i = 1}^N (NW_{i}) f(X^{i}),
 $$
 or by standard Monte-Carlo integration 
 $$
@@ -196,16 +196,72 @@ $$
 $$
 \citep{Kong1992Note} applies the delta method to $\var \left( \hat\zeta_{\text{IS}} \right)$, obtaining
 \begin{align*}
-    \var \left( \hat\zeta_{\text{IS}}  \right) \approx \var \left( \hat \zeta_{\text{MC}} \right)\left( 1 + \var \left( w(X)\right) \right),
+    \var \left( \hat\zeta_{\text{IS}}  \right) \approx \var \left( \hat \zeta_{\text{MC}} \right)\left( 1 + \var \left( NW_{1}\right) \right).
 \end{align*}
-for $X \sim \G$. Note that this approximation does not depend on the specific $f$ considered, and it is not guaranteed that for large $N$ the remainder goes to $0$, as \citep{Kong1992Note} already mentions. Nevertheless, it allows to interpret 
+Note that this approximation does not depend on the specific $f$ considered, and it is not guaranteed that for large $N$ the remainder goes to $0$, as \citep{Kong1992Note} mentions. Nevertheless, it allows us to interpret 
 $$
-\frac{N}{1 + \var \left( W \right)}
+\frac{N}{1 + \var \left( NW_{1} \right)}
 $$
-as an effective sample size. 
-\todo{continue argument}
+as an effective sample size, in the sense that $N$ times the relative efficiency of $\hat\zeta_{\text{MC}}$ relative to $\hat \zeta_{\text{IS}}$ is approximately given by this expression. As the self-normalized \todo{replace auto by self} weights $W^{1}, \dots, W^{N}$ are exchangeable and sum to $1$, their expected value is $ \E W_{1} = \frac{1}N$. Estimating $\var \left( W_{1} \right)$ by the unadjusted sample covariance $\frac{1}{N} \sum_{i=1}^N W_{i}^2 - \frac{1}{N^{2}}$ then results in the promised
+$$
+\text{ESS} = \frac{N}{1 + N^{2}\left(\frac{1}{N} \sum_{i = 1}^N W_{i}^2 - \frac{1}{N^{2}}\right)} = \frac{1}{\sum_{i = 1}^{N} W_{i}^{2}}.
+$$
+Notice that as the self-normalized weights sum to $1$, the \acrshort{ess} is at least $1$, as $0 \leq W_{i} \leq 1$ and at most $N$ by the Cauchy-Schwarz inequality. 
 
-Assessing convergence through the empirical variance of $\hat \zeta$ is, while seemingly natural, flawed \citep{Chatterjee2018Sample} \todoTH{more explicit \& intructive} and should be avoided. As a remedy \citep{Chatterjee2018Sample} suggest the heuristic $q_{N} = \E Q_{N}$ where
+If we write the \acrshort{ess} in terms of the unnormalized weights $\tilde w$ we see that the \gls{ef} $\text{EF} = \frac{\text{ESS}}{N}$ fulfills
+$$
+\text{EF} = \frac{\text{ESS}}{N} = \frac{\left(\frac{1}{N}\sum_{i = 1}^{N} \tilde w_{i}\right)^{2}}{\frac{1}{N}\sum_{i = 1} \tilde w_{i}^2} \stackrel{a.s}{\to} \frac{(\G [\tilde w])^{2}}{\G [\tilde w^{2}]} = \rho^{-1},
+$$
+if $\tilde w \in L^{2}(\G)$ \citep[Section 2.3.2]{Agapiou2017Importance}. Thus, asymptotically, a large \acrshort{ess} leads to small bias and \acrshort{mse} for bounded functions $f$. Additionally, the above derivations allow us to interpret the second moment
+$$
+\rho = \G [(NW_1)^2] = \var \left( NW_1 \right)  + \G NW_1 = 1 + \var \left(NW_1\right) \approx \frac{\var \left(\hat\zeta_{\text{IS}}\right)}{\var \left(\hat\zeta_{\text{MC}}\right)}
+$$
+as the asymptotic relative efficiency of the two estimators. In practice, a small \acrshort{ess} can be an indicator that importance sampling with $\G$ may be inadequate. Note that relying solely on the empirical \acrshort{ess} may lead to problems, see the following example.
+
+\begin{example}[failure of the \acrshort{ess}]
+    \label{ex:ess_failure}
+    Consider the Gaussian scale mixture $\P = \frac{1}{2} \left(\mathcal N (0,1) + \mathcal N(0, \varepsilon^{-2})\right)$ and proposal $\G = \mathcal N(0, 1)$. The weights are then given by 
+    $$
+        w(x) = \frac{1}{2} \left( 1 + \frac{\varepsilon}{\sqrt{2\pi}} \exp \left( - \frac{x^{2}}{2} \left( \varepsilon^{2} - 1\right) \right)\right)
+    $$ and their second moment w.r.t. $\G$ 
+    $$
+    \rho = \int w^{2}(x) \frac{1}{\sqrt{2\pi}} \exp \left( -\frac{x^{2}}{2} \right) \d x
+    $$
+    is finite if, and only if, $\varepsilon^{2} > \frac{1}{2}$. Thus, for $\varepsilon^{2} \leq \frac{1}{2}$ interpreting the \acrshort{ess} is not sensible. Nevertheless, given samples $X^{1}, \dots, X^{N} \iid \G$, we may calculate the \acrshort{ess} in the usual way. If $N$ is only moderately large, there is a high probability that most samples do not lie in a region where weights are small, i.e. in the tails of the second component. Thus, unless $N$ is large, the empirical \acrshort{ess} will be large, deceiving us to think that importance sampling with $\G$ is feasible.
+
+    We illustrate this by a simulation study, where we calculate the \acrshort{ef} $M=100$ times for different values of $N$ and $\varepsilon$. We used $N = 100, 1000, 10000$ and $\varepsilon^{2} = 0.01, 0.1, 0.5$; the results may be found in \Cref{fig:ess_failure}. We see that even for $N = 1000$ and $\varepsilon = \frac{1}{2}$ the upper quartile of \acrshortpl{ef} is $71\%$, which seems reasonable to declare importance sampling to perform well. 
+
+    \begin{figure}
+        \centering
+
+        \resizebox{\textwidth}{!}{%
+            \input{tikz/ess_failure.tex}%
+        }
+        \caption{Empirical \acrshort{ef} for the setup of \Cref{ex:ess_failure} for varying sample sizes $N$ and $\varepsilon^{2}$. In all scenarios the second moment $\rho$ is infinite, thus high \acrshortpl{ef} are misleading us to believe that importance sampling performs well when it does not.}
+        \label{fig:ess_failure}
+    \end{figure}
+
+
+\end{example}
+
+As an alternative, we may want to assess whether importance sampling has converged through the empirical variance of $\hat \zeta$, i.e., 
+$$
+\widehat\var \left( \hat\zeta \right) = \frac{1}{N}\left(\frac{1}{N} \sum_{i = 1}^N w_{i}^{2} f(X^{i})^{2} - \hat \zeta^{2}\right)
+$$
+is, while seemingly natural, flawed \citep{Chatterjee2018Sample}.
+Indeed, the authors show that for any given threshold $\epsilon$ we may find an $N$ which only depends on $\epsilon$, such that the probability that the empirical variance exceeds $\epsilon$ for this $N$ is small. This is summarized in the following theorem.
+
+\begin{theorem}[{\cite[Theorem 2.1]{Chatterjee2018Sample}}]
+    Given any $\epsilon > 0$, there exists $N \leq \epsilon^{-2} 2^{1 + \epsilon^{-3}}$ such that the following is true. Take any $\G$ and $\P$ as in \Cref{thm:chatterje2018Thm1}, and any $f: \mathcal X \to \R$ such that $ \lVert f \rVert_{L^{2}(\P)} \leq 1.$ Then 
+    $$
+        \mathbb P \left( \widehat \var \left( \hat \zeta \right) < \epsilon\right) \geq 1 - 4 \epsilon.
+    $$
+    \todo{make $\zeta$ depend on $N$?}
+\end{theorem}
+
+The problem here is that $N$ does not depend on $\G$ and $\P$, so we may choose $\G$ almost singular to $\P$. \todo{continue}
+
+Thus using the empirical variance as a threshold for convergence should be avoided. As a remedy \citep{Chatterjee2018Sample} suggest the heuristic $q_{N} = \E Q_{N}$ where
 $$
 Q_{N} = \max_{1\leq i\leq N} W_{i}.
 $$
@@ -213,7 +269,7 @@ $$
 This judges whether importance sampling has collapsed to just a few particles and is itself amenable to Monte-Carlo integration, though this requires multiple runs of importance sampling and so may be prohibitively expensive in practice.
 
 In the following sections, we will predominantly take the position that we are interested in finding a good particle approximation $\hat\P_{N}$ of the form \Cref{eq:is-particle-approximation} over finding the optimal proposal $\G^{\ast}$ \Cref{prop:minimum_MSE_IS} and assume that the importance sampling weights can only be evaluated up to a constant. 
-\todo{more clearly distinguish arguements for the two assumptions}
+\todo{more clearly distinguish arguments for the two assumptions}
 This has several reasons: First of all, for most problems considered in this thesis $\P$ is usually a conditional distribution, e.g. $\P = \mathbb P^{X|Y=y}$ for states $X$ and observations $Y$ in the \acrshort{ssm} context. Should the appropriate densities exist, evaluating the weights amounts to calculating 
 $$
 \rnd{\mathbb P^{X| Y= y}}{\G}(x) = \frac{p(x|y)}{g(x)} = \frac{p(y|x)p(x)}{g(x)p(y)} \propto \frac{p(y|x)p(x)}{g(x)}.

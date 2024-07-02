@@ -21,7 +21,7 @@ Time and space complexity allow us to compare the methods theoretically, i.e. be
 Let us start with a classical example in which the \gls{la} fails to produce consistent importance sampling estimates. 
 \begin{example}[Failure of \gls{la}]
   \label{ex:la_failure}
-  Consider the Gaussian scale mixture $\P = \frac{1}{2} \left(\mathcal N (0,1) + \mathcal N(0, \varepsilon^{-2})\right)$ with mode $x^{\ast}=0$. 
+  Consider the Gaussian scale mixture $\P = \frac{1}{2} \left(\mathcal N (0,1) + \mathcal N(0, \varepsilon^{-2})\right)$ with mode $x^{\ast}=0$, this is the same setup as in \Cref{ex:ess_failure}. 
   The \gls{la} is $\G_{\text{LA}} = \mathcal N \left( 0, \frac{1}{\varepsilon^{2} - \varepsilon + 1} \right)$, whose variance goes to $1$ as $\varepsilon$ goes to $0$, so the \gls{la} will miss close to $\frac 1 2$ of the total mass.
   For $\varepsilon$ small enough, the variance of the \gls{la} will be smaller than $\frac{1}{2\varepsilon^{2}}$, whence the second moment of the weights is infinite and importance sampling with $\G_{\text{LA}}$ is inconsistent.
 
