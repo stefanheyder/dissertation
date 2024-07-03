@@ -1,0 +1,11 @@
+\glsreset{vm}
+\subsection{\texorpdfstring{\Acrfull{vmm}}{Variance Minimization method}}
+As we have discussed above, the second moment 
+$$
+\rho = \G [w^{2}]
+$$
+plays an important role in the performance of importance sampling. Naturally, we may want to choose $\G$ such that $\rho$ becomes minimal. To this end we consider tractable, parametric proposals $\left( \G_{\psi} \right)_{\psi \in \Psi}$ for a parameter set $\Psi$, where usually $\Psi \subseteq \R^{k}$. Noticing that $\G_{\psi} w_{\psi} = 1$, we see that minimizing $\rho_{\psi} = \G_{\psi}[w^{2}_\psi]$ over $\Psi$ is equivalent to minimizing
+$$
+\var \left( w_{\psi}(X_{\psi}) \right) = \G_{\psi}[w_{\psi}^2] - \G_{\psi}[w_{\psi}]^{2} = \rho_{\psi} - 1,
+$$
+over $\Psi$ where $X_{\psi} \sim \G_{\psi}$. This is the \gls{vmm} 

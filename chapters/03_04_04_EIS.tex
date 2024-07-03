@@ -1,0 +1,202 @@
+\glsreset{eis}
+\subsection{\texorpdfstring{\Acrfull{eis}}{Efficient importance sampling}}
+\label{subsec:eis}
+\gls{eis}\citep{Richard2007Efficient} provides an alternative to the \gls{cem}. Instead of minimizing the \gls{kld} between the target $\P$ and $\G_{\psi}$, \gls{eis} aims at minimizing the variance of the logarithm of importance sampling weights. 
+The work by \citep{Chatterjee2018Sample} \citep{Chatterjee2018Sample}, \Cref{thm:chatterje2018Thm1}, suggests that this is worthwhile: the upper bound in their Theorems 1.1 and 1.2 involve tail probabilities of the distribution of log weights, which suggests minimizing their variance as well as the mean.
+
+Thus, \gls{eis} finds $\psi_{EIS}$ which solves 
+\begin{align*}
+\psi_{EIS} &= \argmin_{\psi \in\Psi} \text{Var}_{\P} \left( \log w_{\psi} \right) \\
+    &= \argmin_{\psi \in \Psi} \P (\log w_{\psi} - \P \log w_{\psi})^{2},
+\end{align*}
+where $\log w_{\psi} = \log p - \log g_{\psi}$.
+As $\P \log w_{\psi}$ is usually intractable as well, we include it in the optimization problem, utilizing the fact that the mean is the minimizer of the squared distance functional.
+Here unnormalized weights $w \propto \frac{\d\P}{\d\G}$ may be used, as the unknown integration constant gets absorbed by the unknown mean. In total, \gls{eis} solves
+\begin{align*}
+\left(\psi_{\text{EIS}}, \lambda_{\text{EIS}}\right) &= \argmin_{\psi \in\Psi, \lambda \in \mathbf R} \P \left( \log p - \log g_{\psi} - \lambda \right)^{2}.
+\end{align*}
+Under the usual regularity conditions allowing to differentiate under the integral, the estimating equations for $\peis$ read
+\begin{align}
+    \begin{split}
+    \label{eq:eis-optimal}
+    \P \left(\left( \log p - \log g_{\psi} - \lambda \right) \nabla_{\psi}\log g_{\psi}\right)&=0\\
+    \P \left( \log p - \log g_{\psi} - \lambda \right)&=0,
+    \end{split}
+\end{align}
+which we will use to derive asymptotics for $\hpeis$. 
+
+Similar to the \gls{cem} we restrict our in-depth analysis to natural exponential family proposals where $\log g_{\psi}(x) = \psi^{T}T(x) - \log Z(\psi) + \log h(x)$. In this case \Cref{eq:eis-optimal} simplifies to
+\begin{align*}
+    \P \left(\left( \log p - \psi^{T}T + \log Z(\psi) - \log h - \lambda \right)(T - \G_{\psi} T)\right) &= 0,\\
+    \lambda = \P (\log p - \log g_{\psi}) &= \Dkl{\P}{\G_{\psi}}.
+\end{align*}
+As the first term is centered under $\P$, this is equivalent to $\log w_{\psi}$ and $T$ being orthogonal in $L^{2}(\P)$. 
+%Thus optimality is achieved if the first term equals the conditional expectation w.r.t. $T$. j
+Unfortunately, this formulation does not allow for an analytical solution of $\peis$, the problematic term being $\log Z(\psi)$, leading to an implicit equation for $\psi$. However, we can achieve an explicit equation by reparameterizing the nuisance parameter to $\lambda' = \lambda - \log Z(\psi)$, which results in a weighted linear least squares problem
+\begin{align*}
+    \min_{\psi \in \Psi, \lambda' \in \R} \P \left(\log p - \log h - \psi^{T}T - \lambda'\right)^{2}.
+\end{align*}
+Thus the optimal $ \left( \peis, \lambda'_{\text{EIS}} \right)$ are given by the best linear prediction of $\log p - \log h$ by the sufficient statistic $T$ under $\P$. Therefore, if $\cov_{\P} T$ is non-singular, 
+\begin{align}
+    \begin{split}
+    \lambda'_{\text{EIS}} &= \P \log p - \log h \\
+    \label{eq:peis-analytical}
+    \peis &= \cov_{\P} \left( T \right)^{-1} \cov_{\P} \left(T, \log p - \log h \right).
+    \end{split}
+\end{align}
+Notice that $\peis$ depends on second-order moments of the sufficient statistic $T$, as well as the shape of $\log p$, whereas the optimal parameter for the \gls{cem} $\pce$ depends only on the first-order moments of $T$. 
+
+As the optimal $\peis$ depends on several unknown quantities, \gls{eis} proceeds like the \gls{cem} and employs importance sampling with a proposal $\G$, estimating $\psi_{\text{EIS}}$ by
+$$
+\left(\hat \lambda,\hat \psi_{\text{EIS}}\right) = \argmin_{\lambda,\psi} \sum_{i=1}^N W^{i} \left( \log p(X^{i}) - \log g_{\psi}(X^{i}) - \lambda \right)^{2},
+$$
+where $X^{1}, \dots, X^{N} \iid \G$. 
+If $\G_{\psi}, \psi \in \Psi$ form an exponential family with natural parameter $\psi$, this optimization problem turns into a weighted least squares problem, so we can estimate $\peis$ with the standard weighted least squares estimator
+$$
+\left( \hat\lambda', \hpeis \right) = \left(\mathbf X^{T}W\mathbf X\right)^{-1}\mathbf X^{T}W y%
+$$
+where the random design matrix $\mathbf X$ and diagonal weights matrix $W$ are given by
+\begin{align*}
+\mathbf X &= \begin{pmatrix}
+    1 & T(X^{1})^{T} \\
+    \dots&\dots\\
+    1 & T(X^{N})^{T} \\
+\end{pmatrix}\\
+\intertext{and}
+W &= \text{diag} \left( W_{1}, \dots, W_{N} \right),
+\end{align*}
+and the observations are 
+\begin{align*}
+y = \left( \log p(X^{1}) - \log h(X^{1}), \dots, \log p(X^{N}) - \log h(X^{N}) \right)^{T} \in \R^{N}.
+\end{align*}
+
+Alternatively, replacing $\P$ by $\hat\P_{N}$ in \Cref{eq:peis-analytical}, we obtain the equivalent formulation
+\begin{align}
+    \label{eq:hpeis-cov}
+    \hpeis = \cov_{\hat\P_{N}} (T)^{-1} \cov_{\hat \P_{N}} \left( T, \log p - \log h \right),
+\end{align}
+as long as $\cov_{\hat \P_{N}} T$ is non-singular.
+
+An attractive feature of \gls{eis} is that if the target $\P$ is a member of the exponential family of proposals, i.e. there is a $\psi_{\P}\in\Psi$ such that $\P = \G_{\psi_{\P}}$, then \gls{eis} finds the optimal $\peis = \psi_{\P}$ a.s. for a finite number of samples.
+
+\begin{proposition}[Finite sample convergence of \gls{eis}]
+    \label{prop:eis-finite-sample}
+    Suppose $\G_{\psi}, \psi \in \Psi \subseteq \R^{k}$ for a natural exponential family w.r.t. Lebesgue measure, where both $\Psi$ and the support of the sufficient statistic $\operatorname{supp} T$ are open in $\R^{k}$. 
+    Furthermore let $\G$ be a probability measure on $\R^{m}$ that is equivalent to $\P$, i.e. $\G \ll \P$ and $\P \ll \G$. 
+
+    If there is a $\psi_{\P} \in \Psi$ such that $\P = \G_{\psi_{\P}}$, then $\hpeis = \psi_{\P}$ a.s. for $N \geq k$. 
+\end{proposition}
+
+\begin{proof}
+   As $\P$ stems from the same exponential family as $\G_{\psi}$, the pseudo-observations are $\log p - \log h = \psi_{\P}^T T - \log Z(\psi_{\P})$. Thus $\cov_{\hat \P_{N}} \left( T, \log p - \log h \right) = \cov_{\hat \P_{N}} \left( T \right)\psi_{\P}$. 
+   If we can show that $\cov_{\hat\P_{N}} T$ is non-singular, \Cref{eq:hpeis-cov} implies that $\hpeis = \psi_{\P}$ a.s.. 
+
+   If $\cov_{\hat \P_{N}} T$ were singular, there would exist a $\psi \in \Psi$ such that $\cov_{\hat \P_{N}} \left( \psi^{T}T \right) = 0$, as $\Psi$ is open and contains $0$. In this case the a.s. non-zero $W^{i}(X^{i}) T(X^{i})$ would lie in the orthogonal complement $\psi^{\perp}$ for all $i = 1, \dots, N$. As the weights are a.s. positive by the assumed equivalence of $\G$ and $\P$, the same holds true for $T(X^{i}), i = 1,\dots, N$.
+   If $N$ is bigger than $k$, this is a contradiction to $\operatorname{supp} T $ being open, so $\cov_{\hat \P_{N}} T$ is non-singular and the result is shown.
+   %\todo{think a bit more about this, what if T is not a homeo?}
+    
+\end{proof}
+
+\begin{theorem}[consistency of $\hpeis$]
+    \label{thm:eis-consistent}
+    \todo{vdV, reg. conditions?}
+\end{theorem}
+
+\begin{theorem}[asymptotic normality of $\hpeis$]
+    \label{thm:clt-eis}
+    Let $\G_{\psi}$ form a natural exponential family with densities $g_{\psi}(x) = \frac{h(x)}{Z(\psi)} \exp \left( \psi^{T}T(x) \right)$ w.r.t. $\mu$. Let $\G, \P$ be two other probability measures such that $\G \ll \P$ and let $W = \frac{\d\P}{\d\G}$ be the normalized importance sampling weights. 
+    Assume $\lambda(\psi) = \P \log w_{\psi}$ is known and the following conditions hold:
+    \begin{enumerate}[label={\bfseries(B\arabic*)}]
+        \item\label{it:eis-dkl-dkl-to-base-finite} $\Dkl{\P}{\G_{\psi}} < \infty$ for all $\psi$ \todo{prob. suffices locally},
+        \item\label{it:eis-T-l2} $T$ and $\log w_{\peis}$ are square integrable w.r.t. $\P$,
+        \item\label{it:eis-cov-t-spd} $\cov_{\P} (T)$ is positive definite and
+        \item\label{it:eis-dkl-regularity} the regularity conditions of \Cref{thm:eis-consistent} hold.
+    \end{enumerate}
+
+    Without loss of generality, assume that $\P T = 0$. Then, as $N$ goes to $\infty$,
+    $$
+    \sqrt{N} \left( \begin{pmatrix}\hat\lambda \\ \hpeis\end{pmatrix} - \begin{pmatrix}\lambda \\ \peis\end{pmatrix} \right) \Dto \mathcal N(0, V_{\eis})
+    $$
+    where 
+    $$
+    V_{\eis} = B_{\eis}M_{\eis}B_{\eis}
+    $$
+    with
+    \begin{align*}
+        B_{\eis} &= \begin{pmatrix}
+            1 & 0 \\
+            0 & \left(\cov_{\P} T\right)^{-1}
+        \end{pmatrix}\\
+        M_{\eis} &= \G \left(W^{2} \left( \log \frac{p}{h} - \peis^{T}T - \lambda_{\eis}\right)^{2} \begin{pmatrix}
+            1& T^{T}\\
+             T &  TT^{T}
+        \end{pmatrix}
+        \right).
+    \end{align*}
+    In particular, the asymptotic variance of $\hpeis$ is
+    $$
+    \left( \cov_{\P} T \right)^{-1} \G\left( W^{2} \left( \log \frac{p}{h} - \peis^{T}T - \lambda_{\eis} \right)^{2} T T ^{T} \right)\left( \cov_{\P} T \right)^{-1}.
+    $$
+\end{theorem}
+
+\begin{proof}
+    This proof follows the same strategy as that for \Cref{thm:ce-clt} and uses the same notation (\Cref{not:notation-clt}). 
+    % verify conditions
+    The estimating equations for $\lambda$ and $\peis$ are given by 
+    %As $\lambda (\psi) = \P (\log p - \log g_{\psi})$ its gradient is $\nabla_{\psi} \lambda (\psi) = -\P T + \dot z(\psi)$, so the estimating equations for $\peis$ are \todo{regularity for $\nabla \lambda$}
+    \begin{align*}
+    x \mapsto f_{\lambda,\psi}(x) &= \nabla_{\lambda} -\frac{1}{2}w(x)\left(\log \frac{p(x)}{h(x)} - \psi^{T}T(x) -\lambda \right)^{2} = w(x) \left( \log \frac{p(x)}{h(x)} - \psi^{T}T(x) -\lambda  \right)\begin{pmatrix}
+        1 \\ T(x)
+    \end{pmatrix}.
+    \end{align*}
+    % LL
+    For $\lambda_{1}, \lambda_{2}\in\R$ and $\psi_{1}, \psi_{2}\in\Psi$ the Lipschitz condition \Cref{eq:clt-vdv-local-lipschitz} are fulfilled, as 
+    \begin{align*}
+    \lVert f_{\lambda_{1}, \psi_{1}} - f_{\lambda_{2}, \psi_{2}} \rVert &= \lvert w(x) \rvert ~\lvert \left( \lambda_{2} - \lambda_{1} + T(x) \left( \psi_{2} - \psi_{1} \right) \right)\rvert ~\left\lVert \begin{pmatrix}
+        1 \\ T(x)
+    \end{pmatrix} \right\rVert \\
+        &\leq \underbrace{\lvert w(x) \rvert \left\lVert \begin{pmatrix} 1 & T^{T}(x) \\ T(x) & T(x) T^T(x) \end{pmatrix} \right\rVert}_{:=\dot f} \lVert \left( \lambda_{2} - \lambda_{1}, \psi_{2} - \psi_{1} \right)\rVert,
+    \end{align*}
+    and $\G \dot f < \infty$ by \ref{it:eis-T-l2}.
+
+    % Gf_psi0 < infy
+    At the optimal $\lambda_{\eis}, \peis$ it holds
+    \begin{align*}
+    \G f_{\lambda_{\eis},\peis} = \P \left( \log \frac{p}{h} - \peis^{T}T - \lambda_{\eis}  \right) \begin{pmatrix}
+        1 \\ T
+    \end{pmatrix} < \infty,
+    \end{align*}
+    as both $T$ and $\log w(\peis)$ are in $L^{2}(\P)$ by \ref{it:eis-T-l2}.
+    \todo{L2 defnieren}
+    % psi -> Gf_psi differentiable, Jacobian non-singular
+    By the assumed regularity conditions, $(\lambda,\psi) \mapsto \G f_{\lambda, \psi}$ is differentiable, with Jacobian
+    \begin{align*}
+    B_{\eis}^{-1} = \partial_{\lambda,\psi}\G f_{\lambda,\psi} &= \P \begin{pmatrix}
+        1 \\ T
+    \end{pmatrix} \begin{pmatrix}
+        1 & T^{T}
+    \end{pmatrix}\\
+        &= \P \left( \begin{pmatrix}
+            1 & T^{T} \\
+            T & TT^{T}
+        \end{pmatrix} \right) = \begin{pmatrix}
+            1 & 0 \\
+            0 & \cov_{\P} (T)
+        \end{pmatrix},
+    \end{align*}
+    as $\P T = 0$.
+    % \hat G_N f_\hat\psi_N = o_P (N^-1/2)
+
+    As $\hpeis$ solves the estimating equations, we have $\hat\P_{N} f_{\hpeis} = 0 = o_{P} \left( N^{-\frac{1}{2}} \right)$. It remains to show that $\hpeis \to \peis$ in probability, which follows by an application of \Cref{thm:ce-consistent}. 
+    Finally, as $\G f_{\lambda_{\eis},\peis}=0$, 
+
+    $$
+    M_{\eis} = \G \left(f_{\lambda_{\eis},\peis} f_{\lambda_{\eis},\peis}^T = \G w^{2} \left( \log \frac{p(x)}{h(x)} - \peis^{T}T - \lambda_{\eis}\right)^{2} \begin{pmatrix}
+        1 & T^{T} \\
+        T & TT^{T}
+    \end{pmatrix}\right)
+    $$
+\end{proof}
+
+\todo{discuss applicability of both CLTs}
+\todo{literature review EIS}
