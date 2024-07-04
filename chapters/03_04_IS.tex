@@ -32,7 +32,7 @@ Let $\G$ be a another probability measure on $\mathcal X$ such that $f\P$ is abs
 $$
     \zeta = \P [f] = \int_{\mathcal X} f(x) \d \P(x) = \int_{\mathcal X} \left(\rnd{f\P}{\G}\right)\d\G(x) = \G [v]
 $$
-which suggests to estimate $\zeta$ by Monte-Carlo integration: $$\hat \zeta = \frac 1 N \sum_{i=1}^{N} v(X^{i}), $$ the importance sampling estimate of $\zeta$. The importance samples $X^{i}, i = 1, \dots, N$ have distribution $\G$, and will usually be i.i.d.. For this procedure to work, we want $\hat \zeta$ to fulfill a law of large numbers and a central limit theorem, so we will want $v \in L^{2}(\G)$, where $L^{p}(\nu)$ is the space of $p$-times $\nu$-integrable functions for a measure $\nu$. The i.i.d. assumption could also be dropped, e.g. when we employ antithetic variables, see \citep[Section 5.3]{Ripley2009Stochastic}. Here we call $\hat \zeta$ the importance sampling estimate of $\zeta$. 
+which suggests to estimate $\zeta$ by Monte-Carlo integration: $$\hat \zeta = \frac 1 N \sum_{i=1}^{N} v(X^{i}), $$ the importance sampling estimate of $\zeta$. The importance samples $X^{i}, i = 1, \dots, N$ have distribution $\G$, and will usually be i.i.d. For this procedure to work, we want $\hat \zeta$ to fulfill a law of large numbers and a central limit theorem, so we will want $v \in L^{2}(\G)$, where $L^{p}(\nu)$ is the space of $p$-times $\nu$-integrable functions for a measure $\nu$. The i.i.d. assumption could also be dropped, e.g. when we employ antithetic variables, see \citep[Section 5.3]{Ripley2009Stochastic}. Here we call $\hat \zeta$ the importance sampling estimate of $\zeta$. 
 
 If $v \in L^{2}(\G)$ and under i.i.d. sampling the Monte-Carlo variance of $\hat \zeta$ is $\frac{\var \left(v(X^{i})\right)}{N}$, and so naturally we want $\var \left(v(X^{i})\right)$ to be small to ensure fast convergence of $\hat \zeta$. As $v$ depends on the proposal $\G$, and we have the flexibility to choose $\G$, importance sampling acts as a variance reduction technique. 
 
@@ -99,12 +99,12 @@ so small $\rho$ implies a small \acrshort{kld} as well. Conversely, the followin
 \begin{theorem}[{\cite[Theorem 1.1]{Chatterjee2018Sample}}]
     \label{thm:chatterje2018Thm1}
      Let $\P$ and $\G$ be probability measures on a measurable space $(\mathcal X, \mathcal B)$ such that $\P \ll \G$ and let $f \in \mathbf L^2(\P)$ be a function with $\lVert f \rVert_{L^{2}(\P)} = \left( \P f^{2} \right)^{1 / 2} < 
-     \infty$. Let $Z$ be an $\mathcal X$ valued random variable with law $\P$. 
+     \infty$. Let $Y$ be an $\mathcal X$ valued random variable with law $\P$. 
      
      Let $L = \Dkl{\P}{\G} = \mathbb E \log w(Y)$ be the \acrshort{kld} between $\P$ and $\G$, and let $$\hat \P_N = \sum_{i = 1}^N w(X^i) \delta_{X^i}$$ be the particle approximations of $\P$  based on samples $X^1, \dots, X^N\iid \G$, $N \in \N$. 
      
      If the sample size $N$ is given by $N = \exp\left( L + t \right)$ for a $t \geq 0$,
-     \begin{align} \label{eq:chatterje-upper-bound}\mathbb E \left\lvert \hat \P_N[f] - \P [f] \right\rvert \leq \lVert f \rVert^2_{L^2(\P)} \left(\exp(-t / 4) + 2 \sqrt{\mathbb P \left( \log w(Z) > L + t / 2 \right)}\right). \end{align}
+     \begin{align} \label{eq:chatterje-upper-bound}\mathbb E \left\lvert \hat \P_N[f] - \P [f] \right\rvert \leq \lVert f \rVert_{L^2(\P)} \left(\exp(-t / 4) + 2 \sqrt{\mathbb P \left( \log w(Z) > L + t / 2 \right)}\right). \end{align}
 
     Conversely, if $N = \exp \left( L - s \right)$ for $s \geq 0$, then for any $\delta \in (0,1)$ 
     \begin{align}
@@ -118,18 +118,18 @@ so small $\rho$ implies a small \acrshort{kld} as well. Conversely, the followin
 
 The proof of this theorem is based on splitting $\mathcal X$ into $\{\log w \leq L + \frac{t}{2}\} $ and its complement and straightforward, it may be found in the Appendix of \citep{Chatterjee2018Sample}. Theorem 1.2 in the same paper provides a qualitatively similar result for autonormalised importance sampling.
 
-Let us consider the implications of \Cref{thm:chatterje2018Thm1}, starting with \Cref{eq:chatterje-upper-bound}, by devising heuristics to decide when $\G$ is a good proposal for fixed sample size $N$, and assume for simplicity that $ \lVert f \rVert^{2}_{L^{2}(\P)} = 1 $.
-First of all, as $t = \log N - L$, we have $\exp(- t / 4) =  \frac{\exp (L / 4)}{N^{4}}$, so for large $N$ this term becomes negligible fast, and the interesting term in \Cref{eq:chatterje-upper-bound} is the second one. As $\E \log w(Z) = L$, this term is a tail probability and we can use standard mass-concentration inequalities to analyze its behavior as $t$ (and so $N$) grows. Markov's inequality tells us that 
+Let us consider the implications of \Cref{thm:chatterje2018Thm1}, starting with \Cref{eq:chatterje-upper-bound}, by devising heuristics to decide when $\G$ is a good proposal for fixed sample size $N$, and assume for simplicity that $ \lVert f \rVert_{L^{2}(\P)} = 1 $.
+First of all, as $t = \log N - L$, we have $\exp(- t / 4) =  \frac{\exp (L / 4)}{N^{\tfrac{1}{4}}}$, so for large $N$ this term becomes negligible, and the interesting term in inequality \eqref{eq:chatterje-upper-bound} is the second one. As $\E \log w(Z) = L$, this term is a tail probability and we can use standard mass-concentration inequalities to analyze its behavior as $t$ (and so $N$) grows. Markov's inequality tells us that 
 $$
 \mathbb P \left( \log w(Z) > L + \frac{t}{2} \right) \leq \frac{L}{L + t / 2} = \frac{2}{1 + \frac{\log N}{L}}.
 $$
 
-Second, if, additionally, $\log w(Z)$ has finite variance, Tchebyscheff's inequality yields 
+Second, if, additionally, $\log w(Z)$ has finite variance, Chebyshev's inequality yields 
 $$
 \mathbb P \left( \log w (Z) > L + \frac{t}{2} \right) \leq \frac{4\operatorname{Var} (\log w(Z))}{t^{2}} = \frac{4\operatorname{Var} (\log w(Z))}{\left( \log N - L \right)^2}.
 $$
 
-In both upper bounds provided by the concentration inequalities, all else being equal, a smaller \acrshort{kld} will yield a tighter bound. However, in Tchebyscheff's inequality, the variance of log weights also plays a role, and will surely be different for different proposals.
+In both upper bounds provided by the concentration inequalities, all else being equal, a smaller \acrshort{kld} will yield a tighter bound. However, in Chebyshev's inequality, the variance of log weights also plays a role, and will surely be different for different proposals.
 Assuming $\G \ll \P$, we have $ \frac{\d \G}{\d\P} = \frac{1}{w}$ and so 
 $$\mathbb E \exp (- \log w(Z) ) = \mathbb E \frac{1}{w(Z)} = \P \left[\frac{\d \G}{\d\P}\right] = 1,$$
 If the log-weights are bounded from above and below, the following lemma shows that as the variance of $U = -\log w(Z)$ goes to $0$, their mean,
@@ -139,7 +139,7 @@ $$
 goes to $0$ as well.
 \begin{lemma}
     \label{lem:bounded-log-variance}
-    For $a,b \in \R$, let $U \in [a,b]$ be a bounded random variable with variance $\sigma^{2}$ and $\mathbb E \exp U = 1$. Let $\mu = \E U$ be the mean of $U$. Then there exists a $\delta \in [a,b]$, such that 
+    For $a,b \in \R$, let $U \in [a,b]$ be a bounded random variable with variance $\sigma^{2}$ and $\mathbb E \exp U = 1$. Let $\mu = \mathbb E U$ be the mean of $U$. Then there exists a $\delta \in [a,b]$, such that 
     $$
     0 \geq \mu = \log \left( 1 - \delta \frac{\sigma^{2}}{2} \right).
     $$
@@ -154,7 +154,7 @@ goes to $0$ as well.
     $$
     1 = \exp(\mu)\mathbb E \exp (U - \mu) = \exp (\mu) \left( 1 + \mathbb E (U - \mu) + \mathbb E\left(\frac{(U-\mu)^{2}}{2} \exp(\xi)\right) \right).
     $$
-    Then $\xi' = \xi + \mu \in [a,b]$. 
+    Then $\xi' = \xi + \mu \in [a,b]$, and note that, unless $U = 1$ a.s., $\mathbb E \exp = 1$ forces $a < 0 < b$. 
     Thus
     $$
     1 = \exp(\mu) + \mathbb E\left(\frac{(U-\mu)^{2}}{2} \exp(\xi')\right),
@@ -169,7 +169,7 @@ goes to $0$ as well.
 \end{proof}
 
 \begin{corollary}
-    Let $\P$ and $\G$ be equivalent probability measures with bounded Radon-Nikodym derivative $w = \frac{\d\P}{\d\G} \in [a,b]$, $a, b \in \R$, finite \acrshort{kld} $\Dkl{\P}{\G} =\P [\log w] < \infty$.
+    Let $\P$ and $\G$ be equivalent probability measures with bounded Radon-Nikodym derivative $w = \frac{\d\P}{\d\G} \in [a,b]$, $a, b \in \R$ and \acrshort{kld} $\Dkl{\P}{\G} =\P [\log w]$.
     
     If $\log w \in L^{2}(\P)$ with variance $\sigma^{2} = \P [(\log w - L)^2]$, and $\sigma^{2} < \frac{2}{b}$, then 
     $$
@@ -178,7 +178,12 @@ goes to $0$ as well.
 \end{corollary}
 Under the assumptions of this corollary, we see that a small variance of the log-weights implies a small \acrshort{kld}, which in turn implies good importance sampling performance.
 
-Let us now discuss the implications of \Cref{eq:chatterje-lower-bound}. We see that for large $s$, i.e. $N \ll \exp(L)$, the right-hand side is small, and so the probability that importance sampling fails for the constant function is practically relevant. Thus \citeauthor{Chatterjee2018Sample} recommend to choose $N = \mathcal O( \exp \left( \Dkl{\P}{\G} \right))$. 
+Let us now discuss the implications of \Cref{eq:chatterje-lower-bound}. We see that for large $s$, i.e. $N \ll \exp(L)$, the right-hand side is small, and so the probability that importance sampling fails for the constant function is practically relevant. Observe that here 
+$$
+\hat \P_{N} [\mathbf 1 ] = \frac{1}{N} \sum_{i = 1}^N w_{i}
+$$
+is the mean of weights, which, for the standard weights $w$, does not have to sum to $1$. 
+As a result, \citeauthor{Chatterjee2018Sample} recommend to choose $N = \mathcal O( \exp \left( \Dkl{\P}{\G} \right))$. 
 
 Based on this discussion, we see that choosing $\G$ such that either the \acrshort{kld} or the variance of the log-weights is small is sensible. Making the variance small has the additional advantage that it, at least for bounded log-weights, also implies an upper bound for the \acrshort{kld}. We will return to this train of thought when we discuss optimal ways of performing importance sampling, such as the \acem (minimizing the \acrshort{kld}) and \aeis (minimizing the variance of log-weights) in the following sub-chapters.
 
@@ -198,7 +203,7 @@ $$
 \begin{align*}
     \var \left( \hat\zeta_{\text{IS}}  \right) \approx \var \left( \hat \zeta_{\text{MC}} \right)\left( 1 + \var \left( NW_{1}\right) \right).
 \end{align*}
-Note that this approximation does not depend on the specific $f$ considered, and it is not guaranteed that for large $N$ the remainder goes to $0$, as \citep{Kong1992Note} mentions. In particular, the approximation has to fail whenever $\var \left( \hat\zeta_{\text{IS}} \right) < \var \left( \hat \zeta_{\text{MC}} \right)$, i.e. when importance sampling actually performs variance reduction. Nevertheless, with these additional assumptions, we may interpret 
+Note that this approximation does not depend on the specific $f$ considered, and it is not guaranteed that for large $N$ the remainder goes to $0$, as \citep{Kong1992Note} mentions. In particular, the approximation has to fail whenever $\var \left( \hat\zeta_{\text{IS}} \right) < \var \left( \hat \zeta_{\text{MC}} \right)$, i.e. when importance sampling actually performs variance reduction. Nevertheless, whenever the approximation is valid, we may interpret \todo{check W / w / tilde w in the following}
 $$
 \frac{N}{1 + \var \left( NW_{1} \right)}
 $$
@@ -214,9 +219,23 @@ $$
 $$
 if $\tilde w \in L^{2}(\G)$ \citep[Section 2.3.2]{Agapiou2017Importance}. Thus, asymptotically, a large \acrshort{ess} leads to small bias and \acrshort{mse} for bounded functions $f$. Additionally, the above derivations allow us to interpret the second moment
 $$
-\rho = \G [(NW_1)^2] = \left(\G [NW_1]\right)^{2} + \var \left( NW_1 \right)  +  = 1 + \var \left(NW_1\right) \approx \frac{\var \left(\hat\zeta_{\text{IS}}\right)}{\var \left(\hat\zeta_{\text{MC}}\right)}
+\rho = \G [(NW_1)^2] = \left(\G [NW_1]\right)^{2} + \var \left( NW_1 \right) = 1 + \var \left(NW_1\right) \approx \frac{\var \left(\hat\zeta_{\text{IS}}\right)}{\var \left(\hat\zeta_{\text{MC}}\right)}
 $$
-as the asymptotic relative efficiency of the two estimators, as long as this approximation is valid. In practice, a small \acrshort{ess} can be an indicator that importance sampling with $\G$ may be inadequate. Note that relying solely on the empirical \acrshort{ess} may lead to problems, see the following example.
+as the asymptotic relative efficiency of the two estimators, as long as this approximation is valid. In practice, a small \acrshort{ess} can be an indicator that importance sampling with $\G$ may be inadequate. Note that relying solely on the empirical \acrshort{ess} may lead to problems, see the following example. To prepare, we prove a lemma regarding $\rho$ for Gaussian targets and proposals.
+
+\begin{lemma}
+    Let $\P = \mathcal N(\mu, \Sigma)$ and $\G = \mathcal N(\nu, \Omega)$ be two $p$-dimensional Gaussian distributions with means $\mu,\nu \in \R^{p}$ and \acrshort{spd} covariance matrices $\Sigma,\Omega \in \R^{p\times p}$. 
+    Then $\rho$ is finite if, and only if, $\Omega \succ \frac{1}{2} \Sigma$. 
+\end{lemma}
+
+\begin{proof}
+    For the weights $w = \frac{p}{g}$ we have
+    \begin{align*}
+        \rho &= \G [w^{2}] = \int \frac{p^{2}(x)}{g^{2}(x)} g(x) \mathrm d x = \int \frac{p^{2}(x)}{g(x)} \mathrm d x \\
+        &= \int \frac{\sqrt{\det \Omega}}{\sqrt{(2\pi)^{p}}\det \Sigma} \exp \left( -(x - \mu)^{T}\Sigma^{-1}(x - \mu) + \frac{1}{2}(x - \nu)^{T}\Omega^{-1}(x - \nu)\right) \d x. 
+    \end{align*}
+    The exponent is a quadratic form in $x$, and so the integral is finite if, and only if, the matrix of coefficients, $-\Sigma^{-1} + \frac{1}{2}\Omega^{-1}$ is negative definite. Rearranging terms, we see that this is equivalent to $\Omega \succ \frac{1}{2}\Sigma$.
+\end{proof}
 
 \begin{example}[failure of the \acrshort{ess}]
     \label{ex:ess_failure}
@@ -227,9 +246,9 @@ as the asymptotic relative efficiency of the two estimators, as long as this app
     $$
     \rho = \int w^{2}(x) \frac{1}{\sqrt{2\pi}} \exp \left( -\frac{x^{2}}{2} \right) \d x
     $$
-    is finite if, and only if, $\varepsilon^{2} > \frac{1}{2}$. Thus, for $\varepsilon^{2} \leq \frac{1}{2}$ interpreting the \acrshort{ess} is not sensible. Nevertheless, given samples $X^{1}, \dots, X^{N} \iid \G$, we may calculate the \acrshort{ess} in the usual way. If $N$ is only moderately large, there is a high probability that most samples do not lie in a region where weights are small, i.e. in the tails of the second component. Thus, unless $N$ is large, the empirical \acrshort{ess} will be large, deceiving us to think that importance sampling with $\G$ is feasible.
+    is finite if, and only if, $\varepsilon^{2} > \frac{1}{2}$, by the preceding lemma. Thus, for $\varepsilon^{2} \leq \frac{1}{2}$ interpreting the \acrshort{ess} or \acrshort{ef} is not sensible. Nevertheless, given samples $X^{1}, \dots, X^{N} \iid \G$, we may calculate the \acrshort{ess} in the usual way. If $N$ is only moderately large, there is a high probability that most samples do not lie in a region where weights are small, i.e. in the tails of the second component. Thus, unless $N$ is large, the empirical \acrshort{ess} will be large, deceiving us to think that importance sampling with $\G$ is feasible.
 
-    We illustrate this by a simulation study, where we calculate the \acrshort{ef} $M=100$ times for different values of $N$ and $\varepsilon$. We used $N = 100, 1000, 10000$ and $\varepsilon^{2} = 0.01, 0.1, 0.5$; the results may be found in \Cref{fig:ess_failure}. We see that even for $N = 1000$ and $\varepsilon = \frac{1}{2}$ the upper quartile of \acrshortpl{ef} is $71\%$, which seems reasonable to declare importance sampling to perform well. 
+    We illustrate this by a simulation study, where we calculate the \acrshort{ef} $M=100$ times for different values of $N$ and $\varepsilon$. We used $N = 100, 1000, 10000$ and $\varepsilon^{2} = 0.01, 0.1, 0.5$; the results may be found in \Cref{fig:ess_failure}. Notice that for all values of $\varepsilon$ considered, we have $\rho = \infty$. We see that even for $N = 1000$ and $\varepsilon = \frac{1}{2}$ the upper quartile of \acrshortpl{ef} is $71\%$, which seems reasonable to declare importance sampling to perform well. 
 
     \begin{figure}
         \centering
@@ -237,13 +256,13 @@ as the asymptotic relative efficiency of the two estimators, as long as this app
         \resizebox{\textwidth}{!}{%
             \input{tikz/ess_failure.tex}%
         }
-        \caption{Empirical \acrshort{ef} for the setup of \Cref{ex:ess_failure} for varying sample sizes $N$ and $\varepsilon^{2}$. In all scenarios the second moment $\rho$ is infinite, thus high \acrshortpl{ef} are misleading us to believe that importance sampling performs well when it does not.}
+        \caption{Empirical \acrshort{ef} for the setup of \Cref{ex:ess_failure} for varying sample sizes $N$ and $\varepsilon^{2}$ and $M=100$ replications. Here $\G = \mathcal N(0,1)$ and $\P = \frac{1}{2} \left( \mathcal N (0,1) + \mathcal N(0, \varepsilon^{-2}) \right)$. In all scenarios the second moment $\rho$ is infinite, thus high \acrshortpl{ef} are misleading us to believe that importance sampling performs well when it does not.}
         \label{fig:ess_failure}
     \end{figure}
 
 \end{example}
 
-As an alternative, we may want to assess whether importance sampling has converged through the empirical variance of $\hat \zeta_{N}$\footnote{As the following arguments depend on the sample size $N$, we mark this dependency by adding $N$ to the subscript of the estimator.}, i.e., 
+As an alternative, we may want to assess whether importance sampling has converged through the empirical variance of $\hat \zeta_{N}$,\footnote{As the following arguments depend on the sample size $N$, we mark this dependency by adding $N$ to the subscript of the estimator.} i.e., 
 $$
 \widehat\var \left( \hat\zeta_{N} \right) = \frac{1}{N}\left(\frac{1}{N} \sum_{i = 1}^N w_{i}^{2} f(X^{i})^{2} - \hat \zeta_{N}^{2}\right)
 $$
@@ -252,25 +271,27 @@ Indeed, the authors show that for any given threshold $\epsilon$ we may find an 
 
 \begin{theorem}[{\cite[Theorem 2.1]{Chatterjee2018Sample}}]
     \label{thm:variance_failure}
-    Given any $\epsilon > 0$, there exists $N \leq \epsilon^{-2} 2^{1 + \epsilon^{-3}}$ such that the following is true. Take any $\G$ and $\P$ as in \Cref{thm:chatterje2018Thm1}, and any $f: \mathcal X \to \R$ such that $ \lVert f \rVert_{L^{2}(\P)} \leq 1.$ Then 
+    Given any $\epsilon > 0$, there exists \todo{lower bound on $N$?} $N \leq \epsilon^{-2} 2^{1 + \epsilon^{-3}}$ such that the following is true. Take any $\G$ and $\P$ as in \Cref{thm:chatterje2018Thm1}, and any $f: \mathcal X \to \R$ such that $ \lVert f \rVert_{L^{2}(\P)} \leq 1.$ Then 
     $$
         \mathbb P \left( \widehat \var \left( \hat \zeta_{N} \right) < \epsilon\right) \geq 1 - 4 \epsilon.
     $$
 \end{theorem}
 
+\todo{make eps / sigma consistent in all examples}
 The problem here is that $N$ does not depend on $\G$ and $\P$, so we may choose $\G$ almost singular to $\P$. As an example, take $\P = \mathcal N(0, 1)$ and $\G = \mathcal N(0, \sigma^{2})$ for $\sigma^{2} > \frac{1}{2}$. The weights are then given by $$w(x) = \sigma \exp \left( - \frac{x^{2}}{2} \left( 1 - \frac{1}{\sigma^{2}} \right) \right),$$
 and for $X \sim \G$ the variance of $w(X)X$ is 
-$$
+\begin{align}
+    \label{eq:variance-wxx}
 \tau^{2} = \var \left( w(X)X \right) = \frac{\sigma^{4}}{\left( 2 \sigma^{2} - 1 \right)^{\frac{3}{2}}}
-$$
-which goes to $\infty$ as $\sigma^2$ does\footnote{see the accompanying Jupyter notebook for derivations in sympy}. Thus for a pre-specified $\epsilon > 0$, let $N$ be as in \Cref{thm:variance_failure} and choose $\sigma^{2}$ such that $\var \left( \hat\zeta_{N} \right) = \frac {\tau^{2}}N$ is larger than, say, $10\epsilon$. By the preceding theorem, we would, with large probability, observe a small empirical variance and thus declare $\hat\zeta_{N}$ to have converged, whereas, in reality, we would need a sample size that is $100$ times as large.
+\end{align}
+which goes to $\infty$ as $\sigma^2$ does, see the appendix for the calculations. Thus for a pre-specified $\epsilon > 0$, let $N$ be as in \Cref{thm:variance_failure} and choose $\sigma^{2}$ such that $\var \left( \hat\zeta_{N} \right) = \frac {\tau^{2}}N$ is larger than, say, $10\epsilon$. By the preceding theorem, we would, with large probability, observe a small empirical variance and thus declare $\hat\zeta_{N}$ to have converged, whereas, in reality, we would need a sample size that is $100$ times as large.
 
 Thus using the empirical variance as a threshold for convergence should be avoided, at least for importance sampling where the weights can be evaluated exactly. For self-normalized importance sampling, the authors do not provide such a theorem. As a remedy \citep{Chatterjee2018Sample} suggest the heuristic $q_{N} = \mathbb E Q_{N}$ where
 $$
-Q_{N} = \max_{1\leq i\leq N} W_{i}.
+Q_{N} = \max_{1\leq i\leq N} W_{i} \in [0, 1].
 $$
-\todoTH{more details}
-This judges whether importance sampling has collapsed to just a few particles and is itself amenable to Monte-Carlo integration, though this requires multiple runs of importance sampling and so may be prohibitively expensive in practice.
+This judges whether importance sampling has collapsed to just a few particles and is itself amenable to Monte-Carlo integration, by repeatedly sampling $N$ samples from $\G$ and calculating the weights. 
+As this requires multiple runs of importance sampling, it may, however, be prohibitively expensive in practice.
 
 In the following sections, we will predominantly take the position that we are interested in finding a good particle approximation $\hat\P_{N}$ of the form \Cref{eq:is-particle-approximation} over finding the optimal proposal $\G^{\ast}$ \Cref{prop:minimum_MSE_IS} and assume that the importance sampling weights can only be evaluated up to a constant. 
 This has several reasons: First of all, for most problems considered in this thesis $\P$ is usually a conditional distribution, e.g. $\P = \mathbb P^{X|Y=y}$ for states $X$ and observations $Y$ in the \acrshort{ssm} context. Should the appropriate densities exist, evaluating the weights amounts to calculating 
@@ -305,8 +326,8 @@ The main advantage of the \gls{la} is that it is usually fast to obtain and, for
 For the \glspl{ssm} we consider in this thesis, the numerical methods can be implemented using the Kalman filter and smoother \citep{Shephard1997Likelihood,Durbin1997Monte}, even in the degenerate case where $H$ is indefinite \citep{Jungbacker2007Monte}, see also \Cref{subsec:glssm-approach}.
 \todo{more theoretical background on LA?}
 
-However, as the \gls{la} is a local approximation, it may be an inappropriate description of the global behavior of the target, see \Cref{ex:la_failure} for a breakdown of \gls{la} and the simulation studies presented in \Cref{sec:simulation_studies}. 
-Additionally, even if \gls{la} works in principle, its \gls{ess} will usually degenerate quickly once the dimension increases whereas the \gls{cem} and \gls{eis} do so at a slower pace.
+However, as the \gls{la} is a local approximation, it may be an inappropriate description of the global behavior of the target, see \Cref{ex:la_failure} for a breakdown of \gls{la}, and the simulation studies presented in \Cref{sec:simulation_studies}. 
+Additionally, even if the \gls{la} works in principle, its \gls{ess} will usually degenerate quickly once the dimension increases whereas the \gls{cem} and \gls{eis} do so at a slower pace.
 
 \todo{include VM?}
 %\input{chapters/03_04_02_VM.tex}

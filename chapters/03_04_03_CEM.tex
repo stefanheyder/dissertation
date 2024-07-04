@@ -27,7 +27,7 @@ If $\P$ and $\G_{\psi}$ possess densities $p$ and $g_{\psi}$ w.r.t. some common 
     &= \argmax_{\psi \in \Psi} \P \left[\log g_{\psi}\right]
     \end{split} \label{eq:ce_argmax}.
 \end{align}
-Suppose now that $\psi \mapsto \log g_{\psi}(x)$ is (strictly) concave for $\P$-almost every $x \in \mathcal X$ and $\Psi$ is a convex subset of $\R^{k}$. Then $\psi \mapsto \P \left[\log g_{\psi}\right]$ is (strictly) concave as well. As a consequence, we may apply the usual results from convex optimization, i.e. every local maximum is a global one, the set of maximizers is convex and if $\psi \mapsto \log g_{\psi}(x)$ is strictly convex for $\P$-almost every $x$, there is at most one maximizer \todo{ref}.
+Suppose now that $\psi \mapsto \log g_{\psi}(x)$ is (strictly) concave for $\P$-almost every $x \in \mathcal X$ and $\Psi$ is a convex subset of $\R^{k}$. Then $\psi \mapsto \P \left[\log g_{\psi}\right]$ is (strictly) concave as well. As a consequence, we may apply the usual results from convex optimization, i.e. every local maximum is a global one and if $\psi \mapsto \log g_{\psi}(x)$ is strictly convex for $\P$-almost every $x$, there is at most one maximizer \citep[Theorem 3.4.2]{Bazaraa2006Nonlinear}.
 
 As we have seen in \Cref{lem:log-concavity}, the densities of exponential families are log-concave in the natural parameter, and as such they will be the ideal candidates for our investigations. 
 
@@ -61,7 +61,7 @@ An additional attractive property of the \gls{cem} for exponential families with
     \log g_{\psi}(x) = \log h(x) + \psi^{T} T(x) - \log Z(\psi),
     $$
     and convex parameter space $\Psi \subseteq \R^{k}$. 
-    Suppose $T, \log (h) \in L^{1}(\P)$.
+    Suppose $T, \log h \in L^{1}(\P)$.
 
     If there is a $\psi$ such that 
     $$
@@ -87,11 +87,11 @@ An additional attractive property of the \gls{cem} for exponential families with
     $$
     H_{\psi} f = - \cov_{\G_{\psi}} T,
     $$
-    which is negative-semi-definite. Thus $f$ is concave, and any local maximizer $\psi$ is a global maximizer. The gradient of $f$ is 
+    which is negative-semi-definite. Therefore $f$ is concave, and any local maximizer $\psi$ is a global maximizer. The gradient of $f$ is 
     $$
         \nabla_{\psi} f(\psi) = \P[T] - \G_{\psi} [T],
     $$
-    thus the optimal $\psi_{\text{CE}}$ solves
+    so the optimal $\psi_{\text{CE}}$ solves
     $$
     \P[T] = \G_{\pce}[T].
     $$
@@ -99,7 +99,7 @@ An additional attractive property of the \gls{cem} for exponential families with
 \end{proof}
 As a consequence, the \acrshort{cem} for natural exponential families reduces to matching the moments of the sufficient statistic of the target and proposal.
 In many cases, this system of equations can be solved analytically or by gradient descent algorithms.
-Let us discuss the assumptions and applicability of this proposition. Assuming that $T, \log h \in L^{1}(\P)$ is necessary for the target to be finite, so it cannot be dropped. The proof of uniqueness relies on $\cov_{\G_{\psi}} T$ being positive definite, to ensure that $\psi \mapsto \log Z(\psi)$ is strictly convex. This could also be achieved by requiring the exponential family to be minimal, see \citep[Theorem 1.13 (iv)]{Brown1986Fundamentals}. The existence of a $\psi$ such that $\P T = \G_{\psi} T$ is not restrictive for most commonly used distributions: for the (multivariate) normal, Poisson, negative binomial and binomial distribution there is always a unique solution, as the sufficient statistics consist of means and covariances. 
+Let us discuss the assumptions and applicability of this proposition. Assuming that $T, \log h \in L^{1}(\P)$ is necessary for the target to be finite, so it cannot be dropped. As $T$ and $log h$ typically consist of polynomial, rational or exponential functions, this is not too restrictive. The proof of uniqueness relies on $\cov_{\G_{\psi}} T$ being positive definite, to ensure that $\psi \mapsto \log Z(\psi)$ is strictly convex. This could also be achieved by requiring the exponential family to be minimal, see \citep[Theorem 1.13 (iv)]{Brown1986Fundamentals}. The existence of a $\psi$ such that $\P T = \G_{\psi} T$ is not restrictive for most commonly used distributions: for the (multivariate) normal, Poisson, negative binomial and binomial distribution there is always a unique solution, as the sufficient statistics consist of means and covariances. 
 
 While $\P T$ is usually not available, it is itself amenable to importance sampling. Given a proposal $\G$ we may estimate $\P T$ by $\hat\P_N T = \sum_{i = 1}^{N} W^{i} T(X^{i})$ for $X^{1}, \dots, X^{N} \iid \G$ and auto-normalized importance sampling weights $W^{i}$ and in turn, applying \Cref{prop:cem_exponential_families}, estimate $\psi_{\text{CE}}$ by $\hat \psi_{\text{CE}}$ solving
 $$
@@ -154,14 +154,14 @@ The following theorem of \citep{VanderVaart2000Asymptotic} will be useful in ana
 \begin{theorem}[asymptotic normality of $\hat \psi_{\text{CE}}$]
     \label{thm:ce-clt}
     %\todo{require unique solution?}
-    Let $\G_{\psi}$ form a natural exponential family with densities $g_{\psi}(x) = \frac{h(x)}{Z(\psi)} \exp \left( \psi^{T}T(x)\right) $ w.r.t. $\mu$. Let $\G, \P$ be two other probability measures such that $\G \ll \P$ and let $W = \frac{\d \P}{\d \G}$ be the normalized importance sampling weights. 
+    Let $\G_{\psi}$ form a natural exponential family with densities $g_{\psi}(x) = \frac{h(x)}{Z(\psi)} \exp \left( \psi^{T}T(x)\right) $ w.r.t. $\mu$. Let $\G, \P$ be two other probability measures such that $\G \ll \P$ and let $w = \frac{\d \P}{\d \G}$ be the normalized importance sampling weights. 
     Suppose further that 
     \begin{enumerate}[label={\bfseries(A{\arabic*})}]
         \item\label{it:exist-unique-psice} $\G_{\hpce} T = \hat\P_{N} T$ $\mu$-a.s. has a unique solution $\hpce$,
-        \item\label{it:zdot-ll} $\psi \mapsto \nabla_\psi \log Z(\psi)$ is locally Lipschitz around $\psi_{\text{CE}}$,
-        \item\label{it:w-t-wt-L2} $W,T$ and $WT$ possess finite second moments  w.r.t. $\G$,
-        \item\label{it:FI-psd} the Fisher information $I(\psi_{\text{CE}})$ is positive definite and equal to $-\ddot z(\pce)$, additionally $\psi \mapsto I(\psi)$ is continuous, and
-        \item\label{it:ce-regularity} the regularity conditions of \Cref{thm:ce-consistent} hold.
+        \item\label{it:ce-regularity} $\hpce$ consistently estimates $\pce$,
+        \item\label{it:zdot-ll} $\psi \mapsto \dot z(\psi) = \nabla_\psi \log Z(\psi)$ is locally Lipschitz around $\psi_{\text{CE}}$,
+        \item\label{it:w-t-wt-L2} $w,T,wT \in L^{2}(\G)$, and
+        \item\label{it:FI-psd} the Fisher information $I(\psi_{\text{CE}})$ is positive definite and equal to $-\ddot z(\pce)$, additionally $\psi \mapsto I(\psi)$ is continuous in a neighborhood of $\pce$.
     \end{enumerate}
 
     Then, as $N$ goes to $\infty$,
@@ -170,45 +170,57 @@ The following theorem of \citep{VanderVaart2000Asymptotic} will be useful in ana
     $$
     where 
     $$
-    V_{\text{CE}} = B_\ce M_\ce B_\ce,%I(\psi_{\text{CE}})^{-1}  \text{Cov}_{\G} \left( W (T - \G_{\pce}T) \right) I(\psi_{\text{CE}})^{-1},
+    V_{\text{CE}} = B_\ce M_\ce B_\ce,%I(\psi_{\text{CE}})^{-1}  \text{Cov}_{\G} \left( w (T - \G_{\pce}T) \right) I(\psi_{\text{CE}})^{-1},
     $$
     with 
     \begin{align*}
         B_{\ce} &= I(\pce)^{-1}, \\
-        M_{\ce} &= \cov_{\G} \left( W (T - \G_{\pce}T) \right).
+        M_{\ce} &= \cov_{\G} \left( w (T - \G_{\pce}T) \right).
     \end{align*}
-    Moreover $\G (W(T - \G_{\pce}T))) = 0$, so we may estimate $V_{\text{CE}}$ consistently by plug-in:
+    Moreover $\G (w(T - \G_{\pce}T)) = 0$, so we may estimate $V_{\text{CE}}$ consistently by plug-in:
     $$
     \hat V_{\text{CE}} = I(\hat\psi_{\text{CE}})^{-1}  \left(\sum_{i = 1}^N W^{2}_{i} \left(T(X^{i}) - \G_{\hpce}T \right)\left(T(X^{i}) - \G_{\hpce} T\right)^{T} \right)I(\hat\psi_{\text{CE}})^{-1}.
     $$
 \end{theorem}
 
 \begin{proof} We check that the conditions of the central limit theorem for Z-estimators (\Cref{thm:clt_z_est_vdv}) are fulfilled. This proof uses the notation established in \Cref{not:notation-clt}. Consider the estimating equations for $\pce$ 
-    $$x\mapsto f_\psi(x) = \nabla_{\psi} \left(w(x)\log g_{\psi}(x)\right) = w(x) T(x) - w(x) \dot z (\psi),$$ where $w(x)$ are the unnormalized importance sampling weights. 
-    By \ref{it:exist-unique-psice} $\hat \P_{N} f_{\hpce} = 0$ $\mu$-a.s., so it remains to show that $\hpce \to \pce$  in probability, which is implied by \Cref{thm:ce-consistent}.
+    $$x\mapsto f_\psi(x) = \nabla_{\psi} \left(\tilde w(x)\log g_{\psi}(x)\right) = \tilde w(x) T(x) - \tilde w(x) \dot z (\psi),$$ where $\tilde w(x)$ are the unnormalized importance sampling weights. 
+    Let $\hat\G_{N} = \frac{1}{N} \sum_{i = 1}^N \delta_{X^{i}}$ be the empirical measure. Then 
+    \begin{align*}
+    \hat \G_{N} f_{\hpce} = \frac{1}{N} \sum_{i = 1}^N \tilde w(X^{i}) \left( T(X^{i}) - \dot z (\hpce)\right) = \left(\frac{1}{N}\sum_{i=1}^N \tilde w(X^{i})\right) \hat \P_{N} \left[T - \dot z(\hpce)\right] = 0 && \text{a.s.},
+    \end{align*}
+    by \ref{it:exist-unique-psice}, as $W^{i} = \frac{\tilde w(X^{i})}{\sum_{i=1}^N \tilde w(X^{i})}$. 
     
-    As $$\left\lVert f_{\psi_1}(x) - f_{\psi_2}(x)\right\rVert = w(x) \left\lVert \dot z (\psi_1) - \dot z(\psi_2)\right\rVert$$ for all $\psi_{1}, \psi_{2}\in \Psi$,  $\G w < \infty $ and \ref{it:zdot-ll} imply the local Lipschitz condition \Cref{eq:clt-vdv-local-lipschitz} in \Cref{thm:clt_z_est_vdv}.
+    As $$\left\lVert f_{\psi_1}(x) - f_{\psi_2}(x)\right\rVert = \tilde w(x) \left\lVert \dot z (\psi_1) - \dot z(\psi_2)\right\rVert$$ for all $\psi_{1}, \psi_{2}\in \Psi$,  $\G \tilde w < \infty $ and \ref{it:zdot-ll} imply the local Lipschitz condition \Cref{eq:clt-vdv-local-lipschitz} in \Cref{thm:clt_z_est_vdv}.
     Furthermore, by \ref{it:w-t-wt-L2} it holds
-    %\todo{fix: no triangle equation (squared norm)}
     $$
-    \G \left\lVert f_\psi \right\rVert^2 \leq \G w^2 \left\lVert \dot z(\psi) \right\rVert ^2  + 2 \lVert \dot z(\psi) \rVert \G \lVert wT\rVert + \G \left\lVert wT\right\rVert^2 < \infty.
+    \G \left\lVert f_\psi \right\rVert^2 \leq \G \tilde w^2 \left\lVert \dot z(\psi) \right\rVert ^2  + 2 \lVert \dot z(\psi) \rVert \G \lVert \tilde wT\rVert + \G \left\lVert \tilde wT\right\rVert^2 < \infty.
     $$
 
-    Additionally $\psi \mapsto\G f_\psi = (\G w) \dot z (\psi) + \G wT$ is differentiable everywhere, with Jacobian $(\G w) \ddot z(\psi)$, where  $\ddot z(\psi) = \partial_\psi \dot z(\psi)$ is the Hessian of the cumulant generating function, which equals the negative Fisher information $-I(\pce)$ as $\G_{\psi}, \psi \in \Psi$ form a natural exponential family and the regularity conditions \ref{it:ce-regularity} allow differentiation under the integral.
-    Thus we see that 
+    Additionally $\psi \mapsto\G f_\psi = (\G \tilde w) \dot z (\psi) + \G \tilde wT$ is differentiable everywhere, as $\psi \mapsto \log Z(\psi)$ is the cumulant generating function of the base measure. Its Jacobian is $(\G \tilde w) \ddot z(\psi)$, where  $\ddot z(\psi) = \partial_\psi \dot z(\psi)$ is the Hessian of the cumulant generating function, which equals the negative Fisher information $-I(\pce)$ as $\G_{\psi}, \psi \in \Psi$ form a natural exponential family and the regularity conditions \ref{it:FI-psd} allow differentiation under the integral. Thus 
     $$
-    \G f_{\pce} = \P \left( \dot z(\pce) + T \right) = \dot z (\pce) + \P T = 0,
+        B_{\ce} = I(\pce)^{-1} = -\ddot z(\pce) = - \frac{1}{\G[\tilde w]} \partial_{\psi} \G [f_{\psi}]_{\vert \psi = \pce}.
     $$
-    by definition of $\pce$, so $$\text{Cov}_{\G} \left( w(T - \nabla_{\pce} \log Z (\pce)) \right) = \text{Cov}_{\G}(f_{\pce}) = \G f_{\pce}f_{\pce}^{T}.$$
-    As $W = \frac{w}{\G w}$
+    
+    By definition of $\pce$,
+    $$
+    \G \left[ f_{\pce} \right] = \G[\tilde w] \left(\P \left[ T + \dot z(\pce) \right]\right) = \G[\tilde w](\P [T] + \dot z (\pce)) = 0,
+    $$
+    so 
+    \begin{align*}
+        M_{\ce} &= \text{Cov}_{\G} \left( w (T - \dot z (\pce)) \right) \\
+        &= (\G \tilde w)^{2}\text{Cov}_{\G} \left( \tilde w(T - \dot z (\pce)) \right) \\
+        &= (\G \tilde w)^{2}\text{Cov}_{\G}(f_{\pce}) = (\G \tilde w)^{2}\G [f_{\pce}f_{\pce}^{T}].
+    \end{align*}
+
     By \Cref{eq:clt-vdv} the asymptotic covariance matrix is 
     $$
-    V_{\ce} = B_{\ce}M_{\ce}B_{\ce}
+    V_{\ce} = \partial_{\psi}\G [f_{\psi}]_{\vert \psi = \pce} \G \left[f_{\pce}f_{\pce}^{T}\right] \partial_{\psi}\G [f_{\psi}]_{\vert \psi = \pce}= B_{\ce}M_{\ce}B_{\ce}
     $$
     which shows the asymptotic normality. 
 
-    Estimating $B_{\ce}$ by $\hat B_{\ce}= I(\hpce)$ and $$M_{\ce} = \G W^{2} (T - \G_{\pce}T)(T - \G_{\pce}T)^{T} = \P W (T - \G_{\pce})(T - \G_{\pce})^T$$ by $$\hat M_{\ce} = \hat\P_{N} W \left( T - \G_{\hpce} T \right)\left( T - \G_{\hpce} T \right)^{T}$$
-    yields the stated plug-in estimator. 
+    Estimating $B_{\ce}$ by $\hat B_{\ce}= I(\hpce)^{-1}$ and $$M_{\ce} = \G W^{2} (T - \G_{\pce}T)(T - \G_{\pce}T)^{T} = \P W (T - \G_{\pce})(T - \G_{\pce})^T$$ by $$\hat M_{\ce} = \hat\P_{N} W \left( T - \G_{\hpce} T \right)\left( T - \G_{\hpce} T \right)^{T}$$
+    yields the stated plug-in estimator. \todo{something is fishy here}
     The promised consistency follows from \ref{it:w-t-wt-L2} and \ref{it:FI-psd}.
 \end{proof}
 

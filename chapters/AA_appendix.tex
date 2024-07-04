@@ -1,3 +1,15 @@
 \chapter{Implementation in Python}
 
-\chapter{Proofs (?)}
+\chapter{Additional calculations}
+
+\section*{\Cref{eq:variance-wxx}}
+To show \Cref{eq:variance-wxx} we calculate the second moment of $w(X)X$,
+\begin{align*}
+    \mathbb E (w(X)X)^{2} &= \int w(x)^{2} x^{2} g(x) \d x \\
+    &= \int \sigma^{2} \exp \left( - x^{2} \left( 1 - \frac{1}{\sigma^{2}} \right)\right)\, x^{2}\, \frac{1}{\sqrt{2\pi\sigma^{2}}} \exp \left( -\frac{x^{2}}{2\sigma^{2}} \right)  \d x \\
+    &= \int \sigma x^{2} \frac{1}{\sqrt{2\pi}}\exp \left( - \frac{x^{2}}{2} \left( 2 - \frac{2}{\sigma^{2}} + \frac{1}{\sigma^{2}} \right) \right)\d x \\
+    &= \int \sigma x^{2} \frac{1}{\sqrt{2\pi}}\exp \left( - \frac{x^{2}}{2} \frac{2\sigma^{2} - 1}{\sigma^{2}} \right)\d x \\
+    &= \tau \sigma \int x^{2} \frac{1}{\sqrt{2\pi\tau^{2}}} \exp \left( - \frac{x^{2}}{2\tau^{2}}\right)\d x \\
+    &= \tau^{3} \sigma = \frac{\sigma^{4}}{(2\sigma^{2} - 1)^{\frac{3}{2}}}
+\end{align*}
+where $\tau^{2} = \frac{\sigma^{2}}{2\sigma^{2} - 1}$.
