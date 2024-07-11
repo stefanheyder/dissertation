@@ -99,7 +99,7 @@ An additional attractive property of the \gls{cem} for exponential families with
 \end{proof}
 As a consequence, the \acrshort{cem} for natural exponential families reduces to matching the moments of the sufficient statistic of the target and proposal.
 In many cases, this system of equations can be solved analytically or by gradient descent algorithms.
-Let us discuss the assumptions and applicability of this proposition. Assuming that $T, \log h \in L^{1}(\P)$ is necessary for the target to be finite, so it cannot be dropped. As $T$ and $log h$ typically consist of polynomial, rational or exponential functions, this is not too restrictive. The proof of uniqueness relies on $\cov_{\G_{\psi}} T$ being positive definite, to ensure that $\psi \mapsto \log Z(\psi)$ is strictly convex. This could also be achieved by requiring the exponential family to be minimal, see \citep[Theorem 1.13 (iv)]{Brown1986Fundamentals}. The existence of a $\psi$ such that $\P T = \G_{\psi} T$ is not restrictive for most commonly used distributions: for the (multivariate) normal, Poisson, negative binomial and binomial distribution there is always a unique solution, as the sufficient statistics consist of means and covariances. 
+Let us discuss the assumptions and applicability of this proposition. Assuming that $T, \log h \in L^{1}(\P)$ is necessary for the target to be finite, so it cannot be dropped. As $T$ and $\log h$ typically consist of polynomial, rational or exponential functions, this is not too restrictive. The proof of uniqueness relies on $\cov_{\G_{\psi}} T$ being positive definite, to ensure that $\psi \mapsto \log Z(\psi)$ is strictly convex. This could also be achieved by requiring the exponential family to be minimal, see \citep[Theorem 1.13 (iv)]{Brown1986Fundamentals}. The existence of a $\psi$ such that $\P T = \G_{\psi} T$ is not restrictive for most commonly used distributions: for the (multivariate) normal, Poisson, negative binomial and binomial distribution there is always a unique solution, as the sufficient statistics consist of means and covariances. 
 
 While $\P T$ is usually not available, it is itself amenable to importance sampling. Given a proposal $\G$ we may estimate $\P T$ by $\hat\P_N T = \sum_{i = 1}^{N} W^{i} T(X^{i})$ for $X^{1}, \dots, X^{N} \iid \G$ and auto-normalized importance sampling weights $W^{i}$ and in turn, applying \Cref{prop:cem_exponential_families}, estimate $\psi_{\text{CE}}$ by $\hat \psi_{\text{CE}}$ solving
 $$
@@ -107,7 +107,120 @@ $$
 $$
 As $T, \log h \in L^{1}(\hat \P_{N})$, the only conditions we have to check to apply the above proposition is that this equation has a unique solution and that $\Psi$ is convex. 
 
-In what follows, we will derive novel results on the performance of this estimator. In particular, we will investigate under which conditions $\hpce$ is consistent and asymptotically normal. While we restrict ourselves here to the setting of $k$-dimensional natural exponential families, these results should generalize to other classes of distributions as well. The advantage that this class of families has is that due to the structure of the densities, they provide straightforward (regularity) conditions for the asymptotic results to hold.
+In what follows, we will derive novel results on the performance of this estimator. In particular, we will investigate under which conditions $\hpce$ is consistent and asymptotically normal. While we restrict ourselves here to the setting of $k$-dimensional natural exponential families, these results should generalize to other classes of distributions as well. The advantage that this class of families has is that due to the structure of the densities, they provide straightforward (regularity) conditions for the asymptotic results to hold. As the target functions are concave, these conditions are rather liberal. We start with proving the consistency of $\hpce$. 
+
+\begin{proposition}[consistency of $\hpce$]
+    \label{prop:cem-consistent}
+    Adopt the same assumptions as in \Cref{prop:cem_exponential_families}. Furthermore, let $\G$ be a proposal distribution, assume that $\pce$ is the unique maximizer of \Cref{eq:ce_argmax} and that $\pce$ is in the interior of the convex parameter space $\Psi$ and there exists a neighborhood of $\pce$ that is contained in $\Psi$. Then $\hpce$ is a strongly consistent estimator of $\pce$.
+\end{proposition}
+
+The proof is based on the following theorem of \citeauthor{Haberman1989Concavity}.
+
+\begin{theorem}[{\citep[Theorem 5.1]{Haberman1989Concavity}}\footnote{Note that while the actual theorem assumes conditions 1,2,5 and 6 in the paper, C3 as stated here implies conditions 5 and 6, see also the discussion in Sections 2.3 and 2.4 in \citep{Haberman1989Concavity}.}]
+    \label{thm:haberman-consistent}
+    Let $\Psi \subseteq \R^{k}$, $\mathcal X$ a separable, complete metric space and $b: \mathcal X \times \R^{k} \to [- \infty, \infty )$ such that for every $x \in \mathcal X$ the function $$b(x, \cdot): \R^{k} \to [-\infty, \infty), \psi \mapsto b(x, \psi)$$ is concave. Let $\P$ be a probability measure on $\mathcal X$ such that $\P [b(\cdot, \psi)] < \infty$  for all $\psi \in \R^{k}$. Assume that $\psi^{\ast} \in \Psi$ is the unique maximizer of $$b_{\Psi}: \Psi \to [-\infty, \infty), \psi \mapsto \P [b(\cdot,\psi)].$$ For $N\in\N$, let $X^{1}, \dots, X^{N}  \iid \P$ and $\hat \P_{N} = \frac{1}{N} \sum_{i = 1}^N \delta_{X^{i}}$ their empirical distribution. Let $\left(\hat\psi_{N}\right)_{N \in \N}$ be a sequence M-estimators, i.e. a sequence of maximizers of
+    $$
+    \hat b_{\Psi}: \Psi \to [-\infty, \infty), \psi \mapsto \hat \P_{N} [b(\cdot, \psi)].
+    $$
+    
+    Assume that the following conditions hold:
+    \begin{enumerate}[label=(C\arabic*),ref=(C\arabic*)]
+        \item\label{it:C1} For some closed set $N$, $\psi^{\ast}$ is in the interior of $N$ and $\Psi \cap N$ is closed. 
+        \item\label{it:C2} $\psi^{\ast}$ is the unique maximizer of $$b_{\operatorname{cl} (\Psi)}: \operatorname{cl} (\Psi) \to [-\infty, \infty), \psi \mapsto \P [b(\cdot, \psi)],$$ where $ \operatorname{cl}$ denotes the closure of $\Psi$ in $\R^{k}$.
+        \item\label{it:C3} $\Psi$ is convex and $b_{\Psi}$ is finite on a nonempty open set.
+    \end{enumerate}
+
+    Then $$\hat \psi_{N} \stackrel{N \to \infty}\to \psi^{\ast}$$ $\P$-almost surely, so $\hat\psi_{N}$ is strongly consistent.
+\end{theorem}
+
+The assumptions of this theorem ensure that the unique optimum is in the interior of $\Psi$ and \glqq{}well-separated\grqq{} from its boundary, so concavity of $b(x, \psi)$ together with the law of large numbers yield uniform convergence of $\hat P_{N} [b(\cdot, \psi)] \to \P [b(\cdot, \psi)]$ on compacta and thus also for $\hat\psi_{N}$.
+
+To apply this theorem to our setting, let us begin by incorporating importance sampling. 
+
+\begin{lemma}
+    \label{lem:is-consistency}
+    Assume that the conditions of \Cref{thm:haberman-consistent} are fulfilled and let $\G \gg \P$ be another probability measure with Radon-Nikdoym derivative $w(x) = \rnd{\P}{\G}(x)$. Let $X^{1}, \dots, X^{N} \iid \G$ be samples and consider the particle approximations 
+    \begin{align*}
+        \tilde \P_{N} &= \frac{1}{N}\sum_{i = 1}^N w(X^{i})\delta_{X^{i}},  \\ 
+        \hat \P_{N} &= \sum_{i = 1}^{N} W^{i} \delta_{X^{i}},
+    \end{align*}
+    and suppose there exist sequences of M-estimators 
+    \begin{align*}
+    \tilde \psi_{N} &\in \argmax_{\psi \in \Psi} \tilde \P _{N} \left[ b(\cdot, \psi) \right],\\
+    \hat \psi_{N} &\in \argmax_{\psi \in \Psi} \hat \P _{N} \left[ b(\cdot, \psi) \right].
+    \end{align*}
+
+    Then both $\tilde\psi_{N}$ and $\hat\psi_{N}$ are strongly consistent estimators of $\psi^{\ast}$.
+\end{lemma}
+\begin{proof}
+    Define a new objective function $\tilde b : \mathcal X \times \R^{k} \to [-\infty, \infty)$ by 
+    $$
+    \tilde b(x, \psi) = w(x) b(x, \psi).
+    $$
+    Then $\G \left[ \tilde b(\cdot, \psi) \right] = \P \left[ b(\cdot, \psi) \right]$ for all $\psi\in\Psi$, and so $\psi^{\ast}$ is the unique global maximum of $\psi \mapsto \G \left[ \tilde b(\cdot, \psi) \right]$. 
+    As $\G [\tilde b(\cdot, \psi)] = \P [b(\cdot, \psi)] < \infty$ and for fixed $x$ $\tilde b(x, \cdot) = w(x)b(x,\cdot)$ is concave, we may directly apply \Cref{thm:haberman-consistent} to $\tilde\psi_{N}$, showing its strong consistency.
+
+    For $\hat\psi_{N}$, notice that for a fixed sample $X^{1}, \dots, X^{N} \iid \G$ and any function $f: \mathcal X \to [-\infty, \infty)$ we have, a.s., 
+    $$
+        \hat \P _{N} [f] = \sum_{i = 1}^{N} W^{i} f(X^{i}) = \frac{\G [\tilde w]}{\sum_{i = 1}^N \tilde w(X^{i})} \sum_{i = 1}^{N} \frac{\tilde w_{i}}{\G[\tilde w]} f(X^{i}) = \frac{\G [\tilde w]}{\sum_{i = 1}^{N} \tilde w(X^{i})} \tilde \P _{N} [f] \propto \tilde \P_{N} [f],
+    $$
+    where $\tilde w$ are the unnormalized weights, i.e. $ \frac{\tilde w(x)}{\G [\tilde w]} = w(x), x \in\mathcal X$.
+    Thus $\hat \psi_{N}$ maximizes $\tilde \P_{N} [b(\cdot, \psi)]$ as well, and the result follows from the consistency of $\tilde \psi_{N}$.
+\end{proof}
+
+\begin{proof}[Proof (\Cref{prop:cem-consistent})]
+    We show that the assumptions of \Cref{thm:haberman-consistent} are fulfilled. Let
+    \begin{align*}
+        b: \R^{p}\times \R^{k} \to [-\infty, \infty) && b(x, \psi) = \begin{cases}
+            \log g_{\psi}(x) & \psi \in \Psi, \\
+            - \infty & \text{else.}
+        \end{cases} 
+    \end{align*}
+    As $\Psi$ is convex and $g_{\psi}(x)$ is log-concave (see \Cref{lem:log-concavity}), $b(x, \cdot)$ is concave. Let $X^{1}, \dots, X^{N} \iid \P$ and let $\tilde{\P}_{N} = \frac{1}{N} \sum_{i = 1}^N \delta_{X^{i}}$. For $\psi \in \Psi$ we have
+    $$
+    \P [b(\cdot, \psi)] = \P [\log h] + \psi^{T}\P[T] - \log Z(\psi) < \infty,
+    $$
+    as $\log h, T \in L^{1}(\P)$, while for $\psi \notin \Psi$ this integral is $-\infty$. Thus we only have to check that \ref{it:C1}-\ref{it:C3} are fulfilled. 
+    
+    For condition \ref{it:C1} note that, as $\pce$ is in the interior of $\Psi$, we may choose $\varepsilon > 0$ such that the closed $\varepsilon$ ball around $\pce$, $\bar B_{\varepsilon} (\pce)$ is completely contained in $\Psi$, so letting $N = \bar B_{\varepsilon} (\pce)$ implies the condition. condition \ref{it:C2} is fulfilled by the definition of $b$ and condition \ref{it:C3} is fulfilled by considering the neighborhood of $\pce$ that is assumed to be contained in $\Psi$. Finally, by \Cref{lem:is-consistency}, $\hpce$ is strongly consistent.
+\end{proof}
+
+The assumptions on $\pce$ and $\Psi$ in \Cref{prop:cem-consistent} could be somewhat looser, as the concavity of the target function is a rather strong property. In natural exponential families, 
+$$
+\Psi = \left\{ \psi \in \R^{k} \,:\, Z(\psi) < \infty \right\}
+$$
+is always convex so this is not a strong restriction. In regular exponential families, $\Psi$ is open and so only uniqueness of $\pce$ is required. \todo{pce is moment based, does that not make it unique?}. 
+
+\todo{check conditions under which cumulant generating function is diff. + equal to covariance}
+Not only is $\log g_{\psi}$ concave, but it also has second-order derivatives. Indeed, its Hessian is given by the inverse of the Fisher-information matrix $I(\psi)^{-1}$:
+$$
+H_{\psi} \log g_{\psi} = - H_{\psi} \log Z (\psi) = - \cov_{\G_{\psi}} \left(T\right) = -I(\psi)^{-1}.
+$$
+These rather strong properties enable us to derive a central limit theorem for the \acrshort{cem} with natural exponential family proposals under quite liberal conditions.
+Let us start again with a general version of a central limit theorem for M-estimators based on concave objective functions. 
+\begin{theorem}[{\citep[Theorem 6.1]{Haberman1989Concavity}}\footnote{Note, again, that the original theorem is based on conditions 7,8,9 in the paper. However, under \ref{it:C7}, condition \ref{it:C10} implies conditions 8 and 9 in the paper. See the discussion in Section 3.1 in \citep{Haberman1989Concavity}.}]
+    Consider the same setting as in \Cref{thm:haberman-consistent}. 
+
+    Assume further that $\psi^{\ast}$ lies in the interior of $\Psi$ and that the following conditions hold: 
+    \begin{enumerate}[label=(C\arabic*),ref=(C\arabic*)]
+        \setcounter{enumi}{6}
+        \item\label{it:C7} The Hessian $H_{\psi} \P \left[ b(\cdot, \psi) \right]$ exists and is non-singular.
+        \setcounter{enumi}{9}
+        \item\label{it:C10} For $X\sim \P$ and some neighborhood $N$ of $\psi^{\ast}$ 
+        \begin{align*}
+            \sigma^{2}(\psi, \xi) = \mathbb E \left( b'(X, \psi, \xi)  \right) < \infty && \psi \in N, \xi \in \R^{k},
+        \end{align*}
+        where $b'(x, \psi, \xi) = \lim_{a \downarrow} a^{-1} \left( b(x, \psi + a\xi) - b(x, \psi)\right)$ is the directional derivative. Note that if $b$ is differentiable at $x$, $b'(x, \psi, \xi) = \xi^{T}\nabla_{\psi} b(x, \psi)$.
+    \end{enumerate}
+    
+    Let $M = \cov \left( \nabla_{\psi} b(X, m) \right)$ and let $B = - \left(H_{\psi} \P \left[ b(\cdot, \psi) \right]\right)^{-1}$. Then 
+    \begin{equation}
+        \sqrt{n} \left( \hat\psi_{N} - \psi \right) \convD \Normal (0, BMB).
+    \end{equation}
+    
+\end{theorem}
+
+
 
 % proof: appeal to vdV, pd ensures that M(\theta) is convex, so global maximum unique and well separated
 $\hat\psi_{\text{CE}}$ is a Z-estimator, i.e. an estimator that arises from solving a random system of equations, and we can analyze its asymptotic behavior using standard results from the theory of Z-estimators. 
