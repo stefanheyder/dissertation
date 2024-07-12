@@ -61,6 +61,16 @@ Exponential families have the attractive property that they are log-concave in t
     $$\theta \mapsto \log Z(\theta) = \log \int \exp \left( \theta^{T}y \right) \mathrm d \mu(y)$$ is the cumulant generating function of the base measure $\mu$, which is convex \citep[p. 144f]{Billingsley1995Probabilitya}.
 \end{proof}
 
+Additionally, the moment generating function $\theta \mapsto Z(\theta)$ is smooth on the interior of $\Theta$ and allows to switch the order of integration and differentiation.
+\begin{theorem}[{\citep[Theorem 2.2]{Brown1986Fundamentals}}]
+    \label{thm:logZsmooth}
+    Let $\theta \in \operatorname{int} \Theta$ be an interior point. Then the moment generating function $Z: \Psi \to \R$ is infinitely often differentiable with derivatives 
+    $$
+        \frac{\partial^{\lvert \alpha \rvert}}{\partial^{\alpha}\theta} Z(\theta) = \int y^{\alpha} \exp \left( \theta^{T} y \right) \d \mu(y)
+    $$
+    for any multi-index $\alpha \in \N^{k}$.
+\end{theorem}
+
 \begin{example}[Poisson \& negative binomial distribution]
     \label{ex:pois_negbinom}
     Both the family of Poisson distributions, parameterized by rate $\lambda$ and the negative binomial distribution, parameterized by success probability $p$ with fixed overdispersion $r$ form an exponential family.
