@@ -62,13 +62,24 @@ Exponential families have the attractive property that they are log-concave in t
 \end{proof}
 
 Additionally, the moment generating function $\theta \mapsto Z(\theta)$ is smooth on the interior of $\Theta$ and allows to switch the order of integration and differentiation.
-\begin{theorem}[{\citep[Theorem 2.2]{Brown1986Fundamentals}}]
+\begin{theorem}[{\citep[Theorem 2.2, Corollary 2.3]{Brown1986Fundamentals}}]
     \label{thm:logZsmooth}
     Let $\theta \in \operatorname{int} \Theta$ be an interior point. Then the moment generating function $Z: \Psi \to \R$ is infinitely often differentiable with derivatives 
     $$
         \frac{\partial^{\lvert \alpha \rvert}}{\partial^{\alpha}\theta} Z(\theta) = \int y^{\alpha} \exp \left( \theta^{T} y \right) \d \mu(y)
     $$
     for any multi-index $\alpha \in \N^{k}$.
+
+    Additionally, the gradient of $\log Z$, $\nabla_{\theta} \log Z(\theta)$ is given by
+    $$
+        \nabla_{\theta} \log Z(\theta) = \E T(X),
+    $$
+    and the Hessian of $\log Z$, $H_{\theta} \log Z(\theta)$ by
+    $$
+        H_{\theta} \log Z(\theta) = \cov (T(X)),
+    $$
+    where $X \sim \mathcal P_{\theta}$.
+    
 \end{theorem}
 
 \begin{example}[Poisson \& negative binomial distribution]
