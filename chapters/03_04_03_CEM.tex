@@ -3,11 +3,11 @@
 \label{subsec:cem}
 Recall from our discussion surrounding \Cref{thm:chatterje2018Thm1} that for importance sampling to be effective, a small \acrshort{kld} between the target $\P$ and the proposal $\G$ implies good performance for importance sampling. As the \acrshort{kld} depends on global properties of $\P$, i.e. the Radon-Nikodym derivative $\rnd{\P}{\G}$, minimizing it leads to a global approximation of $\P$, improving on the local-approximation provided by the \acrshort{la}.
 
-The \gls{cem} \citep{Rubinstein1999CrossEntropy,Rubinstein2004CrossEntropy} implements this idea and selects from a parametric family $ \left( \G_{\psi} \right)_{\psi \in \Psi}$ of proposals the one that minimizes the \gls{kld} to the target. Here $\Psi$ is usually a subset of $\R^{k}$, which may be open, closed or neither. Thus, the \acrshort{cem} aims at finding
+The \gls{cem} \citep{Rubinstein1999CrossEntropy,Rubinstein2004CrossEntropy} implements this idea and selects from a parametric family $ \left( \G_{\psi} \right)_{\psi \in \Psi}$ of proposals the one that minimizes the \gls{kld} to the target. Here $\Psi$ is usually a subset of $\R^{k}$, which may be open, closed or neither. Thus, the \acrshort{cem} aims at solving the following optimization problem
 $$
-    \pce \in \argmin_{\psi \in \Psi} \Dkl{\P}{\G_{\psi}},
+    \min_{\psi \in \Psi} \Dkl{\P}{\G_{\psi}},
 $$
-should the minimum exist. The existence and uniqueness of $\psi_{\text{CE}}$ will depend heavily on the choice of parametric family $(\G_{\psi})_{\psi \in \Psi}$ and $\P$. 
+for the optimal $\pce$, should the minimum exist. The existence and uniqueness of $\pce$ will depend heavily on the choice of parametric family $(\G_{\psi})_{\psi \in \Psi}$ and $\P$. 
 
 We will assume the existence of a common dominating measure $\mu$ for both $\P$ and all $\G_{\psi}$, $\psi \in \Psi$ with corresponding densities $p$ and $g_{\psi}$, $\psi \in \Psi$. The importance sampling weights are then given by 
 $$
@@ -144,7 +144,7 @@ To apply the \acrshort{cem} in practice, one usually iterates the sampling and e
 
 \todo{literature review CEM}
 The \gls{cem} is routinely used for estimating failure probabilities for rare events \citep{Homem-de-Mello2007Study} and has been applied to Bayesian posterior inference \citep{Engel2023Bayesian,Ehre2023Certified} and optimal control problems \citep{Kappen2016Adaptive,Zhang2014Applications}.
-\todo{more lit. review CEM}
+\todo{more lit. review CEM, add Chan Marginal Likelihood estimation}
 % curse of dimensionality
 \glsreset{cod}
 Importance sampling is well known to exhibit the \gls{cod} \cite{Bengtsson2008Curseofdimensionality}, i.e. the phenomenon that in many problems, unless $N$ grows exponentially with the dimension of $\mathcal X$, the weights collapse to a single particle, i.e. $W^{(N)} \to 1$ as the dimension of $\mathcal X$ goes to $\infty$. As the \acrshort{cem} employs importance sampling to obtain $\hpce$, it too is affected by this phenomenon, see also \Cref{sec:simulation_studies}. 
@@ -152,6 +152,7 @@ Importance sampling is well known to exhibit the \gls{cod} \cite{Bengtsson2008Cu
 The screening method \cite{Rubinstein2009How} deals with the \acrshort{cod} by keeping components of $\psi^{l}$ that vary too much from iteration to iteration fixed, in essence reducing the dimension of $\Psi$. 
 Alternatively, the improved cross-entropy method \citep{Chan2012Improved} suggests generating approximately independent samples from $\P$ by, e.g., \acrshort{mcmc}-methods, and replacing the importance sampling version of $\hat\P_{N}$  in \Cref{eq:ee_hpce} by the actual empirical distribution.
 Still, in high dimensions both of these approaches may be difficult to implement: the screening method may not move far from the initial proposal and \acrshort{mcmc}-methods are expensive in high dimensions.
+
 
 As stated in \citep{Chan2012Improved} there may be two reasons as to why the \acrshort{cem} fails: either the parametric family is not rich enough to give a good approximation to $\P$, i.e. $ \Dkl{\P}{\G_{\pce}}$ is still large, or the estimate $\hpce$ fails to be close to $\pce$. As our simulation studies \Cref{sec:simulation_studies} suggest, the reason for the degeneracy seems to be the latter. It will thus be beneficial to investigate the asymptotic behavior of $\hpce$. 
 
