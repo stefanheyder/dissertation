@@ -20,10 +20,10 @@ $$
 $$
 where $\psi\in \Psi$ is a minimizer of the left-hand side if, and only if, $(\psi, \lambda) \in \Psi \times \R$ with $\lambda = \P \left[ \log \tilde w_{\psi} \right]$ is a minimizer of the right-hand side. 
 
-Similar to the \gls{cem} we restrict our in-depth analysis to natural exponential family proposals where $$\log g_{\psi}(x) = \log h(x) + \psi^{T}T(x) - \log Z(\psi).$$ In this case the optimization problem is reduced to
+Similar to the \gls{cem} we restrict our in-depth analysis to natural exponential family proposals where $$\log g_{\psi}(x) = \psi^{T}T(x) - \log Z(\psi).$$ In this case the optimization problem is reduced to
 \begin{align}
     \label{eq:eis_exponential_families}
-    \min_{\psi \in \Psi, \lambda \in \R} \P \left[ \log p - \log h - \psi^{T}T - \lambda \right]^{2},
+    \min_{\psi \in \Psi, \lambda \in \R} \P \left[ \log p - \psi^{T}T - \lambda \right]^{2},
 \end{align}
 a weighted linear least squares problem. As we consider unnormalized weights $\tilde w$, we are additionally able to get rid of the potentially non-linear term $\log Z(\psi)$.
 Notice too that this is a convex objective function in $\psi$ which, similar to the \acrshort{cem}, will be very useful to derive asymptotics later on. For now, we begin with studying the existence and uniqueness of $\peis$ similar to \Cref{prop:cem_exponential_families}.
@@ -32,27 +32,27 @@ Notice too that this is a convex objective function in $\psi$ which, similar to 
     \label{prop:eis_exponential_families}
     Let $\left( \G_{\psi} \right)_{\psi \in \Psi}$ form a k-dimensional natural exponential family with log-densities 
     $$
-        \log g_{\psi}(x) = \log h(x) + \psi^{T} T(x) - \log Z(\psi)
+        \log g_{\psi}(x) = \psi^{T} T(x) - \log Z(\psi)
     $$
-    for $\Psi \subseteq \R^{k}$. Suppose that $\log p, \log h, T \in L^{2}(\P)$. 
+    for $\Psi \subseteq \R^{k}$. Suppose that $\log p, T \in L^{2}(\P)$. 
 
     If there is a $\peis \in \Psi$ with
     \begin{align}
         \label{eq:peis-analytical}
-        \cov_{\P} \left( T \right)\peis = \cov_{\P} \left(T, \log p - \log h \right)
+        \cov_{\P} \left( T \right)\peis = \cov_{\P} \left(T, \log p \right)
     \end{align}
-    it is a global minimizer of \Cref{eq:eis_optim}. If
+    it is a global minimizer of \Cref{eq:eis_optim}. If $\cov_{\P} \left( T \right)$ is non-singular,
     $$
-    \cov_{\P} \left( T \right)
+    \peis = \cov_{\P} (T) ^{-1} \cov _{\P} (T, \log p )
     $$
-    is non-singular, $\peis = \cov_{\P} (T) ^{-1} \cov _{\P} (T, \log p - \log h)$ is the unique global minimizer.
+    is the unique global minimizer.
 \end{lemma}
 
 \begin{proof}
-    Under the proposed conditions, we may consider \Cref{eq:eis_exponential_families} instead, where the moment conditions on $\log p, \log h$ and $T$ ensure that the problem is well-posed, i.e. the target is finite for all $\psi \in \Psi$. 
-    Thus the optimal $ \left( \peis, \lambda_{\eis} \right)$ are given by the \gls{blup} of $\log p - \log h$ by the sufficient statistic $T$ under $\P$ for $\peis$ and $\P \left[ \log \tilde w_{\peis} \right]$ for $\lambda_{\eis}$. The \acrshort{blup} is given by any solution of
+    Under the proposed conditions, we may consider \Cref{eq:eis_exponential_families} instead, where the moment conditions on $\log p $ and $T$ ensure that the problem is well-posed, i.e. the target is finite for all $\psi \in \Psi$. 
+    Thus the optimal $ \left( \peis, \lambda_{\eis} \right)$ are given by the \gls{blup} of $\log p $ by the sufficient statistic $T$ under $\P$ for $\peis$ and $\P \left[ \log \tilde w_{\peis} \right]$ for $\lambda_{\eis}$. The \acrshort{blup} is given by any solution of
     $$
-        \cov_{\P} (T) \peis = \cov_{\P} (T, \log p - \log h),
+        \cov_{\P} (T) \peis = \cov_{\P} (T, \log p),
     $$
     \todo{cite something}
     i.e. $\peis$ as stated in the lemma. Furthermore, if $\cov_{\P} (T)$ is non-singular, the solution to this equation is unique.
@@ -76,17 +76,17 @@ where the random design matrix $\mathbf X$\footnote{if $\mathbf X\mathbf W \math
     1 & T(X^{N})^{T} \\
 \end{pmatrix}\\
 \intertext{and}
-\mathbf W &= \text{diag} \left( W_{1}, \dots, W_{N} \right),
+\mathbf W &= \text{diag} \left( W^{1}, \dots, W^{N} \right),
 \end{align*}
 and the observations are 
 \begin{align*}
-y = \left( \log p(X^{1}) - \log h(X^{1}), \dots, \log p(X^{N}) - \log h(X^{N}) \right)^{T} \in \R^{N}.
+y = \left( \log p(X^{1}), \dots, \log p(X^{N}) \right)^{T} \in \R^{N}.
 \end{align*}
 
 Alternatively, replacing $\P$ by $\hat\P_{N}$ in \Cref{eq:peis-analytical}, we obtain the equivalent formulation
 \begin{align}
     \label{eq:hpeis-cov}
-    \hpeis = \cov_{\hat\P_{N}} (T)^{-1} \cov_{\hat \P_{N}} \left( T, \log p - \log h \right),
+    \hpeis = \cov_{\hat\P_{N}} (T)^{-1} \cov_{\hat \P_{N}} \left( T, \log p \right),
 \end{align}
 as long as $\cov_{\hat \P_{N}} T$ is non-singular.
 
@@ -101,116 +101,132 @@ An attractive feature of \gls{eis} is that if the target $\P$ is a member of the
 \end{proposition}
 
 \begin{proof}
-   As $\P$ stems from the same exponential family as $\G_{\psi}$, the pseudo-observations are $\log p - \log h = \psi_{\P}^T T - \log Z(\psi_{\P})$. Thus $\cov_{\hat \P_{N}} \left( T, \log p - \log h \right) = \cov_{\hat \P_{N}} \left( T \right)\psi_{\P}$. 
+   As $\P$ stems from the same exponential family as $\G_{\psi}$, the pseudo-observations are $$\log p  = \psi_{\P}^T T - \log Z(\psi_{\P}).$$ Thus $\cov_{\hat \P_{N}} \left( T, \log p  \right) = \cov_{\hat \P_{N}} \left( T \right)\psi_{\P}$. 
    If we can show that $\cov_{\hat\P_{N}} T$ is non-singular, \Cref{eq:hpeis-cov} implies that $\hpeis = \psi_{\P}$ a.s.. 
 
-   If $\cov_{\hat \P_{N}} T$ were singular, there would exist a $\psi \in \R^{k}$ such that $\cov_{\hat \P_{N}} \left( \psi^{T}T \right) = 0$. In this case the a.s. non-zero $W^{i}(X^{i}) T(X^{i})$ would lie in the orthogonal complement $\psi^{\perp}$ for all $i = 1, \dots, N$. As the weights are a.s. positive by the assumed equivalence of $\G$ and $\P$, the same holds true for $T(X^{i}), i = 1,\dots, N$.
-   If $N$ is bigger than $k$, the probability that this happens is $0$, as $\operatorname{supp} T $ is open, so $\cov_{\hat \P_{N}} T$ is non-singular almost surely and the result is shown.
-   %\todo{think a bit more about this, what if T is not a homeo?}
-    
+   If $\cov_{\hat \P_{N}} T$ were singular, there would exist a $\psi \in \R^{k}$ such that
+   $$
+   \psi^{T} \cov_{\hat\P_{N}} (T) \psi = \cov_{\hat \P_{N}} \left( \psi^{T}T \right) = 0.
+   $$
+    In this case the a.s. non-zero $W^{i}(X^{i}) T(X^{i})$ would lie in the orthogonal complement $\psi^{\perp}$ for all $i = 1, \dots, N$. As the weights are a.s. positive by the assumed equivalence of $\G$ and $\P$, the same holds true for $T(X^{i}), i = 1,\dots, N$.
+   If $N$ is bigger than $k$, the probability that this happens is $0$, as $\operatorname{supp} T $ is open. Thus $\cov_{\hat \P_{N}} T$ is non-singular almost surely and the result is shown.
 \end{proof}
 
+Note that if in the above proposition only $\G_{\psi} \gg \P$ holds, we obtain, by a similar argument, that $$\mathbb P \left( \hpeis = \psi_{\P} \right) \stackrel{N\to\infty}\longrightarrow 1.$$
+Additionally, we then have to take care of the event $ \{ w(X) = 0 \}$, whose probability is now potentially positive.
 
+We now turn to deriving asymptotics for $\hpeis$. As for the \acrshort{cem}, we start with proving that $\hpeis$ consistently estimates $\peis$.
+For this we need to ensure that $\peis$ is the unique solution to \Cref{eq:eis_optim}, as otherwise, consistent estimators of $\peis$ cannot exist. 
+As \Cref{eq:eis_exponential_families} is a linear least squares problem, the objective function is convex, and so we can apply \Cref{thm:haberman-consistent} and \Cref{prop:is-consistency}.
 
 \begin{theorem}[consistency of $\hpeis$]
     \label{thm:eis-consistent}
-    \todo{vdV, reg. conditions?}
-\end{theorem}
-
-\begin{theorem}[asymptotic normality of $\hpeis$]
-    \label{thm:clt-eis}
-    Let $\G_{\psi}$ form a natural exponential family with densities $g_{\psi}(x) = \frac{h(x)}{Z(\psi)} \exp \left( \psi^{T}T(x) \right)$ w.r.t. $\mu$. Let $\G, \P$ be two other probability measures such that $\G \ll \P$ and let $W = \frac{\d\P}{\d\G}$ be the normalized importance sampling weights. 
-    Assume $\lambda(\psi) = \P \log w_{\psi}$ is known and the following conditions hold:
-    \begin{enumerate}[label={\bfseries(B\arabic*)}]
-        \item\label{it:eis-dkl-dkl-to-base-finite} $\Dkl{\P}{\G_{\psi}} < \infty$ for all $\psi$ \todo{prob. suffices locally},
-        \item\label{it:eis-T-l2} $T$ and $\log w_{\peis}$ are square integrable w.r.t. $\P$,
-        \item\label{it:eis-cov-t-spd} $\cov_{\P} (T)$ is positive definite and
-        \item\label{it:eis-dkl-regularity} the regularity conditions of \Cref{thm:eis-consistent} hold.
+    Let $\left( \G_{\psi} \right)_{\psi \in \Psi}$ form a $k$-dimensional natural exponential family with log-densities 
+    $$
+        \log g_{\psi}(x) = \psi^{T}T(x) - \log Z(\psi)
+    $$
+    for convex $\Psi \subseteq \R^{k}$. Let $\G \gg \P$ be a proposal and suppose that 
+    \begin{enumerate}
+        \item $\log p, T \in L^{2}(\P)$ and
+        \item $\cov_\P (T)$ is non-singular,
+        \item $\peis \in \operatorname{int} \Psi.$ 
     \end{enumerate}
-
-    Without loss of generality, assume that $\P T = 0$. Then, as $N$ goes to $\infty$,
+    
+    Then 
     $$
-    \sqrt{N} \left( \begin{pmatrix}\hat\lambda \\ \hpeis\end{pmatrix} - \begin{pmatrix}\lambda \\ \peis\end{pmatrix} \right) \Dto \mathcal N(0, V_{\eis})
+        \hpeis \stackrel{N \to \infty}\longrightarrow \peis
     $$
-    where 
-    $$
-    V_{\eis} = B_{\eis}M_{\eis}B_{\eis}
-    $$
-    with
-    \begin{align*}
-        B_{\eis} &= \begin{pmatrix}
-            1 & 0 \\
-            0 & \left(\cov_{\P} T\right)^{-1}
-        \end{pmatrix}\\
-        M_{\eis} &= \G \left(W^{2} \left( \log \frac{p}{h} - \peis^{T}T - \lambda_{\eis}\right)^{2} \begin{pmatrix}
-            1& T^{T}\\
-             T &  TT^{T}
-        \end{pmatrix}
-        \right).
-    \end{align*}
-    In particular, the asymptotic variance of $\hpeis$ is
-    $$
-    \left( \cov_{\P} T \right)^{-1} \G\left( W^{2} \left( \log \frac{p}{h} - \peis^{T}T - \lambda_{\eis} \right)^{2} T T ^{T} \right)\left( \cov_{\P} T \right)^{-1}.
-    $$
+    almost surely.
 \end{theorem}
 
 \begin{proof}
-    This proof follows the same strategy as that for \Cref{thm:ce-clt} and uses the same notation (\Cref{not:notation-clt}). 
-    % verify conditions
-    The estimating equations for $\lambda$ and $\peis$ are given by 
-    %As $\lambda (\psi) = \P (\log p - \log g_{\psi})$ its gradient is $\nabla_{\psi} \lambda (\psi) = -\P T + \dot z(\psi)$, so the estimating equations for $\peis$ are \todo{regularity for $\nabla \lambda$}
+    We follow the same strategy as in the proof of \Cref{thm:cem-consistent}. Let 
     \begin{align*}
-    x \mapsto f_{\lambda,\psi}(x) &= \nabla_{\lambda} -\frac{1}{2}w(x)\left(\log \frac{p(x)}{h(x)} - \psi^{T}T(x) -\lambda \right)^{2} = w(x) \left( \log \frac{p(x)}{h(x)} - \psi^{T}T(x) -\lambda  \right)\begin{pmatrix}
-        1 \\ T(x)
-    \end{pmatrix}.
+        b: \R^{p} \times \R^{k + 1} \to [-\infty, \infty)  && b(x,\psi') = \begin{cases}
+            -\frac{1}{2} \left( \log p(x) - \psi^{T}T(x) - \lambda \right)^{2} & \psi \in \Psi \\
+            -\infty &  \text{ else,}
+        \end{cases}
     \end{align*}
-    % LL
-    For $\lambda_{1}, \lambda_{2}\in\R$ and $\psi_{1}, \psi_{2}\in\Psi$ the Lipschitz condition \Cref{eq:clt-vdv-local-lipschitz} are fulfilled, as 
-    \begin{align*}
-    \lVert f_{\lambda_{1}, \psi_{1}} - f_{\lambda_{2}, \psi_{2}} \rVert &= \lvert w(x) \rvert ~\lvert \left( \lambda_{2} - \lambda_{1} + T(x) \left( \psi_{2} - \psi_{1} \right) \right)\rvert ~\left\lVert \begin{pmatrix}
-        1 \\ T(x)
-    \end{pmatrix} \right\rVert \\
-        &\leq \underbrace{\lvert w(x) \rvert \left\lVert \begin{pmatrix} 1 & T^{T}(x) \\ T(x) & T(x) T^T(x) \end{pmatrix} \right\rVert}_{:=\dot f} \lVert \left( \lambda_{2} - \lambda_{1}, \psi_{2} - \psi_{1} \right)\rVert,
-    \end{align*}
-    and $\G \dot f < \infty$ by \ref{it:eis-T-l2}.
-
-    % Gf_psi0 < infy
-    At the optimal $\lambda_{\eis}, \peis$ it holds
-    \begin{align*}
-    \G f_{\lambda_{\eis},\peis} = \P \left( \log \frac{p}{h} - \peis^{T}T - \lambda_{\eis}  \right) \begin{pmatrix}
-        1 \\ T
-    \end{pmatrix} < \infty,
-    \end{align*}
-    as both $T$ and $\log w(\peis)$ are in $L^{2}(\P)$ by \ref{it:eis-T-l2}.
-    \todo{L2 defnieren}
-    % psi -> Gf_psi differentiable, Jacobian non-singular
-    By the assumed regularity conditions, $(\lambda,\psi) \mapsto \G f_{\lambda, \psi}$ is differentiable, with Jacobian
-    \begin{align*}
-    B_{\eis}^{-1} = \partial_{\lambda,\psi}\G f_{\lambda,\psi} &= \P \begin{pmatrix}
-        1 \\ T
-    \end{pmatrix} \begin{pmatrix}
-        1 & T^{T}
-    \end{pmatrix}\\
-        &= \P \left( \begin{pmatrix}
-            1 & T^{T} \\
-            T & TT^{T}
-        \end{pmatrix} \right) = \begin{pmatrix}
-            1 & 0 \\
-            0 & \cov_{\P} (T)
-        \end{pmatrix},
-    \end{align*}
-    as $\P T = 0$.
-    % \hat G_N f_\hat\psi_N = o_P (N^-1/2)
-
-    As $\hpeis$ solves the estimating equations, we have $\hat\P_{N} f_{\hpeis} = 0 = o_{P} \left( N^{-\frac{1}{2}} \right)$. It remains to show that $\hpeis \to \peis$ in probability, which follows by an application of \Cref{thm:ce-consistent}. 
-    Finally, as $\G f_{\lambda_{\eis},\peis}=0$, 
-
+    where $\psi' = (\psi, \lambda) \in \R^{k + 1}$. For fixed $x$ this function is concave, as its Hessian is negative semi-definite:
     $$
-    M_{\eis} = \G \left(f_{\lambda_{\eis},\peis} f_{\lambda_{\eis},\peis}^T = \G w^{2} \left( \log \frac{p(x)}{h(x)} - \peis^{T}T - \lambda_{\eis}\right)^{2} \begin{pmatrix}
-        1 & T^{T} \\
-        T & TT^{T}
-    \end{pmatrix}\right)
+        H_{\psi'} b(x, \psi') = -\begin{pmatrix}
+            1 & T(x)^{T} \\
+            T(x) & T(x)T(x)^{T}
+        \end{pmatrix} = -\begin{pmatrix} 1 & T(x)^{T} \end{pmatrix} \begin{pmatrix} 1 & T(x)^{T} \end{pmatrix}^{T},
     $$
+    if $\psi \in \Psi$. Let $X^{1}, \dots, X^{N} \iid \P$ and let $\tilde \P _{N}$ be their empirical distribution. For $\psi \in \Psi, \lambda \in \R$ we have 
+    $$
+        \P \left[ b(\cdot, \psi') \right] = - \frac{1}{2} \P \left[ \left( \log p - \psi^{T}T - \lambda\right)^{2} \right] < \infty,
+    $$
+    as $\log p, T\in L^{2}(\P)$. Let us now check that conditions \ref{it:C1} - \ref{it:C3} are fulfilled. 
+
+    \ref{it:C1} is fulfilled, as we assumed $\peis \in \operatorname{int} \Psi$. \ref{it:C2} holds, as $\peis$ is the unique global maximizer by \Cref{prop:eis_exponential_families}, as $\cov (T)$ is non-singular.
+    \ref{it:C3} obviously holds. 
+
+    Thus $\hpeis$ is strongly consistent if $\G = \P$. If $\G$ is different from $\P$, we can apply \Cref{prop:is-consistency}, where the existence of M-estimators is ensured by \Cref{eq:hpeis-cov}, using the Moore-Penrose inverse if $\cov_{\hat\P_{N}}(T)$ is singular. 
+\end{proof}
+\todo{discussion of assumptions}
+
+As \Cref{eq:hpeis-cov} expresses $\hpeis$ in terms of empirical covariances, we could alternatively prove consistency by ensuring that the empirical covariances are consistent as well, for which we would need to ensure that fourth-order moments of $\log p$ and $T$ w.r.t. $\P$ exist. This strategy may be fruitful if $\peis$ does not lie in the interior of $\Psi$, although the more sophisticated treatment of \citep{Haberman1989Concavity} may also be applicable under these circumstances.
+
+Additionally, if fourth-order moments exist, we can derive a central limit theorem, similar to \Cref{thm:cem-clt}, for \acrshort{eis}.
+
+\begin{theorem}[\acrshort{clt} for $\hpeis$]
+    \label{thm:eis-clt}
+    Let $\left( \G_{\psi} \right)_{\psi \in \Psi}$ form a $k$-dimensional natural exponential family with log-densities 
+    $$
+    \log g_{\psi}(x) = \psi^{T} T(x) - \log Z(\psi),
+    $$
+    and convex parameter space $\Psi \subseteq \R^{k}$. Let $\G \gg \P$ be a proposal with weights $w = \rnd{\P}{\G}$. 
+
+    \begin{enumerate}
+        \item $w T_{i}, w \log p \in L^{4}(\G)$,
+        \item\label{it:fourthmomentsexist} $\log p, T_i \in L^{4}(\P)$ for all $i = 1, \dots, k$
+        \item $\cov_{\P}(T)$ is non-singular and $\peis \in \operatorname{int} \Psi$.
+    \end{enumerate}
+
+    Then 
+    $$
+        \sqrt{N} (\hpeis - \peis) \convD \Normal (0, BMB)
+    $$
+    where $B = \cov_{\P}(T)^{-1}$ and $M = $
+\end{theorem}
+
+\begin{proof}
+    Similar to the proof of \Cref{thm:cem-clt}, we combine \Cref{thm:haberman-clt} and \Cref{prop:is-clt}. Let 
+    \begin{align*}
+        b : \mathcal X \times \R^{k + 1} \to [-\infty, \infty) && b(x, \psi') \begin{cases}
+            -\frac{1}{2} \left( \log p(x) - \psi^{\prime T}T'(x) \right) & x \in \Psi \\
+            -\infty & \text{else,}
+        \end{cases}
+    \end{align*}
+    where $\psi' = (\psi, \lambda) \in \Psi \times\R$ and $T'(x) = \begin{pmatrix} T(x) & 1 \end{pmatrix}$. For $\psi \in \Psi$ $(\psi, \lambda) \to \P [b(\cdot, (\psi, \lambda))]$ is differentiable with gradient 
+    $$
+        \nabla_{\psi'} \P [b(\cdot, \psi')] = - \P \left[\left( \log p - \psi^{\prime T}T' \right) T'\right]
+    $$
+    and Hessian 
+    $$
+        H_{\psi'} \P[b(\cdot, \psi')] = -\P\left[T'T^{\prime T}\right] = - \begin{pmatrix}
+            \P \left[ TT^{T} \right] & \P [T^{T}] \\
+            \P [T] & 1
+        \end{pmatrix}.
+    $$
+    The Hessian is negative definite, as for all $\psi\in \R^{k}, \lambda \in \R$ we have
+    \begin{align*}
+        \begin{pmatrix} \psi & \lambda \end{pmatrix}^{T} H_{\psi'} \P \left[ b(\cdot, \psi') \right]\begin{pmatrix} \psi & \lambda \end{pmatrix} &= - \left( \psi^{T} \cov_{\P} (T) \psi + \psi^{T}\mu\mu^{T}\psi + 2 \psi^{T} \lambda + \lambda^{2}\right) \\
+        &= - \left( \psi^{T}\cov_{\P}(T)\psi + (\lambda + \psi^{T}\mu)^{2} \right) \leq 0,
+    \end{align*}
+    with equality if, and only if, both $\lambda$ and $\psi$ are $0$, as $\cov_{\P}(T)$ is assumed to be positive definite. Thus condition \ref{it:C7} is fulfilled.
+
+    For condition \ref{it:C10}, we can verify that for all $i,j = 1,\dots, k+ 1$ and $X \sim \P$
+    $$
+        (\nabla_{\psi'} b(X, \psi'))_{i}(\nabla_{\psi'} b(X, \psi'))_{j} = \left( \log p - \psi^{\prime T}T' \right)^{2} T'_{i}T'_{j}
+    $$
+    is in $L^{1}(\P)$ by assumption \ref{it:fourthmomentsexist} and the Hölder inequality. 
+
+    To account for importance sampling
+    \todo{continue}
+    
 \end{proof}
 
 \todo{discuss applicability of both CLTs}

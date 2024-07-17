@@ -37,14 +37,31 @@ As the \acrshort{kld} is non-negative by the information inequality, the cross-e
 Suppose now that $\psi \mapsto \log g_{\psi}(x)$ is (strictly) concave for $\P$-almost every $x \in \mathcal X$ and $\Psi$ is a convex subset of $\R^{k}$. Then $\psi \mapsto \P \left[\log g_{\psi}\right]$ is (strictly) concave as well. As a consequence, we may apply the usual results from convex optimization, i.e. every local maximum is a global one and if $\psi \mapsto \log g_{\psi}(x)$ is strictly convex for $\P$-almost every $x$, there is at most one maximizer \citep[Theorem 3.4.2]{Bazaraa2006Nonlinear}.
 
 As we have seen in \Cref{lem:log-concavity}, the densities of exponential families are log-concave in the natural parameter, and as such they will be the primary candidates for our investigations of the \acrshort{cem}. 
-% analytical solution, MLE
-An additional attractive property of the \gls{cem} for exponential families with natural parameter $\psi \in \R^{k}$ is that the optimal $\psi_{\text{CE}}$ only depends on the expected value $\P [T]$. We first show, that if the covariance of the sufficient statistic is positive definite, the expected value of $T$ under $\G_{\psi}$ uniquely determines $\psi \in \Psi$, see also \citep[Corollary 2.5]{Brown1986Fundamentals} for a similar result in minimal exponential families.
+If we use proposals from an exponential family, we may get rid of the base measure term $h(x)$ in the densities, as the following lemma shows.
 
+\begin{lemma}
+    Let $\P$ be a probability measure on $\mathcal X = \R^{p}$ and let $(\G_{\psi})_{\psi\in\Psi}$ be a natural exponential family on $\mathcal X$ such that $\P \ll \G_{\psi}$ for all $\psi \in \Psi$. Let $\mu$ be the dominating measure of the exponential family, such that 
+    $$
+        \rnd{\G_{\psi}}{\mu}(x) = \frac{h(x)}{Z(\psi)} \exp \left( \psi^{T}T(x)\right),
+    $$
+    with $h\geq 0$ $\mu$-a.s.
+    
+    Then $h\mu$ is a dominating measure for both $\P$ and $\G_{\psi}$ for every $\psi$ in $\Psi$. 
+\end{lemma}
+\begin{proof}
+    Let $A \subseteq \R^{p}$ be measurable. As $h$ is a.s. non-negative, $(h\mu)(A) = 0$ implies that $h\mathbf 1 _{A} = 0$  $\mu$-a.s. 
+    Thus $\G_{\psi}(A) = \int \mathbf 1 _{A}(x) \frac{h(x)}{Z(\psi)}\exp(\psi^{T}T(x)) \d \mu = 0$ for all $\psi$ as well. 
+    As $\G_{\psi} \gg \P$ and $ \gg $ is transitive, $h\mu$ dominates $\P$ as well.
+\end{proof}
+
+As a consequence, when performing importance sampling with target $\P$ and proposal $\G_{\psi}$ from an exponential family, we will assume in the following that $h \equiv 1$, achieved by taking $h\mu$ as the joint dominating measure. 
+
+An additional attractive property of the \gls{cem} for exponential families with natural parameter $\psi \in \R^{k}$ is that the optimal $\psi_{\text{CE}}$ only depends on the expected value $\P [T]$. We first show, that if the covariance of the sufficient statistic is positive definite, the expected value of $T$ under $\G_{\psi}$ uniquely determines $\psi \in \Psi$, see also \citep[Corollary 2.5]{Brown1986Fundamentals} for a similar result in minimal exponential families.
 \begin{lemma}
     \label{lem:psiunique}
     Let $\left( \G_{\psi} \right)_{\psi \in \Psi}$ form a $k$-dimensional natural exponential family with log-densities 
     $$
-    \log g_{\psi}(x) = \log h(x) + \psi^{T} T(x) - \log Z(\psi),
+    \log g_{\psi}(x) = \psi^{T} T(x) - \log Z(\psi),
     $$
     and convex parameter space $\Psi \subseteq \R^{k}$. 
     Let $\psi, \psi' \in \operatorname{int} \Psi$ with $\G_{\psi} [T] = \G_{\psi'} [T]$. If $\cov_{\G_{\psi}} T$ is positive definite, then $\psi$ and $\psi'$ coincide.
@@ -53,7 +70,7 @@ An additional attractive property of the \gls{cem} for exponential families with
 \begin{proof}
     Consider the function $b: \Psi \to [-\infty, \infty)$
     $$
-        \xi \mapsto b(\xi) = \G_{\psi'} \left[ \log g_{\xi} - \log h \right] = \xi^{T}\G_{\psi'} [T] - \log Z(\xi).
+        \xi \mapsto b(\xi) = \G_{\psi'} \left[ \log g_{\xi} \right] = \xi^{T}\G_{\psi'} [T] - \log Z(\xi).
     $$
     By \Cref{thm:logZsmooth}, $\G_{\psi'}[T]$ is finite and $b$ possesses derivatives of every order.
     Then $\psi$ is a critical point of this map, as the gradient at $\psi$ is
@@ -71,10 +88,10 @@ An additional attractive property of the \gls{cem} for exponential families with
     \label{prop:cem_exponential_families}
     Let $\left( \G_{\psi} \right)_{\psi \in \Psi}$ form a $k$-dimensional natural exponential family with log-densities 
     $$
-    \log g_{\psi}(x) = \log h(x) + \psi^{T} T(x) - \log Z(\psi),
+    \log g_{\psi}(x) = \psi^{T} T(x) - \log Z(\psi),
     $$
     and convex parameter space $\Psi \subseteq \R^{k}$. 
-    Suppose $T, \log h \in L^{1}(\P)$.
+    Suppose $T \in L^{1}(\P)$.
 
     If there is a $\pce \in \Psi$ such that 
     $$
@@ -86,7 +103,7 @@ An additional attractive property of the \gls{cem} for exponential families with
 \begin{proof}
     The target may be rewritten as
     $$
-    \psi \mapsto f(\psi) = \P \left[\log g_{\psi}(x)\right]= \P [\log h] - \log Z(\psi) + \psi^{T} \P [T].
+    \psi \mapsto f(\psi) = \P \left[\log g_{\psi}(x)\right]= \log Z(\psi) + \psi^{T} \P [T].
     $$
     As $\log Z(\psi)$ is the cumulant-generating function of $\G_{\psi}$ it is twice differentiable, and so is $f$. The gradient of $\log Z(\psi)$ is 
     $$
@@ -112,14 +129,14 @@ An additional attractive property of the \gls{cem} for exponential families with
 \end{proof}
 As a consequence, the \acrshort{cem} for natural exponential families reduces to matching the moments of the sufficient statistic of the target and proposal.
 In many cases, this system of equations can be solved analytically or by gradient descent algorithms.
-Let us discuss the assumptions and applicability of this proposition. Assuming that $T, \log h \in L^{1}(\P)$ is necessary for the target to be finite, so it cannot be dropped. As $T$ and $\log h$ typically consist of polynomial, rational or exponential functions, this is not too restrictive, provided the target does not exhibit heavy tails. The proof of uniqueness relies on $\cov_{\G_{\psi}} T$ being positive definite, to ensure that $\psi \mapsto \log Z(\psi)$ is strictly convex. This could also be achieved by requiring the exponential family to be minimal, see \citep[Theorem 1.13 (iv)]{Brown1986Fundamentals}. The existence of a $\psi$ such that $\P [T] = \G_{\psi} [T]$ is not restrictive for most commonly used distributions: for the (multivariate) normal, Poisson, negative binomial and binomial distribution there is always a unique solution, as the sufficient statistics consist of means and covariances. 
+Let us discuss the assumptions and applicability of this proposition. Assuming that $T \in L^{1}(\P)$ is necessary for the target to be finite, it cannot be dropped. As $T$ typically consists of polynomial, rational or exponential functions, this is not too restrictive, provided the target does not exhibit heavy tails. The proof of uniqueness relies on $\cov_{\G_{\psi}} T$ being positive definite, to ensure that $\psi \mapsto \log Z(\psi)$ is strictly convex. This could also be achieved by requiring the exponential family to be minimal, see \citep[Theorem 1.13 (iv)]{Brown1986Fundamentals}. The existence of a $\psi$ such that $\P [T] = \G_{\psi} [T]$ is not restrictive for most commonly used distributions: for the (multivariate) normal, Poisson, negative binomial and binomial distribution there is always a unique solution, as the sufficient statistics consist of means and covariances. 
 
 While $\P [T]$ is usually not available, it is itself amenable to importance sampling. Given a proposal $\G$ we may estimate $\P [T]$ by $\hat\P_N T = \sum_{i = 1}^{N} W^{i} T(X^{i})$ for $X^{1}, \dots, X^{N} \iid \G$ and auto-normalized importance sampling weights $W^{i}$ and in turn, applying \Cref{prop:cem_exponential_families}, estimate $\psi_{\text{CE}}$ by $\hat \psi_{\text{CE}}$ solving
 \begin{equation}
     \label{eq:ee_hpce}
 \hat \P_N [T] = \G_{\hpce} [T].
 \end{equation}
-As $T, \log h \in L^{1}(\hat \P_{N})$, the only conditions we have to check to apply the above proposition are that this equation has a unique solution $\G$-almost surely in the interior of $\Psi$ and that $\Psi$ is convex. 
+As $T \in L^{1}(\hat \P_{N})$, the only conditions we have to check to apply the above proposition are that this equation has a unique solution $\G$-almost surely in the interior of $\Psi$ and that $\Psi$ is convex. 
 
 To apply the \acrshort{cem} in practice, one usually iterates the sampling and estimation steps, using the previously found $\hpce$ to sample in the current iteration and starting the iteration with a proposal from the same exponential family $\G = \G_{\psi^{0}}$. To ensure numerical convergence, a popular device is that of \glspl{crn}, i.e. using the same random number seed in all iterations. A basic version of the \acrshort{cem} is presented in \Cref{alg:cem-basic}.
 
@@ -143,8 +160,8 @@ To apply the \acrshort{cem} in practice, one usually iterates the sampling and e
 \end{algorithm}
 
 \todo{literature review CEM}
-The \gls{cem} is routinely used for estimating failure probabilities for rare events \citep{Homem-de-Mello2007Study} and has been applied to Bayesian posterior inference \citep{Engel2023Bayesian,Ehre2023Certified} and optimal control problems \citep{Kappen2016Adaptive,Zhang2014Applications}.
-\todo{more lit. review CEM, add Chan Marginal Likelihood estimation}
+The \gls{cem} is routinely used for estimating failure probabilities for rare events \citep{Homem-de-Mello2007Study} and has been applied to Bayesian posterior inference \citep{Engel2023Bayesian,Ehre2023Certified}, Bayesian marginal likelihood estimation \citep{Chan2012Marginal} and optimal control problems \citep{Kappen2016Adaptive,Zhang2014Applications}.
+\todo{more lit. review CEM}
 % curse of dimensionality
 \glsreset{cod}
 Importance sampling is well known to exhibit the \gls{cod} \cite{Bengtsson2008Curseofdimensionality}, i.e. the phenomenon that in many problems, unless $N$ grows exponentially with the dimension of $\mathcal X$, the weights collapse to a single particle, i.e. $W^{(N)} \to 1$ as the dimension of $\mathcal X$ goes to $\infty$. As the \acrshort{cem} employs importance sampling to obtain $\hpce$, it too is affected by this phenomenon, see also \Cref{sec:simulation_studies}. 
@@ -158,18 +175,17 @@ As stated in \citep{Chan2012Improved} there may be two reasons as to why the \ac
 
 In the remainder of this section, we will derive novel results on the performance of the estimator $\hpce$ of $\pce$. In particular, we will investigate under which conditions $\hpce$ is consistent and asymptotically normal. To focus on the asymptotic behavior, we will only perform a single iteration of the basic \acrshort{cem} algorithm (\Cref{alg:cem-basic}). While we restrict ourselves here to the setting of $k$-dimensional natural exponential families, these results should generalize to other classes of distributions as well. The advantage that this class of families has is that due to the structure of the densities, they provide straightforward (regularity) conditions for the asymptotic results to hold. As the target functions are concave, these conditions are rather liberal. We start with proving the consistency of $\hpce$. 
 
-\begin{proposition}[consistency of $\hpce$]
-    \label{prop:cem-consistent}
+\begin{theorem}[consistency of $\hpce$]
+    \label{thm:cem-consistent}
     Adopt the same assumptions as in \Cref{prop:cem_exponential_families}. Furthermore, let $\G \gg \P$ be a proposal distribution and assume that
     
     \begin{enumerate}
         \item $\pce$ is the unique maximizer of \Cref{eq:ce_argmax},
-        \item $\pce$ is in the interior of the convex parameter space $\Psi$, and
-        \item there exists a neighborhood $V$ of $\pce$ that is contained in $\Psi$.
+        \item $\pce$ is in the interior of the convex parameter space $\Psi$.
     \end{enumerate}
     
    Then $\hpce$ is a strongly consistent estimator of $\pce$.
-\end{proposition}
+\end{theorem}
 
 The proof is based on the following theorem of \citeauthor{Haberman1989Concavity}.
 
@@ -230,7 +246,7 @@ To apply this theorem to our setting, let us begin by extending it to incorporat
 \end{proof}
 
 Let us now prove the promised consistency of the \acrshort{cem}.
-\begin{proof}[Proof (\Cref{prop:cem-consistent})]
+\begin{proof}[Proof (\Cref{thm:cem-consistent})]
     We show that the assumptions of \Cref{thm:haberman-consistent} are fulfilled. Let
     \begin{align*}
         b: \R^{p}\times \R^{k} \to [-\infty, \infty) && b(x, \psi) = \begin{cases}
@@ -240,14 +256,14 @@ Let us now prove the promised consistency of the \acrshort{cem}.
     \end{align*}
     As $\Psi$ is convex and $g_{\psi}(x)$ is log-concave (see \Cref{lem:log-concavity}), $b(x, \cdot)$ is concave. Let $X^{1}, \dots, X^{N} \iid \P$ and let $\tilde{\P}_{N} = \frac{1}{N} \sum_{i = 1}^N \delta_{X^{i}}$. For $\psi \in \Psi$ we have
     $$
-    \P [b(\cdot, \psi)] = \P [\log h] + \psi^{T}\P[T] - \log Z(\psi) < \infty,
+    \P [b(\cdot, \psi)] = \psi^{T}\P[T] - \log Z(\psi) < \infty,
     $$
-    as $\log h, T \in L^{1}(\P)$, while for $\psi \notin \Psi$ this integral is $-\infty$. Thus we only have to check that \ref{it:C1}-\ref{it:C3} are fulfilled. 
+    as $T \in L^{1}(\P)$, while for $\psi \notin \Psi$ this integral is $-\infty$. Thus we only have to check that \ref{it:C1}-\ref{it:C3} are fulfilled. 
     
     For condition \ref{it:C1} note that, as $\pce$ is in the interior of $\Psi$, we may choose $\varepsilon > 0$ such that the closed $\varepsilon$ ball around $\pce$, $\bar B_{\varepsilon} (\pce)$ is completely contained in $\Psi$, so letting $V = \bar B_{\varepsilon} (\pce)$ implies the condition. condition \ref{it:C2} is fulfilled by the definition of $b$ and condition \ref{it:C3} is fulfilled by considering the neighborhood of $\pce$ that is assumed to be contained in $\Psi$. Finally, by \Cref{prop:is-consistency}, $\hpce$ is strongly consistent.
 \end{proof}
 
-The assumptions on $\pce$ and $\Psi$ in \Cref{prop:cem-consistent} could be somewhat looser, as the concavity of the target function is a rather strong property. In natural exponential families, 
+The assumptions on $\pce$ and $\Psi$ in \Cref{thm:cem-consistent} could be somewhat looser, as the concavity of the target function is a rather strong property. In natural exponential families, 
 $$
 \Psi = \left\{ \psi \in \R^{k} \,:\, Z(\psi) < \infty \right\}
 $$
@@ -271,9 +287,9 @@ These rather strong properties enable us to derive a central limit theorem for t
     
     Then 
     $$
-        \sqrt{n}(\hpce - \pce) \convD \Normal (0, BMB)
+        \sqrt{N}(\hpce - \pce) \convD \Normal (0, BMB)
     $$
-    where $B = I(\pce) = \cov_{G_{\pce}} (T)^{-1}$ and $$M = \cov_{\G} (wT) = \G \left[w^{2} (T - \P[T])(T - \P[T])^{T}\right] = \P \left[ w (T - \P [T]) (T - \P [T])^{T} \right].$$
+    where $B = I(\pce) = \cov_{\G_{\pce}} (T)^{-1}$ and $$M = \cov_{\G} (wT) = \G \left[w^{2} (T - \P[T])(T - \P[T])^{T}\right] = \P \left[ w (T - \P [T]) (T - \P [T])^{T} \right].$$
 \end{theorem}
 
 To prove \Cref{thm:cem-clt}, let us start again with a general version of a central limit theorem for M-estimators based on concave objective functions. 
@@ -290,7 +306,7 @@ To prove \Cref{thm:cem-clt}, let us start again with a general version of a cent
         \begin{align*}
             \sigma^{2}(\psi, \xi) = \mathbb E \left( b'(X, \psi, \xi)  \right)^{2} < \infty && \psi \in V, \xi \in \R^{k},
         \end{align*}
-        where $b'(x, \psi, \xi) = \lim_{a \downarrow} a^{-1} \left( b(x, \psi + a\xi) - b(x, \psi)\right)$ is the directional derivative. Note that if $b$ is differentiable for all $\psi \in V$, $b'(x, \psi, \xi) = \xi^{T}\nabla_{\psi} b(x, \psi)$ and it suffices to assume $\nabla_{\psi} b(x,\psi) \in L^{2} (\P)$ for all $\psi \in N$.
+        where $b'(x, \psi, \xi) = \lim_{a \downarrow} a^{-1} \left( b(x, \psi + a\xi) - b(x, \psi)\right)$ is the directional derivative. Note that if $b$ is differentiable for all $\psi \in V$, $b'(x, \psi, \xi) = \xi^{T}\nabla_{\psi} b(x, \psi)$ and it suffices to assume $(\nabla_{\psi} b(x,\psi))_{i}(\nabla_{\psi} b(x,\psi))_{j} \in L^{1} (\P)$ for all $\psi \in N$ and $i,j = 1,\dots, k$.
     \end{enumerate}
     
     Let $M = \cov \left( \nabla_{\psi} b(X, \psi) \right)$ and let $B = - \left(H_{\psi} \P \left[ b(\cdot, \psi) \right]\right)^{-1}$. Then 
@@ -349,7 +365,7 @@ We now have all the tools at our disposal to proof \Cref{thm:cem-clt}.
 
     The Hessian of the objective function is, for $\psi \in \operatorname{int} \Psi$
     $$
-        H_{\psi} \P \left[ b(\cdot, \psi) \right] = H_{\psi} \P \left[ \log h + \psi^{T} T - \log Z(\psi) \right] = -H_{\psi}\log Z(\psi)  = - I(\psi),
+        H_{\psi} \P \left[ b(\cdot, \psi) \right] = H_{\psi} \P \left[ \psi^{T} T - \log Z(\psi) \right] = -H_{\psi}\log Z(\psi)  = - I(\psi),
     $$
     as the cumulant generating function is smooth on $ \operatorname{int} \Psi$ (\Cref{thm:logZsmooth}). Thus the Hessian is non-singular by assumption \ref{it:FIMspd}, showing that condition \ref{it:C7} is fulfilled.
 

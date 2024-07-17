@@ -37,48 +37,48 @@ Both the Poisson and negative binomial belong to the class of exponential family
 
 \begin{definition}[exponential family]
     Let $\mu$ be a $\sigma$-finite measure on $\R^{p}$ and denote by 
-    $$\Theta = \left\{\theta \in \R^{p} : \int \exp \left( \theta^{T} y \right) \d\mu(y) < \infty\right\}$$
-    the set of parameters $\theta$ such that the moment-generating function of $\mu$ is finite. 
-    For every $\theta \in \Theta$ $$p_{\theta}(y) = Z(\theta)^{-1} \exp (\theta^{T} y)$$ defines a probability density with respect to the measure $\mu$, where $$Z(\theta) = \int \exp \left( \theta^{T} x \right) \d\mu(y)$$ is the normalizing constant. 
-    We call both the densities $p_{\theta}$ and induced probability measures $$ \P_{\theta} (A) = \int_{A} p_{\theta}(y) \d \mu(y),$$ for measurable $A \subset \R^{p}$, a \textbf{standard exponential family}.
+    $$\Psi = \left\{\psi \in \R^{p} : \int \exp \left( \psi^{T} y \right) \d\mu(y) < \infty\right\}$$
+    the set of parameters $\psi$ such that the moment-generating function of $\mu$ is finite. 
+    For every $\psi \in \Psi$ $$p_{\psi}(y) = Z(\psi)^{-1} \exp (\psi^{T} y)$$ defines a probability density with respect to the measure $\mu$, where $$Z(\psi) = \int \exp \left( \psi^{T} x \right) \d\mu(y)$$ is the normalizing constant. 
+    We call both the densities $p_{\psi}$ and induced probability measures $$ \P_{\psi} (A) = \int_{A} p_{\psi}(y) \d \mu(y),$$ for measurable $A \subset \R^{p}$, a \textbf{standard exponential family}.
 
-    Conversely, let $\P_{\theta}, \theta \in \Theta$ be a given parametric family of probability measures on some space $\mathcal Y$ that is absolutely continuous with respect to a common dominating measure $\mu$. Suppose there exist a reparametrization $\eta : \Theta \to \R^{p}$, a statistic $T: \mathcal Y \to \R^{p}$ and functions $Z: \Theta\to \R$, $h:\mathcal Y \to \R$, such that
+    Conversely, let $\P_{\psi}, \psi \in \Psi$ be a given parametric family of probability measures on some space $\mathcal Y$ that is absolutely continuous with respect to a common dominating measure $\mu$. Suppose there exist a reparametrization $\eta : \Psi \to \R^{p}$, a statistic $T: \mathcal Y \to \R^{p}$ and functions $Z: \Psi\to \R$, $h:\mathcal Y \to \R$, such that
     $$
-        p_{\theta}(y) = \frac{\d \P_{\theta}}{\d \mu} = Z(\theta) h(y) \exp \left(\eta(\theta)^{T}T(y)\right),
+        p_{\psi}(y) = \frac{\d \P_{\psi}}{\d \mu} = Z(\psi) h(y) \exp \left(\eta(\psi)^{T}T(y)\right),
     $$
-    then we call $\P_{\theta}, \theta \in \Theta$ and $p_{\theta}, \theta \in \Theta$ a \textbf{$p$-dimensional exponential family} and $\left(\P_{\theta}\right)_{\theta\in\Theta}$ a \textbf{$p$-dimensional natural exponential family}. If $\eta(\theta) = \theta$ we call $\theta$ the natural parameter. If $T(y) = y$, we call $y$ the natural observation. By reparametrization (in $\theta$) and sufficiency (in $y$) every $p$-dimensional exponential family can be written as an equivalent standard exponential family, see the elaborations in \citep[Chapter 1]{Brown1986Fundamentals}.
+    then we call $\P_{\psi}, \psi \in \Psi$ and $p_{\psi}, \psi \in \Psi$ a \textbf{$p$-dimensional exponential family} and $\left(\P_{\psi}\right)_{\psi\in\Psi}$ a \textbf{$p$-dimensional natural exponential family}. If $\eta(\psi) = \psi$ we call $\psi$ the natural parameter. If $T(y) = y$, we call $y$ the natural observation. By reparametrization (in $\psi$) and sufficiency (in $y$) every $p$-dimensional exponential family can be written as an equivalent standard exponential family, see the elaborations in \citep[Chapter 1]{Brown1986Fundamentals}.
     % potentially more: natural parameter/statistic/observation, regular, full, minimal, convex support
 \end{definition}
 
 Exponential families have the attractive property that they are log-concave in their parameters. As such the Fisher-information is always positive semidefinite, which will be crucial in defining surrogate Gaussian models in \Cref{sec:gaussian_importance_sampling_for_state_space_models}.
 \begin{lemma}[log-concavity of exponential family distributions]
     \label{lem:log-concavity}
-    Let $p_{\theta}, \theta \in \Theta$ be a natural $p$-dimensional exponential family and $\Theta$ convex and open in $\R^{p}$. In this case $\theta \mapsto \log p_{\theta}(y)$ is concave for every $y \in \R^{p}$.
+    Let $p_{\psi}, \psi \in \Psi$ be a natural $p$-dimensional exponential family and $\Psi$ convex and open in $\R^{p}$. In this case $\psi \mapsto \log p_{\psi}(y)$ is concave for every $y \in \R^{p}$.
 \end{lemma}
 
 \begin{proof}
-    As $\log p_{\theta}(y) = - \log Z(\theta) + \theta^{T} y$ it suffices to show that $\theta \mapsto \log Z(\theta)$ is convex. However, 
-    $$\theta \mapsto \log Z(\theta) = \log \int \exp \left( \theta^{T}y \right) \mathrm d \mu(y)$$ is the cumulant generating function of the base measure $\mu$, which is convex \citep[p. 144f]{Billingsley1995Probabilitya}.
+    As $\log p_{\psi}(y) = - \log Z(\psi) + \psi^{T} y$ it suffices to show that $\psi \mapsto \log Z(\psi)$ is convex. However, 
+    $$\psi \mapsto \log Z(\psi) = \log \int \exp \left( \psi^{T}y \right) \mathrm d \mu(y)$$ is the cumulant generating function of the base measure $\mu$, which is convex \citep[p. 144f]{Billingsley1995Probabilitya}.
 \end{proof}
 
-Additionally, the moment generating function $\theta \mapsto Z(\theta)$ is smooth on the interior of $\Theta$ and allows to switch the order of integration and differentiation.
+Additionally, the moment generating function $\psi \mapsto Z(\psi)$ is smooth on the interior of $\Psi$ and allows to switch the order of integration and differentiation.
 \begin{theorem}[{\citep[Theorem 2.2, Corollary 2.3]{Brown1986Fundamentals}}]
     \label{thm:logZsmooth}
-    Let $\theta \in \operatorname{int} \Theta$ be an interior point. Then the moment generating function $Z: \Psi \to \R$ is infinitely often differentiable with derivatives 
+    Let $\psi \in \operatorname{int} \Psi$ be an interior point. Then the moment generating function $Z: \Psi \to \R$ is infinitely often differentiable with derivatives 
     $$
-        \frac{\partial^{\lvert \alpha \rvert}}{\partial^{\alpha}\theta} Z(\theta) = \int y^{\alpha} \exp \left( \theta^{T} y \right) \d \mu(y)
+        \frac{\partial^{\lvert \alpha \rvert}}{\partial^{\alpha}\psi} Z(\psi) = \int y^{\alpha} \exp \left( \psi^{T} y \right) \d \mu(y)
     $$
     for any multi-index $\alpha \in \N^{k}$.
 
-    Additionally, the gradient of $\log Z$, $\nabla_{\theta} \log Z(\theta)$ is given by
+    Additionally, the gradient of $\log Z$, $\nabla_{\psi} \log Z(\psi)$ is given by
     $$
-        \nabla_{\theta} \log Z(\theta) = \E T(X),
+        \nabla_{\psi} \log Z(\psi) = \E T(X),
     $$
-    and the Hessian of $\log Z$, $H_{\theta} \log Z(\theta)$ by
+    and the Hessian of $\log Z$, $H_{\psi} \log Z(\psi)$ by
     $$
-        H_{\theta} \log Z(\theta) = \cov (T(X)),
+        H_{\psi} \log Z(\psi) = \cov (T(X)),
     $$
-    where $X \sim \mathcal P_{\theta}$.
+    where $X \sim \mathcal P_{\psi}$.
     
 \end{theorem}
 
@@ -149,6 +149,6 @@ From \Cref{lem:log-concavity}, we immediately obtain the following results \cite
 
 Notice that the dependence of $Y_{t}$ on $Y_{t - 1}$ does not influence the statement of this lemma, as we are interested in properties of $x \mapsto p(x|y)$.
 
-As in the previous chapter, after having observed $Y$, one is interested in the conditional distribution of states $X$, given $Y$. If the observations are not Gaussian, this is a difficult task as the distribution is not analytically tractable. Instead, approximations, e.g. the \gls{la}, which will exploit the log-concavity developed here or simulation-based inference, e.g. importance sampling (\Cref{sec:importance_sampling,sec:gaussian_importance_sampling_for_state_space_models}), sequential Monte Carlo \citep{Chopin2020Introduction} or MCMC-methods \citep{Brooks2011Handbook} are used. Similarly, fitting hyperparameters $\theta$ by maximum likelihood inference becomes more difficult as evaluating $\ell(\theta) = p(y) = \int p(x,y) \d x$ is not analytically available, thus requiring numerical or simulation methods for evaluation and gradient descent or EM-techniques for optimization, see \Cref{sec:maximum_likelihood_estimation}.
+As in the previous chapter, after having observed $Y$, one is interested in the conditional distribution of states $X$, given $Y$. If the observations are not Gaussian, this is a difficult task as the distribution is not analytically tractable. Instead, approximations, e.g. the \gls{la}, which will exploit the log-concavity developed here or simulation-based inference, e.g. importance sampling (\Cref{sec:importance_sampling,sec:gaussian_importance_sampling_for_state_space_models}), sequential Monte Carlo \citep{Chopin2020Introduction} or MCMC-methods \citep{Brooks2011Handbook} are used. Similarly, fitting hyperparameters $\psi$ by maximum likelihood inference becomes more difficult as evaluating $\ell(\psi) = p(y) = \int p(x,y) \d x$ is not analytically available, thus requiring numerical or simulation methods for evaluation and gradient descent or EM-techniques for optimization, see \Cref{sec:maximum_likelihood_estimation}.
 
 In this thesis, we will focus on importance sampling methods, which are the focus of the next section.
