@@ -1,4 +1,44 @@
 \section{Interim discussion}
 
-\todo{compare consistency and CLT for EIS and CEM}
+% region novelty
+Before we apply \acrshort{eis} and the \acrshort{cem} in the \acrshort{ssm} context, let us consolidate what we have achieved by the asymptotic analysis in the preceding two subsections and reason which of the two methods should be used in which circumstances.
+% endregion
+
+% region optimal values
+%% CE depends only on first moment of T, EIS also on second moments, as well as log p
+We start with a discussion of the optimal values $\pce$ and $\peis$.
 Notice that $\peis$ depends on second-order moments of the sufficient statistic $T$, as well as the shape of $\log p$, whereas the optimal parameter for the \gls{cem} $\pce$ depends only on the first-order moments of $T$. 
+%% dependence on higher moments might help w/ better fit to heavier tail distributions
+This dependence on higher-order moments may be beneficial for the \acrshort{eis} method, for example, if the covariance of $T$ under $\P$ is very different from that under $\G_{\psi}$. 
+\todo{should have an example for this later}
+%% reiterate Dkl vs. log var
+% endregion
+
+% region assumptions
+%% EIS requires higher moments to work, so might fail if target does not have these moments
+%% EIS is least squares so if assumptions violated, LSQ theory might be more powerful than concave analysis
+% endregion
+
+% region asymptotic covariances
+%% assuming Cov_P T approx Cov_psi T, main differences lies in Ms
+%% Meis has (log w_psi) term which is minimized by it, thus making asymptotic covariance smaller than the wT for Mce
+%% however Mce might allow for optimization, by choosing G s.t. Cov wT is small, ie VM?
+% endregion
+
+% region choice of \G
+%% 
+% endregion
+
+% region extension / outlook
+%% asymptotic properties of both methods have not been studied to authors knowledge
+Finally, let us stress that these asymptotic considerations are, to the author's knowledge, novel results and should be straightforward to extend if the proposals $\left(\G_{\psi}\right)_{\psi \in \Psi}$ do not form a natural exponential family. As any minimal exponential family may be reduced to a natural exponential family by reparametrization, see \citep[Theorem 1.9]{Brown1986Fundamentals}, the delta method can be used to derive \acrshortpl{clt} in this case as well, as \Cref{prop:cem_exponential_families,prop:eis_exponential_families} still apply. If the family is not minimal the optimal values $\peis$ and $\pce$ may be non-unique, so we cannot hope to estimate them consistently. In this case the user should choose a minimal parametrization, see again \citep[Theorem 1.9]{Brown1986Fundamentals}. 
+For non-exponential family proposals our results should also carry over, provided the usual regularity conditions ensuring uniqueness, consistency and asymptotic normality for M-estimators hold. If the objective functions are not concave as they are in our setting one usually requires uniformly bounded third-order derivatives of the objective function to exist. 
+
+Furthermore, our results can also be extended to the so-called \gls{vmm} which determines an optimal proposal by solving the following optimization problem:
+$$
+\min_{\psi\in\Psi} \var_{\G_{\psi}} \left( w_{\psi}  \right) = \min_{\psi \in \Psi} \G_{\psi} \left[w_{\psi}^2\right] = \min_{\psi\in\Psi} \P \left[w_{\psi} \right],
+$$
+where the first equality holds as $\G_{\psi}[w_{\psi}] = 1$ for all $\psi$. Thus the \acrshort{vmm} chooses $\psi$ such that the second moment of importance sampling weights, $\rho$, becomes small. Again, this is sensible by the discussion surrounding $\rho$ and the \acrshort{ess}. Again, one uses importance sampling with a proposal $\G$ to approximate $\P [w_{\psi}]$ by $\hat\P_{N} [w_{\psi}]$, and solves this noisy version of the problem.
+Unfortunately, there is no closed form for the optimal $\psi_{\text{VM}}$ or $\hat\psi_{\text{VM}}$, even if the proposals form a natural exponential family. Still, as $x \mapsto w_{\psi}(x)$ is convex, so is $x \mapsto \P [w_{\psi}]$, and we can apply \Cref{thm:haberman-consistent,thm:haberman-clt} in combination with \Cref{prop:is-consistency,prop:is-clt} to show, under suitable regularity conditions, the consistency and asymptotic normality of the method. 
+\todo{continune}
+% endregion

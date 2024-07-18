@@ -171,6 +171,7 @@ As \Cref{eq:hpeis-cov} expresses $\hpeis$ in terms of empirical covariances, we 
 
 Additionally, if fourth-order moments exist, we can derive a central limit theorem, similar to \Cref{thm:cem-clt}, for \acrshort{eis}.
 
+% region CLT proof
 \begin{theorem}[\acrshort{clt} for $\hpeis$]
     \label{thm:eis-clt}
     Let $\left( \G_{\psi} \right)_{\psi \in \Psi}$ form a $k$-dimensional natural exponential family with log-densities 
@@ -180,7 +181,7 @@ Additionally, if fourth-order moments exist, we can derive a central limit theor
     and convex parameter space $\Psi \subseteq \R^{k}$. Let $\G \gg \P$ be a proposal with weights $w = \rnd{\P}{\G}$. 
 
     \begin{enumerate}
-        \item $w T_{i}, w \log p \in L^{4}(\G)$,
+        \item\label{it:secondISmomentsexist}$w T_{i}T_{j}, w (\log p)^{2} \in L^{2}(\G)$ for $i = 1, \dots, k$, $j = 1, \dots, k$,
         \item\label{it:fourthmomentsexist} $\log p, T_i \in L^{4}(\P)$ for all $i = 1, \dots, k$
         \item $\cov_{\P}(T)$ is non-singular and $\peis \in \operatorname{int} \Psi$.
     \end{enumerate}
@@ -189,7 +190,10 @@ Additionally, if fourth-order moments exist, we can derive a central limit theor
     $$
         \sqrt{N} (\hpeis - \peis) \convD \Normal (0, BMB)
     $$
-    where $B = \cov_{\P}(T)^{-1}$ and $M = $
+    where $B = \cov_{\P}(T)^{-1}$ and 
+    $$
+    M = \cov_{\G} \left( w \left( \log p - \peis^{T}T - \lambda_{\eis} - \P[T] \right)T \right).
+    $$
 \end{theorem}
 
 \begin{proof}
@@ -200,9 +204,12 @@ Additionally, if fourth-order moments exist, we can derive a central limit theor
             -\infty & \text{else,}
         \end{cases}
     \end{align*}
-    where $\psi' = (\psi, \lambda) \in \Psi \times\R$ and $T'(x) = \begin{pmatrix} T(x) & 1 \end{pmatrix}$. For $\psi \in \Psi$ $(\psi, \lambda) \to \P [b(\cdot, (\psi, \lambda))]$ is differentiable with gradient 
+    where $\psi' = (\psi, \lambda) \in \Psi \times\R$ and $T'(x) = \begin{pmatrix} T(x) & 1 \end{pmatrix}$. For $\psi \in \Psi$ the map $(\psi, \lambda) \to \P [b(\cdot, (\psi, \lambda))]$ is differentiable with gradient 
     $$
-        \nabla_{\psi'} \P [b(\cdot, \psi')] = - \P \left[\left( \log p - \psi^{\prime T}T' \right) T'\right]
+        \nabla_{\psi'} \P [b(\cdot, \psi')] = - \P \left[\left( \log p - \psi^{\prime T}T' \right) T'\right] = \begin{pmatrix}
+            - \P \left[ T'\log p - T'T^{\prime T}\psi' \right] \\
+            -\P \left[ \log p - \psi'^{T}T' \right]
+        \end{pmatrix}
     $$
     and Hessian 
     $$
@@ -213,21 +220,81 @@ Additionally, if fourth-order moments exist, we can derive a central limit theor
     $$
     The Hessian is negative definite, as for all $\psi\in \R^{k}, \lambda \in \R$ we have
     \begin{align*}
-        \begin{pmatrix} \psi & \lambda \end{pmatrix}^{T} H_{\psi'} \P \left[ b(\cdot, \psi') \right]\begin{pmatrix} \psi & \lambda \end{pmatrix} &= - \left( \psi^{T} \cov_{\P} (T) \psi + \psi^{T}\mu\mu^{T}\psi + 2 \psi^{T} \lambda + \lambda^{2}\right) \\
-        &= - \left( \psi^{T}\cov_{\P}(T)\psi + (\lambda + \psi^{T}\mu)^{2} \right) \leq 0,
+        \begin{pmatrix} \psi^{T} & \lambda \end{pmatrix} H_{\psi'} \P \left[ b(\cdot, \psi') \right]\begin{pmatrix} \psi^{T} & \lambda \end{pmatrix}^{T} &= - \left( \psi^{T} \cov_{\P} (T) \psi + \psi^{T}\P[T]\P[T]^{T}\psi + 2 \psi^{T}\P[T] \lambda + \lambda^{2}\right) \\
+                                 &= - \left( \psi^{T}\cov_{\P}(T)\psi + (\lambda + \psi^{T}\P[T])^{2} \right) \leq 0,
     \end{align*}
     with equality if, and only if, both $\lambda$ and $\psi$ are $0$, as $\cov_{\P}(T)$ is assumed to be positive definite. Thus condition \ref{it:C7} is fulfilled.
 
-    For condition \ref{it:C10}, we can verify that for all $i,j = 1,\dots, k+ 1$ and $X \sim \P$
+    For condition \ref{it:C10}, we can verify that for all $i,j = 1,\dots, k+ 1$ 
     $$
-        (\nabla_{\psi'} b(X, \psi'))_{i}(\nabla_{\psi'} b(X, \psi'))_{j} = \left( \log p - \psi^{\prime T}T' \right)^{2} T'_{i}T'_{j}
+        (\nabla_{\psi'} b(\cdot, \psi'))_{i}(\nabla_{\psi'} b(\cdot, \psi'))_{j} = \left( \log p - \psi^{\prime T}T' \right)^{2} T'_{i}T'_{j}
     $$
     is in $L^{1}(\P)$ by assumption \ref{it:fourthmomentsexist} and the Hölder inequality. 
 
-    To account for importance sampling
-    \todo{continue}
+    To apply \Cref{prop:is-clt} we need to show that $w(\cdot)b'(\cdot, \psi',\xi') \in L^{2}(\G)$ for all $\xi'\in\R^{k + 1}$ and all $\psi'$ in a neighborhood of $\peis$, for this it suffices that we show 
+    $$
+        w^{2}(\nabla_{\psi'} b(\cdot, \psi'))_{i}(\nabla_{\psi'} b(\cdot, \psi'))_{j} = w^{2}\left( \log p - \psi^{\prime T}T' \right)^{2} T'_{i}T'_{j}
+    $$
+    is in $L^{1}(\G)$, which holds, again, by assumption \Cref{it:secondISmomentsexist} and the Hölder inequality.
+
+    We have thus shown a central limit theorem for $\hat\psi'_{\eis} = \left( \hpeis, \hat\lambda_{\eis} \right)$, i.e. 
+    $$
+        \sqrt{N} \left( \hat\psi'_{\eis} - \peis \right) \to \mathcal N(0, M'B'M')
+    $$
+    with $B' = - \left(H_{\psi'_{\eis}} \P \left[ b(\cdot, \psi'_{\eis}) \right]\right)^{-1}$ and $M' = \cov \left( w(X) \nabla_{\psi'_{\eis}} b(X,\psi'_{\eis}) \right)$ for $X \sim \G$. By using the inversion formula for block matrices, we obtain 
+    \begin{align*}
+        B' &= \begin{pmatrix}
+            \P \left[ TT^{T} \right] & \P [T^{T}] \\
+            \P [T] & 1
+        \end{pmatrix}^{-1} = \begin{pmatrix}
+            \Sigma + \mu\mu^{T} & \mu^{T} \\
+            \mu & 1
+        \end{pmatrix}^{-1} \\
+        &= \begin{pmatrix}
+            (\Sigma + \mu\mu^{T} - \mu\mu^{T})^{-1} & 0 \\
+            0 & 1 - \mu^{T} (\Sigma + \mu\mu^{T})^{-1}\mu
+        \end{pmatrix} \begin{pmatrix}
+            I_{k} & - \mu^{T} \\
+            -\mu(\Sigma + \mu\mu^{T})^{-1}& 1
+        \end{pmatrix} \\
+        &= \begin{pmatrix}
+            \Sigma^{-1} & - \mu^{T}\Sigma^{-1}\\
+            -\Sigma^{-1}\mu& 1 - \mu^{T} \left( \Sigma + \mu\mu^{T} \right)^{-1}\mu
+        \end{pmatrix}
+    \end{align*}
+    where $\Sigma = \cov_{\P} (T)$ and $\mu = \P [T]$. Similarly, 
+    $$
+        M' = \begin{pmatrix}
+            \cov_{\G} \left( w W_{\peis}T \right) &\cov_{\G} \left( w W_{\peis}T, w W_{\peis} \right) \\
+            \cov_{\G} \left( w W_{\peis}, w W_{\peis}T \right) & \cov_{\G} \left( w W_{\peis} \right) 
+        \end{pmatrix},
+    $$
+    where $W_{\peis} = \log p - \psi^{\prime T}_{\eis}T'$.
+
+    If $\mu \neq 0$, we may change the sufficient statistic of the exponential family such that this holds, i.e. let $\tilde T = T - \P [T]$, then 
+    $$
+        \log g_{\psi}(x) = \psi^{T}T(x) - \log Z(\psi) = \psi^{T}\tilde T(x) - \log \tilde Z(\psi)
+    $$
+    where $\tilde Z(\psi) = \log Z(\psi) + \P [T]$. As $\peis$, \Cref{eq:peis-analytical}, only depends on $T - \P[T]$ under $\P$, this does not change $\peis$. Similarly, $\hpeis$, \Cref{eq:hpeis-cov}, is unaffected by subtracting a constant from $T$. Only 
+    $$
+        \tilde \lambda_{\eis} = \lambda_{\eis} + \P[T]
+    $$
+    and similarly $\hat\lambda_{\eis}$ are changed.
+    
+    Thus, without loss of generality, we may assume that $\P[T] = 0$. 
+    Then 
+    $$
+        B' = \begin{pmatrix}
+            \Sigma^{-1} & 0 \\
+            0 & 1
+        \end{pmatrix}
+    $$
+    is a diagonal matrix. Taking the $\peis$ marginal of the asymptotic normal distribution, we arrive at 
+    $$
+        \sqrt{N} \left( \hpeis - \peis \right) \to \mathcal N \left( 0, BMB \right)
+    $$
+    with $B = \cov_{\P}(T)$ and $M = \cov_{G} \left( w \left( \log p - \peis^{T}T - \lambda_{\eis} - \P[T] \right)T \right)$, as promised.
     
 \end{proof}
+% endregion 
 
-\todo{discuss applicability of both CLTs}
-\todo{literature review EIS}
