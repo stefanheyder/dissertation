@@ -264,7 +264,7 @@ Rearranging terms, provided $L_{t,t}$ is non-singular, we end up with the Markov
 \label{eq:rev_time_u}
     U_{t} = L^{-T}_{t,t} L_{t-1, t }^T U_{t - 1} +L^{-T}_{t,t} Z_{t},
 \end{align}
-where $Z_{t}$ is, by construction, independent of $U_{t}$. Thus for model \eqref{eq:markov-proposal}, we obtain
+where $Z_{t}$ is, by construction, independent of $U_{t - 1}$. Thus for model \eqref{eq:markov-proposal}, we obtain
 \begin{align}
     \label{eq:parameters_markov_from_L}
     \begin{split}
@@ -272,10 +272,10 @@ where $Z_{t}$ is, by construction, independent of $U_{t}$. Thus for model \eqref
     C_{t} &= L^{-T}_{t,t} L_{t-1, t }^T \text{ for } t =1, \dots, n.
     \end{split}
 \end{align}
-Here we see why we chose to use $\overset{\leftarrow}U$ in \Cref{cor:sparsity_L}: had we applied \Cref{thm:gelfand_gmrf} to $U$ directly yields a Markov process in reverse time.
+Here we see why we chose to use $\overset{\leftarrow}U$ in \Cref{cor:sparsity_L}: had we applied \Cref{thm:gelfand_gmrf} to $U$ directly we would have ended up with a Markov process in reverse time.
 
 % show how to estimate Cholesky root analytically -> Schäfer
-We now turn our attention to applying the \gls{cem} to model \eqref{eq:markov-proposal}. Following a similar argument as in the discussion surrounding \Cref{eq:cem_reparametrization}, we see that it suffices to choose $P$, the precision matrix of $U$, such that it minimizes
+We now turn our attention to applying the \gls{cem} to model \eqref{eq:markov-proposal}. Following a similar argument as in the discussion surrounding \Cref{eq:cem_reparametrization}, we see that we may match the mean $v$ to that of $\P$ and it suffices to choose $P$, the precision matrix of $U$, such that it minimizes
 \begin{align}
 \label{eq:markov_ce_target}
 \frac{1}{2} \operatorname{trace} \left( P \hat\Gamma \right) - \frac{1}{2}\log\det P
@@ -305,51 +305,115 @@ To make this argument rigorous, let us apply the following result (stated in our
     \label{eq:schafer_gamma}
         L_{s_{i}, i} &= \frac{\Gamma_{s_{i}, s_{i}}^{-1} e_{1}}{\sqrt{e_{1}^{T}\Gamma_{s_{i}, s_{i}}^{-1} e_{1}}},
     \end{align}
-    where $s_{i} = \{j : (i,j) \in S\}$, $\Gamma_{s_{i}, s_{i}}$ is the restriction of $\Gamma$ to the set of indices $s_{i}$ and $e_{1} \in\R^{\lvert s_{i}\rvert}$ is the first unit vector.
+    where $s_{i} = \{j : (i,j) \in \mathcal S\}$, $\Gamma_{s_{i}, s_{i}}$ is the restriction of $\Gamma$ to the set of indices $s_{i}$ and $e_{1} \in\R^{\lvert s_{i}\rvert}$ is the first unit vector.
 \end{theorem}
-For the problem at hand, the sparsity pattern $\mathcal S $ is given by the non-zero entries of $L$ depicted in \Cref{eq:L_structure} and the matrices $\Gamma_{s_{i}, s_{i}}$ are sub-matrices of the covariances $\cov \left( \left(X_{t-1}, X_{t}\right) | Y\right)$, for $t = 1, \dots, n$ and $\cov \left( X_{0} | Y\right)$, i.e. we let $\Gamma = \cov \left(\overset{\leftarrow}X| Y\right)$ in \Cref{thm:schafer_cholesky_analytical}.
+Exploiting the Markov structure of our proposals, we immediately obtain the following:
+\begin{corollary}
+    \label{cor:markov_sparsity}
+    Let $\mathcal S$ be the sparsity set of a Gaussian Markov process of the form \Cref{eq:markov-proposal}, i.e. 
+    $$
+        \mathcal S = \left\{ ((t,i),(s,j)) \in \left(\{0,\dots, n\}\times \{1,\dots, m\}\right)^{2} \,|\, (t = s \text{ and } i \geq  j) \text{ or } t = s + 1 \right\},
+    $$
+    see also \Cref{eq:L_structure},
+    and let $\Gamma$ be a positive definite matrix of size $((n+1)m)\times(n + 1)m$ with blocks
+    $$
+        \Gamma_{s,t} = (\Gamma_{(s,i),(t,j)})_{i,j =1,\dots,m}.
+    $$
+    Then $\hat L$ in \Cref{thm:schafer_cholesky_analytical} depends only on the block-diagonal entries $\Gamma_{t, t}$, $ t = 0, \dots, n$ and block off-diagonal entries $\Gamma_{t, t + 1}$, $t = 0, \dots, n$.
 
-Let $l^{j}_{t}\in \R^{2m\times m}$ be the $j$-th column of 
-$$
-\begin{pmatrix}
-    L_{t,t} \\
-    L_{t - 1, t}
-\end{pmatrix},
-$$
-where $j \in \{1, \dots, m\}$. 
-As $L_{t,t}$ is lower triangular, the first $j - 1$ entries of $l^{j}_t$ are $0$. We obtain the remaining nonzero entries by computing
-$$
-\frac{\Gamma_{t,j}^{-1}e_{j}}{\sqrt{e_{j}^T\Gamma_{t,j}^{-1}e_{j}}},
-$$
-for $\Gamma_{t,j}\in \R^{(2m - (j - 1))\times (2m - (j - 1))}$ the joint covariance matrix of the last $ m - (j - 1)$ components of $X_{t}$ and all entries of $X_{t - 1}$, conditional on $Y = y$, and $e_{j} \in \R^{2m - (j - 1)}$ the first unit vector.
+    If, in particular, $\Gamma$ is the covariance matrix of Gaussian Markov process, $\hat L = \operatorname{chol} (\Gamma ^{-1})$.
+\end{corollary}
 
-Putting everything together, we may apply the \gls{cem} to estimate $\psi$ in model \eqref{eq:markov-proposal} in the following way: Given importance samples $U^{1}, \dots, U^{N}$ for $\mathcal L (X| Y = y)$ and associated unnormalized weights $w^{1}, \dots, w^{N}$, we estimate $v$ by 
+We have thus shown the following: The covariance matrix of the KL-optimal Gaussian Markov process for the positive definite covariance matrix $\Gamma$ with $\mathcal O(n^{2}m^{2})$ entries only depends on $\mathcal O(n m^{2})$ many entries, the marginal covariances. In particular, if we can find a centered Gaussian Markov process $(X_{t})_{t = 0, \dots, n}$ whose marginal covariances fulfill 
+\begin{align*}
+    \cov (X_{t}) = \Gamma_{t}  && t = 0, \dots, n\\
+    \cov (X_{t}, X_{t + 1}) = \Gamma_{t, t + 1} && t = 0, \dots, n,
+\end{align*}
+then its law $\mathcal L (X)$ is the one we seek. The following proposition puts all the pieces together.
+
+\begin{proposition}[the \acrshort{cem} for the Markov proposal]
+    \label{prop:cem-for-markov-proposal}
+    Let $\P$ be a probability measure on $\R^{(n+1)\times m}$ with mean $\mu$ and positive definite covariance matrix $\Gamma$, partitioned into blocks 
+    $$
+        \Gamma_{s,t} = (\Gamma_{(s,i),(t,j)})_{i,j =1,\dots,m}.
+    $$
+    Let
+    $$
+        \begin{pmatrix}
+            J_{t,t} & 0 \\
+            J_{t + 1, t} & Z_{t+1, t+1}
+        \end{pmatrix} = \operatorname{chol} \begin{pmatrix}
+            \Gamma_{t,t} & \Gamma_{t, t + 1} \\
+            \Gamma_{t + 1, t} & \Gamma_{t + 1, t + 1}
+        \end{pmatrix}.
+    $$
+
+    Then the optimal cross-entropy parameter
+    $$
+        \pce = \argmin_{\psi = (v, C_{1}, \dots, C_{n}, R_{0}, \dots, R_{n})} \Dkl{\P}{\G_{\psi}}
+    $$
+    for the Markov proposal $\G_{\psi}$ from model \eqref{eq:markov-proposal} exists and is unique. The components of $\pce$ are given by 
+    \begin{align*}
+        v &= \mu\\
+        R_{0} &= \operatorname{chol} (\Gamma_{0,0}) 
+    \end{align*}
+    and for $t = 1, \dots, n$
+    \begin{align*}
+        C_{t} &= J_{t + 1, t}^{T} J_{t, t}^{-1}\\
+        R_{t} &= \operatorname{chol} \left( \Gamma_{t + 1, t + 1} - C_{t}\Gamma_{t,t}^{-1}C_{t}^T \right).
+    \end{align*}
+
+    Thus, given $\nu$ and $\Gamma$, $\pce$ can be obtained in $\mathcal O(n\,m^{3})$ many operations.
+\end{proposition}
+
+\begin{proof}
+    It only remains to show the uniqueness and existence of $\pce$, as well as its representation.
+    The discussion surrounding \Cref{eq:markov_ce_target} shows that $v = \mu$ has to hold, so we may assume that $\P$ and the proposal are both centered.
+    As $\Gamma$ is positive definite, so are all of its sub-matrices, and we may apply \Cref{cor:markov_sparsity}. Therefore, if we can show that there is a unique Gaussian Markovian probability measure whose covariance matrix matches $\Gamma$ as in that corollary we are done. 
+
+    Let $(U_{t})_{t = 0, \dots, n} \sim \G_{\pce}$. Then 
+    $$
+        \cov (U_{0}) = R_{0}R_{0}^T = \Gamma_{0,0},
+    $$
+    and from the Cholesky decomposition we obtain for $t = 0, \dots, n - 1$
+    $$
+        \begin{pmatrix}
+            J_{t,t}J_{t,t}^T & J_{t,t}J_{t + 1, t}^T\\
+            J_{t +1, t}J_{t,t}^T & J_{t + 1, t}J_{t + 1, t}^{T} + Z_{t + 1, t + 1} Z_{t + 1, t + 1}^T.
+        \end{pmatrix} = \begin{pmatrix}
+            \Gamma_{t,t} & \Gamma_{t, t + 1} \\
+            \Gamma_{t + 1, t} & \Gamma_{t + 1, t + 1}
+        \end{pmatrix}.
+    $$
+    Using induction over $t = 0, \dots, n - 1$, we obtain
+    \begin{align*}
+        \cov \left( U_{t + 1} \right) &= C_{t + 1}\cov \left( U_{t} \right) C_{t + 1} + R_{t + 1}R_{t + 1}^T \\
+            &= C_{t}\Gamma_{t,t}C_{t}^T + \Gamma_{t +1, t+ 1} - C_{t}\Gamma_{t,t}C_{t}^T\\
+            &= \Gamma_{t + 1, t + 1}
+    \end{align*}
+    and
+    \begin{align*}
+        \cov \left( U_{t + 1}, U_{t} \right) &= C_{t}\cov \left( U_{t} \right) = J_{t + 1, t}J_{t,t}^{-1} J_{t,t} J_{t, t}^T = \Gamma_{t + 1, t}.
+    \end{align*}
+    This shows the existence. For uniqueness, note that model \eqref{eq:markov-proposal} enforces that $R_{t}$ is a lower triangular matrix with positive diagonals. As $R_{t + 1}R_{t + 1}^T$ is the conditional covariance of $U_{t + 1}$ given $U_{t}$ which is, by \Cref{lem:gaussian_conditional} given by $\Gamma_{t + 1, t + 1} - \Gamma_{t + 1, t}\Gamma_{t,t}^{-1}\Gamma_{t + 1, t}$. Thus the $R$ matrices are unique as well. As $\cov (U_{t}, U_{t + 1}) = \cov (U_{t})C_{t}^{T}$, we can show that, additionally, also $C_{t}$ is unique.
+\end{proof}
+
+\todo{rewrite everything in terms of this prop}
+When using the \acrshort{cem}, we do not have access to the mean and covariances necessary to apply this proposition. Instead, we may apply the \gls{cem} to estimate $\psi$ in model \eqref{eq:markov-proposal} by replacing these unknown moments with their importance sampling estimates. Given importance samples $U^{1}, \dots, U^{N}$ for $\mathcal L (X| Y = y)$ and associated auto-normalized weights $W^{1}, \dots, W^{N}$, we estimate $v$ by 
 \begin{align}
 \label{eq:hat_v}
-\hat v = \frac{\sum_{i = 1}^N w^{i}X^{i}}{\sum_{i = 1}^N w^{i}}
+\hat v = \sum_{i = 1}^N W^{i}X^{i}
 \end{align}
 and the empirical covariance matrices
 \begin{align}
     \label{eq:empirical_covs}
-    \widehat{\cov} \left( X_{t}, X_{t - 1} \right) &= \frac{\sum_{i = 1}^N w^{i}(X_{t:t-1}^{i} - \hat v_{t-1:t}) (X_{t:t-1}^{i} - \hat v_{t-1:t})^{T}}{\sum_{i = 1}^N w^{i}}\\
-\widehat{\cov} \left( X_{0}\right) &= \frac{\sum_{i = 1}^N w^{i}(X_{0}^{i} - \hat v_{0}) (X_{0}^{i} - \hat v_{0})^{T}}{\sum_{i = 1}^N w^{i}}.
+    \begin{split}
+    \widehat{\cov} \left( X_{t}, X_{t - 1} \right) &= \sum_{i = 1}^N W^{i}(X_{t:t-1}^{i} - \hat v_{t-1:t}) (X_{t:t-1}^{i} - \hat v_{t-1:t})^{T}\\
+\widehat{\cov} \left( X_{0}\right) &= \sum_{i = 1}^N W^{i}(X_{0}^{i} - \hat v_{0}) (X_{0}^{i} - \hat v_{0})^{T}
+    \end{split}
 \end{align}
-We then determine $\hat L$ from these covariance matrices using \Cref{thm:schafer_cholesky_analytical}. 
 These steps are summarized in \Cref{alg:cem-markov-proposal}. 
 
-\begin{tcolorbox}[title={WIP improve: order to $\mathcal O(m^{3})$}]
-    By the preceding theorem, the KL-optimal Gaussian Markov process depends only on the covariance matrices $\cov(X_n), \cov (X_{t}, X_{t - 1})$ for $t = n, \dots, 1$ and the mean $v$ and no other entries of $\Gamma$. Thus we may assume that $\Gamma$ is the covariance matrix of a Gaussian Markov process whose marginals have exactly these means and covariances. This uniquely determines the Gaussian Markov process, and as such, it is the optimal one. 
-
-    \begin{lemma}
-        Let $X_{t}, t=0,\dots, n$ be a Gaussian Markov process of the form \Cref{eq:markov-proposal}. If $\cov(X_{0}), \cov(X_{t- 1}, X_{t}), t = 1, \dots, n$ are non-singular, 
-        \begin{align*}
-            R_{0} = \operatorname{chol} \left( \cov (X_{0}) \right)
-        \end{align*}
-        
-    \end{lemma}
-
-    We can implement this more efficiently: Given sequential covariances $\cov (X_{t}, X_{t - 1})$, there exists a Markov process with these covariances (Cholesky roots give $L_{t}$ and $R_{t}$). As the optimal MP only depends on these covariances, we can also minimize KL-divergence to this MP. The KL divergence is thus minimized for this MP. Calculation of $L_{t}$ and $R_{t}$ then only take $\mathcal O((2m)^{3}) = \mathcal O(m^{3})$ instead of the $\mathcal O(m^{4})$ procedure presented until now. 
-\end{tcolorbox}
 \begin{algorithm}
     \caption{The \gls{cem} for the Markov proposal \eqref{eq:markov-proposal}}
     \label{alg:cem-markov-proposal}
@@ -358,11 +422,11 @@ These steps are summarized in \Cref{alg:cem-markov-proposal}.
         \State set $l = 0$
         \Repeat 
             \State\label{step:cem-simulate} sample $U^{1} + v^{l}, \dots, U^{N} + v^{l} \iid \G_{\hat\psi^{l}}$ with fixed seed \Comment{\Cref{eq:markov-proposal}} 
-            \State\label{step:cem-weights} determine unnormalized weights $w^{1}, \dots, w^{N}$ \Comment{\Cref{eq:weights_markov}}
+            \State\label{step:cem-weights} determine auto-normalized weights $W^{1}, \dots, W^{N}$ \Comment{\Cref{eq:weights_markov}}
             \State\label{step:cem-est_v} estimate $\hat v^{l + 1}$ \Comment{\Cref{eq:hat_v}} 
-            \State\label{step:cem-est_cov} estimate $\widehat{\cov} (U_{t}, U_{t-1}), t=1, \dots, n$, $\widehat\cov (U_{0})$ \Comment{\Cref{eq:empirical_covs}}
-            \State\label{step:cem-L} determine $\hat L^{l + 1}$ \Comment{\Cref{thm:schafer_cholesky_analytical}}
-            \State\label{step:cem-C_R} determine $C^{l + 1}$ and $R^{l + 1}$ from $\hat L^{l + 1}$ \Comment{\Cref{eq:parameters_markov_from_L}}
+            \State\label{step:cem-est_cov} estimate $\widehat{\cov} (U_{t}, U_{t-1}), t=1, \dots, n$, and $\widehat\cov (U_{0})$ \Comment{\Cref{eq:empirical_covs}}
+            %\State\label{step:cem-L} determine $\hat L^{l + 1}$ \Comment{\Cref{thm:schafer_cholesky_analytical}}
+            \State\label{step:cem-C_R} determine $C^{l + 1}$ and $R^{l + 1}$ \Comment{\Cref{prop:cem-for-markov-proposal}}
             \State\label{step:cem-est_phi} set $\hat\psi^{l + 1} = \left( \hat v^{l + 1}, C^{l + 1}, R^{l + 1}\right)$ 
             \State set $l = l + 1$
         \Until{$\hat\psi^{l}$ converged}
@@ -381,14 +445,14 @@ In \Cref{step:cem-simulate} we use the standard praxis of \glspl{crn} to ensure 
 
 % runtime
 We give an overview of the time and space complexities of each line in \Cref{alg:cem-markov-proposal} in \Cref{tab:cem-time-space-complexity}
-The total time complexity of single iteration of \Cref{alg:cem-markov-proposal} is $\mathcal O \left( N\,n\,m^{2} + n\,m^{4}\right)$ and its space complexity is $\mathcal O \left( N\,n\,m + n\,m^{2}\right)$. Let us elaborate on the complexities of each step:
+The total time complexity of a single iteration of \Cref{alg:cem-markov-proposal} is $\mathcal O \left( N\,n\,m^{2} + n\,m^{3}\right)$ and its space complexity is $\mathcal O \left( N\,n\,m + n\,m^{2}\right)$. Let us elaborate on the complexities of each step:
 \begin{enumerate}
     \item[\Cref{step:cem-simulate}] Generate $N$ i.i.d. samples from model \eqref{eq:markov-proposal}, where each simulation requires $\mathcal O(n)$ matrix-vector multiplications of dimension $m$. 
     \item[\Cref{step:cem-weights}] To evaluate the weights, \Cref{eq:weights_markov}, we have to evaluate for every sample $\mathcal O(n)$-times the density of a $m$-variate Gaussian distribution, while this usually has time-complexity $\mathcal O(m^{3})$, we have access to the Cholesky root $R_{t}$, so this step has only time-complexity $\mathcal O(m^{2})$. In \Cref{eq:weights_markov} we also need to compute $p(y_{t}|x_{t})$ and $p(x_{t}|x_{t - 1})$. Assuming conditional independence of observations, $p(y_{t}|x_{t}) = \prod_{i = 1}^{m}p(y_{t}^i|(B_{t}x_{t})^{i})$, evaluating the first term requires only $\mathcal O(m^{2})$ operations. For the second term, if we allow pre-computation of the Cholesky roots of innovations off-line (in $\mathcal O(m^{3})$ time), this step reduces to $\mathcal O(m^{2})$ as well.  
     \item[\Cref{step:cem-est_v}] Calculating the weighted mean $\hat v \in\R^{(n+1)m}$, \Cref{eq:hat_v}, requires $\mathcal O(N\,n\,m)$ operations.
     \item[\Cref{step:cem-est_cov}] Calculating the weighted covariance matrices, \Cref{eq:empirical_covs}, requires $(n+1)$ times multiplying $N$ many $m\times 1$ with $1 \times m$ vectors. 
-    \item[\Cref{step:cem-L}] To determine $L_{t,t}$ and $L_{t - 1, t}$ we have to solve $m$ times the linear systems of equations given in \Cref{eq:schafer_gamma}, where the dimension of the system is $2m,\dots, m + 1$. This requires $\mathcal O(m^{4})$ many operations, and we have to perform it for every one of the $n + 1$ time points. The result is $L$ with sparsity structure given by \Cref{eq:L_structure}, which has $\mathcal O (n m^{2})$ many non-zero entries.
-    \item[\Cref{step:cem-C_R}] For each of the $\mathcal O(n)$ many $C_{t}$ and $R_{t}$ we have to invert a triangular matrix of dimension $m$. 
+    %\item[\Cref{step:cem-L}] To determine $L_{t,t}$ and $L_{t - 1, t}$ we have to solve $m$ times the linear systems of equations given in \Cref{eq:schafer_gamma}, where the dimension of the system is $2m,\dots, m + 1$. This requires $\mathcal O(m^{4})$ many operations, and we have to perform it for every one of the $n + 1$ time points. The result is $L$ with sparsity structure given by \Cref{eq:L_structure}, which has $\mathcal O (n m^{2})$ many non-zero entries.
+    \item[\Cref{step:cem-C_R}] For each of the $\mathcal O(n)$ many $C_{t}$ and $R_{t}$ we have to calculate Cholesky decompositions and invert triangular matrices of dimension $m$. 
 \end{enumerate}
 
 \begin{table}
@@ -401,7 +465,6 @@ The total time complexity of single iteration of \Cref{alg:cem-markov-proposal} 
         weights (\Cref{step:cem-weights}) & $\mathcal O (N\,n\,m^{2})$ & $\mathcal O \left( N \right)$\\
         estimating $v$ (\Cref{step:cem-est_v}) & $\mathcal O (N\,n\,m)$ & $\mathcal O \left( n\,m \right)$\\
         estimating covariances (\Cref{step:cem-est_cov}) & $\mathcal O (N\,n\,m^{2})$ & $\mathcal O \left( n\,m \right)$\\
-        determining $L$ (\Cref{step:cem-L}) & $\mathcal O (n\,m^{4})$ & $\mathcal O (n \,m^{2})$\\
         determining $C$ and $R$ (\Cref{step:cem-C_R}) & $\mathcal O (n\,m^{3})$ & $\mathcal O (n\,m^{2})$\\
         \bottomrule
     \end{tabular}
@@ -409,28 +472,28 @@ The total time complexity of single iteration of \Cref{alg:cem-markov-proposal} 
     \label{tab:cem-time-space-complexity}
 \end{table}
 
-An efficient implementation of \Cref{alg:cem-markov-proposal} can improve on some of the other steps involved. There is no need to calculate the $C_{t}$ and $R_{t}$ matrices explicitly, instead we can calculate $C_{t}U_{t - 1}$ efficiently by solving the linear system $L^{T}_{t,t}\left(C_{t}U_{t - 1}\right) = L_{t - 1, t}^TU_{t - 1}t$ by back-substitution, as $L^{T}_{t,t}$ is an upper triangular matrix. Similarly, to compute $R_{t}Z_{t}$ we solve $L^{T}_{t,t}\left( R_{t} Z_{t}\right) = Z_{t}$ by back-substitution. However, the main bottleneck for the time-complexity of \Cref{alg:cem-markov-proposal} is determining $L$ with time complexity $\mathcal O (n\,m^{4})$, which we have not been able to improve upon. 
+An efficient implementation of \Cref{alg:cem-markov-proposal} can improve on the practically relevant computational time. There is no need to calculate the $C_{t}$ and $R_{t}$ matrices explicitly, instead we can calculate $C_{t}U_{t - 1} = J_{t + 1, t}J_{t,t}^{-1}U_{t - 1}$ efficiently by back-substitution, as $J_{t,t}$ is a lower triangular matrix. Similar to the square-root Kalman filter and smoother \citep{Morf1975Squareroot} we may compute $R_{t}$ efficiently by QR-decomposition, as it is the Cholesky root of a conditional covariance matrix. 
 
 % if space complexity is problematic, can compute weights first with fixed seed and then iterate forwards
-If the main bottleneck for space lies in the $\mathcal O(N\,n\,m)$ simulation part, we may reduce this by simulating twice from model \eqref{eq:markov-proposal} using \glspl{crn}, and only storing the samples for a single time step (dimension $\mathcal O (N\,m)$) in each simulation. In the first pass, we only calculate the weights, and in the second pass, we calculate $\hat v$ and the required covariance matrices. For this, we only need the $2N$ samples of dimension $m$ from time $t$ and $t + 1$, i.e. $\mathcal O(N\,m)$ space. This reduces the total space complexity to $\mathcal O(N\,m + n\,m^{2})$. 
+The main bottleneck for space lies in the $\mathcal O(N\,n\,m)$ simulation part, and we may reduce this by simulating twice from model \eqref{eq:markov-proposal} using \glspl{crn}, and only storing the samples for a single time step (dimension $\mathcal O (N\,m)$) in each simulation. In the first pass, we only calculate the weights, and in the second pass, we calculate $\hat v$ and the required covariance matrices. For this, we only need the $2N$ samples of dimension $m$ from time $t$ and $t + 1$, i.e. $\mathcal O(N\,m)$ space. This reduces the total space complexity to $\mathcal O(N\,m + n\,m^{2})$. 
 
 We demonstrate these improvements in \Cref{alg:cem-markov-proposal-fast}. Additionally, we calculate the weights on the log scale for numerical stability.
 
 \begin{algorithm}
     \begin{algorithmic}
-        \Require \gls{lcssm} (\Cref{def:lcssm}), observations $Y$, initial estimate $\hat\psi^0 = \left( v^{0}, L^{0}\right)$, sample size $N$
+        \Require \gls{lcssm} (\Cref{def:lcssm}), observations $Y$, initial estimate $\hat\psi^0 = \left( v^{0}, R^{0}, J^{0}\right)$, sample size $N$
         \State set $l = 0$
         \Repeat 
-            \State simulate $Z^{1}_0, \dots, Z^{N}_0 \iid \mathcal N(0, I)$ 
-            \State set $U^{i}_0 = (L^{l}_{0,0})^{-T}Z_{0}^{i}$ \Comment{backsubstitution}
+            \State simulate $\nu^{1}_0, \dots, \nu^{N}_0 \iid \mathcal N(0, I)$ 
+            \State set $U^{i}_0 = R^{l}_{0}\nu_{0}^{i}$ 
             \State set $X_{0}^{i} = v^{l}_{0} + U^{i}_0$ 
-            \State set $\log w^{i} = \log p(y_{0}|X_{0}^{i}) + \log p(X_{0}^i) + \frac{1}{2} \lVert Z^{i}_0\rVert^{2}$ \Comment{$\log g(X_{0}^{i}) = -\frac{1}{2}\lVert Z^{i}_{0}\rVert^{2}_2 + C$ }
+            \State set $\log w^{i} = \log p(y_{0}|X_{0}^{i}) + \log p(X_{0}^i) + \frac{1}{2} \lVert \nu^{i}_0\rVert^{2}$ \Comment{$\log g(X_{0}^{i}) = -\frac{1}{2}\lVert \nu^{i}_{0}\rVert^{2}_2 + C$ }
             \State store current RNG state
             \For {$t \gets 1, \dots, n$}
-                \State simulate $Z^{1}_t, \dots, Z^{N}_t \iid \mathcal N(0, I)$ 
-                \State set $U^{i}_t = (L^{l}_{t,t})^{-T}(L_{t - 1, t}^{l})^{T}U^{i}_{t - 1} + (L^{l}_{t,t})^{-T}Z_{t}^{i}$ \Comment{backsubstitution}
+                \State simulate $\nu^{1}_t, \dots, \nu^{N}_t \iid \mathcal N(0, I)$ 
+                \State set $U^{i}_t = (J_{t + 1, t})^{T}(J_{t,t})^{-1}U^{i}_{t - 1} + R^{l}_{t}\nu_{t}^{i}$ \Comment{backsubstitution}
                 \State set $X_{t}^{i} = v^{l}_{t} + U^{i}_t$ 
-                \State set $\log w^{i} = \log w^{i} + \log p(y_{t}|X_{t}^{i}) + \log p(X_{t}^i|X_{t - 1}^i) + \frac{1}{2} \lVert Z^{i}_t\rVert^{2}$ 
+                \State set $\log w^{i} = \log w^{i} + \log p(y_{t}|X_{t}^{i}) + \log p(X_{t}^i|X_{t - 1}^i) + \frac{1}{2} \lVert \nu^{i}_t\rVert^{2}$ 
             \EndFor
             \State set $\log w^{i} = \log w^{i} - \max_{i = 1,\dots, N} \log w^{i}$ \Comment{ensure $\log w^{i} \leq 0$}
             \State set $w^{i} = \exp (\log w^{i})$
@@ -438,8 +501,8 @@ We demonstrate these improvements in \Cref{alg:cem-markov-proposal-fast}. Additi
             \State set $v^{l + 1}_0 = \sum_{i = 1}^{N}W^{i}X_{0}^i$
             \State restore RNG state
             \For {$t \gets 1, \dots, n$}
-                \State simulate $Z^{1}_t, \dots, Z^{N}_t \iid \mathcal N(0, I)$ 
-                \State set $U^{i}_t = (L^{l}_{t,t})^{-T}(L^{l}_{t - 1, t})^{T}U^{i}_{t - 1} + (L^{l}_{t,t})^{-T}Z_{t}^{i}$ \Comment{backsubstitution}
+                \State simulate $\nu^{1}_t, \dots, \nu^{N}_t \iid \mathcal N(0, I)$ 
+                \State set $U^{i}_t = (L^{l}_{t,t})^{-T}(L^{l}_{t - 1, t})^{T}U^{i}_{t - 1} + (L^{l}_{t,t})^{-T}\nu_{t}^{i}$ \Comment{backsubstitution}
                 \State set $X_{t}^{i} = v^{l}_{t} + U^{i}_t$ 
                 \State set $v^{l + 1}_t = \sum_{i = 1}^{N} W^{i}X^{i}_t$
                 \State set $\widehat\cov \left( X_{t - 1}, X_{t} \right) = \sum_{i = 1}^N W^{i} \left( X^{i}_{t-1:t} - v^{l}_{t-1:t} \right)\left( X^{i}_{t-1:t} - v^{l}_{t-1:t} \right)^{T}$
