@@ -1,2 +1,68 @@
-\section{Maximum likelihood estimation in \texorpdfstring{\glspl{ssm}}{state space models}}
+\section{Maximum likelihood estimation in \texorpdfstring{\acrshortpl{ssm}}{SSMs}}
 \label{sec:maximum_likelihood_estimation}
+
+% region introduction
+%% need for MLE: hyperparameters
+Until now, we have assumed that the \acrshort{ssm} under consideration is completely known, i.e. we have access to the true transition and observation kernels. For the models considered in this thesis (\Cref{cha:analysis_of_selected_models}), this is unrealistic, as they are not based on concrete physical processes but are rather statistical approximations of the true underlying dynamics. The transition densities of, e.g., \Cref{eq:glssm_states} will depend on the covariance matrix of innovations, of which we have no a priori knowledge and for negative binomially distributed observations the overdispersion parameter $r$ will be unknown. Let us denote by $\theta\in\R^{l}$ the vector of these hyperparameters. \todo{check l / k with psis}
+To make this dependence explicit, we will introduce subscripts $\theta$ where appropriate, i.e. $\P_{\theta}$ is a target distribution that additionally depends on $\theta$, $p_{\theta}$ its density et cetera.
+
+To determine a suitable value of $\theta$, multiple options are available. Here, we opt for a frequentist approach, using maximum likelihood estimation to determine an optimal $\hat \theta$. Therefore, given observations $y\in\R^{(n+1)\times p}$, $\hat\theta$ maximizes the likelihood $p_{\theta}(y)$ and can be obtained as the global maximum of the following optimization problem: 
+$$
+    \max_{\theta \in \Theta} p_{\theta}(y).
+$$
+For numerical stability, we should maximize the log-likelihood instead, i.e. solve 
+$$
+    \max_{\theta \in \Theta} \log p_{\theta}(y).
+$$
+Here $\Theta$ is a space of feasible parameters. To solve this optimization problem using gradient descent algorithms, we need access to both the likelihood and its derivatives. Thus, in the following, we will assume that $\theta \mapsto \log p_{\theta}(y)$ is sufficiently smooth, to apply these methods, i.e. it has continuous derivatives of second order. 
+
+%% GLSSM analytically available, still need to use gradient descent algs. 
+While the Kalman-filter (\Cref{alg:kalman_filter}) allows analytical computation of this likelihood \acrshortpl{glssm}, in general \acrshortpl{ssm} it is numerically intractable. The reason for this is that
+$$
+    p_{\theta}(y) = \int p_{\theta}(x,y) \mathrm d \mu(x)
+$$
+is a high-dimensional integral, which is hard to evaluate numerically. Instead, we will use importance sampling to estimate the likelihood. For this, let us regard $p_{\theta}(x,y)$ as an unnormalized density in $x$. The missing integration constant is then just $p_{\theta}(y)$ and the normalized density is $p_{\theta}(x|y)$. If $\G \gg \P$ is a proposal distribution whose density $g$ with respect to $\mu$ we can evaluate analytically, i.e. not only up to a constant, we see that for the unnormalized weights $\tilde w_{\theta}(x) = \frac{p_{\theta}(x,y)}{g(x)}$, that $p_{\theta}(y) = \G [\tilde w_{\theta}]$. Thus we may estimate the likelihood by 
+$$
+    \widehat{p_{\theta}(y)} = \sum_{i = 1}^N \tilde w_{\theta} (X^{i})
+$$
+for $X^{1}, \dots, X^{N} \iid \G$ and $N \in \N$. To evaluate the gradient, notice that as $\nabla_{\theta} p_{\theta}(x,y) = p_{\theta}(x,y) \nabla_{\theta} \log p_{\theta}(x,y)$, we have, provided we can exchange integration and differentiation,
+\begin{align*}
+     \nabla_{\theta} p_{\theta}(y) &= \nabla_{\theta}\int p_{\theta}(x,y)\d \mu(x) = \int p_{\theta}(x,y) \nabla_{\theta} \log p_{\theta}(x,y)\d \mu(x) \\
+     &= \G [\tilde w_{\theta} \nabla_{\theta} \log p_{\theta}(x,y)],
+\end{align*}
+and so we may estimate the gradient by 
+\begin{align*}
+    \widehat{\nabla_{\theta} p_{\theta}(y)} &=\sum_{i = 1}^N \tilde w_{\theta}(X^{i}) \nabla_{\theta} \log p_{\theta}(X^{i}, y) \\
+    &= \sum_{i = 1}^N \tilde w_{\theta}(X^{i}) \sum_{t = 0}^n \nabla_{\theta} \left( \log p_{\theta}(y_{t} | X^{i}_{t}) + \log p_{\theta}(X^{i}_t|X^{i}_{t - 1}) \right).
+\end{align*}
+Similarly, we can estimate the log-likelihood by
+$$
+    \widehat{\log p_{\theta}(y)} = \log \left( \sum_{i = 1}^N \tilde w_{\theta}(X^{i}) \right)
+$$
+and its gradient, using the fact that the gradient of $\log f$ for $f: \R^{l} \to \R$ is $ \frac{1}{f} \nabla_{\theta} f$, by 
+\begin{align*}
+    \widehat{\nabla \log p_{\theta}(y)} &= \left( \sum_{i = 1}^N \tilde w_{\theta}(X^{i}) \right)^{-1} \left( \sum_{i = 1}^N \tilde w_{\theta}(X^{i}) \sum_{t = 0}^n \nabla_{\theta} \left( \log p_{\theta}(y_{t} | X^{i}_{t}) + \log p_{\theta}(X^{i}_t|X^{i}_{t - 1}) \right) \right) \\
+    &=\sum_{i = 1}^N W_{\theta}^{i} \sum_{t = 0}^n \nabla_{\theta} \left( \log p_{\theta}(y_{t} | X^{i}_{t}) + \log p_{\theta}(X^{i}_t|X^{i}_{t - 1}) \right),
+\end{align*}
+where $W_{\theta}^{i} = \frac{\tilde w_{\theta}(X^{i})}{\sum_{i= 1}^N \tilde w_{\theta}(X^{i})}$ are the auto-normalized weights.
+
+
+
+%% discuss not really frequentist setting
+%% alternative: fully Bayesian
+%% analytically impossible
+%% high dimensional integral -> importance sampling
+% endregion
+
+% region general proposal
+
+% endregion
+
+% region GLSSM proposal
+% endregion
+
+% region Markvo proposal
+% endregion
+
+% region optimal MLE means optimal constant function approximation
+% endregion

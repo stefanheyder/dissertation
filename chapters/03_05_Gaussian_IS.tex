@@ -210,6 +210,19 @@ The Markov structure of model \eqref{eq:markov-proposal} implies that the precis
 \end{proof}
 
 Applying \Cref{lem:gaussian_precision_zeros} to model \eqref{eq:markov-proposal}, we see that its precision matrix $P$ is sparse, i.e. it is a block-tri-diagonal matrix, as $U_{t} \perp U_{s} | U_{-t,-s}$ for $\lvert t - s\rvert > 1$ and $U_{-t,-s}$ being the vector of all $U_{0}, \dots, U_{n}$ except for $U_{t}, U_{s}$. Thus, the only entries of $P$ that are potentially non-zero are those whose row and column correspond to $(U_{t}, U_{t})$ for $t = 0, \dots, n$, $(U_{t}, U_{t - 1})$ and $(U_{t - 1}, U_{t})$ for $t=1, \dots, n$. 
+Therefore, $P$ has the following block-tridiagonal structure:
+\begin{align}
+    \label{eq:P_structure}
+P = \begin{pmatrix}
+    P_{0,0} & P_{0, 1} & 0 & \cdots & \cdots & 0 & 0 \\
+    P_{1, 0} & P_{1,1} & P_{1,2} & 0 & \cdots & 0 & 0\\
+    0 & P_{2,1} & P_{2,2} & P_{2,3} & \cdots & 0 & 0 \\
+    \vdots & \ddots & \ddots  & \ddots & \ddots & 0 & 0 \\
+    0 & 0& 0& \cdots& P_{n - 1, n - 2}& P_{n - 1, n- 1} & P_{n - 1, n} \\
+    0 & 0 & 0 & \cdots & 0 & P_{n, n - 1} & P_{n,n} 
+\end{pmatrix}.
+\end{align}
+As the precision matrix is the natural parameter for the multivariate Gaussian exponential family, we see that model \eqref{eq:markov-proposal}, parameterized by $(P^{-1}v, P)$ form a natural exponential family and we can apply \Cref{thm:cem-clt} to obtain a central limit theorem when applying the \acrshort{cem} for this model. 
 
 % show Cholesky root of precision matrix is also sparse -> Katzfuss (or refs therein), Lauritzen, Bernstein?, same as Schäfer paper?
 The sparsity of $P$ implies that $P = LL^{T}$ has a sparse Cholesky root $L$, which will make computations efficient. 
@@ -352,6 +365,7 @@ then its law $\mathcal L (X)$ is the one we seek. The following proposition puts
     $$
         \pce = \argmin_{\psi = (v, C_{1}, \dots, C_{n}, R_{0}, \dots, R_{n})} \Dkl{\P}{\G_{\psi}}
     $$
+    \todo{adapt notation to model? use tildes as cholesky roots}
     for the Markov proposal $\G_{\psi}$ from model \eqref{eq:markov-proposal} exists and is unique. The components of $\pce$ are given by 
     \begin{align*}
         v &= \mu\\
@@ -360,7 +374,7 @@ then its law $\mathcal L (X)$ is the one we seek. The following proposition puts
     and for $t = 1, \dots, n$
     \begin{align*}
         C_{t} &= J_{t + 1, t}^{T} J_{t, t}^{-1}\\
-        R_{t} &= \operatorname{chol} \left( \Gamma_{t + 1, t + 1} - C_{t}\Gamma_{t,t}^{-1}C_{t}^T \right).
+        R_{t} &= Z_{t + 1, t + 1}
     \end{align*}
 
     Thus, given $\nu$ and $\Gamma$, $\pce$ can be obtained in $\mathcal O(n\,m^{3})$ many operations.
@@ -385,17 +399,22 @@ then its law $\mathcal L (X)$ is the one we seek. The following proposition puts
             \Gamma_{t + 1, t} & \Gamma_{t + 1, t + 1}
         \end{pmatrix}.
     $$
-    Using induction over $t = 0, \dots, n - 1$, we obtain
+    As $Z_{t + 1, t + 1}$ is a lower triangular matrix with positive diagonal and
+    $$
+        \Gamma_{t + 1, t + 1} - \Gamma_{t+1, t}\Gamma_{t}^{-1}\Gamma_{t, t +1} = Z_{t + 1, t + 1} Z_{t + 1, t + 1}^T,
+    $$
+    it is the Cholesky root of the Schur complement $\Gamma_{t + 1, t + 1} - \Gamma_{t+1, t}\Gamma_{t}^{-1}\Gamma_{t, t +1}$, which, recalling \Cref{lem:gaussian_conditional}, we can think of as a conditional covariance matrix. 
+    Therefore, using induction over $t = 0, \dots, n - 1$, we obtain
     \begin{align*}
         \cov \left( U_{t + 1} \right) &= C_{t + 1}\cov \left( U_{t} \right) C_{t + 1} + R_{t + 1}R_{t + 1}^T \\
-            &= C_{t}\Gamma_{t,t}C_{t}^T + \Gamma_{t +1, t+ 1} - C_{t}\Gamma_{t,t}C_{t}^T\\
+            &= J_{t + 1, t}^TJ_{t,t}^{-1}\Gamma_{t,t}J_{t,t}^{-T}J_{t+1,t}^T + \Gamma_{t + 1, t + 1} - \Gamma_{t+1, t}\Gamma_{t}^{-1}\Gamma_{t, t +1}\\
             &= \Gamma_{t + 1, t + 1}
     \end{align*}
     and
     \begin{align*}
         \cov \left( U_{t + 1}, U_{t} \right) &= C_{t}\cov \left( U_{t} \right) = J_{t + 1, t}J_{t,t}^{-1} J_{t,t} J_{t, t}^T = \Gamma_{t + 1, t}.
     \end{align*}
-    This shows the existence. For uniqueness, note that model \eqref{eq:markov-proposal} enforces that $R_{t}$ is a lower triangular matrix with positive diagonals. As $R_{t + 1}R_{t + 1}^T$ is the conditional covariance of $U_{t + 1}$ given $U_{t}$ which is, by \Cref{lem:gaussian_conditional} given by $\Gamma_{t + 1, t + 1} - \Gamma_{t + 1, t}\Gamma_{t,t}^{-1}\Gamma_{t + 1, t}$. Thus the $R$ matrices are unique as well. As $\cov (U_{t}, U_{t + 1}) = \cov (U_{t})C_{t}^{T}$, we can show that, additionally, also $C_{t}$ is unique.
+    This shows the existence. For uniqueness, note that model \eqref{eq:markov-proposal} enforces that $R_{t}$ is a lower triangular matrix with positive diagonals. As $R_{t + 1}R_{t + 1}^T$ is the conditional covariance of $U_{t + 1}$ given $U_{t}$ which is, by \Cref{lem:gaussian_conditional} given by $\Gamma_{t + 1, t + 1} - \Gamma_{t + 1, t}\Gamma_{t,t}^{-1}\Gamma_{t + 1, t}$. Thus the $R$ matrices are unique as well. As $\cov (U_{t + 1}, U_{t}) = C_{t}\cov (U_{t})$, we can show that, additionally, also $C_{t}$ is unique.
 \end{proof}
 
 \todo{rewrite everything in terms of this prop}
@@ -472,7 +491,7 @@ The total time complexity of a single iteration of \Cref{alg:cem-markov-proposal
     \label{tab:cem-time-space-complexity}
 \end{table}
 
-An efficient implementation of \Cref{alg:cem-markov-proposal} can improve on the practically relevant computational time. There is no need to calculate the $C_{t}$ and $R_{t}$ matrices explicitly, instead we can calculate $C_{t}U_{t - 1} = J_{t + 1, t}J_{t,t}^{-1}U_{t - 1}$ efficiently by back-substitution, as $J_{t,t}$ is a lower triangular matrix. Similar to the square-root Kalman filter and smoother \citep{Morf1975Squareroot} we may compute $R_{t}$ efficiently by QR-decomposition, as it is the Cholesky root of a conditional covariance matrix. 
+An efficient implementation of \Cref{alg:cem-markov-proposal} can improve on the practically relevant computational time. There is no need to calculate the $C_{t}$ matrices explicitly, instead we can calculate $C_{t}U_{t - 1} = J_{t + 1, t}J_{t,t}^{-1}U_{t - 1}$ efficiently by back-substitution, as $J_{t,t}$ is a lower triangular matrix. 
 
 % if space complexity is problematic, can compute weights first with fixed seed and then iterate forwards
 The main bottleneck for space lies in the $\mathcal O(N\,n\,m)$ simulation part, and we may reduce this by simulating twice from model \eqref{eq:markov-proposal} using \glspl{crn}, and only storing the samples for a single time step (dimension $\mathcal O (N\,m)$) in each simulation. In the first pass, we only calculate the weights, and in the second pass, we calculate $\hat v$ and the required covariance matrices. For this, we only need the $2N$ samples of dimension $m$ from time $t$ and $t + 1$, i.e. $\mathcal O(N\,m)$ space. This reduces the total space complexity to $\mathcal O(N\,m + n\,m^{2})$. 
@@ -502,31 +521,27 @@ We demonstrate these improvements in \Cref{alg:cem-markov-proposal-fast}. Additi
             \State restore RNG state
             \For {$t \gets 1, \dots, n$}
                 \State simulate $\nu^{1}_t, \dots, \nu^{N}_t \iid \mathcal N(0, I)$ 
-                \State set $U^{i}_t = (L^{l}_{t,t})^{-T}(L^{l}_{t - 1, t})^{T}U^{i}_{t - 1} + (L^{l}_{t,t})^{-T}\nu_{t}^{i}$ \Comment{backsubstitution}
+                \State set $U^{i}_t = (J_{t + 1, t})^{T}(J_{t,t})^{-1}U^{i}_{t - 1} + R^{l}_{t}\nu_{t}^{i}$ \Comment{backsubstitution}
                 \State set $X_{t}^{i} = v^{l}_{t} + U^{i}_t$ 
-                \State set $v^{l + 1}_t = \sum_{i = 1}^{N} W^{i}X^{i}_t$
-                \State set $\widehat\cov \left( X_{t - 1}, X_{t} \right) = \sum_{i = 1}^N W^{i} \left( X^{i}_{t-1:t} - v^{l}_{t-1:t} \right)\left( X^{i}_{t-1:t} - v^{l}_{t-1:t} \right)^{T}$
+                \State calculate $\hat v^{l + 1}_{t}$ \Comment{\Cref{eq:hat_v}}
+                \State calculate covariances \Comment{\Cref{eq:hat_v}}
             \EndFor
-            \State determine $\hat L^{l + 1}$ \Comment{\Cref{thm:schafer_cholesky_analytical}}
-            \State set $\hat\psi^{l + 1} = \left( \hat v^{l + 1}, \hat L^{l + 1}\right)$ 
+            \State set $\hat\psi^{l + 1} = \left( \hat v^{l + 1}, \hat R^{l + 1}, \hat J^{l + 1}\right)$ 
             \State set $l = l + 1$
         \Until{$\hat\psi^{l}$ converged}
         \State \textbf{return} $\hpce = \hat \psi^{l}$
         
     \end{algorithmic}
-    \caption{Time and space improved version of \Cref{alg:cem-markov-proposal}. Instructions involving the free index $i$ are to be performed for all $i = 1, \dots, N$ samples.}
+    \caption{Time and space improved version of \Cref{alg:cem-markov-proposal}. Instructions involving the free index $i$ are to be performed for all $i = 1, \dots, N$ samples. For simplicity of notation we let $R^{l} = (R^{l}_0, \dots, R^{l}_n)$ and $J^l = (J^{l}_{0,0}, J^{l}_{1, 0}, \dots, J^{l}_{n - 1, n -1}, J^{l}_{n, n - 1} )$ for $l \in \N_{0}$.}
     \label{alg:cem-markov-proposal-fast}
 \end{algorithm}
 
-The advantage of \Cref{alg:cem-markov-proposal,alg:cem-markov-proposal-fast} over applying the \gls{cem} to the \gls{glssm} model \eqref{eq:glssm-proposal} are multiple: First of all, as long as the involved covariance matrices are positive definite, the two algorithms produce valid proposals, i.e. they do not have the degeneracy problem we observed in \Cref{subsec:glssm-approach}.
+The advantage of \Cref{alg:cem-markov-proposal,alg:cem-markov-proposal-fast} over applying the \gls{cem} to the \gls{glssm} model \eqref{eq:glssm-proposal} are multiple: First of all, as long as the involved covariance matrices are positive definite, the two algorithms produce valid proposals, i.e. they do not have the degeneracy problem we observed in \Cref{subsec:glssm-approach}. When matrices are only positive-semi definite, replacing inverses with generalized inverses still yields a valid model.
 % no numerical issues w/ determining optimal parameters
-Additionally, determining the optimal parameters $(v,C,R)$ or $(v,L)$ is numerically stable, involving only inversion of small matrices. Compare this with solving \Cref{eq:gamma_post}, where we need to employ a numerical scheme to solve for the diagonal entries of $\Omega$.
+Additionally, determining the optimal parameters $(v, C,R)$ or $(v,J,R)$ is numerically stable, involving only inversion of small matrices. Compare this with solving \Cref{eq:gamma_post}, where we need to employ a numerical scheme to solve for the diagonal entries of $\Omega$.
 
 % sampling faster 
-After having determined $\hpce$ for model \eqref{eq:markov-proposal}, generating $N$ samples requires only $\mathcal O(N\,n\,m^{2})$ operations, whereas sampling from model \eqref{eq:glssm-proposal} requires $\mathcal O(n\,m^{3} + N\,n\,m^{2})$ operations, as we need an initial run of the Kalman filter. Unless $N < m$, this difference is negligible, and the case where $N < m$ is not really of interest, as we would expect importance sampling to require at least as many samples as there are dimensions, i.e. $N \gg m$. 
+After having determined $\hpce$ for model \eqref{eq:markov-proposal}, generating $N$ samples requires only $\mathcal O(N\,n\,m^{2})$ operations, whereas sampling from model \eqref{eq:glssm-proposal} requires $\mathcal O(n\,m^{3} + N\,n\,m^{2})$ operations, as we need an initial run of the Kalman filter. Unless $N < m$, this difference is negligible, and the case where $N < m$ is not really of interest, as we would expect importance sampling to require a much larger number of samples, i.e. $N \gg m$. 
 
 % problems: large state dimension: both $L$ and number of parameters
-However, the two algorithms presented in this section also come with some drawbacks, especially if the dimension $m$ of states is large. This affects the algorithms in multiple ways: when $m$ is large, computation of $L$ becomes more time-intensive. Additionally, the dimension of the parameter $\psi$ increases quadratically in $m$, so we expect convergence to be slower, requiring a larger sample size $N$ to find the optimal $\hpce$. For an empirical study in this direction, see \Cref{sec:simulation_studies}.
-
-% potential solution: directly estimate C + R?
-To improve the speed of computation of both algorithms, $L$ has to be computed faster. 
+However, the two algorithms presented in this section also come with some drawbacks, especially if the dimension $m$ of states is large. This affects the algorithms in multiple ways: when $m$ is large, computation of the Cholesky decomposition in \Cref{prop:cem-for-markov-proposal} becomes more time-intensive. Additionally, the dimension of the parameter $\psi$ increases quadratically in $m$, so we expect convergence to be slower, requiring a larger sample size $N$ to find the optimal $\hpce$. For an empirical study in this direction, see \Cref{sec:simulation_studies}.

@@ -239,7 +239,11 @@ as the asymptotic relative efficiency of the two estimators, as long as this app
 
 \begin{example}[failure of the \acrshort{ess}]
     \label{ex:ess_failure}
-    Consider the Gaussian scale mixture $\P = \frac{1}{2} \left(\mathcal N (0,1) + \mathcal N(0, \varepsilon^{-2})\right)$ and proposal $\G = \mathcal N(0, 1)$. The weights are then given by 
+    Consider the Gaussian scale mixture
+    $$
+    \P = \frac{1}{2} \left(\mathcal N (0,1) + \mathcal N(0, \varepsilon^{-2})\right)
+    $$
+    and proposal $\G = \mathcal N(0, 1)$. The weights are then given by 
     $$
         w(x) = \frac{1}{2} \left( 1 + \frac{\varepsilon}{\sqrt{2\pi}} \exp \left( - \frac{x^{2}}{2} \left( \varepsilon^{2} - 1\right) \right)\right)
     $$ and their second moment w.r.t. $\G$ 
@@ -301,6 +305,7 @@ $$
 In these situations $p(y) = \int p(x,y)\d x$ is usually intractable. For $\G^{\ast}$ we are in the same situation, where the evaluation of the integration constant $\P \lvert f \rvert$ is infeasible, but the density $\lvert f(x)\rvert p(x)$ is available.
 % do not focus on a single f
 Second, focusing on the particle approximation allows us to consider multiple test functions $f$, e.g. focus on different marginals of $\P$, which is usually what practitioners are interested in. 
+%Third, for maximum likelihood estimation (\Cref{sec:maximum_likelihood_estimation}), we will see that these two notions coincide.
 % simplify notation: P always target, G always proposal
 Finally, this allows us to simplify the notation used in this thesis. $\P$ will always be the probability measure of interest and $\G$ the proposal. In later parts of this thesis, we will predominantly perform Gaussian importance sampling, i.e. $\G = \mathcal N(\mu, \Sigma)$, hence a handy mnemonic is to think of $\G$ as a \textbf{G}aussian proposal.
 
