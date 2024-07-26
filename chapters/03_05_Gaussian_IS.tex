@@ -499,7 +499,7 @@ The main bottleneck for space lies in the $\mathcal O(N\,n\,m)$ simulation part,
 We demonstrate these improvements in \Cref{alg:cem-markov-proposal-fast}. Additionally, we calculate the weights on the log scale for numerical stability.
 
 \begin{algorithm}
-    \begin{algorithmic}
+    \begin{algorithmic}[1]
         \Require \gls{lcssm} (\Cref{def:lcssm}), observations $Y$, initial estimate $\hat\psi^0 = \left( v^{0}, R^{0}, J^{0}\right)$, sample size $N$
         \State set $l = 0$
         \Repeat 

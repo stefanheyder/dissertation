@@ -39,9 +39,10 @@ and so we may estimate the gradient by
     %&= \sum_{i = 1}^N \tilde w_{\theta}(X^{i}) \sum_{t = 0}^n \nabla_{\theta} \left( \log p_{\theta}(y_{t} | X^{i}_{t}) + \log p_{\theta}(X^{i}_t|X^{i}_{t - 1}) \right).
 \end{align*}
 Similarly, we can estimate the log-likelihood by Plug-In
-$$
+\begin{align}
+    \label{eq:loglik-hat-standard}
     \verywidehat{\log p_{\theta}(y)} = \log \left( \frac{1}{N}\sum_{i = 1}^N \tilde w_{\theta}(X^{i}) \right)
-$$
+\end{align}
 and its gradient, using the fact that the gradient of $\log f$ for $f: \R^{l} \to \R$ is $ \frac{1}{f} \nabla_{\theta} f$, by 
 \begin{align*}
     \verywidehat{\nabla_{\theta} \log p_{\theta}(y)} &= \left(\frac{1}{N} \sum_{i = 1}^N \tilde w_{\theta}(X^{i}) \right)^{-1} \left( \frac{1}{N}\sum_{i = 1}^N \tilde w_{\theta}(X^{i}) \nabla_{\theta} \log p_{\theta}(X^{i}, y) \right) \\
@@ -80,9 +81,10 @@ $$
     \tilde w_{\theta}(x) = g(z)\frac{p_{\theta}(y|s)}{g(z|s)} = g(z) \prod_{t = 0}^n \frac{p_{\theta}(y_{t}|s_{t})}{g(z_{t}|s_{t})},
 $$
 where $s_{t} = B_{t}x_{t}$ is the signal, and so the estimated log-likelihood can evaluated efficiently as 
-$$
+\begin{align}
+    \label{eq:loglik-hat-linearsignal}
     \verywidehat{\log p_{\theta}(y)} = \log g_{\theta}(z) + \log \left(\frac{1}{N}\sum_{i=1}^{N}\prod_{t = 0}^{n} \frac{p_{\theta}(y_{t}|S^{i}_{t})}{ g(z_{t}|S^{i}_{t})}\right)
-$$
+\end{align}
 Notice that $\log g_{\theta}(z)$ is the likelihood in a \acrshort{glssm}, which can be computed efficiently by the standard Kalman filter (\Cref{alg:kalman_filter}). As in the \acrshort{glssm}-approach we propose with an \acrshort{glssm} whose state density $g(x)$ and observation matrices $B_{t}$, $t = 0, \dots, n$ are equal to those of the target, the log-likelihood $\log g_{\theta}(z)$ also depends on $\theta$. The estimated gradient of the log-likelihood is 
 $$
     \verywidehat{\nabla_{\theta} \log p_{\theta}(y)} = \nabla_{\theta} \log g_{\theta}(z) + \sum_{i=1}^N W^{i}_\theta \sum_{t = 0}^n \nabla_{\theta} \log p_{\theta}(y_{t}|S_{t}^{i}).
@@ -96,44 +98,108 @@ $$
 as $\nabla_{\theta} \frac{1}{g_{\theta}(z|s)} = - \frac{1}{g_{\theta}(z|s)} \nabla_{\theta} \log g_{\theta}(z|s)$. The computation of this additional term is much more involved, as the parameters $z,\Omega$ are found through an iterative numerical scheme. Instead, we favor numerical differentiation of the whole procedure to evaluate the likelihood at $\theta$, including the method of finding an optimal importance sampling scheme. 
 
 \begin{algorithm}
-    \begin{algorithmic}
-        \Require 
+    \begin{algorithmic}[1]
+        \Require density $p_{\theta}$ of a parameterized \acrshort{pgssm}, $\theta \in \Theta$, observations $y \in \R^{(n+1)p}$
+        \State determine importance sampling proposal $\G_{\psi(\theta)}$ \Comment{\Cref{alg:la}, \Cref{alg:eis} or \Cref{alg:cem-basic}}
+        \State sample $X^{1}, \dots, X^{N} \iid \G_{\psi(\theta)}$
+        \State compute $\widehat{\log p_{\theta}(y)}$ \Comment{\Cref{eq:loglik-hat-standard} or \Cref{eq:loglik-hat-linearsignal}}
+        \State \textbf{return} $\widehat{\log p_{\theta}(y)}$
     \end{algorithmic}
     \caption{Estimation of log-likelihood $\verywidehat{\log p_{\theta}(y)}$}
 \end{algorithm}
 
 As a single evaluation of the log-likelihood can become very expensive we want our procedure to be as efficient as possible. To this end, \citep{Durbin1997Monte} provides several improvements to the basic algorithm if the model is a \acrshort{pgssm} with a linear signal. Their contributions consist of a bias correction for the log-likelihood, the use of antithetic and control variables to reduce Monte-Carlo error for importance sampling and a deterministic initialization procedure.
-Let us briefly summarize these ideas, adapted to our notation; for an in-depth analysis, we refer the reader to the (very readable) source. 
+Let us briefly summarize these ideas, adapted to our notation. As the computational gains for control variates in the presence of antithetic variables seem to be limited, we do not give the same level of detail here, for an in-depth analysis, we refer the reader to the source. 
 
 % bias reduction
-For bias reduction, a second-order Taylor series expansion shows that, for $\tilde{w}_\cdot = \frac{1}{N} \sum_{i =1}^N \tilde w(X^{i})$,
+For bias reduction, a second-order Taylor series expansion shows that for $\tilde{w}_\cdot = \frac{1}{N} \sum_{i =1}^N \tilde w(X^{i})$,
 \begin{align*}
     \E \left(\log \tilde{w}_\cdot\right) - \log \G \tilde w &= \E \log \left(1 + \frac{\tilde{w}_\cdot - \G \tilde w}{\G \tilde w} \right)\\
                                                            &=  \frac{\tilde{w}_\cdot - \G \tilde w}{\G \tilde w}  - \frac{1}{2} \left(\frac{\tilde{w}_\cdot - \G \tilde w}{\G \tilde w} \right)^{2} + \mathcal O_{p}(N^{-\frac{3}{2}}),
 \end{align*}
 provided $\tilde w \in L^{3}(\G)$. Thus, estimating the second order term by $- \frac{\hat\sigma^2}{2N \tilde{w}_\cdot} $, where $\hat \sigma^{2}$ is the empirical variance of the unnormalized weights, we can perform a bias reduction by estimating 
-$$
-    \widehat{\log p_{\theta}(y)} = \log \left( \frac{1}{N} \sum_{i = 1}^N \tilde w(X^{i}) \right)
-$$
-
-
+\begin{align}
+    \label{eq:loglik-hat-bias-reduction}
+    \widehat{\log p_{\theta}(y)} = \log \left(\tilde w_{\cdot}\right) + \log g_{\theta}(z) + \frac{\hat\sigma^{2}}{2N\tilde w_{\cdot}}
+\end{align}
 
 % antithetics
+The second improvement of \citep{Durbin1997Monte} is the use of antithetic variables and control variates, a device to reduce Monte-Carlo variance. The main idea of an antithetic variable is to construct for each sample $X^{i}$, $i = 1,\dots, N$, another sample $\tilde X^{i}$ that has the same distribution as $X^{i}$, but is negatively correlated with $X^{i}$. This has two effects: first of all, we increase the number of samples used for importance sampling and second, as the new samples are negatively correlated with the old samples, the Monte-Carlo variance is reduced. The computation of these samples is usually much faster than creating new samples, which requires the use of the expensive \acrshort{ffbs} or simulation smoother algorithms. 
+\begin{definition}[antithetic variable]
+    Let $X, \tilde X\in\R^{k}$ be two random variables with the same distribution, $\mathcal L (X) = \mathcal L(\tilde X)$ and $f: \R^{k} \to \R$. Then $\tilde X$ is called an antithetic variable of $X$ for $f$, if $\cov \left( f(\tilde X), f(X) \right) < 0$.
+\end{definition}
+
+% location & scale
+\citep{Durbin1997Monte} introduce two antithetic variables: balanced for location and balanced for scale, both of which are tailored to the multivariate normal distribution. 
+\begin{definition}[antithetic variable balanced for location and scale, \citep{Durbin1997Monte}]
+    Let $X\sim \mathcal N(\mu, \Sigma)$ for $\mu \in \R^{k}$ and $\Sigma \in \R^{k\times k}$ positive definite. We call
+    $$
+    \tilde X = \mu + (\mu - X)
+    $$
+    the antithetic balanced for location. If $L\in\R^{k\times k}$ is a Cholesky root of $\Sigma$ and 
+    $$
+        X = \mu + L \varepsilon
+    $$
+    with $\varepsilon \sim \mathcal N(0, I)$, let $c = \varepsilon^{T}\varepsilon \sim \chi^{2}_k$ and $c' = F^{-1}_{\chi_{k}}(1 - F_{\chi_n}(\sqrt{c}))$\footnote{Note that unlike \citep{Durbin1997Monte} we use the $\chi_{k}$-distribution instead of their $\chi^{2}_k$ distribution, which makes the following proof somewhat simpler}. We call
+    $$
+        \check X = \mu + \sqrt{\frac{c'}{c}} \left( X - \mu \right)
+    $$
+    the antithetic balanced for location.
+\end{definition}
+\begin{lemma}
+    Both $\tilde X$ and $\check X$ in the preceding lemma are antithetic variables for the coordinate functions $f_{i}:\R^{k} \to \R$, $f_{i}(x) = x_{i}$, $i = 1, \dots, k$.
+\end{lemma}
+\begin{proof}
+    It is easy to see that $\tilde X$ has the same distribution as $X$. Furthermore 
+    $$
+        \cov \left( f_{i}(X), f_{i}(\tilde X)\right) = \cov \left( 2 \mu_{i} - X_{i}, X_{i} \right) = - \Sigma_{i,i} < 0.
+    $$
+
+    By the properties of the standard multivariate normal distribution, $ \lVert u \rVert $ and $ \frac{u}{ \lVert u \rVert }$ are independent. Writing 
+    $$
+        X = \mu + \lVert u \rVert L \frac{u}{ \lVert u \rVert } = \mu + \lVert u \rVert \frac{X - \mu}{\sqrt{c}},
+    $$
+    we see that 
+    $$
+        \check X = \mu + \sqrt{c'}\frac{X - \mu}{\sqrt{c}}
+    $$
+    has the same distribution as $X$, as $c' \sim \mathcal L( \lVert u \rVert^{2})$ and is independent of $ \frac{X - \mu}{\sqrt{c}}$. 
+    Let $Z = \frac{X - \mu}{\sqrt{c}}$. Then $Z$ is centered and independent of both $c$, $c'$ and their product $cc'$. Thus 
+    \begin{align*}
+        \cov \left(f_{i}(X), f_{i}(\check X) \right) &= \cov \left( \sqrt{c} Z_{i}, \sqrt{c'}Z_{i} \right) = \E  \sqrt{cc'}Z_{i}^2 - \left( \E \sqrt c Z_{i} \right) \left( \E \sqrt {c'} Z_{i} \right) \\
+        &= \E \sqrt{cc'} \E Z_{i}^2 \leq \cov \left( \sqrt{c}, \sqrt{c'} \right) \E Z_{i}^2,
+    \end{align*}
+    as $c$ and $c'$ are a.s. non-negative. Thus it suffices to show that $\cov \left( \sqrt{c}, \sqrt{c'} \right) < 0$. Let $U = F_{\chi_{k}}(\sqrt{c})$, then $U \sim \operatorname{Unif}(0,1)$ and $1 - U = F_{\chi_k}(\sqrt{c'})$. 
+    In \citep[Lemma 2.3]{Whitt1976Bivariate} it is shown that for any pair of real-valued random variables $(Y,W)$ with CDF $H$ and marginal CDFs $F, G$, it holds
+    $$
+        \cov \left(Y,W \right) = \int_{\R^{2}} H(y,w) - F(y)G(w) \d y \d w,
+    $$
+    and, furthermore, by \citep[Theorem 2.1 and Lemma 2.4]{Whitt1976Bivariate} that the joint CDF of $(\sqrt{c}, \sqrt{c'})$ is $(y,w) \mapsto \max \{0, F(y) + G(w) - 1\}$, where $F$ is the CDF of $c$ and $G$ the CDF of $c'$. 
+    As 
+    $$
+        a + b - 1 = ab + a(1-b) + b - 1 = ab - (1 - a)(1 - b) < ab
+    $$
+    for all $a,b \in (0,1)$, we have 
+    \begin{align*}
+        \cov \left( \sqrt{c}, \sqrt{c'} \right) &= \int_{\R^{2}} H(y,w) - F(y)G(w) \d y \d w \\
+        &= \int_{\R^{2}} \max\{0, F(y) + G(w) - 1\} - F(y)G(w) \d y \d w < 0.
+    \end{align*}
+\end{proof}
+
+Given a \acrshort{glssm}-proposal and samples $X^{1}, \dots, X^{N}$ from it, we can cheaply calculate these antithetic variables: for the location balanced antithetic we can calculate the mean using the Kalman-smoother and for the scale balanced antithetic we can calculate $c$ and $c'$ using the inverse CDF of the $\chi_{k}$ distribution and the standard normal samples used to sample $X^{i}$ in the first place, for which fast implementations are readily available. Incidental, we obtain a third antithetic, $\check{\tilde X} = \mu - \sqrt{ \frac{c'}{c}} (X - \mu)$ for free. 
 
 % intialization
-
-
-%% initialization w/ DK
+Finally, \citep{Durbin1997Monte} give 
 
 
 % endregion
 
-% region Markov proposal
-% endregion
-
+\todo{full algorithm}
 
 % region outlook
-Notice that our discussion implies that we cannot reuse a proposal used for $\theta$ at another $\theta'$, as in the \acrshort{glssm} approach $p_{\theta'}(x) \neq g_{\theta}(x)$ and generally the optimal importance sampling parameter $\psi$ depends on $\theta$. If computations are so involved that we want to avoid running the optimal importance sampling scheme as much as possible, one could try, if the model under investigation allows for it, to split $\theta$ into $(\theta_{x}, \theta_y)$ where $\theta_{x}$ only affects the state transitions and $\theta_{y}$ only affects the observation densities. Then a coordinate ascent scheme could be employed, where the update step for $\theta_{y}$ can reuse the proposal, provided that $\theta_{y}$ does not change too much and the observation density $p_{\theta}(y|x)$ is not too sensitive to changes in $\theta_{y}$, which should imply that the proposal is still close enough to give good importance sampling performance. Then numerical differentiation is only required to update $\theta_{x}$. 
+Notice that our discussion implies that we cannot reuse a \acrshort{glssm} proposal used for $\theta$ at another $\theta'$, as $p_{\theta'}(x) \neq g_{\theta}(x)$. While we can still calculate the weights using the general \Cref{eq:loglik-hat-standard}, we presume that the old proposal is not a good choice for the new target. The reason for this is that $\theta$ will usually contain parameters related to the covariance structure of the innovations and observations, and these parameters usually affect many, if not all states or observations. For example, it is common to model states that perform a random walk with common innovation variance $\sigma^{2}$ as an element of $\theta$. As the distributions lie in a high-dimensional space, slight misspecification of the covariance structure will drastically deteriorate the performance of importance sampling. 
+
+If computations are so involved that we want to avoid running the optimal importance sampling scheme as much as possible, one could try, if the model under investigation allows for it, to split $\theta$ into $(\theta_{x}, \theta_y)$ where $\theta_{x}$ only affects the state transitions and $\theta_{y}$ only affects the observation densities. Then a coordinate ascent scheme could be employed, where the update step for $\theta_{y}$ can reuse the proposal, provided that $\theta_{y}$ does not change too much and the observation density $p_{\theta}(y|x)$ is not too sensitive to changes in $\theta_{y}$, which should imply that the proposal is still close enough to give good importance sampling performance. Then numerical differentiation is only required to update $\theta_{x}$. 
 
 
 
