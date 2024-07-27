@@ -39,12 +39,16 @@
         \item Proof \Cref{prop:eis-finite-sample}. 
     \end{itemize}
 
+    \paragraph{\nameref{sec:interim-discussion}}
+
     \paragraph{\nameref{sec:gaussian_importance_sampling_for_state_space_models}}
     derive an efficient algorithm to apply the \acem to state space models (\Cref{subsec:markov-approach})
 
     \paragraph{\nameref{sec:maximum_likelihood_estimation}}
 
     \paragraph{\nameref{sec:simulation_studies}} Extensively compare both methods on theoretical as well as practically relevant properties with instructive univariate and multivariate examples (\Cref{sec:simulation_studies}). 
+
+    \paragraph{\nameref{sec:03_conclusion}}
 \end{tcolorbox}
 \newpage
 
@@ -88,7 +92,7 @@ The models that we consider in this thesis will usually admit densities for the 
 
     Note that this notation also implicitly includes the time $t$ and allows for changes in, e.g., the state transition over time.
 
-    When densities come from a parametric model parametrized by $\theta \in \Theta \subseteq \mathbf{R}^{k}$ and the dependence of the model on $\theta$ is of interest, i.e. because we try to estimate $\theta$, we indicate this by adding a subscript to the densities.
+    When densities come from a parametric model parametrized by $\theta \in \Theta \subseteq \mathbf{R}^{l}$ and the dependence of the model on $\theta$ is of interest, i.e. because we try to estimate $\theta$, we indicate this by adding a subscript to the densities.
     If the dependence is not of interest, e.g. because $\theta$ is fixed, I will usually omit $\theta$ for better readability.
 
     In this notation, the joint density of a parametric \gls{ssm} factorizes as
@@ -160,6 +164,7 @@ where $p(x,\theta|y)$ is the joint posterior of states and hyperparameters, cond
 \input{chapters/03_02_LGSSM.tex}
 \input{chapters/03_03_LCSSM.tex}
 \input{chapters/03_04_IS.tex}
+\input{chapters/03_05_comparison.tex}
 \input{chapters/03_05_Gaussian_IS.tex}
 %\input{chapters/03_06_multimodality_heavy_tails.tex}
 \input{chapters/03_07_MLE.tex}
