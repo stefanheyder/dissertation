@@ -373,7 +373,7 @@ then its law $\mathcal L (X)$ is the one we seek. The following proposition puts
     \end{align*}
     and for $t = 1, \dots, n$
     \begin{align*}
-        C_{t} &= J_{t + 1, t}^{T} J_{t, t}^{-1}\\
+        C_{t} &= J_{t + 1, t} J_{t, t}^{-1}\\
         R_{t} &= Z_{t + 1, t + 1}
     \end{align*}
 
@@ -406,8 +406,8 @@ then its law $\mathcal L (X)$ is the one we seek. The following proposition puts
     it is the Cholesky root of the Schur complement $\Gamma_{t + 1, t + 1} - \Gamma_{t+1, t}\Gamma_{t}^{-1}\Gamma_{t, t +1}$, which, recalling \Cref{lem:gaussian_conditional}, we can think of as a conditional covariance matrix. 
     Therefore, using induction over $t = 0, \dots, n - 1$, we obtain
     \begin{align*}
-        \cov \left( U_{t + 1} \right) &= C_{t + 1}\cov \left( U_{t} \right) C_{t + 1} + R_{t + 1}R_{t + 1}^T \\
-            &= J_{t + 1, t}^TJ_{t,t}^{-1}\Gamma_{t,t}J_{t,t}^{-T}J_{t+1,t}^T + \Gamma_{t + 1, t + 1} - \Gamma_{t+1, t}\Gamma_{t}^{-1}\Gamma_{t, t +1}\\
+        \cov \left( U_{t + 1} \right) &= C_{t + 1}\cov \left( U_{t} \right) C^T_{t + 1} + R_{t + 1}R_{t + 1}^T \\
+            &= J_{t + 1, t}J_{t,t}^{-1}\Gamma_{t,t}J_{t,t}^{-T}J_{t+1,t}^T + \Gamma_{t + 1, t + 1} - \Gamma_{t+1, t}\Gamma_{t}^{-1}\Gamma_{t, t +1}\\
             &= \Gamma_{t + 1, t + 1}
     \end{align*}
     and
