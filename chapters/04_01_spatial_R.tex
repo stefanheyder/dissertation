@@ -1,4 +1,4 @@
-\section{Spatial reproduction number model}%
+\section{Reproduction numbers for the whole country}%
 \label{sec:spatial_reproduction_number_model}
 
 \begin{enumerate}
@@ -6,15 +6,7 @@
     \item rationale: compare to weekly GF which has "stable" regional effects
 \end{enumerate}
 
-This section is based on \citep{Burgard2021Regional} where we fitted a similar model to daily \acrshort{c19} incidences in Germany. However, in this previous work, we fitted a separate model for each day whereas the model presented in this section additionally regularizes in time by extending the old model to a \acrshort{pgssm}. 
-
 \subsection{Context}
 \subsection{Data}
 \subsection{Model}
-Recall from \Cref{sec:measures_of_epidemic_spread} the stochastic renewal equation \todo{ref it} 
-$$
-    I_{t} | I_{t - 1}, \dots \sim \operatorname{Pois} \left( R_{t} \sum_{\tau = 1}^k I_{t - \tau}w_{\tau}\right)
-$$
-for the incidences at day $t$ $I_{t}$, the time-varying reproduction number $R_{t}$ and the infectivity profile $w \in \R^{k}_{\geq 0}$ with $\sum_{\tau = 1}^{k} w_{\tau} = 1$.
-
 \subsection{Discussion}

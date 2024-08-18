@@ -79,6 +79,11 @@
 % ********************************************************************
 % TIKZ
 % ********************************************************************
+% sometimes tikzdevice creates additional figures it includes in this directory
+% wierdly, \pgfimage does not seem to respect graphicspath
+\let\pgfimage\includegraphics
+% using ./tikz/ here does not work with mactex
+\graphicspath{{tikz/}}
 \usepackage{tikz}
 \usepackage{tikzscale}
 \usetikzlibrary{calc}

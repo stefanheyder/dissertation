@@ -1,10 +1,9 @@
 \section{Available data and its quality}
 \label{sec:data}
 
-Early during the \acrshort{c19} epidemic, a surprising amount of publicly accessible data on the severity became available quickly. These data were provided by national health authorities such as the \acrfull{rki} in Germany, but also made available through aggregate data repositories, e.g. by the \acrfull{jhu} \citep{Dong2020Interactive}. These data contain information about the number of cases and deaths reported each day and depending on the data source further information, e.g., the age, sex or location of the case may be included. Here we focus on the data available for Germany, provided by the \acrshort{rki} \citep{RobertKoch-Institut2022SARSCoV2}. 
+Early during the \acrshort{c19} epidemic, a surprising amount of publicly accessible data on the severity became available quickly. These data were provided by national health authorities such as the \acrfull{rki} in Germany, but also made available through aggregate data repositories, e.g. by the \acrfull{jhu} \citep{Dong2020Interactive}. These data contain information about the number of cases and deaths reported each day and depending on the data source further information, e.g., the age, sex or location of the case may be included. Here we focus on the data available for Germany, provided by the \acrshort{rki} available on zenodo \citep{RobertKoch-Institut2024SARSCoV2} or github \citep{RobertKoch-Institut2024SARSCoV2a}. In these repositories, the \acrshort{rki} publishes daily data on the number of cases in the aforementioned strata. For some days, data have not been published to zenodo, e.g. for May 31st 2020 \todo{why?}. In this case, we use the data provided by the ard-data RKI-archive on github \citep{MichaelKreil2022RKICoronaDatenArchiv}. We restrict ourselves to data from April 1st 2020.
 
 In Germany, the reporting process of these cases is regulated by law. 
-
 
 
 \begin{figure}
@@ -30,5 +29,52 @@ In Germany, the reporting process of these cases is regulated by law.
         \item testing regime changing (2G/3G)
         \item ...
     \end{itemize}
+    \item data source: Zenodo + ARD archive
     %\item data on commuting
 \end{itemize}
+
+
+% focus on Meldedatum over Infektionsdatum due to consistency issues
+Due to late reporting and other reporting artifacts, the number of reported cases for any day $s$ will, usually, increase over time. The \acrshort{rki} does not report incidences on the same day and so on any day $t > s$ we obtain incidences $I_{s,t}$ for day $s$. We say these cases are reported with delay $\tau = t -s > 0$. This results in the so-called reporting triangle, depicted for April 2020 in \Cref{fig:reporting_delays_cases}. 
+
+\begin{figure}
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/reporting_delays_cases.tex}%
+    }
+    \caption{The reporting triangle for \acrshort{c19} cases in April 2020. Notice that due to late reporting the number of reported cases stabilizes only after roughly $4$ days.}
+    \label{fig:reporting_delays_cases}
+\end{figure}
+
+To quantify the amount of reporting delay, we will focus on the number of newly reported cases on each day, i.e. we want to determine
+$$
+    I_{s,t} = \sum_{\tau = 1}^{t - s} i_{s,\tau},
+$$
+where $i_{s,\tau} \in \N_{0}$ is the number of newly reported cases for day $s$ with delay $\tau$, i.e. on day $t = s + \tau$. However, due to reporting artifacts, it may occur that $i_{s,\tau}$ is negative in some instances, e.g. because the reporting dates of cases have been misattributed. To deal with this issue, we set 
+$$
+    \tilde I_{s,t} = \min \{\max \{I_{s,s + 1}, \dots, I_{s, T}\}, I_{s, T}\},
+$$
+where $T$ is the last date in our dataset, i.e. 13th October 2023. This running maximum, cut-off at the final value, ensures that we can write 
+$$
+    \tilde I_{s,t} =  \sum_{\tau = 1}^{t - s} i_{s,\tau},
+$$
+where $i_{s,\tau} \in \N_0$. Cutting off at $I_{s,T}$ ensures that if a large amount of cases is misattributed, we still treat the last reported value as the truth. Large positive relative differences $ \frac{I_{s, t} - I_{s,T}}{I_{s,T}} > 0$, possibly due to such misattributions, are quite rare, with the $99.9\%$ quantile of these positive relative differences still being only $16\%$.
+
+From \Cref{fig:reporting_delays_cases} we get the impression that most reporting delays are short, and indeed this is the case. Let 
+$$
+    p_{\tau} = \frac{\sum_{t-s = \tau}i_{s,t}}{\sum_{s,t} i_{s,t}}
+$$
+be the proportion of cases that are reported with delay $\tau \in\N$. The corresponding empirical survival function 
+$$
+    \hat S(\tau) = 1 - \sum_{\tau' \leq \tau} p_{\tau'}
+$$
+is the share of cases reported with at most $\tau$ days of delay. We compute $\hat S(\tau)$ in each of the $15$ quarters present in our dataset separately, as the reporting behavior may have changed over time. The results are shown in \Cref{fig:survival_function_rep_tri_incidences}, where we observe that for most quarters, $95\%$ of the cases have been reported after $4$ days delay and $99\%$ of the cases have been reported after $8$ days delay. 
+Additionally, we see that the speed of next-day reporting slightly decreased in $2021$ and $2022$.
+\todo{ref this when we do reporting delay model}
+
+\begin{figure}
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/survival_function_rep_tri_incidences.tex}%
+    }
+    \caption{Emiprical survival function $\hat S(\tau)$ for every quarter present in the \acrshort{c19} dataset. In most quarters $95\%$ ($99\%$) of the cases have been reported after $4$ ($8$) days of delay.}
+    \label{fig:survival_function_rep_tri_incidences}
+\end{figure}
