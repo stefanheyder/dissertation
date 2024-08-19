@@ -33,6 +33,5 @@ theme_thesis <- function() {
 theme_set(theme_thesis())
 
 options(
-    ggplot2.discrete.colour = scale_color_npg,
-    
+    ggplot2.discrete.colour = scale_color_npg
 )

@@ -980,7 +980,7 @@
       \endverb
     \endentry
     \entry{Bracher2021Preregistered}{article}{}{}
-      \name{author}{38}{ul=16}{%
+      \name{author}{38}{}{%
         {{un=0,uniquepart=base,hash=d371388a80a2726bf15130b69fa4f8d2}{%
            family={Bracher},
            familyi={B\bibinitperiod},
@@ -1213,14 +1213,15 @@
       \list{publisher}{1}{%
         {Nature Publishing Group}%
       }
-      \strng{namehash}{79c2ebb74ade1e832d262b02f4f7d168}
+      \strng{namehash}{3691f95bc90c7b4dfbf71749000fb951}
       \strng{fullhash}{9bf78b7a5420832ad5460cf2a5c67b7b}
       \strng{fullhashraw}{9bf78b7a5420832ad5460cf2a5c67b7b}
-      \strng{bibnamehash}{79c2ebb74ade1e832d262b02f4f7d168}
-      \strng{authorbibnamehash}{79c2ebb74ade1e832d262b02f4f7d168}
-      \strng{authornamehash}{79c2ebb74ade1e832d262b02f4f7d168}
+      \strng{bibnamehash}{3691f95bc90c7b4dfbf71749000fb951}
+      \strng{authorbibnamehash}{3691f95bc90c7b4dfbf71749000fb951}
+      \strng{authornamehash}{3691f95bc90c7b4dfbf71749000fb951}
       \strng{authorfullhash}{9bf78b7a5420832ad5460cf2a5c67b7b}
       \strng{authorfullhashraw}{9bf78b7a5420832ad5460cf2a5c67b7b}
+      \field{extraname}{1}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{extradatescope}{labelyear}
@@ -1247,7 +1248,7 @@
       \warn{\item Datamodel: article entry 'Bracher2021Preregistered' (own_publications.bib): Invalid field 'publisher' for entrytype 'article'}
     \endentry
     \entry{Bracher2022National}{article}{}{}
-      \name{author}{42}{ul=16}{%
+      \name{author}{42}{}{%
         {{un=0,uniquepart=base,hash=bf4e0b1559f41753a5f8f0e193bf5f98}{%
            family={Bracher},
            familyi={B\bibinitperiod},
@@ -1504,14 +1505,15 @@
       \list{publisher}{1}{%
         {Nature Publishing Group}%
       }
-      \strng{namehash}{067cce1807cc42a634d2140e7d8b43d7}
+      \strng{namehash}{057518eeab9da06b877bc329dd050981}
       \strng{fullhash}{3ed1a5a43d0267f58e35cccf46400260}
       \strng{fullhashraw}{3ed1a5a43d0267f58e35cccf46400260}
-      \strng{bibnamehash}{067cce1807cc42a634d2140e7d8b43d7}
-      \strng{authorbibnamehash}{067cce1807cc42a634d2140e7d8b43d7}
-      \strng{authornamehash}{067cce1807cc42a634d2140e7d8b43d7}
+      \strng{bibnamehash}{057518eeab9da06b877bc329dd050981}
+      \strng{authorbibnamehash}{057518eeab9da06b877bc329dd050981}
+      \strng{authornamehash}{057518eeab9da06b877bc329dd050981}
       \strng{authorfullhash}{3ed1a5a43d0267f58e35cccf46400260}
       \strng{authorfullhashraw}{3ed1a5a43d0267f58e35cccf46400260}
+      \field{extraname}{2}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{extradatescope}{labelyear}
@@ -1897,68 +1899,6 @@
       \field{title}{Fundamentals of Statistical Exponential Families: With Applications in Statistical Decision Theory}
       \field{year}{1986}
       \field{dateera}{ce}
-    \endentry
-    \entry{Burgard2021Regional}{unpublished}{}{}
-      \name{author}{4}{}{%
-        {{un=0,uniquepart=base,hash=f7560193f01140eac23cc1fb22dfbf55}{%
-           family={Burgard},
-           familyi={B\bibinitperiod},
-           given={Jan\bibnamedelima Pablo},
-           giveni={J\bibinitperiod\bibinitdelim P\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=62aea11d18878abad805cac399a7537f}{%
-           family={Heyder},
-           familyi={H\bibinitperiod},
-           given={Stefan},
-           giveni={S\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=73074c606c194c4ae0e4f6ab7d40d7df}{%
-           family={Hotz},
-           familyi={H\bibinitperiod},
-           given={Thomas},
-           giveni={T\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=363adbdc5cb19dc178104d9cc123abd9}{%
-           family={Krueger},
-           familyi={K\bibinitperiod},
-           given={Tyll},
-           giveni={T\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{bc74c6854337e335cda153a3719c4387}
-      \strng{fullhash}{bbffb1716f4786b8c44b46ee9523a75c}
-      \strng{fullhashraw}{bbffb1716f4786b8c44b46ee9523a75c}
-      \strng{bibnamehash}{bc74c6854337e335cda153a3719c4387}
-      \strng{authorbibnamehash}{bc74c6854337e335cda153a3719c4387}
-      \strng{authornamehash}{bc74c6854337e335cda153a3719c4387}
-      \strng{authorfullhash}{bbffb1716f4786b8c44b46ee9523a75c}
-      \strng{authorfullhashraw}{bbffb1716f4786b8c44b46ee9523a75c}
-      \field{sortinit}{B}
-      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{day}{31}
-      \field{eprintclass}{stat}
-      \field{eprinttype}{arXiv}
-      \field{month}{8}
-      \field{title}{Regional Estimates of Reproduction Numbers with Application to {{COVID-19}}}
-      \field{urlday}{30}
-      \field{urlmonth}{9}
-      \field{urlyear}{2021}
-      \field{year}{2021}
-      \field{dateera}{ce}
-      \field{urldateera}{ce}
-      \verb{eprint}
-      \verb 2108.13842
-      \endverb
-      \verb{urlraw}
-      \verb http://arxiv.org/abs/2108.13842
-      \endverb
-      \verb{url}
-      \verb http://arxiv.org/abs/2108.13842
-      \endverb
     \endentry
     \entry{Byambasuren2020Estimating}{article}{}{}
       \name{author}{6}{}{%
@@ -2491,14 +2431,74 @@
       \field{year}{2013}
       \field{dateera}{ce}
     \endentry
+    \entry{Dong2020Interactive}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=4bfd52fcb578e8b400682a36a602f5b4}{%
+           family={Dong},
+           familyi={D\bibinitperiod},
+           given={Ensheng},
+           giveni={E\bibinitperiod},
+           givenun=0}}%
+        {{un=1,uniquepart=given,hash=5430693a851a0afcda824a8b1cc76b4c}{%
+           family={Du},
+           familyi={D\bibinitperiod},
+           given={Hongru},
+           giveni={H\bibinitperiod},
+           givenun=1}}%
+        {{un=0,uniquepart=base,hash=42e71bb10559543c24cc07d6a39afe9b}{%
+           family={Gardner},
+           familyi={G\bibinitperiod},
+           given={Lauren},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier}%
+      }
+      \strng{namehash}{c103f46c07856db2e0261a3e964076dc}
+      \strng{fullhash}{c103f46c07856db2e0261a3e964076dc}
+      \strng{fullhashraw}{c103f46c07856db2e0261a3e964076dc}
+      \strng{bibnamehash}{ff92fa9f3f5b7d2d16536f6ad0d74bd1}
+      \strng{authorbibnamehash}{ff92fa9f3f5b7d2d16536f6ad0d74bd1}
+      \strng{authornamehash}{c103f46c07856db2e0261a3e964076dc}
+      \strng{authorfullhash}{c103f46c07856db2e0261a3e964076dc}
+      \strng{authorfullhashraw}{c103f46c07856db2e0261a3e964076dc}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{1}
+      \field{eprinttype}{pmid}
+      \field{issn}{1473-3099, 1474-4457}
+      \field{journaltitle}{The Lancet Infectious Diseases}
+      \field{langid}{english}
+      \field{month}{5}
+      \field{number}{5}
+      \field{title}{An Interactive Web-Based Dashboard to Track {{COVID-19}} in Real Time}
+      \field{volume}{20}
+      \field{year}{2020}
+      \field{dateera}{ce}
+      \field{pages}{533\bibrangedash 534}
+      \range{pages}{2}
+      \verb{doi}
+      \verb 10.1016/S1473-3099(20)30120-1
+      \endverb
+      \verb{eprint}
+      \verb 32087114
+      \endverb
+      \warn{\item Datamodel: article entry 'Dong2020Interactive' (bibliography.bib): Invalid field 'publisher' for entrytype 'article'}
+      \warn{\item Datamodel: article entry 'Dong2020Interactive' (bibliography.bib): Invalid ISSN in value of field 'issn'}
+    \endentry
     \entry{Du2022Reproduction}{article}{}{}
       \name{author}{11}{}{%
-        {{un=0,uniquepart=base,hash=f599ed6c416c7035443dec3dc52f8359}{%
+        {{un=1,uniquepart=given,hash=f599ed6c416c7035443dec3dc52f8359}{%
            family={Du},
            familyi={D\bibinitperiod},
            given={Zhanwei},
            giveni={Z\bibinitperiod},
-           givenun=0}}%
+           givenun=1}}%
         {{un=0,uniquepart=base,hash=2b0c2445c72b79cef374d70361b799fe}{%
            family={Liu},
            familyi={L\bibinitperiod},
@@ -3217,14 +3217,64 @@
       \verb 32512579
       \endverb
     \endentry
+    \entry{Fraser2007Estimating}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=1,uniquepart=given,hash=f00e40a6ee8de34667282f3c54ec5fcc}{%
+           family={Fraser},
+           familyi={F\bibinitperiod},
+           given={Christophe},
+           giveni={C\bibinitperiod},
+           givenun=1}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=dde1999aef9d1a421d96d1193e64cf92}{%
+           family={Galvani},
+           familyi={G\bibinitperiod},
+           given={Alison},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{f00e40a6ee8de34667282f3c54ec5fcc}
+      \strng{fullhash}{f00e40a6ee8de34667282f3c54ec5fcc}
+      \strng{fullhashraw}{f00e40a6ee8de34667282f3c54ec5fcc}
+      \strng{bibnamehash}{f00e40a6ee8de34667282f3c54ec5fcc}
+      \strng{authorbibnamehash}{f00e40a6ee8de34667282f3c54ec5fcc}
+      \strng{authornamehash}{f00e40a6ee8de34667282f3c54ec5fcc}
+      \strng{authorfullhash}{f00e40a6ee8de34667282f3c54ec5fcc}
+      \strng{authorfullhashraw}{f00e40a6ee8de34667282f3c54ec5fcc}
+      \strng{editorbibnamehash}{dde1999aef9d1a421d96d1193e64cf92}
+      \strng{editornamehash}{dde1999aef9d1a421d96d1193e64cf92}
+      \strng{editorfullhash}{dde1999aef9d1a421d96d1193e64cf92}
+      \strng{editorfullhashraw}{dde1999aef9d1a421d96d1193e64cf92}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{22}
+      \field{issn}{1932-6203}
+      \field{journaltitle}{PLoS ONE}
+      \field{langid}{english}
+      \field{month}{8}
+      \field{number}{8}
+      \field{title}{Estimating {{Individual}} and {{Household Reproduction Numbers}} in an {{Emerging Epidemic}}}
+      \field{volume}{2}
+      \field{year}{2007}
+      \field{dateera}{ce}
+      \field{pages}{e758}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1371/journal.pone.0000758
+      \endverb
+    \endentry
     \entry{Fraser1969Optimum}{article}{}{}
       \name{author}{2}{}{%
-        {{un=0,uniquepart=base,hash=a54e3a1fc30bcbe83626e54ff6fa3542}{%
+        {{un=1,uniquepart=given,hash=a54e3a1fc30bcbe83626e54ff6fa3542}{%
            family={Fraser},
            familyi={F\bibinitperiod},
            given={D.},
            giveni={D\bibinitperiod},
-           givenun=0}}%
+           givenun=1}}%
         {{un=0,uniquepart=base,hash=d49f27f50fade96df3d6ec8689c626c7}{%
            family={Potter},
            familyi={P\bibinitperiod},
@@ -3353,12 +3403,12 @@
     \endentry
     \entry{Gunther2021Nowcasting}{article}{}{}
       \name{author}{5}{}{%
-        {{un=0,uniquepart=base,hash=7fc8f59c7b2b48e5bb8a7d735fc55189}{%
+        {{un=1,uniquepart=given,hash=7fc8f59c7b2b48e5bb8a7d735fc55189}{%
            family={Günther},
            familyi={G\bibinitperiod},
            given={Felix},
            giveni={F\bibinitperiod},
-           givenun=0}}%
+           givenun=1}}%
         {{un=0,uniquepart=base,hash=8cf90897a363ce99d63372266fbc6a5a}{%
            family={Bender},
            familyi={B\bibinitperiod},
@@ -3411,6 +3461,102 @@
       \verb{doi}
       \verb 10.1002/bimj.202000112
       \endverb
+    \endentry
+    \entry{Gunther2020SARSCoV2}{article}{}{}
+      \name{author}{10}{}{%
+        {{un=1,uniquepart=given,hash=7a34a1b8a60b5ee01ffded92a967fb49}{%
+           family={Günther},
+           familyi={G\bibinitperiod},
+           given={Thomas},
+           giveni={T\bibinitperiod},
+           givenun=1}}%
+        {{un=0,uniquepart=base,hash=8a293a1db015f3eb9a750dfd18de97e0}{%
+           family={Czech-Sioli},
+           familyi={C\bibinithyphendelim S\bibinitperiod},
+           given={Manja},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=61f6a273a1593f304e74cfd069209a04}{%
+           family={Indenbirken},
+           familyi={I\bibinitperiod},
+           given={Daniela},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f39090700e08c127e4a3e1ece3128ed5}{%
+           family={Robitaille},
+           familyi={R\bibinitperiod},
+           given={Alexis},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=abb765536dd25dd23057c7bd436f34ff}{%
+           family={Tenhaken},
+           familyi={T\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=fbec15f24d458c06074c1c1175cae9e8}{%
+           family={Exner},
+           familyi={E\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3fbb21e480ba4b4f5db907f6c0529538}{%
+           family={Ottinger},
+           familyi={O\bibinitperiod},
+           given={Matthias},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=772a462c82f16c86743eaa644d5cab4c}{%
+           family={Fischer},
+           familyi={F\bibinitperiod},
+           given={Nicole},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=405fd91aa0560aca6f699a4732125f2d}{%
+           family={Grundhoff},
+           familyi={G\bibinitperiod},
+           given={Adam},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b1e66acded4bd8a936b7044edba607d0}{%
+           family={Brinkmann},
+           familyi={B\bibinitperiod},
+           given={Melanie\bibnamedelima M},
+           giveni={M\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {John Wiley \& Sons, Ltd}%
+      }
+      \strng{namehash}{234a9c71c118de6e1652ed6a104e4911}
+      \strng{fullhash}{f3145fb3c1b5b7eb9de23a7630e6af7f}
+      \strng{fullhashraw}{f3145fb3c1b5b7eb9de23a7630e6af7f}
+      \strng{bibnamehash}{234a9c71c118de6e1652ed6a104e4911}
+      \strng{authorbibnamehash}{234a9c71c118de6e1652ed6a104e4911}
+      \strng{authornamehash}{234a9c71c118de6e1652ed6a104e4911}
+      \strng{authorfullhash}{f3145fb3c1b5b7eb9de23a7630e6af7f}
+      \strng{authorfullhashraw}{f3145fb3c1b5b7eb9de23a7630e6af7f}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{7}
+      \field{issn}{1757-4676}
+      \field{journaltitle}{EMBO Molecular Medicine}
+      \field{month}{12}
+      \field{number}{12}
+      \field{title}{{{SARS-CoV-2}} Outbreak Investigation in a {{German}} Meat Processing Plant}
+      \field{volume}{12}
+      \field{year}{2020}
+      \field{dateera}{ce}
+      \field{pages}{e13296}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.15252/emmm.202013296
+      \endverb
+      \warn{\item Datamodel: article entry 'Gunther2020SARSCoV2' (bibliography.bib): Invalid field 'publisher' for entrytype 'article'}
     \endentry
     \entry{Gupta2020Mandated}{online}{}{}
       \name{author}{3}{}{%
@@ -3563,8 +3709,10 @@
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Covid-19 pandisziplinär und international: Gesundheitswissenschaftliche, gesellschaftspolitische und philosophische Hintergründe}
+      \field{day}{4}
       \field{isbn}{978-3-658-40525-0}
       \field{langid}{ngerman}
+      \field{month}{10}
       \field{series}{Medizin, Kultur, Gesellschaft}
       \field{title}{Measures of COVID-19 Spread}
       \field{year}{2023}
@@ -3953,6 +4101,7 @@
       \field{title}{Continuous Univariate Distributions}
       \field{year}{1994}
       \field{dateera}{ce}
+      \warn{\item Datamodel: book entry 'Johnson1994Continuous' (bibliography.bib): Invalid value of field 'volume' must be datatype 'integer' - ignoring field}
       \warn{\item Datamodel: book entry 'Johnson1994Continuous' (bibliography.bib): Invalid ISBN in value of field 'isbn'}
     \endentry
     \entry{Julier1997New}{inproceedings}{}{}
@@ -4739,6 +4888,94 @@
       \warn{\item Datamodel: article entry 'Laplace1986Memoir' (bibliography.bib): Invalid field 'publisher' for entrytype 'article'}
       \warn{\item Datamodel: article entry 'Laplace1986Memoir' (bibliography.bib): Invalid ISSN in value of field 'issn'}
     \endentry
+    \entry{Lauer2020Incubation}{article}{}{}
+      \name{author}{9}{}{%
+        {{un=0,uniquepart=base,hash=cbe8941f22c2c88c09d5975a13449886}{%
+           family={Lauer},
+           familyi={L\bibinitperiod},
+           given={Stephen\bibnamedelima A.},
+           giveni={S\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9ab1689d69d35ccddbab22d6321b73a6}{%
+           family={Grantz},
+           familyi={G\bibinitperiod},
+           given={Kyra\bibnamedelima H.},
+           giveni={K\bibinitperiod\bibinitdelim H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=83718431f96fa5f2f163c5d8d0ae22df}{%
+           family={Bi},
+           familyi={B\bibinitperiod},
+           given={Qifang},
+           giveni={Q\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d539c3073304b1ab83204abd312ac959}{%
+           family={Jones},
+           familyi={J\bibinitperiod},
+           given={Forrest\bibnamedelima K.},
+           giveni={F\bibinitperiod\bibinitdelim K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=908f1087361910b8acabdcef1b7147af}{%
+           family={Zheng},
+           familyi={Z\bibinitperiod},
+           given={Qulu},
+           giveni={Q\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=92f17c0a9c374f2109384f513005a5a8}{%
+           family={Meredith},
+           familyi={M\bibinitperiod},
+           given={Hannah\bibnamedelima R.},
+           giveni={H\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b76917c74fea51e700fd9a609d317134}{%
+           family={Azman},
+           familyi={A\bibinitperiod},
+           given={Andrew\bibnamedelima S.},
+           giveni={A\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=68b4dbf033ecb04ab5bf0af268e2da21}{%
+           family={Reich},
+           familyi={R\bibinitperiod},
+           given={Nicholas\bibnamedelima G.},
+           giveni={N\bibinitperiod\bibinitdelim G\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5ceece4c2efdc2dad862d8c3d12b277b}{%
+           family={Lessler},
+           familyi={L\bibinitperiod},
+           given={Justin},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {American College of Physicians}%
+      }
+      \strng{namehash}{17e1b023e672adf9e407d472b579b6dc}
+      \strng{fullhash}{8358abd59cd26ff914e517ff6fa1dde1}
+      \strng{fullhashraw}{8358abd59cd26ff914e517ff6fa1dde1}
+      \strng{bibnamehash}{17e1b023e672adf9e407d472b579b6dc}
+      \strng{authorbibnamehash}{17e1b023e672adf9e407d472b579b6dc}
+      \strng{authornamehash}{17e1b023e672adf9e407d472b579b6dc}
+      \strng{authorfullhash}{8358abd59cd26ff914e517ff6fa1dde1}
+      \strng{authorfullhashraw}{8358abd59cd26ff914e517ff6fa1dde1}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{journaltitle}{Annals of internal medicine}
+      \field{number}{9}
+      \field{shorttitle}{The Incubation Period of Coronavirus Disease 2019 ({{COVID-19}}) from Publicly Reported Confirmed Cases}
+      \field{title}{The Incubation Period of Coronavirus Disease 2019 ({{COVID-19}}) from Publicly Reported Confirmed Cases: Estimation and Application}
+      \field{volume}{172}
+      \field{year}{2020}
+      \field{dateera}{ce}
+      \field{pages}{577\bibrangedash 582}
+      \range{pages}{6}
+      \verb{doi}
+      \verb 10.7326/M20-0504
+      \endverb
+      \warn{\item Datamodel: article entry 'Lauer2020Incubation' (bibliography.bib): Invalid field 'publisher' for entrytype 'article'}
+    \endentry
     \entry{Lauritzen1996Graphical}{book}{}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=fef1a84e2e6e3cb207d76e8e74984b93}{%
@@ -4972,6 +5209,60 @@
       \endverb
       \verb{eprint}
       \verb 32251464
+      \endverb
+    \endentry
+    \entry{MichaelKreil2022RKICoronaDatenArchiv}{software}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=8492d5d2d16ad85200ce295da6d7adfa}{%
+           family={{MichaelKreil}},
+           familyi={M\bibinitperiod}}}%
+        {{un=0,uniquepart=base,hash=06488efa053a6812fdafb764b7718880}{%
+           family={{fossdd}},
+           familyi={f\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {ard-data}%
+      }
+      \strng{namehash}{8c7fdc1da80b3321be23cdf92bbcfb77}
+      \strng{fullhash}{8c7fdc1da80b3321be23cdf92bbcfb77}
+      \strng{fullhashraw}{8c7fdc1da80b3321be23cdf92bbcfb77}
+      \strng{bibnamehash}{1a4bf23fb52ced5d5cd042f7e28514a4}
+      \strng{authorbibnamehash}{1a4bf23fb52ced5d5cd042f7e28514a4}
+      \strng{authornamehash}{8c7fdc1da80b3321be23cdf92bbcfb77}
+      \strng{authorfullhash}{8c7fdc1da80b3321be23cdf92bbcfb77}
+      \strng{authorfullhashraw}{8c7fdc1da80b3321be23cdf92bbcfb77}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{16}
+      \field{hour}{9}
+      \field{minute}{40}
+      \field{month}{6}
+      \field{origday}{27}
+      \field{orighour}{1}
+      \field{origminute}{50}
+      \field{origmonth}{5}
+      \field{origsecond}{59}
+      \field{origtimezone}{Z}
+      \field{origyear}{2020}
+      \field{second}{30}
+      \field{timezone}{Z}
+      \field{title}{{{RKI-Corona-Daten-Archiv}}}
+      \field{urlday}{18}
+      \field{urlmonth}{8}
+      \field{urlyear}{2024}
+      \field{year}{2022}
+      \field{dateera}{ce}
+      \field{origdateera}{ce}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://github.com/ard-data/2020-rki-archive
+      \endverb
+      \verb{url}
+      \verb https://github.com/ard-data/2020-rki-archive
       \endverb
     \endentry
     \entry{Midthune2005Modeling}{article}{}{}
@@ -5862,6 +6153,99 @@
       \field{title}{Wöchentlicher {{Lagebericht}} Des {{RKI}} Zur {{Coronavirus-Krankheit-2019}} ({{COVID-19}})}
       \field{year}{2022}
       \field{dateera}{ce}
+    \endentry
+    \entry{RobertKoch-Institut2024SARSCoV2}{dataset}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=c90bca13238edd50195c86481b275c3c}{%
+           family={{Robert Koch-Institut}},
+           familyi={R\bibinitperiod}}}%
+      }
+      \name{namea}{4}{}{%
+        {{hash=bd1266580607986e324aed9c294ce7d0}{%
+           family={Diercke},
+           familyi={D\bibinitperiod},
+           given={Michaela},
+           giveni={M\bibinitperiod}}}%
+        {{hash=6fbccf855491a2e1ee371fbfa52c7cff}{%
+           family={Claus},
+           familyi={C\bibinitperiod},
+           given={Hermann},
+           giveni={H\bibinitperiod}}}%
+        {{hash=af7a835f0909d8aabd076422a8ee3f2f}{%
+           family={Grabenhenrich},
+           familyi={G\bibinitperiod},
+           given={Linus},
+           giveni={L\bibinitperiod}}}%
+        {{hash=ca7f217f88b9a5923708f5cc2b0aea42}{%
+           family={Wuensche},
+           familyi={W\bibinitperiod},
+           given={Hannes},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Zenodo}%
+      }
+      \strng{namehash}{c90bca13238edd50195c86481b275c3c}
+      \strng{fullhash}{c90bca13238edd50195c86481b275c3c}
+      \strng{fullhashraw}{c90bca13238edd50195c86481b275c3c}
+      \strng{bibnamehash}{c90bca13238edd50195c86481b275c3c}
+      \strng{authorbibnamehash}{c90bca13238edd50195c86481b275c3c}
+      \strng{authornamehash}{c90bca13238edd50195c86481b275c3c}
+      \strng{authorfullhash}{c90bca13238edd50195c86481b275c3c}
+      \strng{authorfullhashraw}{c90bca13238edd50195c86481b275c3c}
+      \strng{nameabibnamehash}{c5fb2bd2d7fc0ffcb6ef5ba9738e8d62}
+      \strng{nameanamehash}{c5fb2bd2d7fc0ffcb6ef5ba9738e8d62}
+      \strng{nameafullhash}{292d1762dba6db9a0775f59f6c356b79}
+      \strng{nameafullhashraw}{292d1762dba6db9a0775f59f6c356b79}
+      \field{extraname}{4}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{extradate}{1}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{18}
+      \field{langid}{ngerman}
+      \field{month}{8}
+      \field{nameatype}{collaborator}
+      \field{title}{SARS-CoV-2 Infektionen in Deutschland}
+      \field{version}{2024-08-18}
+      \field{year}{2024}
+      \field{dateera}{ce}
+      \verb{doi}
+      \verb 10.5281/ZENODO.4681153
+      \endverb
+    \endentry
+    \entry{RobertKoch-Institut2024SARSCoV2a}{software}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=c90bca13238edd50195c86481b275c3c}{%
+           family={{Robert Koch-Institut}},
+           familyi={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{c90bca13238edd50195c86481b275c3c}
+      \strng{fullhash}{c90bca13238edd50195c86481b275c3c}
+      \strng{fullhashraw}{c90bca13238edd50195c86481b275c3c}
+      \strng{bibnamehash}{c90bca13238edd50195c86481b275c3c}
+      \strng{authorbibnamehash}{c90bca13238edd50195c86481b275c3c}
+      \strng{authornamehash}{c90bca13238edd50195c86481b275c3c}
+      \strng{authorfullhash}{c90bca13238edd50195c86481b275c3c}
+      \strng{authorfullhashraw}{c90bca13238edd50195c86481b275c3c}
+      \field{extraname}{5}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{extradate}{2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{8}
+      \field{title}{{{SARS-CoV-2 Infektionen}} in {{Deutschland}}}
+      \field{year}{2024}
+      \field{dateera}{ce}
+      \verb{doi}
+      \verb 10.5281/zenodo.13337137
+      \endverb
     \endentry
     \entry{Ross2011Fundamentalsa}{article}{}{}
       \name{author}{1}{}{%
@@ -7652,6 +8036,97 @@
       \field{year}{2000}
       \field{dateera}{ce}
     \endentry
+    \entry{Wallinga2007How}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=1771065544465597630f66d40992dc0d}{%
+           family={Wallinga},
+           familyi={W\bibinitperiod},
+           given={J},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=fdcae7362b082aca8af24b4a0fe3bcab}{%
+           family={Lipsitch},
+           familyi={L\bibinitperiod},
+           given={M},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{cc16ecd93f18d9c2d2b0bbc106977e20}
+      \strng{fullhash}{cc16ecd93f18d9c2d2b0bbc106977e20}
+      \strng{fullhashraw}{cc16ecd93f18d9c2d2b0bbc106977e20}
+      \strng{bibnamehash}{5921c91c80f8c4c1344e9331546ef41b}
+      \strng{authorbibnamehash}{5921c91c80f8c4c1344e9331546ef41b}
+      \strng{authornamehash}{cc16ecd93f18d9c2d2b0bbc106977e20}
+      \strng{authorfullhash}{cc16ecd93f18d9c2d2b0bbc106977e20}
+      \strng{authorfullhashraw}{cc16ecd93f18d9c2d2b0bbc106977e20}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{22}
+      \field{issn}{0962-8452, 1471-2954}
+      \field{journaltitle}{Proc. R. Soc. B.}
+      \field{langid}{english}
+      \field{month}{2}
+      \field{number}{1609}
+      \field{title}{How Generation Intervals Shape the Relationship between Growth Rates and Reproductive Numbers}
+      \field{volume}{274}
+      \field{year}{2007}
+      \field{dateera}{ce}
+      \field{pages}{599\bibrangedash 604}
+      \range{pages}{6}
+      \verb{doi}
+      \verb 10.1098/rspb.2006.3754
+      \endverb
+      \warn{\item Datamodel: article entry 'Wallinga2007How' (bibliography.bib): Invalid ISSN in value of field 'issn'}
+    \endentry
+    \entry{Wallinga2004Different}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=1771065544465597630f66d40992dc0d}{%
+           family={Wallinga},
+           familyi={W\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=150d39d50f18f86d075eec9f10c6e3f9}{%
+           family={Teunis},
+           familyi={T\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{ebfd307834d2770f0f9bbfac3f90f5c9}
+      \strng{fullhash}{ebfd307834d2770f0f9bbfac3f90f5c9}
+      \strng{fullhashraw}{ebfd307834d2770f0f9bbfac3f90f5c9}
+      \strng{bibnamehash}{5921c91c80f8c4c1344e9331546ef41b}
+      \strng{authorbibnamehash}{5921c91c80f8c4c1344e9331546ef41b}
+      \strng{authornamehash}{ebfd307834d2770f0f9bbfac3f90f5c9}
+      \strng{authorfullhash}{ebfd307834d2770f0f9bbfac3f90f5c9}
+      \strng{authorfullhashraw}{ebfd307834d2770f0f9bbfac3f90f5c9}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{15}
+      \field{issn}{0002-9262}
+      \field{journaltitle}{American Journal of Epidemiology}
+      \field{langid}{english}
+      \field{month}{9}
+      \field{number}{6}
+      \field{title}{Different {{Epidemic Curves}} for {{Severe Acute Respiratory Syndrome Reveal Similar Impacts}} of {{Control Measures}}}
+      \field{volume}{160}
+      \field{year}{2004}
+      \field{dateera}{ce}
+      \field{pages}{509\bibrangedash 516}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1093/aje/kwh255
+      \endverb
+    \endentry
     \entry{White1982Maximum}{article}{}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=426e452a5ec8e692f7740ce0d3e3655c}{%
@@ -7922,7 +8397,7 @@
 \refsection{1}
   \datalist[entry]{nyt/global//global/global/global}
     \entry{Bracher2021Preregistered}{article}{}{}
-      \name{author}{38}{ul=16}{%
+      \name{author}{38}{}{%
         {{un=0,uniquepart=base,hash=d371388a80a2726bf15130b69fa4f8d2}{%
            family={Bracher},
            familyi={B\bibinitperiod},
@@ -8155,14 +8630,15 @@
       \list{publisher}{1}{%
         {Nature Publishing Group}%
       }
-      \strng{namehash}{79c2ebb74ade1e832d262b02f4f7d168}
+      \strng{namehash}{3691f95bc90c7b4dfbf71749000fb951}
       \strng{fullhash}{9bf78b7a5420832ad5460cf2a5c67b7b}
       \strng{fullhashraw}{9bf78b7a5420832ad5460cf2a5c67b7b}
-      \strng{bibnamehash}{79c2ebb74ade1e832d262b02f4f7d168}
-      \strng{authorbibnamehash}{79c2ebb74ade1e832d262b02f4f7d168}
-      \strng{authornamehash}{79c2ebb74ade1e832d262b02f4f7d168}
+      \strng{bibnamehash}{3691f95bc90c7b4dfbf71749000fb951}
+      \strng{authorbibnamehash}{3691f95bc90c7b4dfbf71749000fb951}
+      \strng{authornamehash}{3691f95bc90c7b4dfbf71749000fb951}
       \strng{authorfullhash}{9bf78b7a5420832ad5460cf2a5c67b7b}
       \strng{authorfullhashraw}{9bf78b7a5420832ad5460cf2a5c67b7b}
+      \field{extraname}{1}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{extradatescope}{labelyear}
@@ -8190,7 +8666,7 @@
       \warn{\item Datamodel: article entry 'Bracher2021Preregistered' (own_publications.bib): Invalid field 'publisher' for entrytype 'article'}
     \endentry
     \entry{Bracher2022National}{article}{}{}
-      \name{author}{42}{ul=16}{%
+      \name{author}{42}{}{%
         {{un=0,uniquepart=base,hash=bf4e0b1559f41753a5f8f0e193bf5f98}{%
            family={Bracher},
            familyi={B\bibinitperiod},
@@ -8447,14 +8923,15 @@
       \list{publisher}{1}{%
         {Nature Publishing Group}%
       }
-      \strng{namehash}{067cce1807cc42a634d2140e7d8b43d7}
+      \strng{namehash}{057518eeab9da06b877bc329dd050981}
       \strng{fullhash}{3ed1a5a43d0267f58e35cccf46400260}
       \strng{fullhashraw}{3ed1a5a43d0267f58e35cccf46400260}
-      \strng{bibnamehash}{067cce1807cc42a634d2140e7d8b43d7}
-      \strng{authorbibnamehash}{067cce1807cc42a634d2140e7d8b43d7}
-      \strng{authornamehash}{067cce1807cc42a634d2140e7d8b43d7}
+      \strng{bibnamehash}{057518eeab9da06b877bc329dd050981}
+      \strng{authorbibnamehash}{057518eeab9da06b877bc329dd050981}
+      \strng{authornamehash}{057518eeab9da06b877bc329dd050981}
       \strng{authorfullhash}{3ed1a5a43d0267f58e35cccf46400260}
       \strng{authorfullhashraw}{3ed1a5a43d0267f58e35cccf46400260}
+      \field{extraname}{2}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{extradatescope}{labelyear}
@@ -8597,6 +9074,7 @@
       \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{shorttitle}
+      \field{day}{1}
       \field{issn}{0363-0129, 1095-7138}
       \field{journaltitle}{SIAM Journal on Control and Optimization}
       \field{langid}{english}

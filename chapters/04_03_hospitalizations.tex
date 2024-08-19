@@ -5,9 +5,7 @@
 Judging the severity of the COVID-19 epidemic has been an ongoing challenge since its inception. As immunization against COVID-19 rose, strict enforcement of social distancing rules eased and testing regimes became less strict, case incidences became a less reliable and harder to interpret indicator of epidemic severity. Instead more direct indicators of morbidity, such as the number of deaths and ICU admissions and occupancy have come to the fore. But these indicators are late due to the substantial delays between infection and occurence. An alternative indicator that captures the morbidity caused by COVID-19 but is earlier than the others is the number of hospitalisations of positive COVID-19
 cases.
 
-While hospitalisations occur earlier, they still come with substantial delay between the infection and subsequent admission to hospital. Additional difficulties arise due to delays in reporting, i.e.~the time it takes until the hospital reports the new case to the national health authorities. The problem of accounting for delays in reporting for occurred, but not yet reported events has been termed \textbf{nowcasting}, i.e.~forecasting of the indicator at time ``now''. Predicting the number of hospitalisations is thus a mixture of both forecasting --- which reported COVID-19 cases will end up in the hospital --- and nowcasting --- which cases have yet to be reported --- and we will use the term nowcasting in this paper to mean this predictive mixture. In this section we focus on the situation in Germany where data on hospitalisations has been available since April 2021 provided by the German federal health care authorithy, the \gls{rki}, via Github \cite{RobertKoch-Institut2021COVID19Hospitalisierungen}. In these data the number of hospitalisations is linked to the date of reporting of the associated case, so the term of nowcasting is accurate: we are interested in the ``true'' value of the indicator today, that will only be observed after a long delay. While this association requires a careful interpretation of the indicator (see \Cref{subsec:nowcasting_discussion}) it was, besides case incidences and ICU occupancy, one of the main official indicators in Germany informing countermeasures in 2021 and so there is merit in nowcasting it. 
-
-The extent of delays is visible in \cref{fig:delays_in_reporting}: the reported number of hospitalisations will roughly double over the course of twelve weeks. By the aforementioned reporting scheme of hospitalisations there are two reporting dates for a single hospitalised case: the reporting date of the case, i.e.~the date when local health authorities were made aware of the positive test, and the reporting date of the hospitalisation, i.e.~when the hospitalisation was reported to the \gls{rki}. This induces a double weekday effect in the reporting delays which we make visible in \cref{fig:double_weekday_effect}.
+While hospitalisations occur earlier, they still come with substantial delay between the infection and subsequent admission to hospital. Additional difficulties arise due to delays in reporting, i.e.~the time it takes until the hospital reports the new case to the national health authorities. The problem of accounting for delays in reporting for occurred, but not yet reported events has been termed \textbf{nowcasting}, i.e.~forecasting of the indicator at time ``now''. Predicting the number of hospitalisations is thus a mixture of both forecasting --- which reported COVID-19 cases will end up in the hospital --- and nowcasting --- which cases have yet to be reported --- and we will use the term nowcasting in this paper to mean this predictive mixture. In this section we focus on the situation in Germany where data on hospitalisations has been available since April 2021 provided by the German federal health care authorithy, the \gls{rki}, via Github \cite{RobertKoch-Institut2021COVID19Hospitalisierungen}. 
 
 Compared to other approaches in the COVID-19 NowcastHub, that tended to exclusively focus on modelling the delay distribution with parametric and non-parametric models, our model sidesteps this complex delay structure by decomposing delayed hospitalisations into weekly chunks (\cref{fig:reporting_triangle}) and incorporating case data. As cases and hospitalisations are explicitly linked by the case reporting date we forecast the number of hospitalisations in each chunk based on the current incidences and past fractions of hospitalisations in a comparable weekly chunk. We additionally quantify uncertainty by prediction intervals that are informed by the past performance of our model. This makes our model straightforward to understand, easy to implement and fast to run.\todo{reformulate}
 
@@ -53,72 +51,15 @@ depicted in \cref{fig:reporting_triangle}. Our prediction of each of
 these weekly chunks then consists of the fraction of hospitalisations of
 reported cases in the past.
 
-We use publicly available data from the German national health authority
-(\gls{rki}) on daily reported COVID-19 cases
-\cite{RobertKoch-Institut2022SARSCoV2} and weekly reported
-hospitalisations
-\cite{RobertKoch-Institut2021COVID19Hospitalisierungen}. Both
-datasets are updated on a daily basis.
+We use the publicly available data from the \acrshort{rki} discussed in \Cref{sec:data} on daily reported COVID-19 cases \cite{RobertKoch-Institut2024SARSCoV2} and weekly reported hospitalizations \cite{RobertKoch-Institut2024COVID19Hospitalisierungen}. Both datasets are updated daily.
 
-COVID-19 cases are described by their date of reporting, i.e.~the date
-that the local health authorities were made aware of the case. For a
-fraction (63 \%) of cases the date of symptom onset is also reported.
-Due to delays in the process from infection to reporting -- e.g.~the
-time it takes to get tested, evaluate the test and report the result to
-local health authorities -- the date of reporting is, for most cases,
-some days after symptom onset (median delay: 3 with interquartile range
-\([2, 6]\)). As the date of symptom onset is not known for a substantial
-amount of incident cases, and is not reported for hospitalised cases, we
-focus our analysis on the date of reporting.
+Recall from \Cref{sec:data} that COVID-19 cases are described by their date of reporting, and are subject to reporting delay and hospitalizations are reported by the \textit{reporting date of the associated case}, and are subject to delay as well. As the date of symptom onset is not known for a substantial amount of incident cases, and is not reported for hospitalized cases, we focus our analysis on the date of reporting.
 
-Hospitalisations are associated with the \emph{reporting date of the
-corresponding case} and no information is available on the actual date
-of hospitalisation. In addition, hospitalisations are only published as
-weekly sums over the past seven days. This means that the number of
-hospitalisations reported for today consists of all hospitalisations
-that correspond to cases that have a \emph{case reporting date} in the
-past seven days. In particular if the case reporting date of a
-hospitalised case is today the case will \emph{not} count towards todays
-hospitalisation count. The reporting date of hospitalisation is not
-available in the dataset, but can be inferred by comparing datasets from
-consecutive days.
-
-Daily incident cases and weekly hospitalisations are reported by federal
-state and age group (00-04, 05-14, 15-34, 35-59, 60-79, 80+). Incident
-cases are additionally reported by county and sex.
-
-In line with the structure of the data provided by the \gls{rki} we let \(H^a_{t,d}\) be the number of weekly hospitalisations
-in age group \(a\) with case reporting date \(t - 1, \dots, t - 7\) that
-are known on day \(t + d\), aggregating over all states. Accordingly we
-define \(I^a_{t,d}\) to be the number of weekly incident cases in age
-group \(a\) with reporting date \(t - 1, \dots, t - 7\) that are known
-on day \(t + d\). Finally we reconstruct the reporting triangles for
-weekly hospitalisations (\cref{fig:reporting_triangle}) by
-differencing the \(H^a_{t,d}\) for fixed \(t\):
-\(h^a_{t,d} = H^a_{t,d} - H^a_{t, d - 1}\), setting \(H^a_{t, -1}\) to
-\(0\) by convention. We recover the reporting triangle \(i^a_{t,d}\) for
-incident cases in the same manner.
-
-\begin{figure}
-
-    {\centering \includegraphics[width=\textwidth]{figures_tentative/delay_tails-1.pdf} 
-
-}
-
-\caption{Survival function of reporting delays of weekly hospitalisations $H_{t,d}$ with case reporting date 01 September 2021. The delay distribution has long tails with a non-neglibgible fraction of observed delays longer than eight weeks, in some age groups even twelve weeks.}\label{fig:delay_tails}
-\end{figure}
-
-We show the empirical surivival function of hospitalisations for a fixed
-date in \cref{fig:delay_tails}. We observe that delays have long
-tails, with most cases reported after 12 weeks (84 days), except for the
-youngest age group. After such a long delay between infection and
-hospitalisation we deem it unlikely that hospitalisation is due to COVID
-and disregard all longer delays accordingly. Given such long delays, it
-does not suffice to nowcast only todays hospitalisations, but also for
-dates in the past to monitor hospitalisation, i.e.~observe current
-trends; we thus nowcast for all delays \(d = 0, \dots, 28\).
+Given the long delays, \Cref{fig:delay_tails}, it does not suffice to nowcast only today's hospitalizations, but also for dates in the past to monitor hospitalization, i.e.~observe current trends; we thus nowcast for all delays \(d = 0, \dots, 28\).
 
 \subsection{Model}
+In line with the structure of the data provided by the \acrshort{rki}, we let $H^a_{s,s + \tau}$ be the number of weekly hospitalizations in age group $a$ with case reporting date $s - 1, \dots, s - 7$ that are known on the day $s + \tau$, aggregating over all states. Accordingly, we define $I^a_{s,s + \tau}$ to be the number of weekly incident cases in age group $a$ with reporting date $s - 1, \dots, s - 7$ that are known on the day $s + d$. Finally we reconstruct the reporting triangles for weekly hospitalizations (\Cref{fig:reporting_triangle}) by differencing the $H^a_{s,s + \tau}$ for fixed $s$: $h^a_{s,s + \tau} = H^a_{s,s + \tau} - H^a_{s, s + \tau - 1}$, setting $H^a_{s, -1}$ to $0$ by convention. 
+
 More formally, denote by \(h_{t,d}\) the number hospitalisations with
 reporting date \(t\) that are known \(d\) days later. Unfortunately we
 only observe \[H_{t,d} = \sum_{s = t - 6}^{t} h_{s,d + (t - s)},\]

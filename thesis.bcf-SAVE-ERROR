@@ -180,7 +180,7 @@
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>uniquelist</bcf:key>
-      <bcf:value>true</bcf:value>
+      <bcf:value>false</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>uniquename</bcf:key>
@@ -395,7 +395,7 @@
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>uniquelist</bcf:key>
-      <bcf:value>true</bcf:value>
+      <bcf:value>false</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>uniquename</bcf:key>
@@ -2406,28 +2406,46 @@
     <bcf:citekey order="12" intorder="1">Tomori2021Individual</bcf:citekey>
     <bcf:citekey order="12" intorder="2">Mossong2008Social</bcf:citekey>
     <bcf:citekey order="13" intorder="1">Tomori2021Individual</bcf:citekey>
-    <bcf:citekey order="14" intorder="1">Abbott2020Estimating</bcf:citekey>
-    <bcf:citekey order="15" intorder="1">Flaxman2020Estimating</bcf:citekey>
-    <bcf:citekey order="15" intorder="2">Brauner2021Inferring</bcf:citekey>
-    <bcf:citekey order="15" intorder="3">Khazaei2023Using</bcf:citekey>
-    <bcf:citekey order="16" intorder="1">Gupta2020Mandated</bcf:citekey>
-    <bcf:citekey order="17" intorder="1">Flaxman2020Estimating</bcf:citekey>
-    <bcf:citekey order="17" intorder="2">Brauner2021Inferring</bcf:citekey>
-    <bcf:citekey order="17" intorder="3">Khazaei2023Using</bcf:citekey>
-    <bcf:citekey order="18" intorder="1">Cori2021EpiEstim</bcf:citekey>
-    <bcf:citekey order="19" intorder="1">Abbott2020Estimating</bcf:citekey>
-    <bcf:citekey order="20" intorder="1">Flaxman2020Estimating</bcf:citekey>
-    <bcf:citekey order="21" intorder="1">Brauner2021Inferring</bcf:citekey>
-    <bcf:citekey order="21" intorder="2">Khazaei2023Using</bcf:citekey>
-    <bcf:citekey order="22" intorder="1">AnDerHeiden2020Schatzung</bcf:citekey>
-    <bcf:citekey order="23" intorder="1">Khailaie2021Development</bcf:citekey>
-    <bcf:citekey order="24" intorder="1">Hotz2020Monitoring</bcf:citekey>
-    <bcf:citekey order="25" intorder="1">Ray2020Ensemble</bcf:citekey>
-    <bcf:citekey order="26" intorder="1">Bracher2021Preregistered</bcf:citekey>
-    <bcf:citekey order="26" intorder="2">Bracher2022National</bcf:citekey>
-    <bcf:citekey order="27" intorder="1">Sherratt2022Predictive</bcf:citekey>
-    <bcf:citekey order="28" intorder="1">Arroyo-Marioli2021Tracking</bcf:citekey>
-    <bcf:citekey order="29" intorder="1">Khailaie2021Development</bcf:citekey>
-    <bcf:citekey order="30" intorder="1">Adamik2020Mitigation</bcf:citekey>
-    <bcf:citekey order="31" intorder="1">Borchering2023Public</bcf:citekey>
-    <bcf:citekey order="32" intorder="1">Heyder2023Measures</bcf:citekey>
+    <bcf:citekey order="14" intorder="1">Heyder2023Measures</bcf:citekey>
+    <bcf:citekey order="15" intorder="1">Abbott2020Estimating</bcf:citekey>
+    <bcf:citekey order="16" intorder="1">Flaxman2020Estimating</bcf:citekey>
+    <bcf:citekey order="16" intorder="2">Brauner2021Inferring</bcf:citekey>
+    <bcf:citekey order="16" intorder="3">Khazaei2023Using</bcf:citekey>
+    <bcf:citekey order="17" intorder="1">Gupta2020Mandated</bcf:citekey>
+    <bcf:citekey order="18" intorder="1">Flaxman2020Estimating</bcf:citekey>
+    <bcf:citekey order="18" intorder="2">Brauner2021Inferring</bcf:citekey>
+    <bcf:citekey order="18" intorder="3">Khazaei2023Using</bcf:citekey>
+    <bcf:citekey order="19" intorder="1">Cori2021EpiEstim</bcf:citekey>
+    <bcf:citekey order="20" intorder="1">Abbott2020Estimating</bcf:citekey>
+    <bcf:citekey order="21" intorder="1">Flaxman2020Estimating</bcf:citekey>
+    <bcf:citekey order="22" intorder="1">Brauner2021Inferring</bcf:citekey>
+    <bcf:citekey order="22" intorder="2">Khazaei2023Using</bcf:citekey>
+    <bcf:citekey order="23" intorder="1">AnDerHeiden2020Schatzung</bcf:citekey>
+    <bcf:citekey order="24" intorder="1">Khailaie2021Development</bcf:citekey>
+    <bcf:citekey order="25" intorder="1">Hotz2020Monitoring</bcf:citekey>
+    <bcf:citekey order="26" intorder="1">Ray2020Ensemble</bcf:citekey>
+    <bcf:citekey order="27" intorder="1">Bracher2021Preregistered</bcf:citekey>
+    <bcf:citekey order="27" intorder="2">Bracher2022National</bcf:citekey>
+    <bcf:citekey order="28" intorder="1">Sherratt2022Predictive</bcf:citekey>
+    <bcf:citekey order="29" intorder="1">Arroyo-Marioli2021Tracking</bcf:citekey>
+    <bcf:citekey order="30" intorder="1">Khailaie2021Development</bcf:citekey>
+    <bcf:citekey order="31" intorder="1">Adamik2020Mitigation</bcf:citekey>
+    <bcf:citekey order="32" intorder="1">Borchering2023Public</bcf:citekey>
+    <bcf:citekey order="33" intorder="1">Lauer2020Incubation</bcf:citekey>
+    <bcf:citekey order="34" intorder="1">Fraser2007Estimating</bcf:citekey>
+    <bcf:citekey order="35" intorder="1">Fraser2007Estimating</bcf:citekey>
+    <bcf:citekey order="36" intorder="1">Hotz2020Monitoring</bcf:citekey>
+    <bcf:citekey order="37" intorder="1">Cori2021EpiEstim</bcf:citekey>
+    <bcf:citekey order="38" intorder="1">Wallinga2004Different</bcf:citekey>
+    <bcf:citekey order="39" intorder="1">Brauner2021Inferring</bcf:citekey>
+    <bcf:citekey order="39" intorder="2">Khazaei2023Using</bcf:citekey>
+    <bcf:citekey order="39" intorder="3">Flaxman2020Estimating</bcf:citekey>
+    <bcf:citekey order="40" intorder="1">Diekmann2013Mathematical</bcf:citekey>
+    <bcf:citekey order="41" intorder="1">Wallinga2007How</bcf:citekey>
+    <bcf:citekey order="42" intorder="1">Heyder2023Measures</bcf:citekey>
+    <bcf:citekey order="43" intorder="1">Dong2020Interactive</bcf:citekey>
+    <bcf:citekey order="44" intorder="1">RobertKoch-Institut2024SARSCoV2</bcf:citekey>
+    <bcf:citekey order="45" intorder="1">RobertKoch-Institut2024SARSCoV2a</bcf:citekey>
+    <bcf:citekey order="46" intorder="1">MichaelKreil2022RKICoronaDatenArchiv</bcf:citekey>
+    <bcf:citekey order="47" intorder="1">AnDerHeiden2020Schatzung</bcf:citekey>
+    <bcf:citekey order="48" intorder="1">Gunther2020SARSCoV2</bcf:citekey>
