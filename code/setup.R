@@ -1,5 +1,5 @@
 options(
-    repr.plot.width = 16, 
+    repr.plot.width = 16,
     repr.plot.height = 7,
     # silence tidyverse messages
     tidyverse.quiet = TRUE,
@@ -9,19 +9,22 @@ options(
     readr.show_col_types = FALSE
 )
 # necessary for German XLSX files
-Sys.setlocale("LC_ALL", 'en_US.UTF-8')
+Sys.setlocale("LC_ALL", "en_US.UTF-8")
 
 library(tidyverse)
 library(patchwork)
 library(tikzDevice)
 library(ggsci)
 library(here)
+library(zoo)
+library(ggmagnify)
+library(ggforce)
 
 
 default_width <- 8
 default_height <- 5
-ggsave_tikz <- function(filename, plot=last_plot(), width=default_width, height=default_height, ...) {
-    tikz(filename, width=width,height=height, ...)
+ggsave_tikz <- function(filename, plot = last_plot(), width = default_width, height = default_height, ...) {
+    tikz(filename, width = width, height = height, ...)
     print(plot)
     dev.off()
 }

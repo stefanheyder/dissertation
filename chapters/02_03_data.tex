@@ -7,6 +7,17 @@ The main source of data we use for the models in \Cref{cha:analysis_of_selected_
 
 Let us note that several other data could be of interest as well, depending on the analysis at hand. Useful data includes the DIVI-Intensivregister data monitoring the ICU occupancy and capacity in Germany as well as data on the number of tests and vaccines administered. In our later analysis, we will also make use of other data, e.g. commuting data. As these are not directly related to the epidemic data, we present them separately in the respective sections.
 
+\subsection{Epidemiological characteristics of COVID-19}
+To estimate reproduction numbers by \Cref{eq:hatR} we need to assume a discrete time generation time distribution. Here we use a trapezoidal shape with mean generation time $\bar w = 5.6$ days, used also in \citep{Burgard2021Regional}. Its shape is motivated by the fact that primary cases take some days to become infectious themselves, i.e. the incubation period is several days. Additionally, we deem infection after 11 days unlikely, as symptomatic individuals are most likely quarantined or hospitalized after this time. We display this generation time distribution in \Cref{fig:generation_time}. \todo{sources for this?}
+
+\begin{figure}
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/generation_time.tex}%
+    }
+    \caption{Generation time distribution used to estimate reproduction numbers throughout this thesis.}
+    \label{fig:generation_time}
+\end{figure}
+
 \subsection{Incidence and death data}
 In this thesis, we focus on the data available for Germany, provided by the \acrshort{rki} available on zenodo \citep{RobertKoch-Institut2024SARSCoV2} or GitHub \citep{RobertKoch-Institut2024SARSCoV2a}. In these repositories, the \acrshort{rki} publishes daily data on the number of cases in the aforementioned strata. For some days, data have not been published to zenodo, e.g. for May 31st, 2020 \todo{why?}. In this case, we use the data provided by the ard-data RKI-archive on GitHub \citep{MichaelKreil2022RKICoronaDatenArchiv}. 
 
@@ -117,5 +128,7 @@ The extent of delays is visible in the reporting triangle \Cref{fig:reporting_de
 Hospitalizations are associated with the \emph{reporting date of the corresponding case} and no information is available on the actual date of hospitalization. In addition, hospitalizations are only published as weekly sums over the past seven days. This means that the number of hospitalizations reported for today consists of all hospitalizations that correspond to cases that have a \emph{case reporting date} in the past seven days. In particular, if the case reporting date of a hospitalized case is today the case will \emph{not} count towards today's hospitalization count. The reporting date of hospitalization is not available in the dataset but can be inferred by comparing datasets from consecutive days.
 
 We show the empirical survival function of hospitalizations for a fixed date in \Cref{fig:double_weekday_effect_hosp} \textbf{C}, split by age groups. We observe that delays have long tails, with most cases reported after 12 weeks (84 days). After such a long delay between infection and hospitalization, we deem it unlikely that hospitalization is due to \acrshort{c19} and will disregard all longer delays in our analyses accordingly. 
+
+
 
 As apparent from these data quality issues, the models we construct will have to account for, e.g. the week-day effect and reporting delays, to make sensible inferences about the true state of the epidemic. 

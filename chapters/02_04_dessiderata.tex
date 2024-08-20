@@ -1,23 +1,52 @@
 \section{Desiderata for epidemiological models}
 \label{sec:dessiderata}
 
-As the dynamics of the epidemic are constantly changing, our models should
+% to show what can go wrong, figure R / rho daily / weekly 
 
-\todo{mention problems with too simple R estimate in local outbreak setting (over / under estimation)}
-% slide 3 in file:///Users/stefan/workspace/work/talks/2022-07-25%20Siegmundsburg2022%20RegionalReproductionNumbers/Heyder2022SiegmundsburgRegional.pdf
+In what follows, we will give a non-exhaustive list of requirements we view as important when modeling the \acrshort{c19} epidemic. To start, we present a na\"{i}ve analysis of reproduction numbers and weekly growth factors in Germany to illustrate where this simple approach breaks down. This will be our starting point to motivate on which effects to include in our modeling considerations.
+
+For the reproduction number, we first estimate $\hat R$ by the moment estimator \eqref{eq:hatR} using the raw incidences $I_{t}$ for the whole of Germany and the generation time distribution from \Cref{fig:generation_time}. As these estimates incur the week-day effect present in the raw incidences, we repeat the estimation, now based on the seven-day averages $\frac{1}{7}\sum_{\tau = -3}^3I_{t - \tau}$, producing smoother estimates. 
+Similarly, we estimate the weekly growth factor once by the raw incidences, $ \hat \rho^{7} = \frac{I_{t}}{I_{t - 7}}$ and the smoothed estimate \Cref{eq:rho7_smooth}.
+
+\begin{figure}
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/rho_and_R_naive.tex}%
+    }
+    \caption{Na\"{i}ve estimates of weekly growth factors $\hat \rho^{7}$ and reproduction numbers $\hat R$ from April 2020 to the end of 2022. The estimates are based on daily (gray lines) and seven-day average (red line) cases.}
+    \label{fig:rho_and_R_naive}
+\end{figure}
+
+The results of these procedures are displayed in \Cref{fig:rho_and_R_naive}, and from this figure, we can deduce the shortcomings of this na\"{i}ve analysis. When considering the estimates based on daily incidences, the week-day effect is very noticeable in the reproduction number estimates, which makes interpretation of these estimates on any given day difficult. The growth factor estimates are affected less, because the seven-day period coincides with that of the weekday effect. However, the growth factor estimates are prone to large variances in periods of few incidences, e.g. in the summer of 2020. All estimators are, naturally, susceptible to reporting artifacts, e.g. in the Christmas period highlighted in \Cref{fig:cases_germany}.
+
+In addition, we want to draw the reader's attention to the local outbreak highlighted already in \Cref{fig:cases_germany}. In this period, a large share of the country-wide cases were reported in a single, small, region, Gütersloh county. If we want to interpret the reproduction number and growth factor estimates as representing the speed of the epidemic on the country scale, the estimates corresponding to these dates are exaggerated: we would not expect the number of cases, on the country level, to grow at the same speed as in this single county. Furthermore, the estimates in the weeks following the outbreak are understated, because the outbreak now counts towards the denominator in the estimates of $R$ and $\rho$. 
+
+More problems arise when we consider inferences based on these estimators. While confidence intervals for the reproduction numbers can be obtained by assuming a Poisson distribution, \Cref{eq:renewal-model}, these confidence intervals concern only the marginal distribution of a single estimate. Constructing joint confidence intervals for, e.g., the difference in reproduction numbers is not feasible, as the dependencies given by the renewal equation model, \eqref{eq:renewal-model} are non-linear and non-Gaussian. While applying the estimators to the weekly average of cases does produce smoother estimates, it also introduces bias. Indeed, the renewal equation model is no longer valid for these incidences, as $\frac{1}{7}\sum_{\tau = -3}^3 I_{t + \tau}$ is not independent of the past incidences $\frac{1}7 \sum_{\tau = -3 }^3 I_{t - s +\tau}$ if $t - s < 7$. 
+
+
+% file:///Users/stefan/workspace/work/misc/mathstat_research/Epidemiology/Corona/reports/state_space_models/SSM4COVIDtalk/SSM4COVIDtalk_London.pdf
 % incorporate points from spatio temprial R slide therein as well
 
+Given these difficulties, we cannot hope for precise inferences using such simple models. Instead, we will have to extend these models to include or account for some of the following phenomena.
 
-\begin{itemize}
-    \item we want models to be able to include as much data as possible, while still being numerically tractable 
-\end{itemize}
+\paragraph{Slowly varying indicators}
+% why 
+We would generally expect the day-to-day variation in contact, and thus infection, behavior to be small. Even if new \acrshortpl{npi} are introduced, a mix of early and late adoption in different regions should lead to only small changes in $R$ and $\rho$ each day on the country level. 
+% how to do it
+To achieve this smoothing, we may model the absolute or relative change in the indicators to be locally linear or constant. 
 
-\todo{this paragraph to modelling chapter}
-The Poisson distribution arises from the law of small numbers: if there is a large population where every individual has, independently, a small probability of becoming infected in a small window of time then the total number of infections in that window of time is well approximated by the Poisson distribution.
-Indeed, the law of small numbers remains valid for small dependencies \cite{Ross2011Fundamentalsa,Arratia1990Poisson}.
-However, incidences observed from the SARS-CoV-2 epidemic tend to follow a negative binomial distribution \cite{Chan2021Count}. 
+\paragraph{Week-day effects}
+% why important
+Related to the previous point, week-day effects are a major obstacle in our way to obtain smooth estimates of $R$ and $\rho$ over time. These effects are due to the reporting process, where infections are more likely to be reported during the week than on the weekend. 
+
+% how to do it
+While smoothing seems to remove week-day effects visually, the above analysis shows that for reproduction number estimation, smoothing is not suited to properly account for week-day variation in reporting. The reason for this is that the week-day effect can be thought of as the result of a discrete-time convolution of reported infections and a delay distribution that is different for each day of the week. Instead of smoothing, one should solve the inverse problem related to this convolution, i.e. perform a deconvolution. 
+
+\paragraph{Reporting artifacts}
+
+
 
 \paragraph{Regional dependencies and effects}
+\todo{mention problems with too simple R estimate in local outbreak setting (over / under estimation)}
 % use data to inform this section
 \begin{itemize}
     \item German case data are reported on Landkreis level, performing analysis of each individual is not sensible 
@@ -26,8 +55,18 @@ However, incidences observed from the SARS-CoV-2 epidemic tend to follow a negat
     \item also want to account for other regional effects such as different socio-economic settings ... 
 \end{itemize}
 
-\paragraph{Temporal correlation}
+\paragraph{Count data}
 
-\paragraph{Interpretability}
+\todo{this paragraph to modelling chapter}
+The Poisson distribution arises from the law of small numbers: if there is a large population where every individual has, independently, a small probability of becoming infected in a small window of time then the total number of infections in that window of time is well approximated by the Poisson distribution.
+Indeed, the law of small numbers remains valid for small dependencies \citep{Ross2011Fundamentalsa,Arratia1990Poisson}.
+However, incidences observed from the SARS-CoV-2 epidemic tend to follow a negative binomial distribution \citep{Chan2021Count}. 
+
+\paragraph{Reporting delays}
+
+\paragraph{Combining multiple data sources}
 
 
+
+% regression on covariates
+% combine incidences / hospitalisations / tests

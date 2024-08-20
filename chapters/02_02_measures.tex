@@ -34,9 +34,10 @@ the so-called renewal equation. Here $I_{t - \tau} = 0$ if $\tau > t$. If case n
 where the time-varying or instantaneous reproduction number $R_{t}$ is now allowed to vary over time as well. Working with the time-varying reproduction number $R_{t}$ over the case reproduction number $R_{c}$ has the advantage that $R_{t}$ can be estimated from data until day $t$ alone, while $R_{c} = \sum_{\tau = 1} w_{\tau} R_{ t + \tau }$ depends on future cases \citep{Fraser2007Estimating}. 
 
 Given incidence data $I_{t}, I_{t - 1}, \dots $ we can perform frequentist inference on $R_{t}$ in \Cref{eq:renewal-model} by estimating
-$$
+\begin{align}
+    \label{eq:hatR}
     \hat R_{t} = \frac{I_{t}}{\sum_{\tau = 1}^{\infty} I_{t - \tau} w_{\tau}},
-$$
+\end{align}
 which is a moment- and maximum-likelihood estimator \citep{Hotz2020Monitoring}. Additionally \citep{Cori2021EpiEstim} provides a Bayesian framework, using conjugate gamma priors for $R_{t}$. If one is interested in the case reproduction number $R_{c}$ it can be recovered from estimates of $R_{t}$ as $\hat R_{c} = \sum_{\tau = 1}^\infty w_{\tau} \hat R_{t + \tau}$ or using the Wallinga-Teunis estimator \citep{Wallinga2004Different}.
 
 The reproduction numbers $R_{c}$ and $R_{t}$ have a mechanistic interpretation: $R_{c}$ is the number of secondary cases an infectious individual can expect to infect over the time of their disease, and so is $R_{t}$ with the additional assumption that the behavior of the infection process stays the same for the whole duration of infection. 
@@ -71,9 +72,10 @@ Focusing on the growth factor over the reproduction number has the advantage tha
 \subsection{Other indicators}
 \label{subsec:other_indicat}
 Instead of concentrating on the daily evolution of the epidemic, it may be beneficial to consider the weekly behavior instead. As we will see in \Cref{sec:data}, the incidence data available in Germany are strongly contaminated by weekday effects, with few cases reported on the weekends and more during the week. To avoid explicitly modeling these effects we will, in \Cref{sec:regional_growth_factor_model} group the case data by weeks and estimate the weekly growth factor
-$$
+\begin{align}
+    \label{eq:rho7_smooth}
     \rho^{7} \approx \frac{ \E \sum_{s = 0}^{6} I_{t - s}}{\E \sum_{s = 0}^6 I_{t - 7 - s}}.
-$$
+\end{align}
 Here we assumed, again, that the circumstances of the epidemic do not change over the period considered. By slight abuse of notation, we let $\rho^{7}_t$ be this weekly growth factor, where now $t$ is counting weeks instead of days. Notice that when $\rho_{t}$ is time-varying, it is not necessarily the case that $\rho^{7}_t = \prod_{s = 0}^{6} \rho_{t - s}$. Notice that if $\E W = 7$, i.e. the average infectious period is one week, the delta-method yields 
 $$
     R_{c} = \frac{1}{\E \rho^{-W}} \approx \rho^{7}.

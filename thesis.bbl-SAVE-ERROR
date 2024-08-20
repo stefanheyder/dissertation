@@ -6154,6 +6154,101 @@
       \field{year}{2022}
       \field{dateera}{ce}
     \endentry
+    \entry{RobertKoch-Institut2024COVID19Hospitalisierungen}{dataset}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=c90bca13238edd50195c86481b275c3c}{%
+           family={{Robert Koch-Institut}},
+           familyi={R\bibinitperiod}}}%
+      }
+      \name{namea}{4}{}{%
+        {{hash=bd1266580607986e324aed9c294ce7d0}{%
+           family={Diercke},
+           familyi={D\bibinitperiod},
+           given={Michaela},
+           giveni={M\bibinitperiod}}}%
+        {{useprefix=true,hash=e565062e40cdfed8ec752079276f28fb}{%
+           family={Heiden},
+           familyi={H\bibinitperiod},
+           given={Matthias},
+           giveni={M\bibinitperiod},
+           prefix={an\bibnamedelima der},
+           prefixi={a\bibinitperiod\bibinitdelim d\bibinitperiod}}}%
+        {{hash=dd07e78fed502bced9d7227937881f1a}{%
+           family={Ullrich},
+           familyi={U\bibinitperiod},
+           given={Alexander},
+           giveni={A\bibinitperiod}}}%
+        {{hash=ca7f217f88b9a5923708f5cc2b0aea42}{%
+           family={Wuensche},
+           familyi={W\bibinitperiod},
+           given={Hannes},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Zenodo}%
+      }
+      \strng{namehash}{c90bca13238edd50195c86481b275c3c}
+      \strng{fullhash}{c90bca13238edd50195c86481b275c3c}
+      \strng{fullhashraw}{c90bca13238edd50195c86481b275c3c}
+      \strng{bibnamehash}{c90bca13238edd50195c86481b275c3c}
+      \strng{authorbibnamehash}{c90bca13238edd50195c86481b275c3c}
+      \strng{authornamehash}{c90bca13238edd50195c86481b275c3c}
+      \strng{authorfullhash}{c90bca13238edd50195c86481b275c3c}
+      \strng{authorfullhashraw}{c90bca13238edd50195c86481b275c3c}
+      \strng{nameabibnamehash}{c5fb2bd2d7fc0ffcb6ef5ba9738e8d62}
+      \strng{nameanamehash}{c5fb2bd2d7fc0ffcb6ef5ba9738e8d62}
+      \strng{nameafullhash}{e1e97fe42c3822f5330112bea4441bce}
+      \strng{nameafullhashraw}{e1e97fe42c3822f5330112bea4441bce}
+      \field{extraname}{4}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{extradate}{1}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{19}
+      \field{langid}{ngerman}
+      \field{month}{8}
+      \field{nameatype}{collaborator}
+      \field{title}{COVID-19-Hospitalisierungen in Deutschland}
+      \field{version}{2024-08-19}
+      \field{year}{2024}
+      \field{dateera}{ce}
+      \verb{doi}
+      \verb 10.5281/ZENODO.5519056
+      \endverb
+    \endentry
+    \entry{RobertKoch-Institut2024COVID19Hospitalisierungena}{software}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=c90bca13238edd50195c86481b275c3c}{%
+           family={{Robert Koch-Institut}},
+           familyi={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{c90bca13238edd50195c86481b275c3c}
+      \strng{fullhash}{c90bca13238edd50195c86481b275c3c}
+      \strng{fullhashraw}{c90bca13238edd50195c86481b275c3c}
+      \strng{bibnamehash}{c90bca13238edd50195c86481b275c3c}
+      \strng{authorbibnamehash}{c90bca13238edd50195c86481b275c3c}
+      \strng{authornamehash}{c90bca13238edd50195c86481b275c3c}
+      \strng{authorfullhash}{c90bca13238edd50195c86481b275c3c}
+      \strng{authorfullhashraw}{c90bca13238edd50195c86481b275c3c}
+      \field{extraname}{5}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{extradate}{2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{8}
+      \field{title}{{{COVID-19-Hospitalisierungen}} in {{Deutschland}}}
+      \field{year}{2024}
+      \field{dateera}{ce}
+      \verb{doi}
+      \verb 10.5281/zenodo.13340547
+      \endverb
+    \endentry
     \entry{RobertKoch-Institut2024SARSCoV2}{dataset}{}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=c90bca13238edd50195c86481b275c3c}{%
@@ -6197,10 +6292,10 @@
       \strng{nameanamehash}{c5fb2bd2d7fc0ffcb6ef5ba9738e8d62}
       \strng{nameafullhash}{292d1762dba6db9a0775f59f6c356b79}
       \strng{nameafullhashraw}{292d1762dba6db9a0775f59f6c356b79}
-      \field{extraname}{4}
+      \field{extraname}{6}
       \field{sortinit}{R}
       \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
-      \field{extradate}{1}
+      \field{extradate}{3}
       \field{extradatescope}{labelyear}
       \field{labeldatesource}{}
       \field{labelnamesource}{author}
@@ -6231,10 +6326,10 @@
       \strng{authornamehash}{c90bca13238edd50195c86481b275c3c}
       \strng{authorfullhash}{c90bca13238edd50195c86481b275c3c}
       \strng{authorfullhashraw}{c90bca13238edd50195c86481b275c3c}
-      \field{extraname}{5}
+      \field{extraname}{7}
       \field{sortinit}{R}
       \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
-      \field{extradate}{2}
+      \field{extradate}{4}
       \field{extradatescope}{labelyear}
       \field{labeldatesource}{}
       \field{labelnamesource}{author}
