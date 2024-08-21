@@ -1900,6 +1900,68 @@
       \field{year}{1986}
       \field{dateera}{ce}
     \endentry
+    \entry{Burgard2021Regional}{unpublished}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=f7560193f01140eac23cc1fb22dfbf55}{%
+           family={Burgard},
+           familyi={B\bibinitperiod},
+           given={Jan\bibnamedelima Pablo},
+           giveni={J\bibinitperiod\bibinitdelim P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=62aea11d18878abad805cac399a7537f}{%
+           family={Heyder},
+           familyi={H\bibinitperiod},
+           given={Stefan},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=73074c606c194c4ae0e4f6ab7d40d7df}{%
+           family={Hotz},
+           familyi={H\bibinitperiod},
+           given={Thomas},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=363adbdc5cb19dc178104d9cc123abd9}{%
+           family={Krueger},
+           familyi={K\bibinitperiod},
+           given={Tyll},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{bc74c6854337e335cda153a3719c4387}
+      \strng{fullhash}{bbffb1716f4786b8c44b46ee9523a75c}
+      \strng{fullhashraw}{bbffb1716f4786b8c44b46ee9523a75c}
+      \strng{bibnamehash}{bc74c6854337e335cda153a3719c4387}
+      \strng{authorbibnamehash}{bc74c6854337e335cda153a3719c4387}
+      \strng{authornamehash}{bc74c6854337e335cda153a3719c4387}
+      \strng{authorfullhash}{bbffb1716f4786b8c44b46ee9523a75c}
+      \strng{authorfullhashraw}{bbffb1716f4786b8c44b46ee9523a75c}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{31}
+      \field{eprintclass}{stat}
+      \field{eprinttype}{arXiv}
+      \field{month}{8}
+      \field{title}{Regional Estimates of Reproduction Numbers with Application to {{COVID-19}}}
+      \field{urlday}{30}
+      \field{urlmonth}{9}
+      \field{urlyear}{2021}
+      \field{year}{2021}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{eprint}
+      \verb 2108.13842
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/2108.13842
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/2108.13842
+      \endverb
+    \endentry
     \entry{Byambasuren2020Estimating}{article}{}{}
       \name{author}{6}{}{%
         {{un=0,uniquepart=base,hash=17228dcc02c40c589f4a5d6a59c3acf1}{%

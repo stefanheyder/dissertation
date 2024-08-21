@@ -26,11 +26,12 @@ More problems arise when we consider inferences based on these estimators. While
 % file:///Users/stefan/workspace/work/misc/mathstat_research/Epidemiology/Corona/reports/state_space_models/SSM4COVIDtalk/SSM4COVIDtalk_London.pdf
 % incorporate points from spatio temprial R slide therein as well
 
-Given these difficulties, we cannot hope for precise inferences using such simple models. Instead, we will have to extend these models to include or account for some of the following phenomena.
+Given these difficulties, we cannot hope for precise inferences using such simple models. Instead, we will have to extend these models to account for, depending on the problem considered, some of the following phenomena. For each of the phenomena we will give a short rationale on its importance and offer some ideas on how we could include them in our models. See \Cref{sec:modelling_epidemiological_dessiderata_with_state_space_models} for how we can implement these phenomena concretely.
 
-\paragraph{Slowly varying indicators}
+\paragraph{Regularization in time}
 % why 
 We would generally expect the day-to-day variation in contact, and thus infection, behavior to be small. Even if new \acrshortpl{npi} are introduced, a mix of early and late adoption in different regions should lead to only small changes in $R$ and $\rho$ each day on the country level. 
+
 % how to do it
 To achieve this smoothing, we may model the absolute or relative change in the indicators to be locally linear or constant. 
 
@@ -39,15 +40,39 @@ To achieve this smoothing, we may model the absolute or relative change in the i
 Related to the previous point, week-day effects are a major obstacle in our way to obtain smooth estimates of $R$ and $\rho$ over time. These effects are due to the reporting process, where infections are more likely to be reported during the week than on the weekend. 
 
 % how to do it
-While smoothing seems to remove week-day effects visually, the above analysis shows that for reproduction number estimation, smoothing is not suited to properly account for week-day variation in reporting. The reason for this is that the week-day effect can be thought of as the result of a discrete-time convolution of reported infections and a delay distribution that is different for each day of the week. Instead of smoothing, one should solve the inverse problem related to this convolution, i.e. perform a deconvolution. 
+While smoothing seems to remove week-day effects visually, the above analysis shows that for reproduction number estimation, smoothing is not suited to properly account for week-day variation in reporting. The reason for this is that the week-day effect can be thought of as the result of a discrete-time convolution of reported infections and a delay distribution that is different for each day of the week. Instead of smoothing, one should solve the inverse problem related to this convolution instead, i.e. perform a deconvolution. 
 
 \paragraph{Reporting artifacts}
+% why important
+%% first incidences too low, then too high
+During periods of low attendance at the local health authorities, e.g. due to holiday breaks, fewer cases are reported. This is visible, e.g., during the Christmas break in 2020, see \Cref{fig:cases_germany}. However, people are still infected and as such a backlog of accumulates. Once the break is over, case numbers suddenly start to increase. As a result, the indicators we study first point towards declining, then increasing cases, stabilizing again after the backlog of late reported cases disappears from the denominators of $\hat R$ and $\hat \rho$. 
 
+% how to do it
+To deal with this unsatisfactory behavior, we can mark the number of cases in the offending period as missing. This will allow the fitting procedure to rearrange cases in this period so as to best fit the data. If necessary, the total number of missing cases be fixed at the true number of cases in that period, a linear constraint that is easily enforced, see \Cref{sec:modelling_epidemiological_dessiderata_with_state_space_models}.
+\bigskip
 
+The following three aspects are related to modeling the epidemic on a smaller scale. 
 
-\paragraph{Regional dependencies and effects}
-\todo{mention problems with too simple R estimate in local outbreak setting (over / under estimation)}
+\paragraph{Regional variation}
+The outbreak in Gütersloh county, June 2020, shows what can go wrong if we neglect regional variation of the spread of \acrshort{c19}. Similar to the effect of reporting artifacts, reproduction number and growth factor estimates are  not representative during and shortly after the outbreak. Additionally, we would expect the spread of \acrshort{c19} to be heterogeneous due to other factors as well: different regions possess different levels of immunity, be it by infection or vaccination, implement different \acrshortpl{npi} and, arguably, exhibit different contact behavior: inhabitants of rural counties will probably commute to work by car, while inhabitations of larger cities use public transportation, exposing them to many more infectors. Furthermore, inhabitants can travel between different regions, so our models should include an exchange of infections as well. 
+
+% how to do it
+Deterministically modeling different reproduction numbers / growth factors for each of the 400 counties in Germany will be a difficult task, as the number of cases within each region can be quite low, especially between waves, so uncertainty in estimates will be high. Instead, we will implement an idea from small-area estimation, modeling for each day the indicator in a region as random with common marginals. Similar to mixed effects models, this allows regions with few incidences to \glqq{}borrow statistical strength\grqq{} from regions with large incidences. For fixed time-points, we have already implemented such a model in \citep{Burgard2021Regional}. Actually, restricting ourselves to the same marginals is not necessary, as we will see in \Cref{sec:regional_growth_factor_model}. 
+
+% regional dependencies
+% travel between regions leads to correlated indicators, i.e. if region with high contact behavior spills over to other region, creating more cases than expected
+% argue that his approximation is o.k., otherwise could also have 
+% want stability over time
+\paragraph{Exchange of cases between regions}
+% why
+%% breakdown of renewal equation
+%% very high estimates in periods of high incidence otherwise
+
+% how to do it
+To include exchanged cases between regions in our models, 
+
 % use data to inform this section
+
 \begin{itemize}
     \item German case data are reported on Landkreis level, performing analysis of each individual is not sensible 
     \item inhabitants travel between regions, and measures were taken on on regional level as well
