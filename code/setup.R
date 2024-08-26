@@ -19,6 +19,7 @@ library(here)
 library(zoo)
 library(ggmagnify)
 library(ggforce)
+library(reshape2)
 
 
 default_width <- 8
