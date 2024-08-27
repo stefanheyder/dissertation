@@ -1,0 +1,107 @@
+\section{Removing reporting delays and weekday effects}%
+\label{sec:spatial_reproduction_number_model}
+\subsection{Context}
+Forecasting the number of new infections that will be reported in the next day, week or month is one of the main tasks of epidemiological monitoring, see \Cref{sec:objectives}. However, as we have observed in \Cref{sec:data}, the data at our hand are contaminated by the reporting process, most notably the week-day effects, reporting delays, and artifacts due to public holidays.
+While we can make the influence of these effects small by aggregating data to the weekly level, see \Cref{sec:regional_growth_factor_model}, modeling on the daily level has its merits: this is the smallest timescale data are available at, and so it should provide better predictions if we leverage the full information available. 
+% ForecastHubs do weekly forecasting
+
+% use RKI case data for whole country, split by reporting delay
+In this section we use the \acrshort{rki} case data discussed in \Cref{sec:data}. As we have seen in \Cref{fig:reporting_delays_cases} \textbf{A} and \Cref{fig:survival_function_rep_tri_incidences}, most delays are less than $4$ days. Thus, ignoring any cases reported with longer delays, we get for any reporting date $t$ four observations, say 
+$$
+    Y_{t} = \left( Y_{t, 1}, \dots, Y_{t, 4} \right) \in \N^{4}.
+$$
+Here $Y_{t,\tau}$, $\tau = 1, \dots, 4$, is the number of newly reported cases for reporting date $t$ with delay $\tau$, such that $Y_{t,\cdot} = \sum_{\tau = 1}^4 Y_{t, \tau}$ is the total number of cases reported for reporting date $t$ with delay $\leq 4$. 
+Let $\hat p_{t, \tau} = \frac{Y_{t,\tau}}{Y_{t,\cdot}}$ be the empirical delay probability for day $t$ with delay $\tau$. We have already observed in \Cref{fig:reporting_delays_cases}, that $Y_{t, \cdot}$ is subject to weekday effects, but contrary to hospitalizations (\Cref{fig:double_weekday_effect_hosp}), there is no discernible weekday effect for the delay of cases, see \Cref{fig:weekday_effect_delays}.
+
+\begin{figure}
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/weekday_effect_delays}%
+    }
+    \caption{Box plots of delay probabilities $\hat p_{t,\tau}$ by weekday of case reporting date $t$. While there is a small difference in delays between, e.g., Saturday and other days for $\tau = 3$, the differences are small.}
+    \label{fig:weekday_effect_delays}
+\end{figure}
+
+To produce accurate forecasts of the daily number of reported cases, we will construct a \acrshort{ssm} that allows to account for these delays, as well as the weekday effects and dynamics of the incidences. With this model, we will then perform short-term forecasts for the case incidence in Germany, including prediction intervals. To assess the performance of our method, we compare the results to those produced in the \acrfull{ecdc}'s ForecastHub \citep{Sherratt2022Predictive}.
+\todo{also remove reporting artifacts at christmas?}
+
+\subsection{Model}
+
+To model the development of cases over time, we start with the exponential growth equation \Cref{eq:exponential-growth-time-varying}. Let $I_{t}$ be the total unknown number of cases for reporting date $t$. Ignoring variation around the mean, the exponential growth ansatz gives 
+$$
+    \log I_{t + 1} \approx \log \rho_{t + 1}  + \log I_{t}
+$$
+for the growth factor $\rho_{t}$ on day $t$. It is then sensible to assume that the growth factor $\rho_{t}$ performs a random walk on the log-scale, as we would expect large day-to-day variation of $\rho_{t}$ for large values, and small variation for small values, i.e. multiplicative, rather than additive, day-to-day changes. Thus, we assume that 
+$$
+    \log \rho_{t + 1} = \rho_{t} + \varepsilon_{t + 1, \rho}
+$$
+for $\varepsilon_{t + 1,\rho} \sim \mathcal N(0, \sigma^{2}_\rho)$. To incorporate week-day effects, consider a weekly seasonal component 
+$$
+    \log W_{t + 1} = - \sum_{s = 0}^{5} \log W_{t - s} + \varepsilon_{t + 1, W},
+$$
+for $\varepsilon_{t + 1, W} \sim \mathcal N(0, \sigma^{2}_{W})$, as described in \Cref{sec:modelling_epidemiological_dessiderata_with_state_space_models}. Finally, to model the reporting delay probabilities $p_{t,\tau}$, $\tau = 1,2,3,4$, we parameterize them by log ratios
+\begin{align*}
+    q_{t, \tau} = \log \frac{p_{t,\tau}}{p_{t,4}} && \tau = 1,\dots, 3,
+\end{align*}
+which also perform a random walk in time: 
+$$
+    q_{t + 1, \tau} = q_{t, \tau} + \varepsilon_{t+1, q, \tau},
+$$
+with $\varepsilon_{t + 1, q, \tau} \sim \mathcal N(0, \sigma^{2}_{q})$ whose variance does not depend on the delay $\tau$. We can recover the delay probabilities $p_{t, \tau}$ from the log-ratios by 
+\begin{align*}
+    p_{t, 4} &= \frac{1}{1 + \sum_{\tau = 1}^4 \exp \left( q_{t,\tau} \right)} \\
+    p_{t, \tau} &= \exp\left( q_{t, \tau} \right) p_{t, 4}.
+\end{align*}
+
+With these components at our disposal, we can model the observed incidences $Y_{t, \tau}$ by
+\begin{align}
+    \label{eq:reporting_delays_Y}
+    Y_{t, \tau} | \log I_{t}, \log W_{t}, q_{t} \sim \operatorname{Pois} \left( p_{t, \tau}\exp \left(\log I_{t} + \log W_{t}  \right) \right) = \operatorname{Pois} \left( p_{t, \tau} W_{t} I_{t}\right),
+\end{align}
+conditionally independent for fixed $t$. Thus, $W_{t}$ acts as a multiplicative factor that modulates the observed cases depending on the day of the week, and the delay probabilities distribute the total expected number of cases $W_{t}I_{t}$ onto the delays. If we interpret $W_{t}I_{t}$ as the expected number of reported cases for day $t$, it is sensible (see \Cref{sec:dessiderata}) to use a Poisson distribution for the total number of cases, so we can view \Cref{eq:reporting_delays_Y} as a multinomial thinning of this distribution.  
+
+Letting $X_{t} =\left( \log I_{t}, \log \rho_{t + 1}, \log W_{t}, \dots, \log W_{t - 5}, q_{t,1}, q_{t,2}, q_{t,3}\right)$, assuming that
+$$
+\varepsilon_{t + 1} = 
+\begin{pmatrix}
+     \varepsilon_{t + 1,\rho}\\ \varepsilon_{t + 1, W}\\ \varepsilon_{t +1, q, 1}\\ \varepsilon_{t +1, q, 2}\\ \varepsilon_{t +1, q, 3}
+\end{pmatrix}
+$$
+has independent marginals, and fixing an initial distribution of $X_{0}$ fully specifies a \acrshort{pgssm} for the joint distribution of $(X,Y)$. The model has a linear signal 
+$$
+    S_{t} = \begin{pmatrix}
+        \log I_{t} + \log W_{t} \\
+        q_{t, 1} \\
+        q_{t, 2} \\
+        q_{t, 3} 
+    \end{pmatrix},
+$$
+but due to the non-linear dependence of $p_{t,\tau}$ on $q_{t,\tau}$,  $Y_{t,\tau}$ depends not just on $S_{t, \tau}$ but on the whole of $S_{t}$. Fortunately, this is not a problem for either the \acrshort{la} or \acrshort{eis}. For the \acrshort{la}, notice that the covariance matrix $\Omega_{t}$ is given by the inverse of the negative Hessian of $s_{t} \mapsto \log p(y_{t}|s_{t})$, which is now non-diagonal. While it is not guaranteed that $\Omega_{t}$ is positive semi-definite during the Newton-Raphson iteration, we can still employ the Kalman filter and signal smoother to perform the iteration efficiently \citep{Jungbacker2007Monte}. Furthermore, at the global optimum, the Hessian is negative semi-definite, so $\Omega_{t}$ is positive semi-definite, specifying a valid \acrshort{glssm} proposal.  For \acrshort{eis}, notice that the natural parameter for the multivariate normal distribution $\mathcal N(\mu, \Omega)$ is $\Omega^{-1}$, with the Frobenius inner product in the log-density, so the optimal \acrshort{glssm} proposal can still be obtained by weighted least squares, only the number of parameters for the covariance matrix increases from $p$ (diagonal entries only), to $ \frac{p (p +1)}{2}$ (lower triangular entries). 
+
+The parameters of the model are $\theta = \left( \log \sigma^{2}_{\rho}, \log \sigma^{2}_{W}, \log \sigma^{2}_{q} \right)$, which we model on the log-scale to avoid having to take care of boundary problems. Given observations $Y = (Y_{0}, \dots, Y_{n})$ we perform maximum likelihood estimation as described in \Cref{sec:maximum_likelihood_estimation}, obtaining an estimate $\hat\theta$.
+With this estimate at hand, we perform inference using the \acrshort{eis} proposal. 
+%Then
+%$$
+%    \exp \left( \sum_{s = 0}^6 W_{t - s}  \right) = \exp \left( \varepsilon_{t,W} \right)
+%$$
+%has expectation $\exp \left( \frac{1}{2} \sigma^{2}_{\rho}\right)$, which is close to $1$ if $\sigma^{2}_{\rho}$ is small, i.e. the weekly seasonal component changes only slowly.
+%
+
+% results
+\subsection{Results}
+
+\begin{itemize}
+    \item fit model to period in the beginning, elaborate on fit, discuss weekday effects / delays etc.
+    \item perform 1 to 4 week ahead forecasts and compare to ECDC forecasts
+    \item incorporate christmas period, treat artifacts as missing data and impute by simulation
+\end{itemize}
+
+\subsection{Discussion}
+% extension: for true dealing with week-day effect, use information on symptom onset date
+% extension: death data, both for forecasting and improving estimation
+% extension: longer delays
+% extension: NB observations, but estimating r difficult. extension to 
+% extension: use renewal equation. problem: variance of new incidences makes it hard to have Gaussian state model
+% still DK approach can be used, but more involved
+% extension: keep number of cases in missing scenario constant
+% extension: dark figure, w/deaths
+% extension: weekday effects normalized like delays

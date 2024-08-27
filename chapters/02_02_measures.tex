@@ -62,9 +62,10 @@ $$
 has to hold. The left-hand side is the probability generating function $\E \rho^{-W}$ for $W \sim \sum_{\tau = 1}^\infty w_{\tau}\delta_{\tau}$. As $W \geq 1$ almost surely and the probability generating function is strictly increasing with limits $0$ and $\infty$ as $\rho$ goes to $0$ and $\infty$ respectively , there is exactly one solution $\rho \in \R_{> 0}$ to this equation. Here we assume that $w$ is not degenerate, i.e. not a.s. $1$ and  that we can exchange limits with the infinite sum, e.g. because $w$ has bounded support. Thus, once the infectivity profile $w$ is fixed, there is a one-to one relationship between $\rho$ and $R_{c}$. 
 
 Similarly to the time-varying reproduction number, we may alter \Cref{eq:exponential-growth} by introducing for $t \in \N$ a time-varying growth factor $\rho_{t} \in \R_{> 0}$, resulting in 
-$$
+\begin{align}
+    \label{eq:exponential-growth-time-varying}
     \E I_{t} = \rho_t \E I_{t - 1},
-$$
+\end{align}
 which can be estimated, e.g. by the moment-estimator $\hat \rho_{t} = \frac{I_{tj}}{I_{t - 1}}$. 
 
 Focusing on the growth factor over the reproduction number has the advantage that one does not need to specify a generation time distribution $w$ to estimate $\rho_{t}$, whereas it is essential for estimating $R_{t}$. 
