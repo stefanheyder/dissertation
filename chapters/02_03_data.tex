@@ -56,6 +56,7 @@ The second period concerns the Christmas holiday break, where we observe a sudde
 
 % focus on Meldedatum over Infektionsdatum due to consistency issues
 Due to late reporting and other reporting artifacts, the number of reported cases for any day $s$ will, usually, increase over time. The \acrshort{rki} does not report incidences on the same day and so on any day $t > s$ we obtain incidences $I_{s,t}$ for day $s$. We say these cases are reported with delay $\tau = t -s > 0$. This results in the so-called reporting triangle, depicted for April 2020 in \Cref{fig:reporting_delays_cases} \textbf{A}. 
+\todo{Hosp: mention seven day sum, not mean!}
 
 \begin{figure}
     \resizebox{\textwidth}{!}{%
@@ -71,7 +72,7 @@ $$
 $$
 where $i_{s,\tau} \in \N_{0}$ is the number of newly reported cases for day $s$ with delay $\tau$, i.e. on day $t = s + \tau$. However, due to reporting artifacts, it may occur that $i_{s,\tau}$ is negative in some instances, e.g. because the reporting dates of cases have been misattributed. To deal with this issue, we set 
 $$
-    \tilde I_{s,t} = \min \{\max \{I_{s,s + 1}, \dots, I_{s, T}\}, I_{s, T}\},
+    \tilde I_{s,t} = \min \{\max \{I_{s,s + 1}, \dots, I_{s, t}\}, I_{s, T}\},
 $$
 where $T$ is the last date in our dataset, i.e. 13th October 2023. This running maximum, cut-off at the final value, ensures that we can write 
 $$

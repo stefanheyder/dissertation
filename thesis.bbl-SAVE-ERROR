@@ -3003,89 +3003,6 @@
       \verb 10.1029/94JC00572
       \endverb
     \endentry
-    \entry{Faes2020Time}{article}{}{}
-      \name{author}{7}{}{%
-        {{un=0,uniquepart=base,hash=6bf697c383883b8011c62dad1b536be6}{%
-           family={Faes},
-           familyi={F\bibinitperiod},
-           given={Christel},
-           giveni={C\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=3060aa3ffa62d85f366a218bd8920a3f}{%
-           family={Abrams},
-           familyi={A\bibinitperiod},
-           given={Steven},
-           giveni={S\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=29b30401f49185dde55221944e107f8a}{%
-           family={Van\bibnamedelima Beckhoven},
-           familyi={V\bibinitperiod\bibinitdelim B\bibinitperiod},
-           given={Dominique},
-           giveni={D\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=ec6741259b046168cd7a30b7cc713010}{%
-           family={Meyfroidt},
-           familyi={M\bibinitperiod},
-           given={Geert},
-           giveni={G\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=eff79bc489f42985d7b6053e924cce35}{%
-           family={Vlieghe},
-           familyi={V\bibinitperiod},
-           given={Erika},
-           giveni={E\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=487a67f30be03f166cf202def585bf22}{%
-           family={Hens},
-           familyi={H\bibinitperiod},
-           given={Niel},
-           giveni={N\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=c1531b92f931023266325052bbed79d9}{%
-           family={COVID-19\bibnamedelimb Hospital\bibnamedelima Surveillance},
-           familyi={C\bibinithyphendelim 1\bibinitperiod\bibinitdelim H\bibinitperiod\bibinitdelim S\bibinitperiod},
-           given={Belgian\bibnamedelimb Collaborative\bibnamedelima Group},
-           giveni={B\bibinitperiod\bibinitdelim C\bibinitperiod\bibinitdelim G\bibinitperiod},
-           givenun=0,
-           prefix={on},
-           prefixi={o\bibinitperiod},
-           prefixun=0}}%
-      }
-      \list{publisher}{1}{%
-        {Multidisciplinary Digital Publishing Institute}%
-      }
-      \strng{namehash}{50f589c8f2862b682a1e839331f3bb5c}
-      \strng{fullhash}{d73e3559aba7a4ff6a7fbc42b1c57867}
-      \strng{fullhashraw}{d73e3559aba7a4ff6a7fbc42b1c57867}
-      \strng{bibnamehash}{50f589c8f2862b682a1e839331f3bb5c}
-      \strng{authorbibnamehash}{50f589c8f2862b682a1e839331f3bb5c}
-      \strng{authornamehash}{50f589c8f2862b682a1e839331f3bb5c}
-      \strng{authorfullhash}{d73e3559aba7a4ff6a7fbc42b1c57867}
-      \strng{authorfullhashraw}{d73e3559aba7a4ff6a7fbc42b1c57867}
-      \field{sortinit}{F}
-      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{shorttitle}
-      \field{issn}{1660-4601}
-      \field{issue}{20}
-      \field{journaltitle}{International Journal of Environmental Research and Public Health}
-      \field{langid}{english}
-      \field{month}{1}
-      \field{number}{20}
-      \field{shorttitle}{Time between {{Symptom Onset}}, {{Hospitalisation}} and {{Recovery}} or {{Death}}}
-      \field{title}{Time between {{Symptom Onset}}, {{Hospitalisation}} and {{Recovery}} or {{Death}}: {{Statistical Analysis}} of {{Belgian COVID-19 Patients}}}
-      \field{volume}{17}
-      \field{year}{2020}
-      \field{dateera}{ce}
-      \field{pages}{7560}
-      \range{pages}{1}
-      \verb{doi}
-      \verb 10.3390/ijerph17207560
-      \endverb
-      \warn{\item Datamodel: article entry 'Faes2020Time' (bibliography.bib): Invalid field 'publisher' for entrytype 'article'}
-    \endentry
     \entry{Farrington1996Statistical}{article}{}{}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=cdc94cba2e3fedb34703a3f12b061a84}{%
@@ -6173,7 +6090,6 @@
       \field{extraname}{2}
       \field{sortinit}{R}
       \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
-      \field{extradate}{1}
       \field{extradatescope}{labelyear}
       \field{labeldatesource}{}
       \field{labelnamesource}{author}
@@ -6188,33 +6104,6 @@
       \verb{doi}
       \verb 10.5281/ZENODO.4681153
       \endverb
-    \endentry
-    \entry{RobertKoch-Institut2022Lagebericht2022-01-20}{misc}{}{}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=c90bca13238edd50195c86481b275c3c}{%
-           family={{Robert Koch-Institut}},
-           familyi={R\bibinitperiod}}}%
-      }
-      \strng{namehash}{c90bca13238edd50195c86481b275c3c}
-      \strng{fullhash}{c90bca13238edd50195c86481b275c3c}
-      \strng{fullhashraw}{c90bca13238edd50195c86481b275c3c}
-      \strng{bibnamehash}{c90bca13238edd50195c86481b275c3c}
-      \strng{authorbibnamehash}{c90bca13238edd50195c86481b275c3c}
-      \strng{authornamehash}{c90bca13238edd50195c86481b275c3c}
-      \strng{authorfullhash}{c90bca13238edd50195c86481b275c3c}
-      \strng{authorfullhashraw}{c90bca13238edd50195c86481b275c3c}
-      \field{extraname}{3}
-      \field{sortinit}{R}
-      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
-      \field{extradate}{2}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{month}{1}
-      \field{title}{Wöchentlicher {{Lagebericht}} Des {{RKI}} Zur {{Coronavirus-Krankheit-2019}} ({{COVID-19}})}
-      \field{year}{2022}
-      \field{dateera}{ce}
     \endentry
     \entry{RobertKoch-Institut2024COVID19Hospitalisierungen}{dataset}{}{}
       \name{author}{1}{}{%
@@ -6261,7 +6150,7 @@
       \strng{nameanamehash}{c5fb2bd2d7fc0ffcb6ef5ba9738e8d62}
       \strng{nameafullhash}{e1e97fe42c3822f5330112bea4441bce}
       \strng{nameafullhashraw}{e1e97fe42c3822f5330112bea4441bce}
-      \field{extraname}{4}
+      \field{extraname}{3}
       \field{sortinit}{R}
       \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
       \field{extradate}{1}
@@ -6295,7 +6184,7 @@
       \strng{authornamehash}{c90bca13238edd50195c86481b275c3c}
       \strng{authorfullhash}{c90bca13238edd50195c86481b275c3c}
       \strng{authorfullhashraw}{c90bca13238edd50195c86481b275c3c}
-      \field{extraname}{5}
+      \field{extraname}{4}
       \field{sortinit}{R}
       \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
       \field{extradate}{2}
@@ -6354,7 +6243,7 @@
       \strng{nameanamehash}{c5fb2bd2d7fc0ffcb6ef5ba9738e8d62}
       \strng{nameafullhash}{292d1762dba6db9a0775f59f6c356b79}
       \strng{nameafullhashraw}{292d1762dba6db9a0775f59f6c356b79}
-      \field{extraname}{6}
+      \field{extraname}{5}
       \field{sortinit}{R}
       \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
       \field{extradate}{3}
@@ -6388,7 +6277,7 @@
       \strng{authornamehash}{c90bca13238edd50195c86481b275c3c}
       \strng{authorfullhash}{c90bca13238edd50195c86481b275c3c}
       \strng{authorfullhashraw}{c90bca13238edd50195c86481b275c3c}
-      \field{extraname}{7}
+      \field{extraname}{6}
       \field{sortinit}{R}
       \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
       \field{extradate}{4}

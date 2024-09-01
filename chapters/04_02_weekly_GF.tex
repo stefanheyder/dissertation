@@ -3,13 +3,82 @@
 
 \subsection{Context}
 
+Modeling the epidemics spread on a regional level allows us to differentiate between localized and global outbreaks, such as the one in June 2020, highlighted in \Cref{fig:cases_germany}. Additionally, regional level prediction and growth factors are of interest on their own, because \acrshortpl{npi} are enforced on the regional level. Moreover, having access to the spread on the regional level enables, e.g., regression of the growth rate against regional covariates, which in turn sheds light on which factors drive the epidemic.
+
+Instead of modeling the number of cases per day and with delay as we did in \Cref{sec:model_reporting_delay}, we will now model the total number of cases reported within one week for every county in Germany. Here we assume that a sufficient time period has passed, i.e. several days, see \Cref{fig:reporting_delays_cases}, such that the total number of cases is known sufficiently well. This weekly approach has several advantages: First, aggregating over the weekly data gets rid of the weekday effect, at the expense of a lower time resolution. Second, if we are interested in a retrospective analysis, it is sensible to assume all cases have been reported already, so we can avoid modeling the reporting delays. 
+
+However, modeling cases on the regional level comes with its own challenges, as we have to take care of accounting for the spatial spread, as well as an exchange between regions, cf. \Cref{sec:dessiderata}. 
+
+
 % want regional level predictions / growth factors
 % Toennies outbreak
 % for small regions, have to consider exchange of cases as well
 
 \subsection{Model}
+Similar to the last section, we start by modeling the evolution of cases in time. We now have incidences $I_{t,r}$ reported for reporting date $t$ and region $r$, where there are a total of $R$ regions. 
+\todo{comment on Gebietsreform in 2021 (?)}
+Again, we model the evolution of cases by 
+\begin{align}
+    \label{eq:log-growth-regional-model}
+    \log I_{t + 1, r} \approx \log I_{t + 1, r} + \log \rho_{t + 1, r}
+\end{align}
+where $\rho_{t+1, r}$ is the weekly growth factor in region $r$. Now we deviate from the previous model and model 
+$$
+    \log \rho_{t, r} = \overline{\log \rho}_{t} + u_{t, r},
+$$
+where $\overline{\log\rho}_{t}$ is the average growth rate and $u_{t,r}$ is the difference between the growth rate in region $r$ and the country wide average. 
+We will model $u_{t,r}, r = 1, \dots, R$ to be jointly Gaussian, but correlated, which will enable us to model regional dependencies. To motivate our choice for the covariance structure, let us consider how cases are transferred between regions first.
+
+As we are modeling cases on a regional level, we have to account for an exchange of cases as well. To illustrate our approach, suppose that we have for region $r$ $S^{r}$ many secondary cases generated where the primary case belongs to region $r$, but the secondary case may belong to another region $r'$. Here \glqq{}belonging to\grqq{} signifies that the case is reported in that region, which means that the infectee has registered their center of living to be in this region. Denote by $p_{r,r'}$ the fraction of such cases and set $p_{r,r} = 1 - \sum_{r' \neq r} p_{r,r'}$. 
+
+Under these assumptions, the newly reported cases in region $r$ are 
+$$
+    \tilde S^{r} = \sum_{r'} p_{r',r} S^{r'} = (P^{T}S)_{r}
+$$
+for $ P = \left( p_{r, r'} \right)_{r,r' = 1, \dots, R}$. Assuming now that $S^{r}, r= 1, \dots, R$ are random and i.i.d. with variance $\sigma^{2}_S$, we have 
+$$
+    \cov \left( \tilde S\right) = \cov \left( P^{T}S, P^{T}S \right) = \sigma^{2}_SP^{T}P.
+$$
+
+However, modeling the correlation of newly reported cases turns out to be difficult: the cases will surely be modeled by a Poisson or Negative Binomial distribution, so we would have to decide on a copula to introduce this dependency structure. While this is feasible in principle, we opt for an easier way. Instead of modeling correlated incidences $I_{t + 1, r}$, we model correlated growth rates $\log \rho_{t + 1, r}$, by taking $\cov \left( u_{t} \right)$ to be $\sigma^{2}_SP^{T}P$. By \Cref{eq:log-growth-regional-model}, conditional on $I_{t,r}$, this also captures regional correlation, without having to specify an involved joint distribution for the incidences.
+
+As elaborated in \Cref{sec:dessiderata}, we want the regional effects $u_{t,r}$ to be both flexible, but also, in some sense, stable over time. Thus, it makes sense to model $u_{t}$ as a stationary process in time. The simplest, non-trivial, stationary process is a vector-autoregressive process 
+$$
+    u_{t + 1} = \alpha u_{t} + \varepsilon_{t + 1, u}
+$$
+where $\alpha \in (-1, 1)$ and $\varepsilon_{t + 1,u} \sim \mathcal N(0, \Gamma)$, where $\Gamma$ is a positive definite matrix. By the above discussion, we set $\Gamma = (1-\alpha^{2}) \sigma^{2}_{S}P^{T}P$ so that the stationary distribution of $u_{t}, t = 0, \dots, n$  is $\mathcal N(0, \sigma^{2}_SP^{T}P)$. 
+
+To setup our \acrshort{ssm}, let $X_{t} = \left( \overline{\log \rho_{t + 1}}, u_{t, 1}, \dots, u_{t, R} \right)^{T} \in \R^{R + 1}$. For the observations, we let $Y_{t} = \left( I_{t, 1}, \dots, I_{t, R} \right)^{T}$, the number of cases observed in regions $1, \dots, R$ in the $t$-th week. 
+
+We then model the number of cases at time $t + 1$ in region $r$, $I_{t+1, r}$ to follow a negative binomial distribution, conditional on the states $X_{t}$ to be
+$$
+    I_{t+1,r} | I_{t}, \overline{\log\rho}_{t}, u_{t,r} \sim \nbinom \left( \overline{\rho}_{t}\exp(u_{t,r})P^{T}I_t, r\right),
+$$
+conditionally independent. While the previous observations $I_{t}$ are now conditioned on as well, recall from our discussion in the beginning of \Cref{cha:state_space_models}, that this is not problematic.
+
+To fully specify the model, we have to provide the transfer probabilities $p_{r,r'}$. For these, we use official data by Germany's federal employment agency on commuters \todo{ref}. From these data, we calculate $q_{r,r'}$, the fraction of socially insured employees that have their center of life in region $r$, but are registered to work in region $r'$. As this is only a crude approximation to the actual exchange between regions, we let 
+$$
+    p_{r,r'} \propto \bar q + (1- \bar q) \frac{q_{r,r'}}{\sum_{r'' \neq r'} q_{r,r''} + C q_{r,r}}
+$$
+where we interpret $\bar q$ as a constant socket of exchange between regions and $C \geq 1$ as an additional proportion of stay at home inhabitants that are not captured by $q_{r,r}$, e.g. elderly or children. 
+
+Thus, our final model is parameterized by
+$$
+    \theta = \left( \log \sigma^{2}_S, \operatorname{logit} \alpha, \log (C - 1), \logit \bar q, \log \sigma^{2}_{\overline{\log \rho}}, \log r\right),
+$$
+where chose a parametrization that is unconstrained. The model has a linear signal 
+$$
+    S_{t} = \left(\log \rho_{t} + u_{t,r}\right)_{r = 1, \dots, R},
+$$
+which makes inference fast, as the approximating \acrshort{glssm} in the \acrshort{eis} method only requires $\mathcal O(n\,R)$ many parameters. Again, we use \acrshort{mle} to estimate $\theta$, using the methods from \Cref{sec:maximum_likelihood_estimation}.
 
 \subsection{Results}
+
+\begin{itemize}
+    \item fit model by MLE + show inference for Toennies outbreak, interpret covariance matrix estimates
+    \item predict incidences on regional level and show that we outperform simple Poisson / NB baseline that only uses a single region
+    \item maybe: perform predictions for 1-4 weeks ahead, compare to regional FCH
+\end{itemize}
 
 \subsection{Discussion}
 
