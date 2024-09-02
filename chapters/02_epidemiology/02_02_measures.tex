@@ -19,9 +19,10 @@ Finally, we assume that the behavior of the population is constant over the peri
 
 \subsection{Reproduction number}
 \label{subsec:reproduction_number}
-We will model the evolution of the epidemic in discrete time, as this is the time scale on which data are available. Denote by $I_{0} \in \N$ the initial number of infected and for a day $t \in \N$ let $I_{t}$ be the number of newly infected individuals on that day. Note that $I_{t}$ is random. For $\tau\in\N$ let $\beta_{\tau}$ be the expected number of secondary cases a primary case infects $\tau$ days after they become infectious themselves and assume that the expected number of secondary cases $R_{c} = \sum_{\tau \in \N}\beta_{\tau}$ is non-zero and finite $0 < R_{c} < \infty$. $R_{c}$ is called the case reproduction number.  Here we have implicitly assumed that $w_{0} = 0$, i.e. infected individuals need at least one day to become infectious themselves. For \acrshort{c19} this is a reasonable assumption \citep{Lauer2020Incubation}. 
+We will model the evolution of the epidemic in discrete time, as this is the time scale on which data are available. Denote by $I_{0} \in \gls{sym:N}$ the initial number of infected and for a day $t \in \N$ let $I_{t}$ be the number of newly infected individuals on that day. Note that $I_{t}$ is random. For $\tau\in\N$ let $\beta_{\tau}$ be the expected number of secondary cases a primary case infects $\tau$ days after they become infectious themselves and assume that the expected number of secondary cases $
+\gls{sym:Rc} = \sum_{\tau \in \N}\beta_{\tau}$ is non-zero and finite $0 < R_{c} < \infty$. $R_{c}$ is called the case reproduction number.  Here we have implicitly assumed that $\gls{sym:w}_{0} = 0$, i.e. infected individuals need at least one day to become infectious themselves. For \acrshort{c19} this is a reasonable assumption \citep{Lauer2020Incubation}. 
 
-As we have assumed that $R_{c}$ is finite, we may write $\beta_{\tau} = R_{c}w_{\tau}$ where $w_{\tau} = \frac{\beta_{\tau}}{R_{c}}$. $w = \left( w_{\tau} \right)_{\tau \in \N}$ is called the generation time distribution or the infectivity profile. On day $t$ the conditional expectation of newly infected individuals given all past incidences $\E \left(I_{t}| I_{t - 1}, I_{t - 2}, \dots \right)$  can then be written as a convolution of $w$ and the number of past cases 
+As we have assumed that $R_{c}$ is finite, we may write $\beta_{\tau} = R_{c}w_{\tau}$ where $w_{\tau} = \frac{\beta_{\tau}}{R_{c}}$. $w = \left( w_{\tau} \right)_{\tau \in \N}$ is called the generation time distribution or the infectivity profile. On day $t$ the conditional expectation of newly infected individuals given all past incidences $\gls{sym:E} \left(I_{t}| I_{t - 1}, I_{t - 2}, \dots \right)$  can then be written as a convolution of $w$ and the number of past cases 
 \begin{align}
     \label{eq:renewal-eq}
 \E \left(I_{t}| I_{t - 1}, I_{t - 2}, \dots \right) = R_{c} \sum_{\tau = 1}^\infty I_{t - \tau} w_{\tau},
@@ -29,7 +30,7 @@ As we have assumed that $R_{c}$ is finite, we may write $\beta_{\tau} = R_{c}w_{
 the so-called renewal equation. Here $I_{t - \tau} = 0$ if $\tau > t$. If case numbers are small, e.g. if the assumptions we demand hold, the conditional distribution of $I_{t}$ given past cases is, by the law of small numbers, well approximated by a Poisson distribution and combined with the renewal equation we obtain the renewal equation model \citep{Fraser2007Estimating}
 \begin{align}
     \label{eq:renewal-model}
-    I_{t} | I_{t - 1}, I_{t - 2}, \dots \sim \operatorname{Pois} \left( R_{t} \sum _{\tau = 1}^\infty I_{t - \tau w_{\tau}} \right),
+    I_{t} | I_{t - 1}, I_{t - 2}, \dots \sim \gls{sym:Pois} \left( \gls{sym:Rt} \sum _{\tau = 1}^\infty I_{t - \tau w_{\tau}} \right),
 \end{align}
 where the time-varying or instantaneous reproduction number $R_{t}$ is now allowed to vary over time as well. Working with the time-varying reproduction number $R_{t}$ over the case reproduction number $R_{c}$ has the advantage that $R_{t}$ can be estimated from data until day $t$ alone, while $R_{c} = \sum_{\tau = 1} w_{\tau} R_{ t + \tau }$ depends on future cases \citep{Fraser2007Estimating}. 
 
@@ -49,7 +50,7 @@ An additional advantage is that the model \eqref{eq:renewal-model} can be interp
 If $I_{0}$ is small compared to the total population size, a sensible assumption, one can show that under the above model, the expected number of cases grows approximately exponentially \citep[Section 1.2]{Diekmann2013Mathematical}, 
 \begin{align}
     \label{eq:exponential-growth}
-\E I_{t} \approx \rho \E I_{t - 1} \approx \rho^{t} \E I_{0}.
+\E I_{t} \approx \gls{sym:rho} \E I_{t - 1} \approx \rho^{t} \E I_{0}.
 \end{align}
 $\rho$ is called the daily exponential growth factor and can be recovered from \Cref{eq:renewal-eq} by an exponential ansatz \citep{Wallinga2007How}:
 $$
@@ -59,7 +60,7 @@ which shows that unless $\rho$ or $\E I_{0}$ is zero,
 $$
     \sum_{\tau = 1}^\infty \rho^{-\tau} w_{\tau} = \frac{1}{R_{c}}
 $$
-has to hold. The left-hand side is the probability generating function $\E \rho^{-W}$ for $W \sim \sum_{\tau = 1}^\infty w_{\tau}\delta_{\tau}$. As $W \geq 1$ almost surely and the probability generating function is strictly increasing with limits $0$ and $\infty$ as $\rho$ goes to $0$ and $\infty$ respectively , there is exactly one solution $\rho \in \R_{> 0}$ to this equation. Here we assume that $w$ is not degenerate, i.e. not a.s. $1$ and  that we can exchange limits with the infinite sum, e.g. because $w$ has bounded support. Thus, once the infectivity profile $w$ is fixed, there is a one-to one relationship between $\rho$ and $R_{c}$. 
+has to hold. The left-hand side is the probability generating function $\E \rho^{-W}$ for $W \sim \sum_{\tau = 1}^\infty w_{\tau}\delta_{\tau}$. As $W \geq 1$ almost surely and the probability generating function is strictly increasing with limits $0$ and $\infty$ as $\rho$ goes to $0$ and $\infty$ respectively , there is exactly one solution $\rho \in \gls{sym:Rg0}$ to this equation. Here we assume that $w$ is not degenerate, i.e. not a.s. $1$ and  that we can exchange limits with the infinite sum, e.g. because $w$ has bounded support. Thus, once the infectivity profile $w$ is fixed, there is a one-to one relationship between $\rho$ and $R_{c}$.
 
 Similarly to the time-varying reproduction number, we may alter \Cref{eq:exponential-growth} by introducing for $t \in \N$ a time-varying growth factor $\rho_{t} \in \R_{> 0}$, resulting in 
 \begin{align}
@@ -85,7 +86,7 @@ Let us hasten to add that there is no reason for the error in this approximation
 
 The exponential growth rate $r$ and doubling time $d$ are closely related to the growth factor, and are given by 
 \begin{align*}
-    r = \log \rho && d = \log_{\rho} 2 = \frac{\log 2}{\log \rho}.
+    \gls{sym:r} = \log \rho && \gls{sym:d} = \log_{\rho} 2 = \frac{\log 2}{\log \rho}.
 \end{align*}
 Thus $r$ is the growth rate of the exponentially increasing cases, $\E I_{t} \approx \exp(rt) \E I_{0}$ and $d$ is the time it takes for cases to double under this exponential growth, $\E I_{t + d} \approx \E 2I_{t}$. Notice that the last equation only makes sense if $d \in \N$, or if we model the epidemic to evolve in continuous time instead. These two quantities are not as easy to interpret as, e.g., the weekly growth factor or the reproduction number. 
 

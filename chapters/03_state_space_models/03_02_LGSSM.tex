@@ -17,7 +17,7 @@
         \label{eq:glssm_observations}
         Y_{t} & = B_{t}X_{t} + v_{t} + \eta_{t} &  & t = 0, \dots, n.
     \end{align}
-    Here $A_{t} \in \mathbf{R}^{m \times m}$ and $B_{t} \in \mathbf{R}^{p \times m}$ are matrices that specify the systems dynamics. The \textbf{innovations} $(\varepsilon_{t + 1})_{t = 0, \dots, n-1}$ and \textbf{measurement noise} $(\eta_{t})_{t = 0, \dots, n}$ and the  starting value $X_{0} \sim \mathcal N (\E X_{0}, \Sigma_{0})$ are jointly independent. Furthermore, $\varepsilon_{t+1} \sim \mathcal N(0, \Sigma_{t})$ and $\eta_{t}\sim \mathcal N(0, \Omega_{t})$ are centered Gaussian random variables and $u_{t} \in \R^{m}, t = 0, \dots, n - 1$, $v_{t} \in \R^{p}, t = 0, \dots, n$ are deterministic biases.
+    Here $A_{t} \in \mathbf{R}^{m \times m}$ and $B_{t} \in \gls{sym:Rptimesm}$ are matrices that specify the systems dynamics. The \textbf{innovations} $(\varepsilon_{t + 1})_{t = 0, \dots, n-1}$ and \textbf{measurement noise} $(\eta_{t})_{t = 0, \dots, n}$ and the  starting value $X_{0} \sim \mathcal N (\E X_{0}, \Sigma_{0})$ are jointly independent. Furthermore, $\varepsilon_{t+1} \sim \mathcal N(0, \Sigma_{t})$ and $\eta_{t}\sim \mathcal N(0, \Omega_{t})$ are centered Gaussian random variables and $u_{t} \in \R^{m}, t = 0, \dots, n - 1$, $v_{t} \in \R^{p}, t = 0, \dots, n$ are deterministic biases.
 \end{definition}
 
 \begin{remark}

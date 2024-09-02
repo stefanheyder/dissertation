@@ -78,7 +78,7 @@ Let us begin with the most general definition of a \acrshort{ssm}.
     \end{enumerate}
 \end{definition}
 
-For notational convenience, we will write $X_{s:t} = \left(X_s, \dots, X_{t}\right)$ for the vector that contains all states from $s$ to $t$, $s \leq t$, dropping the first index if we consider the whole set of observations up to time $t$, so $X_{:t} = X_{0:t}$, and dropping the subscript if we consider all states at once, $X = X_{:n}$.
+For notational convenience, we will write $\gls{sym:Xs-to-t} = \left(X_s, \dots, X_{t}\right)$ for the vector that contains all states from $s$ to $t$, $s \leq t$, dropping the first index if we consider the whole set of observations up to time $t$, so $\gls{sym:X-to-t} = X_{0:t}$, and dropping the subscript if we consider all states at once, $X = X_{:n}$.
 Similarly we set $Y_{s:t} = \left(Y_s, \dots, Y_{t}\right)$, $Y_{:t} = Y_{0:t}$ and $Y = Y_{:n}$.
 
 \todo{picture of dependency structure}
@@ -88,12 +88,12 @@ The models that we consider in this thesis will usually admit densities for the 
 \begin{notation}[Densities, conditional densities]
     \label{not:densities}
     We will use the standard abuse of notation for densities that makes the type of density \glqq{}obvious\grqq{} from the arguments used.
-    This means that $p(x)$ is the density for all states $X$, $p(x_t|x_{t - 1})$ the conditional density of $X_t|X_{t - 1}$ and similarly for observations: $p(y|x)$ is the density of all observations $Y$ conditional on all states $X$.
+    This means that $\gls{sym:p}(x)$ is the density for all states $X$, $p(x_t|x_{t - 1})$ the conditional density of $X_t|X_{t - 1}$ and similarly for observations: $p(y|x)$ is the density of all observations $Y$ conditional on all states $X$.
 
     Note that this notation also implicitly includes the time $t$ and allows for changes in, e.g., the state transition over time.
 
-    When densities come from a parametric model parametrized by $\theta \in \Theta \subseteq \mathbf{R}^{l}$ and the dependence of the model on $\theta$ is of interest, i.e. because we try to estimate $\theta$, we indicate this by adding a subscript to the densities.
-    If the dependence is not of interest, e.g. because $\theta$ is fixed, I will usually omit $\theta$ for better readability.
+    When densities come from a parametric model parametrized by $\gls{sym:theta}\in \gls{sym:Theta} \subseteq \mathbf{R}^{l}$ and the dependence of the model on $\theta$ is of interest, i.e. because we try to estimate $\theta$, we indicate this by adding a subscript to the densities.
+    If this dependence is not of interest, e.g. because $\theta$ is fixed, we omit $\theta$ for better readability.
 
     In this notation, the joint density of a parametric \gls{ssm} factorizes as
     \begin{align}
@@ -124,7 +124,7 @@ The models that we consider in this thesis will usually admit densities for the 
     In most \acrshortpl{ssm} we consider in this thesis we use $\mathcal X = \R^m$, $\mathcal Y = \R^p$ or $\mathcal Y = \Z^p$ so that $\mathcal X$ is $m$ dimensional and $\mathcal Y$ is $p$ dimensional and equip these spaces with the usual $\sigma$-Algebras. Unless noted otherwise, we use for $\mu_{\mathcal X}$ the $m$-dimensional Lebesgue measure and for $\mu_{\mathcal Y}$ either the $p$-dimensional Lebesgue measure ($\mathcal Y = \R^{p}$) or the $p$-dimensional counting measure ($\mathcal Y = \Z^{p}$).
 \end{remark}
 
-Given data $(y_t)_{t = 0, \dots, n - 1}$ that may be modeled with a \gls{ssm} the practitioner is confronted with several tasks, which provide the structure of this chapter:
+Given data $(y_t)_{t = 0, \dots, n}$ that may be modeled with a \gls{ssm} the practitioner is confronted with several tasks, which provide the structure of this chapter:
 
 \begin{enumerate}
     \item\label{it:model_choice} Choosing a suitable, usually parametric, class of \glspl{ssm} that include the effects of interest.
@@ -136,7 +136,7 @@ The first step, \Cref{it:model_choice}, requires that the practitioner specifies
 Due to the assumed dependency structure, this boils down to specifying transition kernels for the states and observations.
 The setting \Cref{def:ssm} is too abstract to perform inference in, so further assumptions on the types of distributions for the latent states and observations are needed.
 In this chapter, we will discuss \gls{glssm}  (\Cref{sec:linear_gaussian_state_space_models}), where both the posterior distribution and the likelihood are analytically available. For the epidemiological application we have in mind these are however insufficient due to the non-linear behavior of incidences and the low count per region (\Cref{sec:dessiderata}).
-Such observations are better modeled with distributions on the natural numbers, i.e. with a Poisson or negative binomial distribution, both of which are exponential families of distributions. This will lead to the class of \acrfullpl{lcssm} (\Cref{sec:logconcave_gaussian_state_space_models}) which will become the main focus of our study.
+Such observations are better modeled with distributions on the natural numbers, i.e. with a Poisson or negative binomial distribution, both of which are exponential families of distributions. This will lead to the class of \acrfullpl{pgssm} (\Cref{sec:logconcave_gaussian_state_space_models}) which will become the main focus of our study.
 
 Regarding the second step, \Cref{it:model_fitting}, a frequentist practitioner will want to perform maximum likelihood inference on $\theta$.
 While asymptotic confidence intervals for the \gls{mle} $\hat\theta$ can be derived both theoretically and practically \citep[Chapter 7]{Durbin2012Time}, they are, in the context of this thesis, usually of little interest. For these asymptotic frequentist procedures to be meaningful, an appropriate central limit theorem has to hold. However, as the time series we study are non-stationary and the dependence on parameters $\theta$ is allowed to be arbitrary, it is in general not obvious that such a theorem holds for the model under consideration. Instead, we choose to view this fitting as an Empirical Bayes procedure and our main practical interest lies in analyzing the posterior distribution $X|Y$ where we set $\theta$ equal to $\hat\theta$. 
