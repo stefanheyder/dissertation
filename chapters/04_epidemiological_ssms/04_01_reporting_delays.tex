@@ -11,7 +11,7 @@ $$
     Y_{t} = \left( Y_{t, 1}, \dots, Y_{t, 4} \right) \in \N^{4}_{0}.
 $$
 Here $Y_{t,\tau}$, $\tau = 1, \dots, 4$, is the number of newly reported cases for reporting date $t$ with delay $\tau$, such that $Y_{t,\cdot} = \sum_{\tau = 1}^4 Y_{t, \tau}$ is the total number of cases reported for reporting date $t$ with delay $\leq 4$. 
-Let $\hat p_{t, \tau} = \frac{Y_{t,\tau}}{Y_{t,\cdot}}$ be the empirical delay probability for day $t$ with delay $\tau$. We have already observed in \Cref{fig:reporting_delays_cases}, that $Y_{t, \cdot}$ is subject to weekday effects, but contrary to hospitalizations (\Cref{fig:double_weekday_effect_hosp}), there is no discernible weekday effect for the delay of cases, i.e. $\hat p_{t,\tau}$, see \Cref{fig:weekday_effect_delays}.
+Let $\hat p_{t, \tau} = \frac{Y_{t,\tau}}{Y_{t,\cdot}}$ be the empirical delay probability for day $t$ with delay $\tau$. We have already observed in \Cref{fig:reporting_delays_cases}, that $Y_{t, \cdot}$ is subject to weekday effects, but contrary to hospitalizations (\Cref{fig:double_weekday_effect_hosp}), there is only a small weekday effect for the delay of cases, i.e. $\hat p_{t,\tau}$, see \Cref{fig:weekday_effect_delays}. Thus, we will forego modeling a separate weekday effect for the delay probabilities.
 
 \begin{figure}
     \resizebox{\textwidth}{!}{%
@@ -48,16 +48,23 @@ $$
 $$
 with $\varepsilon_{t + 1, q, \tau} \sim \mathcal N(0, \sigma^{2}_{q})$ whose variance does not depend on the delay $\tau$. We can recover the delay probabilities $p_{t, \tau}$ from the log-ratios by 
 \begin{align*}
-    p_{t, 4} &= \frac{1}{1 + \sum_{\tau = 1}^4 \exp \left( q_{t,\tau} \right)}, \\
-    p_{t, \tau} &= \exp\left( q_{t, \tau} \right) p_{t, 4}.
+    p_{t, 4} &= \frac{1}{1 + \sum_{\tau = 1}^3 \exp \left( q_{t,\tau} \right)}, \\
+    p_{t, \tau} &= \exp\left( q_{t, \tau} \right) p_{t, 4},
 \end{align*}
+for $\tau = 1, 2, 3$.
+
+Finally, there are reporting artifacts and other effects that we have not yet considered in our model contribute to the dirtiness of the data. To account for these effects, we model daily, multiplicative, \glqq{}muck\grqq{} $M_{t}$, for date $t$, such that the total expected number of reported cases on this date is $M_{t}I_{t}$ instead of $I_{t}$. We assume that $(\log M_{t})_{t = 0, \dots, n} \iid \mathcal N(-\frac{1}{2}\sigma^{2}_M, \sigma^{2}_{M})$, independent of all other states. Thus, $M_{t}$ follows a log-normal distribution with mean $1$. 
 
 With these components at our disposal, we can model the observed incidences $Y_{t, \tau}$ by
 \begin{align}
     \label{eq:reporting_delays_Y}
-    Y_{t, \tau} | \log I_{t}, \log W_{t}, q_{t} \sim \operatorname{Pois} \left( p_{t, \tau}\exp \left(\log I_{t} + \log W_{t}  \right) \right) = \operatorname{Pois} \left( p_{t, \tau} W_{t} I_{t}\right),
+    Y_{t, \tau} | \log I_{t}, \log W_{t}, q_{t}, \log M_{t} \sim \operatorname{Pois} \left( p_{t, \tau}\exp \left(\log I_{t} + \log W_{t}  + \log M_{t}\right) \right) = \operatorname{Pois} \left( p_{t, \tau} W_{t} M_{t} I_{t}\right),
 \end{align}
-conditionally independent for fixed $t$. Thus, $W_{t}$ acts as a multiplicative factor that modulates the observed cases depending on the day of the week, and the delay probabilities distribute the total expected number of cases $W_{t}I_{t}$ onto the delays. If we interpret $W_{t}I_{t}$ as the expected number of reported cases for day $t$, it is sensible (see \Cref{sec:dessiderata}) to use a Poisson distribution for the total number of cases, so we can view \Cref{eq:reporting_delays_Y} as a multinomial thinning of this distribution.  
+conditionally independent for fixed $t$. Thus, $W_{t}$ acts as a multiplicative factor that modulates the observed cases depending on the day of the week, and the delay probabilities distribute the total expected number of cases $M_{t}W_{t}I_{t}$ onto the delays. In this model, $Y_{t} = \sum_{\tau = 1}^4 Y_{t, \tau}$ has conditional expectation 
+$$
+    \E \left( Y_{t} | \log I_{t}, \log W_{t}, q_{t}, \log M_{t} \right) = M_{t}W_{t}I_t
+$$
+As it is sensible to model the conditional distribution of $Y_{t}$ by a Poisson distribution (see \Cref{sec:dessiderata}), we can view \Cref{eq:reporting_delays_Y} as a multinomial thinning of this distribution. Notice that including $M_{t}$ introduces overdispersion in this Poisson distribution, similar to a negative binomial distribution. 
 
 Letting $X_{t} =\left( \log I_{t}, \log \rho_{t + 1}, \log W_{t}, \dots, \log W_{t - 5}, q_{t,1}, q_{t,2}, q_{t,3}\right)^{T}$, assuming that
 $$
@@ -75,9 +82,14 @@ $$
         q_{t, 3} 
     \end{pmatrix},
 $$
-but due to the non-linear dependence of $p_{t,\tau}$ on $q_{t,\tau}$,  $Y_{t,\tau}$ depends not just on $S_{t, \tau}$ but on the whole of $S_{t}$. Fortunately, this is not a problem for either the \acrshort{la} or \acrshort{eis}. For the \acrshort{la}, notice that the covariance matrix $\Omega_{t}$ is given by the inverse of the negative Hessian of $s_{t} \mapsto \log p(y_{t}|s_{t})$, which is now non-diagonal. While it is not guaranteed that $\Omega_{t}$ is positive semi-definite during the Newton-Raphson iteration, we can still employ the Kalman filter and signal smoother to perform the iteration efficiently \citep{Jungbacker2007Monte}. Furthermore, at the global optimum, the Hessian is negative semi-definite, so $\Omega_{t}$ is positive semi-definite, specifying a valid \acrshort{glssm} proposal.  For \acrshort{eis}, notice that the natural parameter for the multivariate normal distribution $\mathcal N(\mu, \Omega)$ is $\Omega^{-1}$, with the Frobenius inner product in the log-density, so the optimal \acrshort{glssm} proposal can still be obtained by weighted least squares, only the number of parameters for the covariance matrix increases from $p$ (diagonal entries only), to $ \frac{p (p +1)}{2}$ (lower triangular entries). 
+but due to the non-linear dependence of $p_{t,\tau}$ on $q_{t,\tau}$,  $Y_{t,\tau}$ depends not just on $S_{t, \tau}$ but on the whole of $S_{t}$. Fortunately, this is not a problem for either the \acrshort{la} or \acrshort{eis}. For the \acrshort{la} (\Cref{alg:la}), notice that the covariance matrix $\Omega_{t}$ is given by the inverse of the negative Hessian of $s_{t} \mapsto \log p(y_{t}|s_{t})$, which is now non-diagonal. While it is not guaranteed that $\Omega_{t}$ is positive semi-definite during the Newton-Raphson iteration, we can still employ the Kalman filter and signal smoother to perform the iteration efficiently, see \citep{Jungbacker2007Monte} and the discussion in \Cref{subsec:glssm-approach}. Furthermore, at the global optimum, the Hessian is negative semi-definite, so $\Omega_{t}$ is positive semi-definite, specifying a valid \acrshort{glssm} proposal. 
+Similarly, we may extend \acrshort{eis} to account for non-diagonal $\Omega_{t}$. Recall from \Cref{subsec:eis}, that \acrshort{eis} minimizes for a given $t$ 
+$$
+    \sum_{i = 1}^N \left( \log p(y_{t} | S^{i}_t) + \langle \Omega_{t}^{-1}z_{t}, S^{i}_{t}\rangle - \frac{1}{2} \operatorname{tr} \left(\Omega^{-1}_{t}S^{i}_{t}(S^{i}_t)^{T}\right)- \lambda_{t} \right)^{2}
+$$
+over $z_{t}, \Omega_{t}, \lambda_{t}$. Noticing that $(A,B) \mapsto \operatorname{tr} \left( A^{T}B \right)$ is the Frobenius inner-product, we see that this optimization problem is still a weighted linear least squares problem for $\Omega_{t}^{-1}z_{t}, \Omega^{-1}_t, \lambda_{t}$, when we let $\Omega_{t}^{-1}$ take values in the symmetric matrices in $\R^{p \times p}$. As the dimension of this vector space is $ \frac{p (p + 1)}{2}$, we may still perform the efficient weighted linear least squares routine, but at an increased cost: the number of parameters increases from $2p + 1$ ($\Omega_{t}$ diagonal) to $p + \frac{p(p + 1)}{2} + 1$. 
 
-The parameters of the model are $\theta = \left( \log \sigma^{2}_{\rho}, \log \sigma^{2}_{W}, \log \sigma^{2}_{q} \right)$, which we model on the log-scale to avoid having to take care of constraints. Given observations $Y = (Y_{0}, \dots, Y_{n})$ we perform maximum likelihood estimation as described in \Cref{sec:maximum_likelihood_estimation}, obtaining an estimate $\hat\theta$.
+The parameters of the model are $\theta = \left( \log \sigma^{2}_{\rho}, \log \sigma^{2}_{W}, \log \sigma^{2}_{q}, \log \sigma^{2}_M\right)$, which we model on the log-scale to avoid having to take care of constraints. Given observations $Y = (Y_{0}, \dots, Y_{n})$ we perform maximum likelihood estimation as described in \Cref{sec:maximum_likelihood_estimation}, obtaining an estimate $\hat\theta$.
 With this estimate at hand, we perform inference using the \acrshort{eis} proposal. 
 %Then
 %$$
@@ -88,6 +100,13 @@ With this estimate at hand, we perform inference using the \acrshort{eis} propos
 
 % results
 \subsection{Results}
+We start by a showcase of the models capability, fitting it to the reported case date in the period from April 5th to November 30th 2020. We estimate the parameters $\theta = \left( \log \sigma^{2}_{\rho}, \log \sigma^{2}_W, \log \sigma^{2}_q, \log \sigma^{2}_M\right)$ by maximum-likelihood estimation, yielding the parameters displayed as standard deviations in \Cref{tab:showcase-parameters}. 
+
+\begin{table}
+    \centering
+    \input{tables/showcase-parameters.tex}
+    \caption{Standard deviations for the showcase model determined either by hand, by the initial search or by maximum likelihood estimation described in \Cref{sec:maximum_likelihood_estimation}.}
+\end{table}
 
 \begin{itemize}
     \item fit model to period in the beginning, elaborate on fit, discuss weekday effects / delays etc.

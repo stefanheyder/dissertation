@@ -24,6 +24,8 @@ suppressPackageStartupMessages({
     library(gtable)
     library(cowplot)
     library(reshape2)
+    library(knitr)
+    library(kableExtra)
 })
 
 

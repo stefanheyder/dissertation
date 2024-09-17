@@ -55,7 +55,7 @@ $$
 and so if one is interested in the states, rather than the signals, importance sampling with the proposal \Cref{eq:glssm-proposal} can be achieved in a two-step procedure: first sample from $g(s|z)$, then run the FFBS algorithm to sample from $g(x|s) = p(x|s)$ using the same weights for MC-integration. 
 
 % degenerate distribution, exponential family of proposals for signals
-The \gls{glssm}-approach is the standard approach for finding the \gls{la} in \gls{lcssm} \citep{Durbin1997Monte,Durbin2012Time} and may even be applied when the observation densities are not log-concave\citep{Jungbacker2007Monte}. The approach also leads to efficient implementation for \gls{eis} \citep{Koopman2019Modified}. However, as will become apparent in the later part of this section, it is infeasible for the \gls{cem} if $n$ is large. 
+The \gls{glssm}-approach is the standard approach for finding the \gls{la} in \gls{lcssm} \citep{Durbin1997Monte,Durbin2012Time} and may even be applied when the observation densities are not log-concave\citep{Jungbacker2007Monte} \todo{more explicit}. The approach also leads to efficient implementation for \gls{eis} \citep{Koopman2019Modified}. However, as will become apparent in the later part of this section, it is infeasible for the \gls{cem} if $n$ is large. 
 
 
 We now give a concise overview over how to perform the \gls{la} and \gls{eis} for \gls{lcssm}, but refer the reader for more details to the respective literature.
