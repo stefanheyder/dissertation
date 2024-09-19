@@ -13,7 +13,10 @@ Sys.setlocale("LC_ALL", "en_US.UTF-8")
 
 suppressPackageStartupMessages({
     library(tidyverse)
+    library(scales)
     library(patchwork)
+    library(reshape2)
+	library(reticulate)
     library(tikzDevice)
     library(ggsci)
     library(here)

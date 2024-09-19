@@ -87,7 +87,7 @@ Similarly, we may extend \acrshort{eis} to account for non-diagonal $\Omega_{t}$
 $$
     \sum_{i = 1}^N \left( \log p(y_{t} | S^{i}_t) + \langle \Omega_{t}^{-1}z_{t}, S^{i}_{t}\rangle - \frac{1}{2} \operatorname{tr} \left(\Omega^{-1}_{t}S^{i}_{t}(S^{i}_t)^{T}\right)- \lambda_{t} \right)^{2}
 $$
-over $z_{t}, \Omega_{t}, \lambda_{t}$. Noticing that $(A,B) \mapsto \operatorname{tr} \left( A^{T}B \right)$ is the Frobenius inner-product, we see that this optimization problem is still a weighted linear least squares problem for $\Omega_{t}^{-1}z_{t}, \Omega^{-1}_t, \lambda_{t}$, when we let $\Omega_{t}^{-1}$ take values in the symmetric matrices in $\R^{p \times p}$. As the dimension of this vector space is $ \frac{p (p + 1)}{2}$, we may still perform the efficient weighted linear least squares routine, but at an increased cost: the number of parameters increases from $2p + 1$ ($\Omega_{t}$ diagonal) to $p + \frac{p(p + 1)}{2} + 1$. 
+over $z_{t}, \Omega_{t}, \lambda_{t}$. Noticing that $(A,B) \mapsto \operatorname{tr} \left( A^{T}B \right)$ is the Frobenius inner-product, we see that this optimization problem is still a weighted linear least squares problem for $\Omega_{t}^{-1}z_{t}, \Omega^{-1}_t, \lambda_{t}$, when we let $\Omega_{t}^{-1}$ take values in the symmetric matrices in $\R^{p \times p}$. As the dimension of this vector space is $ \frac{p (p + 1)}{2}$, we may still perform the efficient weighted linear least squares routine, but at an increased cost: the number of parameters increases from $2p + 1$ ($\Omega_{t}$ diagonal) to $p + \frac{p(p + 1)}{2} + 1$ ($\Omega_{t}$ symmetric). 
 
 The parameters of the model are $\theta = \left( \log \sigma^{2}_{\rho}, \log \sigma^{2}_{W}, \log \sigma^{2}_{q}, \log \sigma^{2}_M\right)$, which we model on the log-scale to avoid having to take care of constraints. Given observations $Y = (Y_{0}, \dots, Y_{n})$ we perform maximum likelihood estimation as described in \Cref{sec:maximum_likelihood_estimation}, obtaining an estimate $\hat\theta$.
 With this estimate at hand, we perform inference using the \acrshort{eis} proposal. 
@@ -100,13 +100,22 @@ With this estimate at hand, we perform inference using the \acrshort{eis} propos
 
 % results
 \subsection{Results}
-We start by a showcase of the models capability, fitting it to the reported case date in the period from April 5th to November 30th 2020. We estimate the parameters $\theta = \left( \log \sigma^{2}_{\rho}, \log \sigma^{2}_W, \log \sigma^{2}_q, \log \sigma^{2}_M\right)$ by maximum-likelihood estimation, yielding the parameters displayed as standard deviations in \Cref{tab:showcase-parameters}. 
+We start by a showcase of the models capability, fitting it to the reported case date in the period from April 5th to November 30th 2020. We estimate the parameters $\theta = \left( \log \sigma^{2}_{\rho}, \log \sigma^{2}_W, \log \sigma^{2}_q, \log \sigma^{2}_M\right)$ by maximum-likelihood estimation, yielding the parameters displayed in \Cref{tab:showcase-parameters}. We see that both $\log \rho_{t}$ and $\log W_{t}$ vary slowly over time, compared to the faster varying $q$. 
 
 \begin{table}
     \centering
     \input{tables/showcase-parameters.tex}
-    \caption{Standard deviations for the showcase model determined either by hand, by the initial search or by maximum likelihood estimation described in \Cref{sec:maximum_likelihood_estimation}.}
+    \label{tab:showcase-parameters}
+    \caption{Standard deviations for the showcase model determined either by hand, by the initial search or by maximum likelihood estimation described in \Cref{sec:maximum_likelihood_estimation}. The difference between the initial search and the \acrshort{mle} is negligible and is not visible for the precision shown here.}
 \end{table}
+
+\begin{figure}
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/showcase_prediction_intervals.tex}%
+    }
+    \caption{Monte-Carlo estimates of mean and $95\%$ prediction intervals for variables of interest in the showcase model, based on the method described in \Cref{subsec:inference}. Note that all variables are not included directly in the model, but may be written as a function of states, either taking the exponential or converting from log-ratios to probabilities. }
+    \label{fig:showcase_prediction_intervals}
+\end{figure}
 
 \begin{itemize}
     \item fit model to period in the beginning, elaborate on fit, discuss weekday effects / delays etc.

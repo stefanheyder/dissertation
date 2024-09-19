@@ -1,6 +1,9 @@
-\section{Maximum likelihood estimation in SSMs}
+\section{Inference in PGSSMs}
 \label{sec:maximum_likelihood_estimation}
 
+Once we have chosen a suitable \acrshort{pgssm} to model the observations $\left( y_{t} \right)_{t = 0, \dots, n}$, we are interested in statistical inferences. This is a two-part procedure: first we must estimate the unknown hyperparameters $\theta$, which we will do by maximum likelihood estimation. Then we have to obtain a description of the conditional distributions of interest, e.g. the conditional distribution of states given observations or the conditional distribution of future, yet unavailable, observations. 
+
+\subsection{Maximum likelihood estimation}
 % region introduction
 %% need for MLE: hyperparameters
 Until now, we have assumed that the \acrshort{ssm} under consideration is completely known, i.e. we have access to the true transition and observation kernels. For the models considered in this thesis (\Cref{cha:analysis_of_selected_models}), this is unrealistic, as they are not based on concrete physical processes but are rather statistical approximations of the true underlying dynamics. The transition densities of, e.g., \Cref{eq:glssm_states} will depend on the covariance matrix of innovations, of which we have no a priori knowledge and for negative binomially distributed observations the overdispersion parameter $r$ will be unknown. Let us denote by $\theta\in\R^{l}$ the vector of these hyperparameters. \todo{check l / k with psis}
@@ -250,3 +253,37 @@ Notice that our discussion implies that we cannot reuse a \acrshort{glssm} propo
 If computations are so involved that we want to avoid running the optimal importance sampling scheme as much as possible, one could try, if the model under investigation allows for it, to split $\theta$ into $(\theta_{x}, \theta_y)$ where $\theta_{x}$ only affects the state transitions and $\theta_{y}$ only affects the observation densities. Then a coordinate ascent scheme could be employed, where the update step for $\theta_{y}$ can reuse the proposal, provided that $\theta_{y}$ does not change too much and the observation density $p_{\theta}(y|x)$ is not too sensitive to changes in $\theta_{y}$, which should imply that the proposal is still close enough to give good importance sampling performance. Then numerical differentiation is only required to update $\theta_{x}$. 
 
 % endregion
+
+\subsection{Posterior inference}
+\label{subsec:inference}
+Once we have chosen $\theta$ (by maximum likelihood estimation), and thus a concrete \acrshort{pgssm} with which to perform statistical inference, we are interested in, e.g., the conditional distribution of states $X$ given observations $Y$, or functionals thereof. 
+Here we will assume, for computational reasons, that the \acrshort{pgssm} has a linear signal, otherwise the same arguments apply to the states as well.
+At our disposal we will have, after obtaining a \acrshort{glssm} proposal using the \acrshort{eis} method, signal samples $S^{i}\in \R^{(n+1)\times p}$, $i = 1, \dots, N$ and associated auto-normalized weights $W^{i}$. 
+Let $\mathfrak X \in \R$ be a univariate random variable which is conditionally independent of the observations $Y$ given the signal $S$, i.e. $\mathfrak X \perp Y | S$, whose conditional expectation and variance given $Y$ exist, as well as a regular version of this conditional distribution. $\mathfrak X$ can be a marginal of $X$, a scalar function of $X$, a future or missing observation, or function thereof. The following paragraphs are based on \citep[Section 11.5]{Durbin2012Time}, but stated in more general terms using $\mathfrak X$.
+
+We are then interested in estimating several quantities: the conditional expectation $\mathbf E \left( \mathfrak X | Y \right)$, the conditional variance $\var \left( \mathfrak X | Y \right)$ or $\alpha$-quantiles of the conditional distribution $\mathfrak X | Y$. By the assumed conditional independence, we have
+$$
+    \E \left( \mathfrak X | Y\right) = \E \left( \E \left( \mathfrak X | S \right) | Y \right),
+$$
+and, assuming that $\E \left( \mathfrak X | S \right)$ is known analytically, we may estimate the conditional expectation by
+$$
+\sum_{i = 1}^N W^{i} \E \left( \mathfrak X | S = S^{i} \right).
+$$
+In the case that $\E \left( \mathfrak X | S \right)$ is not known analytically, but we can simulate from the conditional distribution $\mathfrak X | S$, we can obtain samples $\mathfrak X^{i}$, $i = 1, \dots, N$ where $\mathfrak X^{i}$ is a draw from $\mathfrak X| S = S^{i}$. By the conditional independence $\mathfrak X \perp Y | S$, we have $p(\mathfrak x, s | y) = p(\mathfrak x | s) p(s | y)$, and $g(\mathfrak x, s | z) = p(\mathfrak x | s)g(s|z)$, so 
+$$
+    \frac{p(\mathfrak x, s|y)}{g(\mathfrak x, s | z)} = \frac{p(s | y)}{g(s|z)} \propto \frac{p(y|s)}{g(z|s)}
+$$
+and $(\mathfrak X^{i}, S^{i}), i = 1,\dots, N$ are draws from a proposal whose auto-normalized weights coincide with $W^{i}$. Thus, we may estimate $\E \left( \mathfrak X | Y \right)$ by
+$$
+    \sum_{i = 1}^N W^{i} \mathfrak X^{i}.
+$$
+Unless the conditional expectation is intractable, we should favor the first approach, as its variance is smaller due to the law of conditional variance.
+
+Similarly, by considering $\mathfrak X^{2}$, we can estimate the conditional variance, and by considering $\mathbf 1 _{\mathfrak X \leq x}$, we may estimate the conditional \acrlong{cdf} of $\mathfrak X$ given $Y$ at $x$. Thus, the convex combination
+$$
+    x \mapsto \sum_{i = 1}^N W^{i} \P \left( \mathfrak X \leq x | S = S^{i} \right)
+$$
+is a \acrshort{cdf}, which estimates the conditional \acrshort{cdf} $x \mapsto \P \left( \mathfrak X \leq x | Y \right)$. We may then estimate the $\alpha$-quantile of the conditional distribution of $\mathfrak X$ given $Y$ by the $\alpha$-quantile of this \acrshort{cdf}. To make quantiles unique, we adopt the common convention for empirical quantiles of linearly interpolating the \acrshort{cdf}, should $\mathfrak X$ be discrete. If the conditional \acrshort{cdf} is not available, we may again sample $\mathfrak X^i$, $i = 1,\dots, N$ and, following \citep[Section 11.5.3]{Durbin2012Time}, obtain the $\alpha$-quantile $\mathfrak X^{[l]}$ where $l$ is the largest index such that $\sum_{i = 1}^l W^{[i]} \leq \alpha$ and the bracketed index indicates that samples and weights are sorted by weight.
+
+When $\mathfrak X = X_{t,j}$ for $t \in \{0, \dots, n\}, j \in \{1, \dots, m\}$ is a marginal distribution of a single state, $\mathfrak X | S = S^{i}$ is a Gaussian distribution whose mean and variance can be obtained by routine application of the Kalman smoother, applied to the model with observations $S^{i}$ and degenerate observation covariance matrix $\Omega_{t} = \mathbf 0_{p \times p}$. In this case the quantities $\E \left( \mathfrak X | S \right)$, $\E \left( \mathfrak X^{2} |S \right)$, $\P \left( \mathfrak X \leq x | S \right)$ are all analytically available, making inference straightforward. 
+If $\mathfrak X = Y'_{t, j}$ is a missing observation, either truly missing, or set to missing for forecasting, we usually know these quantities as well. \todo{elaborate more, transitino to next chapter}
