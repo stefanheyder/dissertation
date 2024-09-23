@@ -108,3 +108,14 @@ theme_set(theme_thesis())
 options(
     ggplot2.discrete.colour = scale_color_npg
 )
+
+weekly_breaks <- function(x) {
+    seq(ceiling_date(x[1], "week", week_start = 7), floor_date(x[2], "week", week_start = 7), by = "1 week")
+}
+four_weekly_breaks <- function(x) {
+    seq(ceiling_date(x[1], "week", week_start = 7), floor_date(x[2], "week", week_start = 7), by = "4 week")
+}
+
+scale_x_four_weekly <- function() {
+	scale_x_date(breaks = four_weekly_breaks, minor_breaks = weekly_breaks, date_labels = "%d %b %y", expand = expansion(mult= c(0.01, 0.01)))
+}

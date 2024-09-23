@@ -1,6 +1,7 @@
 \section{Removing reporting delays and weekday effects}%
 \label{sec:model_reporting_delay}
 \subsection{Context}
+\todo{rewrite: don't forecast, but use daily modeling as motivator}
 Forecasting the number of new infections that will be reported in the coming days, weeks or months is one of the main tasks of epidemiological monitoring, see \Cref{sec:objectives}. However, as we have observed in \Cref{sec:data}, the data at our hand are contaminated by the reporting process, most notably the week-day effects, reporting delays, and artifacts due to public holidays.
 While we can make the influence of these effects small by aggregating data to the weekly level, see \Cref{sec:regional_growth_factor_model}, modeling on the daily level has its merits: this is the smallest timescale data are available at, and so it should provide better predictions if we leverage the full information available. Additionally, going to the finest timescale possible is crucial if we are interested in quantifying the effects of \acrshortpl{npi}.
 % ForecastHubs do weekly forecasting
@@ -97,18 +98,11 @@ $$
 $$
 over $z_{t}, \Omega_{t}, \lambda_{t}$. Noticing that $(A,B) \mapsto \operatorname{tr} \left( A^{T}B \right)$ is the Frobenius inner-product, we see that this optimization problem is still a weighted linear least squares problem for $\Omega_{t}^{-1}z_{t}, \Omega^{-1}_t, \lambda_{t}$, when we let $\Omega_{t}^{-1}$ take values in the symmetric matrices in $\R^{p \times p}$. As the dimension of this vector space is $ \frac{p (p + 1)}{2}$, we may still perform the efficient weighted linear least squares routine, but at an increased cost: the number of parameters increases from $2p + 1$ ($\Omega_{t}$ diagonal) to $p + \frac{p(p + 1)}{2} + 1$ ($\Omega_{t}$ symmetric). 
 
-The parameters of the model are $\theta = \left( \log \sigma^{2}_{\rho}, \log \sigma^{2}_{W}, \log \sigma^{2}_{q}, \log \sigma^{2}_M\right)$, which we model on the log-scale to avoid having to take care of constraints. Given observations $Y = (Y_{0}, \dots, Y_{n})$ we perform maximum likelihood estimation as described in \Cref{alg:mle}. As tuning parameters in this procedure we use $20$ iterations for the \acrshort{la} and \acrshort{eis}, with relative tolerance of convergence set to $10^{-5}$. For the \acrshort{eis} proposals we also use $1\,000$ samples and all four antithetic variables, i.e. we use \Cref{eq:antithetic-weights}. At the \acrshort{mle} we again determine the \acrshort{eis} proposal using the same parameters and perform inference for the conditional distribution using $10\,000$ samples, applying the method described in \Cref{subsec:inference}. 
-%Then
-%$$
-%    \exp \left( \sum_{s = 0}^6 W_{t - s}  \right) = \exp \left( \varepsilon_{t,W} \right)
-%$$
-%has expectation $\exp \left( \frac{1}{2} \sigma^{2}_{\rho}\right)$, which is close to $1$ if $\sigma^{2}_{\rho}$ is small, i.e. the weekly seasonal component changes only slowly.
-%
+The parameters of the model are $\theta = \left( \log \sigma^{2}_{\rho}, \log \sigma^{2}_{W}, \log \sigma^{2}_{q}, \log \sigma^{2}_M\right)$, which we model on the log-scale to avoid having to take care of constraints. Given observations $Y = (Y_{0}, \dots, Y_{n})$ we perform maximum likelihood estimation as described in \Cref{alg:mle}. As tuning parameters in this procedure we use $20$ iterations for the \acrshort{la} and \acrshort{eis}, with relative tolerance of convergence set to $10^{-5}$. For the \acrshort{eis} proposals we also use $1\,000$ samples and all four antithetic variables, i.e. we use \Cref{eq:antithetic-weights}. At the \acrshort{mle} we again determine the \acrshort{eis} proposal using the same parameters and perform inference for the conditional distribution using $10\,000$ samples, applying the method described in \Cref{subsec:inference} to obtain estimates of the posterior mean, standard deviation and prediction intervals. 
 
 % results
 \subsection{Results}
 We start by a showcase of the models' capability, fitting it to the reported case date in the period from April 5th to September 1st 2020, starting from the first day when $4$ delays are available in the dataset to the initial period of exponential growth in the fall of 2020. We estimate the parameters $\theta = \left( \log \sigma^{2}_{\rho}, \log \sigma^{2}_W, \log \sigma^{2}_q, \log \sigma^{2}_M, \sigma^{2}_{W_{q}}\right)$ by maximum-likelihood estimation, yielding the parameters displayed in \Cref{tab:showcase-parameters}. There, we see that both $\log \rho_{t}$ and $\log W_{t}$ vary slowly over time, compared to the faster varying $q$. 
-\todo{add Ns, iteration limits for LA etc.}
 
 \begin{table}
     \centering
@@ -126,18 +120,18 @@ We start by a showcase of the models' capability, fitting it to the reported cas
 
 We show MC-estimates of the mean and $95\%$ prediction intervals of the conditional distribution of $I$ and $\rho$ (\Cref{fig:showcase_prediction_intervals_I_rho}) as well as $W,M$ and $p$ (\Cref{fig:showcase_prediction_intervals}), based on the procedure described in \Cref{subsec:inference}. For $I$ we additionally show the total number of reported cases with delay at most $4$ days, $Y_{t} = Y_{t, 1} + \dots + Y_{t, 4}$, as a sanity check. Indeed, $I$ is a smoothed version of $Y$, which removes weekday-effects and small discrepancies in reporting, as these effects are captured by the $W$ and $M$ terms.
 
-For the daily growth factor $\rho$ we additionally display the corresponding weekly growth factors $\rho^{7}$ on the secondary axis. We see that uncertainty for $\rho$ is roughly constant over time, except close to the beginning and end of the time period considered here. We see that until June 2020 $\rho$ is below $1$, followed by a short skip above $1$ during the local outbreak highlighted in \Cref{fig:cases_germany} and a return to $\rho < 1$ until beginning of July 2020. We will deal with this sudden increase and the following decrease more extensively in the following section. From the middle of July 2020 to the middle of August 2020, $\rho$ is consistently above $1$, with a slight dip at the end of August, before rising above $1$ again. That cases are, or will be, rising exponentially is easier to infer from $\rho$ compared to $I$, as $\rho$, or $\rho^7$ for that matter, directly quantifies the increase in cases. Thus, this sustained period of exponential growth could have been a warning sign to policymakers of the buildup of infections in the population, which only became noticable in the cases starting in October 2020. 
+For the daily growth factor $\rho$ we additionally display the corresponding weekly growth factors $\rho^{7}$ on the secondary axis. We see that uncertainty for $\rho$ is roughly constant over time, except close to the beginning and end of the time period considered here. We see that until June 2020 $\rho$ is below $1$, followed by a short skip above $1$ during the local outbreak highlighted in \Cref{fig:cases_germany} and a return to $\rho < 1$ until beginning of July 2020. We will deal with this sudden increase and the following decrease more extensively in the following section. From the middle of July 2020 to the middle of August 2020, $\rho$ is consistently above $1$, with a slight dip at the end of August, before rising above $1$ again. That cases are, or will be, rising exponentially is easier to infer from $\rho$ compared to $I$, as $\rho$, or $\rho^7$ for that matter, directly quantifies the increase in cases. Thus, this sustained period of exponential growth could have been a warning sign to policymakers of the buildup of infections in the population, which only became noticeable in the cases starting in October 2020. 
 
 \begin{figure}
     \resizebox{\textwidth}{!}{%
         \input{tikz/showcase_prediction_intervals.tex}%
     }
-    \caption{Monte-Carlo estimates of mean and $95\%$ prediction intervals for weekday effect, \glqq{}muck\grqq{} and delay probabilities in the showcase model, based on the method described in \Cref{subsec:inference}. We omit the small prediction intervals for delay probabilities for better readability. Note that all variables are not included directly in the model, but may be written as a function of states, either taking the exponential or converting from log-ratios to probabilities. The major breaks in the x-axis grid indicate the first day of each month, the minor breaks indicate Sundays.}
+    \caption{Monte-Carlo estimates of mean and $95\%$ prediction intervals for weekday effect, \glqq{}muck\grqq{} and delay probabilities in the showcase model, based on the method described in \Cref{subsec:inference}. We omit the small prediction intervals for delay probabilities for better readability. Note that all variables are not included directly in the model, but may be written as a function of states, either taking the exponential or converting from log-ratios to probabilities. The minor breaks in the x-axis grid indicate Sundays.}
     \label{fig:showcase_prediction_intervals}
 \end{figure}
 % muck
 
-For the muck term $M$, we see that is centered around $1$ and allows capturing variation of the reported cases that is not captured by other terms in the model. As $M$ follows a log Normal distribution, its variance is $\left( \exp \left( \sigma^{2}_M \right) - 1 \right) \exp \left( 2 (- \frac{1}{2} \sigma^{2}_M) +\sigma^{2}_M \right) = \exp \left( \sigma^{2}_M - 1\right) \approx 0.02$, so $M$ has standard deviation $\approx 0.12$ for the MLE from \Cref{tab:showcase-parameters}, consistent with \Cref{fig:showcase_prediction_intervals}. As such, we expect the reported cases to vary around $\pm 12\%$ on any given day, due to residual effects not captured by the weekday effect. We also investigated qq-plots of the mean predictions of $M$, which indicate that there might be some outliers, e.g. those around the local outbreak in June 2020, present. To improve the fit, we could replace the distribution of $M$ by, e.g., a t-distribution with a low degree of freedom, allowing for heavier tails. The \acrshort{la} for such a model can still be found efficiently, see \citep[Section 11.7.2]{Durbin2012Time}, so the methods of this section are still applicable. However, we deem such a modification to be outside the scope of this thesis. 
+For the muck term $M$, we see that is centered around $1$ and allows capturing variation of the reported cases that is not captured by other terms in the model. As $M$ follows a log Normal distribution, its variance is $\left( \exp \left( \sigma^{2}_M \right) - 1 \right) \exp \left( 2 (- \frac{1}{2} \sigma^{2}_M) +\sigma^{2}_M \right) = \exp \left( \sigma^{2}_M - 1\right) \approx 0.02$, so $M$ has standard deviation $\approx 0.12$ for the MLE from \Cref{tab:showcase-parameters}, consistent with \Cref{fig:showcase_prediction_intervals}. As such, we expect the reported cases to vary around $\pm 24\%$ on any given day, due to residual effects not captured by the weekday effect. We also investigated qq-plots of the mean predictions of $M$, which indicate that there might be some outliers, e.g. those around the local outbreak in June 2020, present. To improve the fit, we could replace the distribution of $M$ by, e.g., a t-distribution with a low degree of freedom, allowing for heavier tails. The \acrshort{la} for such a model can still be found efficiently, see \citep[Section 11.7.2]{Durbin2012Time}, so the methods of this section are still applicable. However, we deem such a modification to be outside the scope of this thesis. 
 
 % weekday effect
 The weekday effect $W$ exhibits the expected seasonal pattern: on Sundays, which are marked by the minor breaks in the figures' grid, $W$ is below $1$, while it is high for Tuesdays, Wednesdays and Thursdays. Over the period considered, this pattern is quite stable, with only slight changes over time: $W$ is slightly larger for Mondays and Fridays at the end of the period compared to the beginning. By construction, we have $\overline{\log W_{t}} = \frac{1}{7}\sum_{\tau = -3}^3 \log W_{t - \tau} \approx 0$ for all $t$, so Jensen's inequality suggests $\bar W_{t} = \frac{1}{7} \sum_{\tau = -3}^3 W_{t - \tau} \gtrapprox 1$. However, the practical difference is small: $$ \frac{1}{7} \sum_{\tau = -3}^3 \E (W_{t - \tau} | Y) \approx 1.05,$$ for $t = 3, \dots, n-3$, with small standard deviation. Consequently, we could correct $I_{t}$ for the bias introduced by $W$ by an increase of $5\%$ (or, more precisely, consider $ I_{t} \bar W_{t} $). 
@@ -145,22 +139,40 @@ The weekday effect $W$ exhibits the expected seasonal pattern: on Sundays, which
 % delay probabilities
 Finally, for the delay probabilities, we compute both the signals probabilities, given by \Cref{eq:p-from-log-ratios}, and a smoothed version, obtained by setting $\log W_{t}^{q,\tau}$ to $0$ in \Cref{eq:p-from-log-ratios}. From \Cref{fig:showcase_prediction_intervals}, we see that starting in the middle of April, reporting became faster, with a larger share of cases being reported with a delay of only a single day. While this seems to reverse at the end of the considered period, this is likely due to the reporting artifacts at the end of August, indicated by the large spike in $p_{t,2}$. 
 
+Now that we have seen an application of the model, we use it to demonstrate how easily we can incorporate missing or faulty observations. Recall from \Cref{fig:cases_germany} the problem of reporting artifacts during the 2020 Christmas season. In \Cref{fig:christmas_prediction_intervals_I_rho} we show undesirable effects of directly applying our model to the data in this period. In this figure, the red lines correspond to inferences made using all available observations, while turquoise lines correspond to inferences made where we remove all observations from December 19th 2020 until January 17th 2021, marked by the gray background in the figure. 
+\begin{figure}
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/christmas_prediction_intervals_I_rho.tex}%
+    }
+    \caption{Importance sampling estimates of $95\%$ prediction intervals and means of the conditional distribution of $I$ and $\rho$ given reported cases for the reporting delay model applied to the period of October 1st 2020 until February 28th 2021. For $I$ we additionally show weekly average reported cases as in \Cref{fig:cases_germany}. }
+    \label{fig:christmas_prediction_intervals_I_rho}
+\end{figure}
 
+As outlined in \todo{ref correct section}, we can fit both models using the same methods, as we only have to replace the observation matrices $B_{t}$ for missing dates $t$ by zero matrices and the conditional distribution of $Y_{t, \tau} | S_{t}$ by $\delta_{0}$, while replacing $Y_{t,\tau}$ by $0$. In the approximating \acrshortpl{la} and \acrshort{eis} proposals we set $z_{t}$ and $\Omega_{t}$ to the zero vector and matrix, respectively. 
 
-\begin{itemize}
-    \item perform 1 to 4 week ahead forecasts and compare to ECDC forecasts
-    \item potentially: incorporate christmas period, treat artifacts as missing data and impute by simulation
-\end{itemize}
+For the model using all available data, we see that the reporting artifacts affect both the incidences $I$ and growth factors $\rho$, with a sharp decrease in rho during the holidays, followed by a sharp increase in the new year. For the model that has the flawed observations removed, we see that both $I$ and $\rho$ behave more smoothly, as the estimated standard deviations, displayed in \Cref{tab:christmas-parameters}, are also smaller. The price we pay for this smoother transition is larger uncertainty where observations are now missing, i.e. the $95\%$ prediction intervals are larger in this period than those for the model with all data available. However, when data are available, the prediction intervals for the second model are smaller, as its estimated standard deviations are much smaller. 
 
+\begin{table}
+    \centering
+    \input{tables/christmas-parameters.tex}
+    \caption{Estimated parameters for the }
+    \label{tab:christmas-parameters}
+\end{table}
 
+In \Cref{fig:christmas_delay_probs} we additionally show the expected smoothed delay probabilities based on \Cref{eq:p-from-log-ratios} where we set the weekday effects to $0$. There, we see that starting on December 24th, the reporting pattern exhibits strong irregular behavior (recall that the reported cases for December 24th correspond to December 23rd to December 20th for delays $\tau =1, \dots, 4$) for the model using all observations. Additionally, in January, we a large spike in $p_{t,1}$, which could correspond to a backlog of cases being reported all at once. Again, the model that has the Christmas period removed, proceeds much smoother.
+
+\begin{figure}
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/christmas_delay_probs.tex}%
+    }
+    \caption{Importance sampling estimates of conditional expectation $\E \left( p_{t, \tau} | Y \right)$ for the two Christmas models. }
+    \label{fig:christmas_delay_probs}
+\end{figure}
 
 \subsection{Discussion}
 % extension: for true dealing with week-day effect, use information on symptom onset date
 % extension: death data, both for forecasting and improving estimation
 % extension: longer delays
-% extension: NB observations, but estimating r difficult. extension to 
-% extension: use renewal equation. problem: variance of new incidences makes it hard to have Gaussian state model
-% still DK approach can be used, but more involved
 % extension: keep number of cases in missing scenario constant
 % extension: dark figure, w/deaths
 % extension: weekday effects normalized like delays

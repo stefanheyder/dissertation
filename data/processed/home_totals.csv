@@ -1,402 +1,401 @@
 name,ags,total
-"Flensburg, Stadt",01001,33142
-"Kiel, Landeshauptstadt",01002,94163
-"Lübeck, Hansestadt",01003,81813
-"Neumünster, Stadt",01004,30432
-Dithmarschen,01051,49811
-Herzogtum Lauenburg,01053,77080
-Nordfriesland,01054,64544
-Ostholstein,01055,75192
-Pinneberg,01056,130137
-Plön,01057,47266
-Rendsburg-Eckernförde,01058,102361
-Schleswig-Flensburg,01059,72305
-Segeberg,01060,115553
-Steinburg,01061,52052
-Stormarn,01062,97380
-"Hamburg, Freie und Hansestadt",02000,782267
-"Braunschweig, Stadt",03101,103717
-"Salzgitter, Stadt",03102,39290
-"Wolfsburg, Stadt",03103,52544
-Gifhorn,03151,73223
-Goslar,03153,49030
-Helmstedt,03154,37815
-Northeim,03155,51740
-Peine,03157,55296
-Wolfenbüttel,03158,47089
-Göttingen,03159,123011
-Region Hannover,03241,459131
-Diepholz,03251,91708
-Hameln-Pyrmont,03252,57101
-Hildesheim,03254,106722
-Holzminden,03255,26377
-Nienburg (Weser),03256,48902
-Schaumburg,03257,61168
-Celle,03351,67884
-Cuxhaven,03352,74297
-Harburg,03353,105920
-Lüchow-Dannenberg,03354,16442
-Lüneburg,03355,71024
-Osterholz,03356,45707
-Rotenburg (Wümme),03357,69346
-Heidekreis,03358,56018
-Stade,03359,83899
-Uelzen,03360,34756
-Verden,03361,56063
-"Delmenhorst, Stadt",03401,26049
-"Emden, Stadt",03402,18484
-"Oldenburg (Oldenburg), Stadt",03403,67429
-"Osnabrück, Stadt",03404,67985
-"Wilhelmshaven, Stadt",03405,26373
-Ammerland,03451,50153
-Aurich,03452,71622
-Cloppenburg,03453,75393
-Emsland,03454,138417
-Friesland,03455,37259
-Grafschaft Bentheim,03456,55233
-Leer,03457,64017
-Oldenburg,03458,57507
-Osnabrück,03459,155386
-Vechta,03460,66277
-Wesermarsch,03461,35461
-Wittmund,03462,21093
-"Bremen, Stadt",04011,213906
-"Bremerhaven, Stadt",04012,41403
-"Düsseldorf, Stadt",05111,256224
-"Duisburg, Stadt",05112,176408
-"Essen, Stadt",05113,210246
-"Krefeld, Stadt",05114,85335
-"Mönchengladbach, Stadt",05116,98067
-"Mülheim an der Ruhr, Stadt",05117,61337
-"Oberhausen, Stadt",05119,75952
-"Remscheid, Stadt",05120,43027
-"Solingen, Klingenstadt",05122,62986
-"Wuppertal, Stadt",05124,130840
-Kleve,05154,118552
-Mettmann,05158,188466
-Rhein-Kreis Neuss,05162,179082
-Viersen,05166,114859
-Wesel,05170,172990
-"Bonn, Stadt",05314,124405
-"Köln, Stadt",05315,430899
-"Leverkusen, Stadt",05316,63965
-Städteregion Aachen,05334,211917
-Düren,05358,102585
-Rhein-Erft-Kreis,05362,187277
-Euskirchen,05366,74828
-Heinsberg,05370,96772
-Oberbergischer Kreis,05374,110382
-Rheinisch-Bergischer Kreis,05378,109570
-Rhein-Sieg-Kreis,05382,231380
-"Bottrop, Stadt",05512,42877
-"Gelsenkirchen, Stadt",05513,86906
-"Münster, Stadt",05515,124251
-Borken,05554,157375
-Coesfeld,05558,92894
-Recklinghausen,05562,227902
-Steinfurt,05566,191990
-Warendorf,05570,117604
-"Bielefeld, Stadt",05711,131990
-Gütersloh,05754,162567
-Herford,05758,103545
-Höxter,05762,56028
-Lippe,05766,138206
-Minden-Lübbecke,05770,127997
-Paderborn,05774,126612
-"Bochum, Stadt",05911,135693
-"Dortmund, Stadt",05913,220923
-"Hagen, Stadt der FernUniversi.",05914,70240
-"Hamm, Stadt",05915,67315
-"Herne, Stadt",05916,55494
-Ennepe-Ruhr-Kreis,05954,125727
-Hochsauerlandkreis,05958,109225
-Märkischer Kreis,05962,164247
-Olpe,05966,58047
-Siegen-Wittgenstein,05970,112963
-Soest,05974,123030
-Unna,05978,151578
-"Darmstadt, Wissenschaftsstadt",06411,65001
-"Frankfurt am Main, Stadt",06412,319937
-"Offenbach am Main, Stadt",06413,55728
-"Wiesbaden, Landeshauptstadt",06414,111291
-Bergstraße,06431,108823
-Darmstadt-Dieburg,06432,121382
-Groß-Gerau,06433,114643
-Hochtaunuskreis,06434,89718
-Main-Kinzig-Kreis,06435,169727
-Main-Taunus-Kreis,06436,98863
-Odenwaldkreis,06437,37599
-Offenbach,06438,143955
-Rheingau-Taunus-Kreis,06439,72446
-Wetteraukreis,06440,124706
-Gießen,06531,103651
-Lahn-Dill-Kreis,06532,99055
-Limburg-Weilburg,06533,66928
-Marburg-Biedenkopf,06534,96477
-Vogelsbergkreis,06535,42058
-"Kassel, documenta-Stadt",06611,76453
-Fulda,06631,90960
-Hersfeld-Rotenburg,06632,47551
-Kassel,06633,93638
-Schwalm-Eder-Kreis,06634,73113
-Waldeck-Frankenberg,06635,65219
-Werra-Meißner-Kreis,06636,37300
-"Koblenz, kreisfreie Stadt",07111,42990
-Ahrweiler,07131,49657
-Altenkirchen (Westerwald),07132,50945
-Bad Kreuznach,07133,61628
-Birkenfeld,07134,30369
-Cochem-Zell,07135,23916
-Mayen-Koblenz,07137,84313
-Neuwied,07138,72619
-Rhein-Hunsrück-Kreis,07140,42092
-Rhein-Lahn-Kreis,07141,47850
-Westerwaldkreis,07143,82875
-"Trier, kreisfreie Stadt",07211,35732
-Bernkastel-Wittlich,07231,45459
-Eifelkreis Bitburg-Prüm,07232,30895
-Vulkaneifel,07233,23423
-Trier-Saarburg,07235,46086
-"Frankenthal (Pfalz), kr.f. St.",07311,16334
-"Kaiserslautern, kreisfr. Stadt",07312,37738
-"Landau in der Pfalz, kr.f. St.",07313,18133
-"Ludwigshafen am Rhein, Stadt",07314,68407
-"Mainz, kreisfreie Stadt",07315,89827
-"Neustadt an der Weinstraße,St.",07316,20651
-"Pirmasens, kreisfreie Stadt",07317,14614
-"Speyer, kreisfreie Stadt",07318,19578
-"Worms, kreisfreie Stadt",07319,34180
-"Zweibrücken, kreisfreie Stadt",07320,13533
-Alzey-Worms,07331,53915
-Bad Dürkheim,07332,52904
-Donnersbergkreis,07333,30386
-Germersheim,07334,55549
-Kaiserslautern,07335,40588
-Kusel,07336,26824
-Südliche Weinstraße,07337,43985
-Rhein-Pfalz-Kreis,07338,64071
-Mainz-Bingen,07339,86687
-Südwestpfalz,07340,37059
-"Stuttgart, Landeshauptstadt",08111,264152
-Böblingen,08115,170296
-Esslingen,08116,230968
-Göppingen,08117,106183
-Ludwigsburg,08118,237538
-Rems-Murr-Kreis,08119,180966
-"Heilbronn, Universitätsstadt",08121,55166
-Heilbronn,08125,154349
-Hohenlohekreis,08126,52091
-Schwäbisch Hall,08127,88405
-Main-Tauber-Kreis,08128,57014
-Heidenheim,08135,56208
-Ostalbkreis,08136,132470
-"Baden-Baden, Stadt",08211,21573
-"Karlsruhe, Stadt",08212,125315
-Karlsruhe,08215,190993
-Rastatt,08216,101172
-"Heidelberg, Stadt",08221,56686
-"Mannheim, Universitätsstadt",08222,131265
-Neckar-Odenwald-Kreis,08225,60239
-Rhein-Neckar-Kreis,08226,226478
-"Pforzheim, Stadt",08231,52684
-Calw,08235,69316
-Enzkreis,08236,85313
-Freudenstadt,08237,52714
-"Freiburg im Breisgau, Stadt",08311,87814
-Breisgau-Hochschwarzwald,08315,106628
-Emmendingen,08316,71359
-Ortenaukreis,08317,187865
-Rottweil,08325,60581
-Schwarzwald-Baar-Kreis,08326,89012
-Tuttlingen,08327,61993
-Konstanz,08335,108317
-Lörrach,08336,76897
-Waldshut,08337,56786
-Reutlingen,08415,122659
-Tübingen,08416,92250
-Zollernalbkreis,08417,80343
-"Ulm, Universitätsstadt",08421,54560
-Alb-Donau-Kreis,08425,87579
-Biberach,08426,90450
-Bodenseekreis,08435,92413
-Ravensburg,08436,122512
-Sigmaringen,08437,55809
-"Ingolstadt, Stadt",09161,62991
-"München, Landeshauptstadt",09162,657749
-"Rosenheim, Stadt",09163,27116
-Altötting,09171,47428
-Berchtesgadener Land,09172,37695
-Bad Tölz-Wolfratshausen,09173,53177
-Dachau,09174,71590
-Ebersberg,09175,64443
-Eichstätt,09176,57812
-Erding,09177,64563
-Freising,09178,86309
-Fürstenfeldbruck,09179,93655
-Garmisch-Partenkirchen,09180,34413
-Landsberg am Lech,09181,49322
-Miesbach,09182,41034
-Mühldorf a.Inn,09183,50359
-München,09184,149589
-Neuburg-Schrobenhausen,09185,43547
-Pfaffenhofen a.d.Ilm,09186,58266
-Rosenheim,09187,106531
-Starnberg,09188,51637
-Traunstein,09189,72620
-Weilheim-Schongau,09190,56665
-"Landshut, Stadt",09261,30975
-"Passau, Stadt",09262,19656
-"Straubing, Stadt",09263,19956
-Deggendorf,09271,51372
-Freyung-Grafenau,09272,32430
-Kelheim,09273,54756
-Landshut,09274,71409
-Passau,09275,78663
-Regen,09276,31589
-Rottal-Inn,09277,50201
-Straubing-Bogen,09278,44368
-Dingolfing-Landau,09279,45489
-"Amberg, Stadt",09361,17272
-"Regensburg, Stadt",09362,67063
-"Weiden i.d.OPf., Stadt",09363,17278
-Amberg-Sulzbach,09371,44380
-Cham,09372,54432
-Neumarkt i.d.OPf.,09373,59591
-Neustadt a.d.Waldnaab,09374,39622
-Regensburg,09375,84414
-Schwandorf,09376,65064
-Tirschenreuth,09377,30123
-"Bamberg, Stadt",09461,30215
-"Bayreuth, Stadt",09462,28701
-"Coburg, Stadt",09463,17019
-"Hof, Stadt",09464,17770
-Bamberg,09471,65923
-Bayreuth,09472,44297
-Coburg,09473,38415
-Forchheim,09474,51116
-Hof,09475,38104
-Kronach,09476,28442
-Kulmbach,09477,30976
-Lichtenfels,09478,29328
-Wunsiedel i.Fichtelgebirge,09479,28622
-"Ansbach, Stadt",09561,17523
-"Erlangen, Stadt",09562,50093
-"Fürth, Stadt",09563,57748
-"Nürnberg, Stadt",09564,224449
-"Schwabach, Stadt",09565,17389
-Ansbach,09571,81943
-Erlangen-Höchstadt,09572,60628
-Fürth,09573,50264
-Nürnberger Land,09574,72838
-Neustadt a.d.Aisch-Bad Windsh.,09575,44469
-Roth,09576,54998
-Weißenburg-Gunzenhausen,09577,39832
-"Aschaffenburg, Stadt",09661,29652
-"Schweinfurt, Stadt",09662,21108
-"Würzburg, Stadt",09663,54003
-Aschaffenburg,09671,73632
-Bad Kissingen,09672,42440
-Rhön-Grabfeld,09673,33797
-Haßberge,09674,36350
-Kitzingen,09675,39583
-Miltenberg,09676,54437
-Main-Spessart,09677,54621
-Schweinfurt,09678,49893
-Würzburg,09679,68556
-"Augsburg, Stadt",09761,125122
-"Kaufbeuren, Stadt",09762,18737
-"Kempten (Allgäu), Stadt",09763,29372
-"Memmingen, Stadt",09764,19078
-Aichach-Friedberg,09771,57265
-Augsburg,09772,107955
-Dillingen a.d.Donau,09773,42643
-Günzburg,09774,57690
-Neu-Ulm,09775,77732
-Lindau (Bodensee),09776,32970
-Ostallgäu,09777,59511
-Unterallgäu,09778,64231
-Donau-Ries,09779,60269
-Oberallgäu,09780,65643
-Regionalverband Saarbrücken,10041,120386
-Merzig-Wadern,10042,34233
-Neunkirchen,10043,50420
-Saarlouis,10044,73818
-Saarpfalz-Kreis,10045,54948
-St. Wendel,10046,33690
-"Berlin, Stadt",11000,1413970
-"Brandenburg an der Havel, St.",12051,27726
-"Cottbus, Stadt",12052,37204
-"Frankfurt (Oder), Stadt",12053,21062
-"Potsdam, Stadt",12054,74007
-Barnim,12060,75693
-Dahme-Spreewald,12061,71459
-Elbe-Elster,12062,39259
-Havelland,12063,67131
-Märkisch-Oderland,12064,77632
-Oberhavel,12065,86741
-Oberspreewald-Lausitz,12066,42673
-Oder-Spree,12067,70121
-Ostprignitz-Ruppin,12068,38240
-Potsdam-Mittelmark,12069,87368
-Prignitz,12070,29140
-Spree-Neiße,12071,43663
-Teltow-Fläming,12072,73235
-Uckermark,12073,42949
-"Rostock, Hanse- und Uni-Stadt",13003,81340
-"Schwerin, Landeshauptstadt",13004,35831
-Mecklenburgische Seenplatte,13071,97049
-Landkreis Rostock,13072,83594
-Vorpommern-Rügen,13073,84220
-Nordwestmecklenburg,13074,63191
-Vorpommern-Greifswald,13075,85477
-Ludwigslust-Parchim,13076,87332
-"Chemnitz, Stadt",14511,93372
-Erzgebirgskreis,14521,130118
-Mittelsachsen,14522,119933
-Vogtlandkreis,14523,87013
-Zwickau,14524,126771
-"Dresden, Stadt",14612,232983
-Bautzen,14625,119418
-Görlitz,14626,92041
-Meißen,14627,95803
-Sächs. Schweiz-Osterzgebirge,14628,98715
-"Leipzig, Stadt",14713,248712
-Leipzig,14729,104277
-Nordsachsen,14730,82086
-"Dessau-Roßlau, Stadt",15001,29441
-"Halle (Saale), Stadt",15002,89343
-"Magdeburg, Landeshauptstadt",15003,95109
-Altmarkkreis Salzwedel,15081,34445
-Anhalt-Bitterfeld,15082,60028
-Börde,15083,72419
-Burgenlandkreis,15084,71669
-Harz,15085,82624
-Jerichower Land,15086,35329
-Mansfeld-Südharz,15087,49253
-Saalekreis,15088,76854
-Salzlandkreis,15089,71543
-Stendal,15090,42138
-Wittenberg,15091,49770
-"Erfurt, Stadt",16051,86665
-"Gera, Stadt",16052,34256
-"Jena, Stadt",16053,42856
-"Suhl, Stadt",16054,13421
-"Weimar, Stadt",16055,24074
-"Eisenach, Stadt",16056,16513
-Eichsfeld,16061,41266
-Nordhausen,16062,31867
-Wartburgkreis,16063,49879
-Unstrut-Hainich-Kreis,16064,40591
-Kyffhäuserkreis,16065,27640
-Schmalkalden-Meiningen,16066,50912
-Gotha,16067,56349
-Sömmerda,16068,26438
-Hildburghausen,16069,27173
-Ilm-Kreis,16070,42206
-Weimarer Land,16071,34217
-Sonneberg,16072,23221
-Saalfeld-Rudolstadt,16073,40922
-Saale-Holzland-Kreis,16074,33754
-Saale-Orla-Kreis,16075,33248
-Greiz,16076,37011
-Altenburger Land,16077,33325
+"Flensburg, Stadt",01001,34330
+"Kiel, Landeshauptstadt",01002,95733
+"Lübeck, Hansestadt",01003,83717
+"Neumünster, Stadt",01004,31049
+Dithmarschen,01051,51058
+Herzogtum Lauenburg,01053,79147
+Nordfriesland,01054,65854
+Ostholstein,01055,76571
+Pinneberg,01056,132796
+Plön,01057,48178
+Rendsburg-Eckernförde,01058,104528
+Schleswig-Flensburg,01059,74019
+Segeberg,01060,117978
+Steinburg,01061,53055
+Stormarn,01062,98843
+"Hamburg, Freie und Hansestadt",02000,795345
+"Braunschweig, Stadt",03101,104824
+"Salzgitter, Stadt",03102,39908
+"Wolfsburg, Stadt",03103,53030
+Gifhorn,03151,74455
+Goslar,03153,50101
+Helmstedt,03154,38432
+Northeim,03155,52630
+Peine,03157,56310
+Wolfenbüttel,03158,47853
+Göttingen,03159,124953
+Region Hannover,03241,465686
+Diepholz,03251,93404
+Hameln-Pyrmont,03252,58093
+Hildesheim,03254,108236
+Holzminden,03255,26882
+Nienburg (Weser),03256,49749
+Schaumburg,03257,62268
+Celle,03351,69234
+Cuxhaven,03352,75907
+Harburg,03353,107590
+Lüchow-Dannenberg,03354,16868
+Lüneburg,03355,72438
+Osterholz,03356,46346
+Rotenburg (Wümme),03357,70684
+Heidekreis,03358,57209
+Stade,03359,86528
+Uelzen,03360,35518
+Verden,03361,57089
+"Delmenhorst, Stadt",03401,26858
+"Emden, Stadt",03402,18812
+"Oldenburg (Oldenburg), Stadt",03403,68822
+"Osnabrück, Stadt",03404,68940
+"Wilhelmshaven, Stadt",03405,26722
+Ammerland,03451,51177
+Aurich,03452,73296
+Cloppenburg,03453,77338
+Emsland,03454,141668
+Friesland,03455,37938
+Grafschaft Bentheim,03456,56484
+Leer,03457,65667
+Oldenburg,03458,58329
+Osnabrück,03459,158429
+Vechta,03460,67589
+Wesermarsch,03461,36148
+Wittmund,03462,21604
+"Bremen, Stadt",04011,216571
+"Bremerhaven, Stadt",04012,42323
+"Düsseldorf, Stadt",05111,259957
+"Duisburg, Stadt",05112,179349
+"Essen, Stadt",05113,213595
+"Krefeld, Stadt",05114,87110
+"Mönchengladbach, Stadt",05116,100188
+"Mülheim an der Ruhr, Stadt",05117,62512
+"Oberhausen, Stadt",05119,77111
+"Remscheid, Stadt",05120,43876
+"Solingen, Klingenstadt",05122,64033
+"Wuppertal, Stadt",05124,133133
+Kleve,05154,120990
+Mettmann,05158,191259
+Rhein-Kreis Neuss,05162,181901
+Viersen,05166,116304
+Wesel,05170,175683
+"Bonn, Stadt",05314,125996
+"Köln, Stadt",05315,435078
+"Leverkusen, Stadt",05316,64905
+Städteregion Aachen,05334,215388
+Düren,05358,104689
+Rhein-Erft-Kreis,05362,190492
+Euskirchen,05366,75948
+Heinsberg,05370,98851
+Oberbergischer Kreis,05374,112327
+Rheinisch-Bergischer Kreis,05378,111133
+Rhein-Sieg-Kreis,05382,234797
+"Bottrop, Stadt",05512,43693
+"Gelsenkirchen, Stadt",05513,88893
+"Münster, Stadt",05515,125524
+Borken,05554,160296
+Coesfeld,05558,94513
+Recklinghausen,05562,232504
+Steinfurt,05566,195615
+Warendorf,05570,119829
+"Bielefeld, Stadt",05711,134088
+Gütersloh,05754,165280
+Herford,05758,105252
+Höxter,05762,57131
+Lippe,05766,140676
+Minden-Lübbecke,05770,130671
+Paderborn,05774,129209
+"Bochum, Stadt",05911,137673
+"Dortmund, Stadt",05913,224947
+"Hagen, Stadt der FernUniversität",05914,71659
+"Hamm, Stadt",05915,68834
+"Herne, Stadt",05916,56672
+Ennepe-Ruhr-Kreis,05954,127625
+Hochsauerlandkreis,05958,111488
+Märkischer Kreis,05962,166750
+Olpe,05966,58919
+Siegen-Wittgenstein,05970,114878
+Soest,05974,125211
+Unna,05978,154561
+"Darmstadt, Wissenschaftsstadt",06411,65545
+"Frankfurt am Main, Stadt",06412,323366
+"Offenbach am Main, Stadt",06413,56578
+"Wiesbaden, Landeshauptstadt",06414,112961
+Bergstraße,06431,110312
+Darmstadt-Dieburg,06432,122899
+Groß-Gerau,06433,116422
+Hochtaunuskreis,06434,90845
+Main-Kinzig-Kreis,06435,172577
+Main-Taunus-Kreis,06436,99879
+Odenwaldkreis,06437,38252
+Offenbach,06438,146060
+Rheingau-Taunus-Kreis,06439,73572
+Wetteraukreis,06440,126843
+Gießen,06531,105373
+Lahn-Dill-Kreis,06532,100758
+Limburg-Weilburg,06533,68083
+Marburg-Biedenkopf,06534,98361
+Vogelsbergkreis,06535,42770
+"Kassel, documenta-Stadt",06611,77508
+Fulda,06631,92913
+Hersfeld-Rotenburg,06632,48486
+Kassel,06633,95167
+Schwalm-Eder-Kreis,06634,74287
+Waldeck-Frankenberg,06635,66256
+Werra-Meißner-Kreis,06636,37969
+"Koblenz, kreisfreie Stadt",07111,43797
+Ahrweiler,07131,49923
+Altenkirchen (Westerwald),07132,51985
+Bad Kreuznach,07133,62689
+Birkenfeld,07134,30977
+Cochem-Zell,07135,24359
+Mayen-Koblenz,07137,85769
+Neuwied,07138,73952
+Rhein-Hunsrück-Kreis,07140,43135
+Rhein-Lahn-Kreis,07141,48668
+Westerwaldkreis,07143,84423
+"Trier, kreisfreie Stadt",07211,36246
+Bernkastel-Wittlich,07231,46023
+Eifelkreis Bitburg-Prüm,07232,31600
+Vulkaneifel,07233,23893
+Trier-Saarburg,07235,46764
+"Frankenthal (Pfalz), kreisfreie Stadt",07311,16780
+"Kaiserslautern, kreisfreie Stadt",07312,38344
+"Landau in der Pfalz, kreisfreie Stadt",07313,18331
+"Ludwigshafen am Rhein, kreisfreie Stadt",07314,69494
+"Mainz, kreisfreie Stadt",07315,90764
+"Neustadt an der Weinstraße, kreisfreie Stadt",07316,21026
+"Pirmasens, kreisfreie Stadt",07317,14957
+"Speyer, kreisfreie Stadt",07318,19857
+"Worms, kreisfreie Stadt",07319,34806
+"Zweibrücken, kreisfreie Stadt",07320,13746
+Alzey-Worms,07331,54844
+Bad Dürkheim,07332,53656
+Donnersbergkreis,07333,30970
+Germersheim,07334,56177
+Kaiserslautern,07335,41265
+Kusel,07336,27152
+Südliche Weinstraße,07337,44636
+Rhein-Pfalz-Kreis,07338,65178
+Mainz-Bingen,07339,87941
+Südwestpfalz,07340,37522
+"Stuttgart, Landeshauptstadt",08111,266073
+Böblingen,08115,171804
+Esslingen,08116,233778
+Göppingen,08117,107551
+Ludwigsburg,08118,239962
+Rems-Murr-Kreis,08119,182954
+"Heilbronn, Universitätsstadt",08121,55816
+Heilbronn,08125,156569
+Hohenlohekreis,08126,52774
+Schwäbisch Hall,08127,89813
+Main-Tauber-Kreis,08128,57750
+Heidenheim,08135,57173
+Ostalbkreis,08136,134177
+"Baden-Baden, Stadt",08211,21794
+"Karlsruhe, Stadt",08212,126220
+Karlsruhe,08215,193564
+Rastatt,08216,102288
+"Heidelberg, Stadt",08221,56908
+"Mannheim, Universitätsstadt",08222,132728
+Neckar-Odenwald-Kreis,08225,61216
+Rhein-Neckar-Kreis,08226,228723
+"Pforzheim, Stadt",08231,53288
+Calw,08235,70217
+Enzkreis,08236,86294
+Freudenstadt,08237,53555
+"Freiburg im Breisgau, Stadt",08311,88774
+Breisgau-Hochschwarzwald,08315,108191
+Emmendingen,08316,72399
+Ortenaukreis,08317,190688
+Rottweil,08325,61558
+Schwarzwald-Baar-Kreis,08326,90432
+Tuttlingen,08327,63065
+Konstanz,08335,109704
+Lörrach,08336,78091
+Waldshut,08337,57909
+Reutlingen,08415,124204
+Tübingen,08416,93010
+Zollernalbkreis,08417,81573
+"Ulm, Universitätsstadt",08421,55078
+Alb-Donau-Kreis,08425,89083
+Biberach,08426,91873
+Bodenseekreis,08435,94028
+Ravensburg,08436,124517
+Sigmaringen,08437,56785
+"Ingolstadt, Stadt",09161,63635
+"München, Landeshauptstadt",09162,664211
+"Rosenheim, Stadt",09163,27566
+Altötting,09171,48319
+Berchtesgadener Land,09172,38466
+Bad Tölz-Wolfratshausen,09173,53950
+Dachau,09174,72395
+Ebersberg,09175,65137
+Eichstätt,09176,58580
+Erding,09177,65659
+Freising,09178,87449
+Fürstenfeldbruck,09179,94452
+Garmisch-Partenkirchen,09180,35047
+Landsberg am Lech,09181,50083
+Miesbach,09182,41539
+Mühldorf a.Inn,09183,51490
+München,09184,151035
+Neuburg-Schrobenhausen,09185,44302
+Pfaffenhofen a.d.Ilm,09186,59026
+Rosenheim,09187,108230
+Starnberg,09188,52237
+Traunstein,09189,73781
+Weilheim-Schongau,09190,57614
+"Landshut, Stadt",09261,31390
+"Passau, Stadt",09262,20142
+"Straubing, Stadt",09263,20249
+Deggendorf,09271,52300
+Freyung-Grafenau,09272,32954
+Kelheim,09273,55692
+Landshut,09274,72685
+Passau,09275,80128
+Regen,09276,32183
+Rottal-Inn,09277,51219
+Straubing-Bogen,09278,45019
+Dingolfing-Landau,09279,46304
+"Amberg, Stadt",09361,17554
+"Regensburg, Stadt",09362,68046
+"Weiden i.d.OPf., Stadt",09363,17618
+Amberg-Sulzbach,09371,45074
+Cham,09372,55406
+Neumarkt i.d.OPf.,09373,60267
+Neustadt a.d.Waldnaab,09374,40254
+Regensburg,09375,85718
+Schwandorf,09376,66189
+Tirschenreuth,09377,30609
+"Bamberg, Stadt",09461,30602
+"Bayreuth, Stadt",09462,29305
+"Coburg, Stadt",09463,17311
+"Hof, Stadt",09464,18082
+Bamberg,09471,66612
+Bayreuth,09472,44939
+Coburg,09473,38816
+Forchheim,09474,51701
+Hof,09475,38674
+Kronach,09476,28806
+Kulmbach,09477,31350
+Lichtenfels,09478,29776
+Wunsiedel i.Fichtelgebirge,09479,29035
+"Ansbach, Stadt",09561,17809
+"Erlangen, Stadt",09562,50662
+"Fürth, Stadt",09563,58472
+"Nürnberg, Stadt",09564,226362
+"Schwabach, Stadt",09565,17667
+Ansbach,09571,83205
+Erlangen-Höchstadt,09572,61487
+Fürth,09573,50839
+Nürnberger Land,09574,73892
+Neustadt a.d.Aisch-Bad Windsheim,09575,45178
+Roth,09576,55860
+Weißenburg-Gunzenhausen,09577,40428
+"Aschaffenburg, Stadt",09661,30185
+"Schweinfurt, Stadt",09662,21611
+"Würzburg, Stadt",09663,54403
+Aschaffenburg,09671,74809
+Bad Kissingen,09672,43168
+Rhön-Grabfeld,09673,34273
+Haßberge,09674,36947
+Kitzingen,09675,40193
+Miltenberg,09676,55211
+Main-Spessart,09677,55343
+Schweinfurt,09678,50581
+Würzburg,09679,69418
+"Augsburg, Stadt",09761,126735
+"Kaufbeuren, Stadt",09762,19032
+"Kempten (Allgäu), Stadt",09763,29997
+"Memmingen, Stadt",09764,19426
+Aichach-Friedberg,09771,58140
+Augsburg,09772,109585
+Dillingen a.d.Donau,09773,43363
+Günzburg,09774,58616
+Neu-Ulm,09775,79215
+Lindau (Bodensee),09776,33616
+Ostallgäu,09777,60674
+Unterallgäu,09778,65486
+Donau-Ries,09779,61259
+Oberallgäu,09780,66683
+Regionalverband Saarbrücken,10041,122213
+Merzig-Wadern,10042,34745
+Neunkirchen,10043,51043
+Saarlouis,10044,74820
+Saarpfalz-Kreis,10045,55548
+St. Wendel,10046,34088
+"Berlin, Stadt",11000,1435711
+"Brandenburg an der Havel, Stadt",12051,28109
+"Cottbus, Stadt",12052,37709
+"Frankfurt (Oder), Stadt",12053,21261
+"Potsdam, Stadt",12054,74678
+Barnim,12060,76783
+Dahme-Spreewald,12061,72217
+Elbe-Elster,12062,39715
+Havelland,12063,68188
+Märkisch-Oderland,12064,78614
+Oberhavel,12065,88029
+Oberspreewald-Lausitz,12066,43215
+Oder-Spree,12067,71198
+Ostprignitz-Ruppin,12068,38817
+Potsdam-Mittelmark,12069,88366
+Prignitz,12070,29561
+Spree-Neiße,12071,44254
+Teltow-Fläming,12072,74320
+Uckermark,12073,43519
+"Rostock, Hanse- und Universitätsstadt",13003,82630
+"Schwerin, Landeshauptstadt",13004,36379
+Mecklenburgische Seenplatte,13071,98658
+Landkreis Rostock,13072,85054
+Vorpommern-Rügen,13073,85936
+Nordwestmecklenburg,13074,64252
+Vorpommern-Greifswald,13075,87068
+Ludwigslust-Parchim,13076,88761
+"Chemnitz, Stadt",14511,94613
+Erzgebirgskreis,14521,131936
+Mittelsachsen,14522,121660
+Vogtlandkreis,14523,87849
+Zwickau,14524,128439
+"Dresden, Stadt",14612,235806
+Bautzen,14625,120847
+Görlitz,14626,93358
+Meißen,14627,97203
+Sächsische Schweiz-Osterzgebirge,14628,100181
+"Leipzig, Stadt",14713,252525
+Leipzig,14729,105737
+Nordsachsen,14730,83324
+"Dessau-Roßlau, Stadt",15001,29951
+"Halle (Saale), Stadt",15002,91010
+"Magdeburg, Landeshauptstadt",15003,96148
+Altmarkkreis Salzwedel,15081,34843
+Anhalt-Bitterfeld,15082,60710
+Börde,15083,73320
+Burgenlandkreis,15084,72718
+Harz,15085,83877
+Jerichower Land,15086,35727
+Mansfeld-Südharz,15087,49863
+Saalekreis,15088,77824
+Salzlandkreis,15089,72545
+Stendal,15090,42729
+Wittenberg,15091,50416
+"Erfurt, Stadt",16051,87696
+"Gera, Stadt",16052,34919
+"Jena, Stadt",16053,43249
+"Suhl, Stadt",16054,13650
+"Weimar, Stadt",16055,24365
+Eichsfeld,16061,41857
+Nordhausen,16062,32177
+Wartburgkreis,16063,67416
+Unstrut-Hainich-Kreis,16064,41272
+Kyffhäuserkreis,16065,28085
+Schmalkalden-Meiningen,16066,51496
+Gotha,16067,57356
+Sömmerda,16068,26834
+Hildburghausen,16069,27389
+Ilm-Kreis,16070,42774
+Weimarer Land,16071,34701
+Sonneberg,16072,23463
+Saalfeld-Rudolstadt,16073,41392
+Saale-Holzland-Kreis,16074,34224
+Saale-Orla-Kreis,16075,33652
+Greiz,16076,37451
+Altenburger Land,16077,33822
