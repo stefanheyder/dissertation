@@ -1,13 +1,10 @@
 \section{Removing reporting delays and weekday effects}%
 \label{sec:model_reporting_delay}
 \subsection{Context}
-\todo{rewrite: don't forecast, but use daily modeling as motivator}
-Forecasting the number of new infections that will be reported in the coming days, weeks or months is one of the main tasks of epidemiological monitoring, see \Cref{sec:objectives}. However, as we have observed in \Cref{sec:data}, the data at our hand are contaminated by the reporting process, most notably the week-day effects, reporting delays, and artifacts due to public holidays.
-While we can make the influence of these effects small by aggregating data to the weekly level, see \Cref{sec:regional_growth_factor_model}, modeling on the daily level has its merits: this is the smallest timescale data are available at, and so it should provide better predictions if we leverage the full information available. Additionally, going to the finest timescale possible is crucial if we are interested in quantifying the effects of \acrshortpl{npi}.
-% ForecastHubs do weekly forecasting
+Retrospective analysis of the reported cases is one of the main tasks of epidemiological monitoring, see \Cref{sec:objectives}. For this analysis, it is crucial to have the finest temporal resolution possible, as we want, e.g., to link the dates on which \acrshortpl{npi} were enforced to the growth factors on, or surrounding these dates. However, as we have observed in \Cref{sec:data}, the data at our hand are contaminated by the reporting process, most notably the week-day effects, reporting delays, and reporting artifacts, e.g. due to public holidays.
+While we can make the influence of these effects small by aggregating data to the weekly level, see \Cref{sec:regional_growth_factor_model}, modeling on the daily level facilitates better retrospective analyses and as such it is the goal of this section.
 
-% use RKI case data for whole country, split by reporting delay
-In this section we use the \acrshort{rki} case incidence data discussed in \Cref{sec:data}. As we have seen in \Cref{fig:reporting_delays_cases} \textbf{A} and \Cref{fig:survival_function_rep_tri_incidences}, most delays are less than $4$ days. Thus, ignoring any cases reported with longer delays, we get for any reporting date $t$ four observations, say 
+Here, we use the \acrshort{rki} case incidence data discussed in \Cref{sec:data}. As we have seen in \Cref{fig:reporting_delays_cases} \textbf{A} and \Cref{fig:survival_function_rep_tri_incidences}, most delays are shorter than $4$ days. Thus, ignoring any cases reported with longer delays, we get for any reporting date $t$ four observations, say 
 $$
     Y_{t} = \left( Y_{t, 1}, \dots, Y_{t, 4} \right) \in \N^{4}_{0}.
 $$
@@ -22,7 +19,9 @@ Let $\hat p_{t, \tau} = \frac{Y_{t,\tau}}{Y_{t,\cdot}}$ be the empirical delay p
     \label{fig:weekday_effect_delays}
 \end{figure}
 
-To produce accurate forecasts of the daily number of reported cases, we will construct a \acrshort{ssm} that allows to account for these delays, as well as the weekday effects and dynamics of the incidences. With this model, we will then perform short-term forecasts for the case incidence in Germany, including prediction intervals. To assess the performance of our method, we compare the results to those produced in the \acrfull{ecdc}'s ForecastHub \citep{Sherratt2022Predictive}.
+To produce accurate retrospective analyses of the daily growth factor, we will construct a \acrshort{ssm} that allows to account for these delays, as well as the weekday effects and dynamics of the incidences. This model will enable us to better understand the delay process, allow to account for periods of inconsistent reporting, and yield daily growth factors useful for the interpretation of \acrshort{npi} efficacy.
+
+%perform short-term forecasts for the case incidence in Germany, including prediction intervals. To assess the performance of our method, we compare the results to those produced in the \acrfull{ecdc}'s ForecastHub \citep{Sherratt2022Predictive}.
 %\todo{also remove reporting artifacts at christmas?}
 
 \subsection{Model}
@@ -33,7 +32,7 @@ $$
 $$
 for the growth factor $\rho_{t}$ on day $t$. It is then sensible to assume that the growth factor $\rho_{t}$ performs a random walk on the log-scale, as we would expect large day-to-day variation of $\rho_{t}$ for large values, and small variation for small values, i.e. multiplicative, rather than additive, day-to-day changes. Thus, we assume that 
 $$
-    \log \rho_{t + 1} = \rho_{t} + \varepsilon_{t + 1, \rho}
+    \log \rho_{t + 1} = \log \rho_{t} + \varepsilon_{t + 1, \rho}
 $$
 for $\varepsilon_{t + 1,\rho} \sim \mathcal N(0, \sigma^{2}_\rho)$. To incorporate week-day effects, consider a weekly seasonal component 
 $$
@@ -41,17 +40,17 @@ $$
 $$
 for $\varepsilon_{t + 1, W} \sim \mathcal N(0, \sigma^{2}_{W})$, as described in \Cref{sec:modelling_epidemiological_dessiderata_with_state_space_models}. Finally, to model the reporting delay probabilities $p_{t,\tau}$, $\tau = 1,2,3,4$, we parameterize them by log ratios
 \begin{align*}
-    q_{t, \tau} = \log \frac{p_{t,\tau}}{p_{t,4}} && \tau = 1,\dots, 3,
+    q_{t, \tau} = \log \frac{p_{t,\tau}}{p_{t,4}} && \tau = 1, 2, 3,
 \end{align*}
 which also perform a random walk in time: 
 $$
     q_{t + 1, \tau} = q_{t, \tau} + \varepsilon_{t+1, q, \tau},
 $$
-with $\varepsilon_{t + 1, q, \tau} \sim \mathcal N(0, \sigma^{2}_{q})$ whose variance does not depend on the delay $\tau$. To account for the weekday effect visible in \Cref{fig:weekday_effect_delays}, we introduce three further weekday effects 
+with $\varepsilon_{t + 1, q, \tau} \sim \mathcal N(0, \sigma^{2}_{q})$ whose variance does not depend on the delay $\tau$. To account for the weekday effect visible in \Cref{fig:weekday_effect_delays}, we introduce three further weekday effects, for $\tau = 1,  2, 3$ let
 $$
     \log W^{q,\tau}_{t + 1} = - \sum_{s = 0}^{5} \log W^{q,\tau}_{t - s} + \varepsilon_{t + 1, W^{q,\tau}},
 $$
-with $\varepsilon_{t+1, W^{q,\tau}} \sim \mathcal N \left( 0, \sigma^{2}_{W_q} \right)$, with shared variance $\sigma^{2}_{W_{q}}$.
+with $\varepsilon_{t+1, W^{q,\tau}} \sim \mathcal N \left( 0, \sigma^{2}_{W_q} \right)$ and shared variance $\sigma^{2}_{W_{q}}$.
 We can recover the delay probabilities $p_{t, \tau}$ from the log-ratios by 
 \begin{align}
     \begin{split}
@@ -67,22 +66,44 @@ Finally, there are reporting artifacts and other effects that we have not yet co
 With these components at our disposal, we can model the observed incidences $Y_{t, \tau}$ by
 \begin{align}
     \label{eq:reporting_delays_Y}
-    Y_{t, \tau} | \log I_{t}, \log W_{t}, q_{t}, \log M_{t} \sim \operatorname{Pois} \left( p_{t, \tau}\exp \left(\log I_{t} + \log W_{t}  + \log M_{t}\right) \right) = \operatorname{Pois} \left( p_{t, \tau} W_{t} M_{t} I_{t}\right),
+    Y_{t, \tau} | \log I_{t}, \log W_{t}, q_{t}, \log M_{t} \sim \operatorname{Pois} \left( p_{t, \tau}\exp \left(\log I_{t} + \log W_{t}  + \log M_{t}\right) \right),
 \end{align}
 conditionally independent for fixed $t$. Thus, $W_{t}$ acts as a multiplicative factor that modulates the observed cases depending on the day of the week, and the delay probabilities distribute the total expected number of cases $M_{t}W_{t}I_{t}$ onto the delays. In this model, $Y_{t} = \sum_{\tau = 1}^4 Y_{t, \tau}$ has conditional expectation 
 $$
     \E \left( Y_{t} | \log I_{t}, \log W_{t}, q_{t}, \log M_{t} \right) = M_{t}W_{t}I_t
 $$
-As it is sensible to model the conditional distribution of $Y_{t}$ by a Poisson distribution (see \Cref{sec:dessiderata}), we can view \Cref{eq:reporting_delays_Y} as a multinomial thinning of this distribution. Notice that including $M_{t}$ introduces overdispersion in this Poisson distribution, similar to a negative binomial distribution. 
+As it is sensible to model the conditional distribution of $Y_{t}$ by a Poisson distribution (see \Cref{sec:dessiderata}), we can view \Cref{eq:reporting_delays_Y} as a multinomial thinning of this distribution. Notice that including $M_{t}$ introduces overdispersion in this Poisson distribution, similar to modeling with a negative binomial distribution. 
 
-Letting $X_{t} =\left( \log I_{t}, \log \rho_{t + 1}, \log W_{t}, \dots, \log W_{t - 5}, q_{t,1}, q_{t,2}, q_{t,3}\right)^{T}$, assuming that
+Letting $X_{t} =\left( \log I_{t}, \log \rho_{t + 1}, \log W_{t}, \dots, \log W_{t - 5}, q_{t,1}, q_{t,2}, q_{t,3}, \log W^{q,1}_{t}, \dots, \log W^{q,3}_{t - 5}\right)^{T}$, assuming that
 $$
 \varepsilon_{t + 1} = 
 \begin{pmatrix}
      \varepsilon_{t + 1,\rho}\\ \varepsilon_{t + 1, W}\\ \varepsilon_{t +1, q, 1}\\ \varepsilon_{t +1, q, 2}\\ \varepsilon_{t +1, q, 3}
 \end{pmatrix}
 $$
-has independent marginals, and fixing an initial distribution of $X_{0}$ fully specifies a \acrshort{pgssm} for the joint distribution of $(X,Y)$. The model has a linear signal 
+has independent marginals, and fixing an initial distribution of $X_{0}$ fully specifies a \acrshort{pgssm} for the joint distribution of $(X,Y)$. For the initial distribution we use 
+$$
+    X_{0} \sim \mathcal N \left( u_{0}, \Sigma_{0} \right)
+$$
+where $u_{0}$ is $0$ for all elements, except to the third entry (corresponding to $M_{0}$), which we set to $-\frac{1}{2} \sigma^{2}_M$. For the initial covariance we use a diagonal matrix 
+$$
+    \Sigma_{0} = \diag \left( 
+        \underbrace{25}_{\log I},
+        \underbrace{0.2^{2}}_{\log \rho},
+        \underbrace{s^{2}_M}_{M},
+        \underbrace{1}_{\log W_{0}},
+        \dots,
+        \underbrace{1}_{\log W_{-5}},
+        \underbrace{1}_{q_{0, 1}},
+        \underbrace{1}_{q_{0, 2}},
+        \underbrace{1}_{q_{0, 3}},
+        \underbrace{1}_{\log W^{q,1}_{0}},
+        \dots,
+        \underbrace{1}_{\log W^{q,3}_{-5}},
+    \right).
+$$
+
+The model has a linear signal 
 $$
     S_{t} = \begin{pmatrix}
         \log I_{t} + \log W_{t} \\
@@ -96,19 +117,19 @@ Similarly, we may extend \acrshort{eis} to account for non-diagonal $\Omega_{t}$
 $$
     \sum_{i = 1}^N \left( \log p(y_{t} | S^{i}_t) + \langle \Omega_{t}^{-1}z_{t}, S^{i}_{t}\rangle - \frac{1}{2} \operatorname{tr} \left(\Omega^{-1}_{t}S^{i}_{t}(S^{i}_t)^{T}\right)- \lambda_{t} \right)^{2}
 $$
-over $z_{t}, \Omega_{t}, \lambda_{t}$. Noticing that $(A,B) \mapsto \operatorname{tr} \left( A^{T}B \right)$ is the Frobenius inner-product, we see that this optimization problem is still a weighted linear least squares problem for $\Omega_{t}^{-1}z_{t}, \Omega^{-1}_t, \lambda_{t}$, when we let $\Omega_{t}^{-1}$ take values in the symmetric matrices in $\R^{p \times p}$. As the dimension of this vector space is $ \frac{p (p + 1)}{2}$, we may still perform the efficient weighted linear least squares routine, but at an increased cost: the number of parameters increases from $2p + 1$ ($\Omega_{t}$ diagonal) to $p + \frac{p(p + 1)}{2} + 1$ ($\Omega_{t}$ symmetric). 
+over $z_{t}, \Omega_{t}, \lambda_{t}$. Noticing that $(A,B) \mapsto \operatorname{tr} \left( A^{T}B \right)$ is the Frobenius inner-product, we see that this optimization problem is still a weighted linear least squares problem for $\Omega_{t}^{-1}z_{t}, \Omega^{-1}_t, \lambda_{t}$, when we let $\Omega_{t}^{-1}$ take values in the symmetric matrices in $\R^{p \times p}$. As the dimension of this vector space is $ \frac{p (p + 1)}{2}$, we may still perform the computationally efficient weighted linear least squares routine, but at an increased cost: the number of parameters increases from $2p + 1$ ($\Omega_{t}$ diagonal) to $p + \frac{p(p + 1)}{2} + 1$ ($\Omega_{t}$ symmetric). 
 
-The parameters of the model are $\theta = \left( \log \sigma^{2}_{\rho}, \log \sigma^{2}_{W}, \log \sigma^{2}_{q}, \log \sigma^{2}_M\right)$, which we model on the log-scale to avoid having to take care of constraints. Given observations $Y = (Y_{0}, \dots, Y_{n})$ we perform maximum likelihood estimation as described in \Cref{alg:mle}. As tuning parameters in this procedure we use $20$ iterations for the \acrshort{la} and \acrshort{eis}, with relative tolerance of convergence set to $10^{-5}$. For the \acrshort{eis} proposals we also use $1\,000$ samples and all four antithetic variables, i.e. we use \Cref{eq:antithetic-weights}. At the \acrshort{mle} we again determine the \acrshort{eis} proposal using the same parameters and perform inference for the conditional distribution using $10\,000$ samples, applying the method described in \Cref{subsec:inference} to obtain estimates of the posterior mean, standard deviation and prediction intervals. 
+The parameters of the model are $\theta = \left( \log \sigma^{2}_{\rho}, \log \sigma^{2}_{W}, \log \sigma^{2}_{q}, \log \sigma^{2}_M, \log \sigma^{2}_{W_{q}}\right)$, which we model on the log-scale to avoid having to take care of constraints. Given observations $Y = (Y_{0}, \dots, Y_{n})$ we perform maximum likelihood estimation as described in \Cref{alg:mle}. As tuning parameters in this procedure we use $20$ iterations for the \acrshort{la} and \acrshort{eis}, with relative tolerance of convergence set to $10^{-5}$. For the \acrshort{eis} proposals we also use $1\,000$ samples and all four antithetic variables, i.e. we use \Cref{eq:antithetic-weights}. At the \acrshort{mle} we again determine the \acrshort{eis} proposal using the same parameters and perform inference for the conditional distribution using $10\,000$ samples, applying the method described in \Cref{subsec:inference} to obtain estimates of the posterior mean, standard deviation and prediction intervals. 
 
 % results
 \subsection{Results}
-We start by a showcase of the models' capability, fitting it to the reported case date in the period from April 5th to September 1st 2020, starting from the first day when $4$ delays are available in the dataset to the initial period of exponential growth in the fall of 2020. We estimate the parameters $\theta = \left( \log \sigma^{2}_{\rho}, \log \sigma^{2}_W, \log \sigma^{2}_q, \log \sigma^{2}_M, \sigma^{2}_{W_{q}}\right)$ by maximum-likelihood estimation, yielding the parameters displayed in \Cref{tab:showcase-parameters}. There, we see that both $\log \rho_{t}$ and $\log W_{t}$ vary slowly over time, compared to the faster varying $q$. 
+We start by a showcase of the models' capability, fitting it to the reported case date in the period from April 5th to September 1st 2020, starting from the first day when $4$ delays are available in the dataset to the initial period of exponential growth in the fall of 2020. We estimate the parameters $\theta = \left( \log \sigma^{2}_{\rho}, \log \sigma^{2}_W, \log \sigma^{2}_q, \log \sigma^{2}_M, \sigma^{2}_{W_{q}}\right)$ by maximum-likelihood estimation, yielding the parameters displayed in \Cref{tab:showcase-parameters}. There, we see that $\log \rho_{t}$, $\log W_{t}$, $q_{t,1}, q_{t,2}$ and $ q_{t,3}$ vary slowly over time, compared to the faster varying $W^{q, 1}, W^{q,2}, W^{q,3}$. 
 
 \begin{table}
     \centering
     \input{tables/showcase-parameters.tex}
     \label{tab:showcase-parameters}
-    \caption{Standard deviations for the showcase model determined either by hand, by the initial search or by maximum likelihood estimation described in \Cref{sec:maximum_likelihood_estimation}. The difference between the initial search and the \acrshort{mle} is negligible and is not visible for the precision shown here.}
+    \caption{Standard deviations for the models' showcase determined either by hand, by the initial search or by maximum likelihood estimation described in \Cref{sec:maximum_likelihood_estimation}. The difference between the initial search and the \acrshort{mle} is negligible and is not visible for the precision shown here.}
 \end{table}
 \begin{figure}
     \resizebox{\textwidth}{!}{%
@@ -148,14 +169,14 @@ Now that we have seen an application of the model, we use it to demonstrate how 
     \label{fig:christmas_prediction_intervals_I_rho}
 \end{figure}
 
-As outlined in \todo{ref correct section}, we can fit both models using the same methods, as we only have to replace the observation matrices $B_{t}$ for missing dates $t$ by zero matrices and the conditional distribution of $Y_{t, \tau} | S_{t}$ by $\delta_{0}$, while replacing $Y_{t,\tau}$ by $0$. In the approximating \acrshortpl{la} and \acrshort{eis} proposals we set $z_{t}$ and $\Omega_{t}$ to the zero vector and matrix, respectively. 
+As outlined in \todo{ref correct section}, we can fit both models using the same methods, as we only have to replace the observation matrices $B_{t}$ for missing dates $t$ by zero matrices and the conditional distribution of $Y_{t, \tau} | S_{t}$ by $\delta_{0}$, while replacing $Y_{t,\tau}$ by $0$ for $\tau = 1, \dots, 4$. In the approximating \acrshortpl{la} and \acrshort{eis} proposals we set $z_{t}$ and $\Omega_{t}$ to the zero vector and matrix, respectively. 
 
 For the model using all available data, we see that the reporting artifacts affect both the incidences $I$ and growth factors $\rho$, with a sharp decrease in rho during the holidays, followed by a sharp increase in the new year. For the model that has the flawed observations removed, we see that both $I$ and $\rho$ behave more smoothly, as the estimated standard deviations, displayed in \Cref{tab:christmas-parameters}, are also smaller. The price we pay for this smoother transition is larger uncertainty where observations are now missing, i.e. the $95\%$ prediction intervals are larger in this period than those for the model with all data available. However, when data are available, the prediction intervals for the second model are smaller, as its estimated standard deviations are much smaller. 
 
 \begin{table}
     \centering
     \input{tables/christmas-parameters.tex}
-    \caption{Estimated parameters for the }
+    \caption{Estimated parameters for the model during the Christmas period, for all observations or with observations during the Christmas period (19th December 2020 until January 17th 2021) removed. The manual parameter is based on the estimate of the models' showcase, i.e. the \acrshort{mle} result from \Cref{tab:showcase-parameters}.}
     \label{tab:christmas-parameters}
 \end{table}
 
@@ -165,14 +186,23 @@ In \Cref{fig:christmas_delay_probs} we additionally show the expected smoothed d
     \resizebox{\textwidth}{!}{%
         \input{tikz/christmas_delay_probs.tex}%
     }
-    \caption{Importance sampling estimates of conditional expectation $\E \left( p_{t, \tau} | Y \right)$ for the two Christmas models. }
+    \caption{Importance sampling estimates of conditional expectation $\E \left( p_{t, \tau} | Y \right)$ for the two sets of Christmas observations: the full lines correspond to all reported incidences and the dashed lines to observations between December 19th 2020 and January 17th 2021 removed. When using all observations, we clearly see the effect of the Christmas holidays, with a drop in next day reporting during the holidays, and an increase in next day reporting in the middle of January.}
     \label{fig:christmas_delay_probs}
 \end{figure}
 
 \subsection{Discussion}
+% highlight that this is a good model
+%% allows to account for time evolution of cases, while taking care of artifacts etc.
+%% estimated growth factors + uncertainty allow to infer about current state of epidemic
+As we can see from the exemplary results, the model allows to accurately model the evolution of reported cases over time, while taking care of unwelcome reporting artifacts such as the weekday effect, delays and changes in reporting pattern due to holidays. 
+The estimated growth factors allow inferring about the speed at which the cases proliferate, and can thus be a valuable tool for decision makers. With our model, we can identify the almost constant exponential growth in the summer of 2020 (\Cref{fig:showcase_prediction_intervals_I_rho}), which is difficult to see by only looking at the number of reported cases, due to the reporting artifacts and low number of cases. 
+%% can use the model for predictions, see next section
+
+
 % extension: for true dealing with week-day effect, use information on symptom onset date
 % extension: death data, both for forecasting and improving estimation
 % extension: longer delays
 % extension: keep number of cases in missing scenario constant
 % extension: dark figure, w/deaths
 % extension: weekday effects normalized like delays
+% extension: diffuse initialisation
