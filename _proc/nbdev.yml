@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "ssm4epi"
+  site-url: "https://stefanheyder.github.io/dissertation"
+  description: "PhD thesis"
+  repo-branch: main
+  repo-url: "https://github.com/stefanheyder/dissertation"
