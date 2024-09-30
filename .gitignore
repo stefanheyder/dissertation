@@ -309,3 +309,6 @@ tikz/externalized
 
 # latex-build
 build
+
+# nbdev
+_proc
