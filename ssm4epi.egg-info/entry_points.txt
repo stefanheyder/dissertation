@@ -1,0 +1,2 @@
+[nbdev]
+ssm4epi = ssm4epi._modidx:d

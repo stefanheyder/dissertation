@@ -1,3 +1,391 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/index.html</loc>
+    <lastmod>2024-09-30T19:09:21.248Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/04_models/02_regional_growth_factor/data.html</loc>
+    <lastmod>2024-09-30T18:44:20.020Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/04_models/02_regional_growth_factor/figures.html</loc>
+    <lastmod>2024-09-30T18:44:19.998Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/04_models/01_reporting_delays/christmas_model.html</loc>
+    <lastmod>2024-09-30T18:44:19.980Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/04_models/01_reporting_delays/20_showcase_model.html</loc>
+    <lastmod>2024-09-30T18:44:19.953Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/04_models/01_reporting_delays/figures.html</loc>
+    <lastmod>2024-09-30T18:44:19.927Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/04_models/utilities.html</loc>
+    <lastmod>2024-09-30T18:46:05.721Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/02_epidemiology/03_data.html</loc>
+    <lastmod>2024-09-30T18:44:19.938Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/03_ssms/04_is.html</loc>
+    <lastmod>2024-09-30T18:44:19.912Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/03_ssms/compare_ce_eis_mse.html</loc>
+    <lastmod>2024-09-30T18:44:19.934Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/03_ssms/03_04_IS_figures.html</loc>
+    <lastmod>2024-09-30T18:44:19.816Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/03_ssms/03_05_Gaussian_IS.html</loc>
+    <lastmod>2024-09-30T18:44:19.887Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/03_ssms/compare_ce_eis_mse_figures.html</loc>
+    <lastmod>2024-09-30T18:44:19.905Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/03_ssms/08_comparison_figures.html</loc>
+    <lastmod>2024-09-30T18:44:19.944Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/02_epidemiology/04_desiderata.html</loc>
+    <lastmod>2024-09-30T18:44:19.833Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/04_models/01_reporting_delays/model.html</loc>
+    <lastmod>2024-09-30T18:44:23.553Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/04_models/01_reporting_delays/prediction_model.html</loc>
+    <lastmod>2024-09-30T18:44:19.941Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/04_models/01_reporting_delays/data.html</loc>
+    <lastmod>2024-09-30T18:44:19.954Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/04_models/02_regional_growth_factor/model.html</loc>
+    <lastmod>2024-09-30T18:44:23.610Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/04_models/02_regional_growth_factor/showcase.html</loc>
+    <lastmod>2024-09-30T18:44:20.013Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/04_models/02_regional_growth_factor/30_results.html</loc>
+    <lastmod>2024-09-30T18:44:20.030Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/epidemiology/04_desiderata.html</loc>
+    <lastmod>2024-09-30T18:46:47.171Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/02_regional_growth_factor/30_results.html</loc>
+    <lastmod>2024-09-30T18:46:47.147Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/02_regional_growth_factor/showcase.html</loc>
+    <lastmod>2024-09-30T18:46:47.129Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/02_regional_growth_factor/model.html</loc>
+    <lastmod>2024-09-30T18:46:50.043Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/01_reporting_delays/data.html</loc>
+    <lastmod>2024-09-30T18:46:47.089Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/01_reporting_delays/prediction_model.html</loc>
+    <lastmod>2024-09-30T18:46:47.055Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/01_reporting_delays/model.html</loc>
+    <lastmod>2024-09-30T18:46:49.945Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/ssms/08_comparison_figures.html</loc>
+    <lastmod>2024-09-30T18:49:40.239Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/ssms/compare_ce_eis_mse_figures.html</loc>
+    <lastmod>2024-09-30T18:50:43.731Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/ssms/03_05_Gaussian_IS.html</loc>
+    <lastmod>2024-09-30T18:46:47.027Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/ssms/03_04_IS_figures.html</loc>
+    <lastmod>2024-09-30T18:46:47.018Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/ssms/compare_ce_eis_mse.html</loc>
+    <lastmod>2024-09-30T18:50:22.530Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/ssms/04_is.html</loc>
+    <lastmod>2024-09-30T18:48:53.136Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/utilities.html</loc>
+    <lastmod>2024-09-30T18:46:49.456Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/01_reporting_delays/figures.html</loc>
+    <lastmod>2024-09-30T18:46:47.045Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/01_reporting_delays/20_showcase_model.html</loc>
+    <lastmod>2024-09-30T18:46:47.075Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/01_reporting_delays/christmas_model.html</loc>
+    <lastmod>2024-09-30T18:46:47.091Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/02_regional_growth_factor/figures.html</loc>
+    <lastmod>2024-09-30T18:46:47.114Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/02_regional_growth_factor/data.html</loc>
+    <lastmod>2024-09-30T18:46:47.138Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/epidemiology/03_data.html</loc>
+    <lastmod>2024-09-30T18:46:47.174Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/regional_growth_factor/30_results.html</loc>
+    <lastmod>2024-09-30T18:47:52.228Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/regional_growth_factor/showcase.html</loc>
+    <lastmod>2024-09-30T18:47:52.210Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/regional_growth_factor/model.html</loc>
+    <lastmod>2024-09-30T18:47:55.459Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/reporting_delays/data.html</loc>
+    <lastmod>2024-09-30T18:47:52.248Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/reporting_delays/prediction_model.html</loc>
+    <lastmod>2024-09-30T18:47:52.202Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/reporting_delays/model.html</loc>
+    <lastmod>2024-09-30T18:47:55.236Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/reporting_delays/figures.html</loc>
+    <lastmod>2024-09-30T18:47:52.187Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/reporting_delays/20_showcase_model.html</loc>
+    <lastmod>2024-09-30T18:47:52.266Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/reporting_delays/christmas_model.html</loc>
+    <lastmod>2024-09-30T18:47:52.267Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/regional_growth_factor/figures.html</loc>
+    <lastmod>2024-09-30T18:47:52.290Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/models/regional_growth_factor/data.html</loc>
+    <lastmod>2024-09-30T18:47:52.220Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/ssms/04_is_figures.html</loc>
+    <lastmod>2024-09-30T18:49:15.734Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/ssms/05_gaussian_is.html</loc>
+    <lastmod>2024-09-30T18:49:28.923Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/epidemiology/index.html</loc>
+    <lastmod>2024-09-30T18:51:48.691Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/Chapter 2 Epidemiology/04_desiderata.html</loc>
+    <lastmod>2024-09-30T18:52:45.576Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/Chapter 2 Epidemiology/03_data.html</loc>
+    <lastmod>2024-09-30T18:52:45.583Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/Chapter 4 Models/regional_growth_factor/30_results.html</loc>
+    <lastmod>2024-09-30T18:53:31.743Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/Chapter 4 Models/regional_growth_factor/showcase.html</loc>
+    <lastmod>2024-09-30T18:53:31.724Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/Chapter 4 Models/regional_growth_factor/model.html</loc>
+    <lastmod>2024-09-30T18:53:35.330Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/Chapter 4 Models/reporting_delays/christmas_model.html</loc>
+    <lastmod>2024-09-30T18:53:31.699Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/Chapter 4 Models/reporting_delays/20_showcase_model.html</loc>
+    <lastmod>2024-09-30T18:53:31.674Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/Chapter 4 Models/reporting_delays/figures.html</loc>
+    <lastmod>2024-09-30T18:53:31.642Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/Chapter 3 SSMs/08_comparison_figures.html</loc>
+    <lastmod>2024-09-30T18:53:31.692Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/Chapter 3 SSMs/compare_ce_eis_mse_figures.html</loc>
+    <lastmod>2024-09-30T18:53:31.670Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/Chapter 3 SSMs/05_gaussian_is.html</loc>
+    <lastmod>2024-09-30T18:53:31.625Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/Chapter 3 SSMs/04_is_figures.html</loc>
+    <lastmod>2024-09-30T18:53:31.611Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/Chapter 3 SSMs/compare_ce_eis_mse.html</loc>
+    <lastmod>2024-09-30T18:53:31.670Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/Chapter 3 SSMs/04_is.html</loc>
+    <lastmod>2024-09-30T18:53:31.695Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/Chapter 4 Models/reporting_delays/model.html</loc>
+    <lastmod>2024-09-30T18:53:35.314Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/Chapter 4 Models/reporting_delays/prediction_model.html</loc>
+    <lastmod>2024-09-30T18:53:31.656Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/Chapter 4 Models/reporting_delays/data.html</loc>
+    <lastmod>2024-09-30T18:53:31.672Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/Chapter 4 Models/utilities.html</loc>
+    <lastmod>2024-09-30T18:53:34.672Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/Chapter 4 Models/regional_growth_factor/figures.html</loc>
+    <lastmod>2024-09-30T18:53:31.711Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/Chapter 4 Models/regional_growth_factor/data.html</loc>
+    <lastmod>2024-09-30T18:53:31.734Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/2 Epidemiology/04_desiderata.html</loc>
+    <lastmod>2024-09-30T18:58:55.481Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/2 Epidemiology/03_data.html</loc>
+    <lastmod>2024-09-30T18:58:30.623Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.1 Removing reporting delays and weekday effects/christmas_model.html</loc>
+    <lastmod>2024-09-30T19:03:21.007Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.1 Removing reporting delays and weekday effects/20_showcase_model.html</loc>
+    <lastmod>2024-09-30T19:00:47.611Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.1 Removing reporting delays and weekday effects/figures.html</loc>
+    <lastmod>2024-09-30T19:05:52.993Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.2 Regional growth factor model/30_results.html</loc>
+    <lastmod>2024-09-30T19:07:19.988Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.2 Regional growth factor model/showcase.html</loc>
+    <lastmod>2024-09-30T19:07:09.489Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.2 Regional growth factor model/model.html</loc>
+    <lastmod>2024-09-30T19:06:56.382Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/3 SSMs/08_comparison_figures.html</loc>
+    <lastmod>2024-09-30T18:59:19.010Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/3 SSMs/compare_ce_eis_mse_figures.html</loc>
+    <lastmod>2024-09-30T18:59:24.432Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/3 SSMs/05_gaussian_is.html</loc>
+    <lastmod>2024-09-30T18:59:15.224Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/3 SSMs/04_is_figures.html</loc>
+    <lastmod>2024-09-30T18:59:02.482Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/3 SSMs/compare_ce_eis_mse.html</loc>
+    <lastmod>2024-09-30T18:59:27.795Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/3 SSMs/04_is.html</loc>
+    <lastmod>2024-09-30T18:59:08.523Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/utilities.html</loc>
+    <lastmod>2024-09-30T19:00:50.494Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.2 Regional growth factor model/figures.html</loc>
+    <lastmod>2024-09-30T19:00:47.572Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.2 Regional growth factor model/data.html</loc>
+    <lastmod>2024-09-30T19:06:50.192Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.1 Removing reporting delays and weekday effects/model.html</loc>
+    <lastmod>2024-09-30T19:02:55.284Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.1 Removing reporting delays and weekday effects/prediction_model.html</loc>
+    <lastmod>2024-09-30T19:03:26.387Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.1 Removing reporting delays and weekday effects/data.html</loc>
+    <lastmod>2024-09-30T19:02:43.516Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.1 Removing reporting delays and weekday effects/showcase_model.html</loc>
+    <lastmod>2024-09-30T19:03:15.204Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.2 Regional growth factor model/results.html</loc>
+    <lastmod>2024-09-30T19:07:21.856Z</lastmod>
+  </url>
 </urlset>

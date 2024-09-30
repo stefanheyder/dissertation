@@ -1,0 +1,34 @@
+website:
+  sidebar:
+    contents:
+      - index.ipynb
+      - section: 2 Epidemiology
+        contents:
+          - 2 Epidemiology/02_03_data.ipynb
+          - 2 Epidemiology/02_04_desiderata.ipynb
+      - section: 3 SSMs
+        contents:
+          - 3 SSMs/03_04_IS.ipynb
+          - 3 SSMs/03_04_IS_figures.ipynb
+          - 3 SSMs/03_05_Gaussian_IS.ipynb
+          - 3 SSMs/03_08_comparison_figures.ipynb
+          - 3 SSMs/compare_ce_eis_mse.ipynb
+          - 3 SSMs/compare_ce_eis_mse_figures.ipynb
+      - section: 4 Models
+        contents:
+          - 4 Models/00_utilities.ipynb
+          - section: 4.1 Removing reporting delays and weekday effects
+            contents:
+              - 4 Models/4.1 Removing reporting delays and weekday effects/00_data.ipynb
+              - 4 Models/4.1 Removing reporting delays and weekday effects/10_model.ipynb
+              - 4 Models/4.1 Removing reporting delays and weekday effects/20_showcase_model.ipynb
+              - 4 Models/4.1 Removing reporting delays and weekday effects/21_christmas_model.ipynb
+              - 4 Models/4.1 Removing reporting delays and weekday effects/22_prediction_model.ipynb
+              - 4 Models/4.1 Removing reporting delays and weekday effects/40_figures.ipynb
+          - section: 4.2 Regional growth factor model
+            contents:
+              - 4 Models/4.2 Regional growth factor model/00_data.ipynb
+              - 4 Models/4.2 Regional growth factor model/10_model.ipynb
+              - 4 Models/4.2 Regional growth factor model/20_showcase.ipynb
+              - 4 Models/4.2 Regional growth factor model/30_results.ipynb
+              - 4 Models/4.2 Regional growth factor model/40_figures.ipynb
