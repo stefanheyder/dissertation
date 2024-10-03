@@ -5,63 +5,121 @@ d = { 'settings': { 'branch': 'main',
                 'doc_host': 'https://stefanheyder.github.io',
                 'git_url': 'https://github.com/stefanheyder/dissertation',
                 'lib_path': 'ssm4epi'},
-  'syms': { 'ssm4epi.models.regional_growth_factor': { 'ssm4epi.models.regional_growth_factor._P': ( '04_models/02_regional_growth_factor/model.html#_p',
+  'syms': { 'ssm4epi.models.regional_growth_factor': { 'ssm4epi.models.regional_growth_factor._P': ( '4 Models/4.2 Regional growth factor '
+                                                                                                     'model/model.html#_p',
                                                                                                      'ssm4epi/models/regional_growth_factor.py'),
-                                                       'ssm4epi.models.regional_growth_factor._call_sample_n_patched': ( '04_models/02_regional_growth_factor/model.html#_call_sample_n_patched',
+                                                       'ssm4epi.models.regional_growth_factor._call_sample_n_patched': ( '4 Models/4.2 '
+                                                                                                                         'Regional growth '
+                                                                                                                         'factor '
+                                                                                                                         'model/model.html#_call_sample_n_patched',
                                                                                                                          'ssm4epi/models/regional_growth_factor.py'),
-                                                       'ssm4epi.models.regional_growth_factor._initial_guess': ( '04_models/02_regional_growth_factor/model.html#_initial_guess',
+                                                       'ssm4epi.models.regional_growth_factor._initial_guess': ( '4 Models/4.2 Regional '
+                                                                                                                 'growth factor '
+                                                                                                                 'model/model.html#_initial_guess',
                                                                                                                  'ssm4epi/models/regional_growth_factor.py'),
-                                                       'ssm4epi.models.regional_growth_factor._observation_model': ( '04_models/02_regional_growth_factor/model.html#_observation_model',
+                                                       'ssm4epi.models.regional_growth_factor._observation_model': ( '4 Models/4.2 '
+                                                                                                                     'Regional growth '
+                                                                                                                     'factor '
+                                                                                                                     'model/model.html#_observation_model',
                                                                                                                      'ssm4epi/models/regional_growth_factor.py'),
-                                                       'ssm4epi.models.regional_growth_factor._sample_n_patched': ( '04_models/02_regional_growth_factor/model.html#_sample_n_patched',
+                                                       'ssm4epi.models.regional_growth_factor._sample_n_patched': ( '4 Models/4.2 Regional '
+                                                                                                                    'growth factor '
+                                                                                                                    'model/model.html#_sample_n_patched',
                                                                                                                     'ssm4epi/models/regional_growth_factor.py'),
-                                                       'ssm4epi.models.regional_growth_factor._state_model': ( '04_models/02_regional_growth_factor/model.html#_state_model',
+                                                       'ssm4epi.models.regional_growth_factor._state_model': ( '4 Models/4.2 Regional '
+                                                                                                               'growth factor '
+                                                                                                               'model/model.html#_state_model',
                                                                                                                'ssm4epi/models/regional_growth_factor.py'),
-                                                       'ssm4epi.models.regional_growth_factor.account_for_nans': ( '04_models/02_regional_growth_factor/model.html#account_for_nans',
+                                                       'ssm4epi.models.regional_growth_factor.account_for_nans': ( '4 Models/4.2 Regional '
+                                                                                                                   'growth factor '
+                                                                                                                   'model/model.html#account_for_nans',
                                                                                                                    'ssm4epi/models/regional_growth_factor.py'),
-                                                       'ssm4epi.models.regional_growth_factor.gnll': ( '04_models/02_regional_growth_factor/model.html#gnll',
+                                                       'ssm4epi.models.regional_growth_factor.gnll': ( '4 Models/4.2 Regional growth '
+                                                                                                       'factor model/model.html#gnll',
                                                                                                        'ssm4epi/models/regional_growth_factor.py'),
-                                                       'ssm4epi.models.regional_growth_factor.growth_factor_model': ( '04_models/02_regional_growth_factor/model.html#growth_factor_model',
+                                                       'ssm4epi.models.regional_growth_factor.growth_factor_model': ( '4 Models/4.2 '
+                                                                                                                      'Regional growth '
+                                                                                                                      'factor '
+                                                                                                                      'model/model.html#growth_factor_model',
                                                                                                                       'ssm4epi/models/regional_growth_factor.py'),
-                                                       'ssm4epi.models.regional_growth_factor.laplace_approximation': ( '04_models/02_regional_growth_factor/model.html#laplace_approximation',
+                                                       'ssm4epi.models.regional_growth_factor.laplace_approximation': ( '4 Models/4.2 '
+                                                                                                                        'Regional growth '
+                                                                                                                        'factor '
+                                                                                                                        'model/model.html#laplace_approximation',
                                                                                                                         'ssm4epi/models/regional_growth_factor.py'),
-                                                       'ssm4epi.models.regional_growth_factor.log_weights': ( '04_models/02_regional_growth_factor/model.html#log_weights',
+                                                       'ssm4epi.models.regional_growth_factor.log_weights': ( '4 Models/4.2 Regional '
+                                                                                                              'growth factor '
+                                                                                                              'model/model.html#log_weights',
                                                                                                               'ssm4epi/models/regional_growth_factor.py'),
-                                                       'ssm4epi.models.regional_growth_factor.log_weights_t': ( '04_models/02_regional_growth_factor/model.html#log_weights_t',
+                                                       'ssm4epi.models.regional_growth_factor.log_weights_t': ( '4 Models/4.2 Regional '
+                                                                                                                'growth factor '
+                                                                                                                'model/model.html#log_weights_t',
                                                                                                                 'ssm4epi/models/regional_growth_factor.py'),
-                                                       'ssm4epi.models.regional_growth_factor.make_aux': ( '04_models/02_regional_growth_factor/model.html#make_aux',
+                                                       'ssm4epi.models.regional_growth_factor.make_aux': ( '4 Models/4.2 Regional growth '
+                                                                                                           'factor '
+                                                                                                           'model/model.html#make_aux',
                                                                                                            'ssm4epi/models/regional_growth_factor.py'),
-                                                       'ssm4epi.models.regional_growth_factor.modified_efficient_importance_sampling': ( '04_models/02_regional_growth_factor/model.html#modified_efficient_importance_sampling',
+                                                       'ssm4epi.models.regional_growth_factor.modified_efficient_importance_sampling': ( '4 '
+                                                                                                                                         'Models/4.2 '
+                                                                                                                                         'Regional '
+                                                                                                                                         'growth '
+                                                                                                                                         'factor '
+                                                                                                                                         'model/model.html#modified_efficient_importance_sampling',
                                                                                                                                          'ssm4epi/models/regional_growth_factor.py'),
-                                                       'ssm4epi.models.regional_growth_factor.par_to_theta': ( '04_models/02_regional_growth_factor/model.html#par_to_theta',
+                                                       'ssm4epi.models.regional_growth_factor.par_to_theta': ( '4 Models/4.2 Regional '
+                                                                                                               'growth factor '
+                                                                                                               'model/model.html#par_to_theta',
                                                                                                                'ssm4epi/models/regional_growth_factor.py'),
-                                                       'ssm4epi.models.regional_growth_factor.theta_to_par': ( '04_models/02_regional_growth_factor/model.html#theta_to_par',
+                                                       'ssm4epi.models.regional_growth_factor.theta_to_par': ( '4 Models/4.2 Regional '
+                                                                                                               'growth factor '
+                                                                                                               'model/model.html#theta_to_par',
                                                                                                                'ssm4epi/models/regional_growth_factor.py')},
-            'ssm4epi.models.reporting_delays': { 'ssm4epi.models.reporting_delays._initial_guess': ( '04_models/01_reporting_delays/model.html#_initial_guess',
+            'ssm4epi.models.reporting_delays': { 'ssm4epi.models.reporting_delays._initial_guess': ( '4 Models/4.1 Removing reporting '
+                                                                                                     'delays and weekday '
+                                                                                                     'effects/model.html#_initial_guess',
                                                                                                      'ssm4epi/models/reporting_delays.py'),
-                                                 'ssm4epi.models.reporting_delays._model': ( '04_models/01_reporting_delays/model.html#_model',
+                                                 'ssm4epi.models.reporting_delays._model': ( '4 Models/4.1 Removing reporting delays and '
+                                                                                             'weekday effects/model.html#_model',
                                                                                              'ssm4epi/models/reporting_delays.py'),
-                                                 'ssm4epi.models.reporting_delays.account_for_nans': ( '04_models/01_reporting_delays/model.html#account_for_nans',
+                                                 'ssm4epi.models.reporting_delays.account_for_nans': ( '4 Models/4.1 Removing reporting '
+                                                                                                       'delays and weekday '
+                                                                                                       'effects/model.html#account_for_nans',
                                                                                                        'ssm4epi/models/reporting_delays.py'),
-                                                 'ssm4epi.models.reporting_delays.gnll': ( '04_models/01_reporting_delays/model.html#gnll',
+                                                 'ssm4epi.models.reporting_delays.gnll': ( '4 Models/4.1 Removing reporting delays and '
+                                                                                           'weekday effects/model.html#gnll',
                                                                                            'ssm4epi/models/reporting_delays.py'),
-                                                 'ssm4epi.models.reporting_delays.laplace_approximation': ( '04_models/01_reporting_delays/model.html#laplace_approximation',
+                                                 'ssm4epi.models.reporting_delays.laplace_approximation': ( '4 Models/4.1 Removing '
+                                                                                                            'reporting delays and weekday '
+                                                                                                            'effects/model.html#laplace_approximation',
                                                                                                             'ssm4epi/models/reporting_delays.py'),
-                                                 'ssm4epi.models.reporting_delays.log_weights': ( '04_models/01_reporting_delays/model.html#log_weights',
+                                                 'ssm4epi.models.reporting_delays.log_weights': ( '4 Models/4.1 Removing reporting delays '
+                                                                                                  'and weekday '
+                                                                                                  'effects/model.html#log_weights',
                                                                                                   'ssm4epi/models/reporting_delays.py'),
-                                                 'ssm4epi.models.reporting_delays.log_weights_t': ( '04_models/01_reporting_delays/model.html#log_weights_t',
+                                                 'ssm4epi.models.reporting_delays.log_weights_t': ( '4 Models/4.1 Removing reporting '
+                                                                                                    'delays and weekday '
+                                                                                                    'effects/model.html#log_weights_t',
                                                                                                     'ssm4epi/models/reporting_delays.py'),
-                                                 'ssm4epi.models.reporting_delays.modified_efficient_importance_sampling': ( '04_models/01_reporting_delays/model.html#modified_efficient_importance_sampling',
+                                                 'ssm4epi.models.reporting_delays.modified_efficient_importance_sampling': ( '4 Models/4.1 '
+                                                                                                                             'Removing '
+                                                                                                                             'reporting '
+                                                                                                                             'delays and '
+                                                                                                                             'weekday '
+                                                                                                                             'effects/model.html#modified_efficient_importance_sampling',
                                                                                                                              'ssm4epi/models/reporting_delays.py'),
-                                                 'ssm4epi.models.reporting_delays.optimal_parameters': ( '04_models/01_reporting_delays/model.html#optimal_parameters',
+                                                 'ssm4epi.models.reporting_delays.optimal_parameters': ( '4 Models/4.1 Removing reporting '
+                                                                                                         'delays and weekday '
+                                                                                                         'effects/model.html#optimal_parameters',
                                                                                                          'ssm4epi/models/reporting_delays.py'),
-                                                 'ssm4epi.models.reporting_delays.to_log_probs': ( '04_models/01_reporting_delays/model.html#to_log_probs',
-                                                                                                   'ssm4epi/models/reporting_delays.py'),
-                                                 'ssm4epi.models.reporting_delays.tril': ( '04_models/01_reporting_delays/model.html#tril',
+                                                 'ssm4epi.models.reporting_delays.tril': ( '4 Models/4.1 Removing reporting delays and '
+                                                                                           'weekday effects/model.html#tril',
                                                                                            'ssm4epi/models/reporting_delays.py'),
-                                                 'ssm4epi.models.reporting_delays.triu': ( '04_models/01_reporting_delays/model.html#triu',
+                                                 'ssm4epi.models.reporting_delays.triu': ( '4 Models/4.1 Removing reporting delays and '
+                                                                                           'weekday effects/model.html#triu',
                                                                                            'ssm4epi/models/reporting_delays.py')},
-            'ssm4epi.models.util': { 'ssm4epi.models.util.__zero_to_nan': ( '04_models/utilities.html#__zero_to_nan',
+            'ssm4epi.models.util': { 'ssm4epi.models.util.__zero_to_nan': ( '4 Models/utilities.html#__zero_to_nan',
                                                                             'ssm4epi/models/util.py'),
-                                     'ssm4epi.models.util.visualize_pgssm': ( '04_models/utilities.html#visualize_pgssm',
+                                     'ssm4epi.models.util.patch_la': ('4 Models/utilities.html#patch_la', 'ssm4epi/models/util.py'),
+                                     'ssm4epi.models.util.to_log_probs': ('4 Models/utilities.html#to_log_probs', 'ssm4epi/models/util.py'),
+                                     'ssm4epi.models.util.visualize_pgssm': ( '4 Models/utilities.html#visualize_pgssm',
                                                                               'ssm4epi/models/util.py')}}}

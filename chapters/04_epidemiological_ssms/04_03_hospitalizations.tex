@@ -57,7 +57,7 @@ More formally, let $I^{7}_{t}$ be the seven day case incidence (again, modeled s
 $$
     I^{7}_t = \sum_{\tau = 1}^{7} I^{}_{t - \tau, t}
 $$
-where for $\tau = 1, \dots, 7$ $I^{},{t - \tau, t}$ is the number of cases with reporting date $t - \tau$ known on date $t$. Note that, similar to the hospitalization incidence, $I^{7}_t$ does not contain cases with reporting date $t$, but rather cases with reporting dates $t - 1, \dots, t - 7$. While cases are also affected by reporting delays, these delays are on the order of days, rather than weeks, cf. \Cref{fig:reporting_delays_cases}, and averaging over the past week means that $I^{7}_t$ is subject to only minor, neglible, reporting delays. We thus model 
+where for $\tau = 1, \dots, 7$ $I^{7}_{t - \tau, t}$ is the number of cases with reporting date $t - \tau$ known on date $t$. Note that, similar to the hospitalization incidence, $I^{7}_t$ does not contain cases with reporting date $t$, but rather cases with reporting dates $t - 1, \dots, t - 7$. While cases are also affected by reporting delays, these delays are on the order of days, rather than weeks, cf. \Cref{fig:reporting_delays_cases}, and averaging over the past week means that $I^{7}_t$ is subject to only minor, neglible, reporting delays. We thus model 
 \begin{align}
     \label{eq:hosp_increment_distribution}
     H_{t, t + 7k} - H^{}_{t, t + 7 ( k - 1)} | I^{7}_t, p^{}_{t}, q^{}_{k,t} \sim \operatorname{Poisson} \left( \lambda^{}_{t,k} \right) && \lambda^{}_{t,k} = I^{7}_{t} p^{}_{t} q^{}_{t, k},
