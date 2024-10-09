@@ -5,7 +5,22 @@ d = { 'settings': { 'branch': 'main',
                 'doc_host': 'https://stefanheyder.github.io',
                 'git_url': 'https://github.com/stefanheyder/dissertation',
                 'lib_path': 'ssm4epi'},
-  'syms': { 'ssm4epi.models.regional_growth_factor': { 'ssm4epi.models.regional_growth_factor._P': ( '4 Models/4.2 Regional growth factor '
+  'syms': { 'ssm4epi.models.hospitalization': { 'ssm4epi.models.hospitalization._initial_guess': ( '4 Models/4.3 Nowcasting '
+                                                                                                   'hospitalizations/model.html#_initial_guess',
+                                                                                                   'ssm4epi/models/hospitalization.py'),
+                                                'ssm4epi.models.hospitalization.account_for_nans': ( '4 Models/4.3 Nowcasting '
+                                                                                                     'hospitalizations/model.html#account_for_nans',
+                                                                                                     'ssm4epi/models/hospitalization.py'),
+                                                'ssm4epi.models.hospitalization.hospitalization_model': ( '4 Models/4.3 Nowcasting '
+                                                                                                          'hospitalizations/model.html#hospitalization_model',
+                                                                                                          'ssm4epi/models/hospitalization.py'),
+                                                'ssm4epi.models.hospitalization.make_y_nan': ( '4 Models/4.3 Nowcasting '
+                                                                                               'hospitalizations/model.html#make_y_nan',
+                                                                                               'ssm4epi/models/hospitalization.py'),
+                                                'ssm4epi.models.hospitalization.visualize_model_fit': ( '4 Models/4.3 Nowcasting '
+                                                                                                        'hospitalizations/model.html#visualize_model_fit',
+                                                                                                        'ssm4epi/models/hospitalization.py')},
+            'ssm4epi.models.regional_growth_factor': { 'ssm4epi.models.regional_growth_factor._P': ( '4 Models/4.2 Regional growth factor '
                                                                                                      'model/model.html#_p',
                                                                                                      'ssm4epi/models/regional_growth_factor.py'),
                                                        'ssm4epi.models.regional_growth_factor._call_sample_n_patched': ( '4 Models/4.2 '
@@ -84,42 +99,32 @@ d = { 'settings': { 'branch': 'main',
                                                  'ssm4epi.models.reporting_delays.account_for_nans': ( '4 Models/4.1 Removing reporting '
                                                                                                        'delays and weekday '
                                                                                                        'effects/model.html#account_for_nans',
-                                                                                                       'ssm4epi/models/reporting_delays.py'),
-                                                 'ssm4epi.models.reporting_delays.gnll': ( '4 Models/4.1 Removing reporting delays and '
-                                                                                           'weekday effects/model.html#gnll',
-                                                                                           'ssm4epi/models/reporting_delays.py'),
-                                                 'ssm4epi.models.reporting_delays.laplace_approximation': ( '4 Models/4.1 Removing '
-                                                                                                            'reporting delays and weekday '
-                                                                                                            'effects/model.html#laplace_approximation',
-                                                                                                            'ssm4epi/models/reporting_delays.py'),
-                                                 'ssm4epi.models.reporting_delays.log_weights': ( '4 Models/4.1 Removing reporting delays '
-                                                                                                  'and weekday '
-                                                                                                  'effects/model.html#log_weights',
-                                                                                                  'ssm4epi/models/reporting_delays.py'),
-                                                 'ssm4epi.models.reporting_delays.log_weights_t': ( '4 Models/4.1 Removing reporting '
-                                                                                                    'delays and weekday '
-                                                                                                    'effects/model.html#log_weights_t',
-                                                                                                    'ssm4epi/models/reporting_delays.py'),
-                                                 'ssm4epi.models.reporting_delays.modified_efficient_importance_sampling': ( '4 Models/4.1 '
-                                                                                                                             'Removing '
-                                                                                                                             'reporting '
-                                                                                                                             'delays and '
-                                                                                                                             'weekday '
-                                                                                                                             'effects/model.html#modified_efficient_importance_sampling',
-                                                                                                                             'ssm4epi/models/reporting_delays.py'),
-                                                 'ssm4epi.models.reporting_delays.optimal_parameters': ( '4 Models/4.1 Removing reporting '
-                                                                                                         'delays and weekday '
-                                                                                                         'effects/model.html#optimal_parameters',
-                                                                                                         'ssm4epi/models/reporting_delays.py'),
-                                                 'ssm4epi.models.reporting_delays.tril': ( '4 Models/4.1 Removing reporting delays and '
-                                                                                           'weekday effects/model.html#tril',
-                                                                                           'ssm4epi/models/reporting_delays.py'),
-                                                 'ssm4epi.models.reporting_delays.triu': ( '4 Models/4.1 Removing reporting delays and '
-                                                                                           'weekday effects/model.html#triu',
-                                                                                           'ssm4epi/models/reporting_delays.py')},
+                                                                                                       'ssm4epi/models/reporting_delays.py')},
             'ssm4epi.models.util': { 'ssm4epi.models.util.__zero_to_nan': ( '4 Models/utilities.html#__zero_to_nan',
                                                                             'ssm4epi/models/util.py'),
-                                     'ssm4epi.models.util.patch_la': ('4 Models/utilities.html#patch_la', 'ssm4epi/models/util.py'),
+                                     'ssm4epi.models.util.from_consecutive_logits': ( '4 Models/utilities.html#from_consecutive_logits',
+                                                                                      'ssm4epi/models/util.py'),
+                                     'ssm4epi.models.util.to_consecutive_logits': ( '4 Models/utilities.html#to_consecutive_logits',
+                                                                                    'ssm4epi/models/util.py'),
                                      'ssm4epi.models.util.to_log_probs': ('4 Models/utilities.html#to_log_probs', 'ssm4epi/models/util.py'),
                                      'ssm4epi.models.util.visualize_pgssm': ( '4 Models/utilities.html#visualize_pgssm',
-                                                                              'ssm4epi/models/util.py')}}}
+                                                                              'ssm4epi/models/util.py')},
+            'ssm4epi.patch.full_deps': { 'ssm4epi.patch.full_deps.gnll': ( '4 Models/patch_full_dependencies.html#gnll',
+                                                                           'ssm4epi/patch/full_deps.py'),
+                                         'ssm4epi.patch.full_deps.laplace_approximation': ( '4 '
+                                                                                            'Models/patch_full_dependencies.html#laplace_approximation',
+                                                                                            'ssm4epi/patch/full_deps.py'),
+                                         'ssm4epi.patch.full_deps.log_weights': ( '4 Models/patch_full_dependencies.html#log_weights',
+                                                                                  'ssm4epi/patch/full_deps.py'),
+                                         'ssm4epi.patch.full_deps.log_weights_t': ( '4 Models/patch_full_dependencies.html#log_weights_t',
+                                                                                    'ssm4epi/patch/full_deps.py'),
+                                         'ssm4epi.patch.full_deps.modified_efficient_importance_sampling': ( '4 '
+                                                                                                             'Models/patch_full_dependencies.html#modified_efficient_importance_sampling',
+                                                                                                             'ssm4epi/patch/full_deps.py'),
+                                         'ssm4epi.patch.full_deps.optimal_parameters': ( '4 '
+                                                                                         'Models/patch_full_dependencies.html#optimal_parameters',
+                                                                                         'ssm4epi/patch/full_deps.py'),
+                                         'ssm4epi.patch.full_deps.tril': ( '4 Models/patch_full_dependencies.html#tril',
+                                                                           'ssm4epi/patch/full_deps.py'),
+                                         'ssm4epi.patch.full_deps.triu': ( '4 Models/patch_full_dependencies.html#triu',
+                                                                           'ssm4epi/patch/full_deps.py')}}}

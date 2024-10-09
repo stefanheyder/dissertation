@@ -119,3 +119,20 @@ four_weekly_breaks <- function(x) {
 scale_x_four_weekly <- function() {
 	scale_x_date(breaks = four_weekly_breaks, minor_breaks = weekly_breaks, date_labels = "%d %b %y", expand = expansion(mult= c(0.01, 0.01)))
 }
+
+default_probs <- c(0.01, 0.025, 0.05 * 1:19, 0.975, 0.99)
+read_predictions <- function(fname, dates, variables, probs = default_probs) {
+    np <- import("numpy")
+    predictions <- np$load(fname)
+
+    dimnames(predictions) <- list(
+        "type" = c("mean", "sd", probs),
+        "date" = as.character(dates),
+        "variable" = variables
+    )
+
+    df_predictions <- melt(predictions) %>%
+        mutate(date = ymd(date)) %>%
+        pivot_wider(id_cols = c(date, variable), names_from = "type", values_from = "value")
+    df_predictions
+}
