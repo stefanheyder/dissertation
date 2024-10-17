@@ -42,6 +42,7 @@ Recall from \Cref{sec:data} that COVID-19 cases are described by their date of r
     \caption{}
     \label{fig:delay_hospitalization_probabilities}
 \end{figure}
+
 %Given the long delays, \Cref{fig:double_weekday_effect_hosp}, it does not suffice to nowcast only today's hospitalizations, but also for dates in the past to monitor hospitalization, i.e.~observe current trends; we thus nowcast for all delays \(d = 0, \dots, 28\).
 
 \subsection{Model}
@@ -60,49 +61,93 @@ $$
 where for $\tau = 1, \dots, 7$ $I^{7}_{t - \tau, t}$ is the number of cases with reporting date $t - \tau$ known on date $t$. Note that, similar to the hospitalization incidence, $I^{7}_t$ does not contain cases with reporting date $t$, but rather cases with reporting dates $t - 1, \dots, t - 7$. While cases are also affected by reporting delays, these delays are on the order of days, rather than weeks, cf. \Cref{fig:reporting_delays_cases}, and averaging over the past week means that $I^{7}_t$ is subject to only minor, neglible, reporting delays. We thus model 
 \begin{align}
     \label{eq:hosp_increment_distribution}
-    H_{t, t + 7k} - H^{}_{t, t + 7 ( k - 1)} | I^{7}_t, p^{}_{t}, q^{}_{k,t} \sim \operatorname{Poisson} \left( \lambda^{}_{t,k} \right) && \lambda^{}_{t,k} = I^{7}_{t} p^{}_{t} q^{}_{t, k},
+    H_{t, t + 7k} - H^{}_{t, t + 7 ( k - 1)} | I^{7}_t, p^{}_{t,k} \sim \operatorname{Poisson} \left( \lambda^{}_{t,k} \right) && \lambda^{}_{t,k} = I^{7}_{t} p^{}_{t,k},
 \end{align}
 conditionally independent for all $t$ and $k$.
-Here $p^{}_s$ is the proportion of reported cases $I^{7}_{t}$ that will eventually become hospitalized and $q^{}_{t,k}$ is the probability of this hospitalization being reported with a delay of $k$ weeks.
-For simplicity of notation, let $H_{t, t - 7} = 0$, so that $H_{t,t} - H_{t, t- 7} = H_{t,t}$ has conditional rate $\lambda_{t,0} = I^{7}_t p_{t}q_{t,0}$.
+Here $p^{}_{t,k}$ is the proportion of reported cases $I^{7}_{t}$ that will become hospitalized after $k$ weeks.
+For simplicity of notation, let $H_{t, t - 7} = 0$, so that $H_{t,t} - H_{t, t- 7} = H_{t,t}$ has conditional rate $\lambda_{t,0} = I^{7}_t p_{t,0}$.
 
-\Cref{fig:delay_hospitalization_probabilities} displays the empirical delay probabilities $\hat p_{t,k} = \frac{H_{t, t + 7k} - H_{t,t + 7 (k - 1)}}{I^{7}_t}$ during 2022 on the log scale for small $k$. Ignoring noisy day-to-day variation, we see that within an age group, the delay probabilities evolve roughly in parallel. 
-This encourages us to model 
+\Cref{fig:delay_hospitalization_probabilities} displays the empirical delay probabilities $\hat p_{t,k} = \frac{H_{t, t + 7k} - H_{t,t + 7 (k - 1)}}{I^{7}_t}$ during 2022 on the log scale for small $k$. 
+
+Ignoring noisy day-to-day variation, we see that within an age group, the delay probabilities evolve roughly in parallel. This encourages us split the delayed hospitalization probabilities $p_{t,k}$ for all $t$ and $k$ into two parts 
 $$
-    \log p^{}_{t + 1} = \log p^{}_t + \varepsilon_{t + 1, p}
+    p_{t,k} = p_{t}q_{t,k}
 $$
-and to make the model identifiable, while still allowing for some flexibility in reporting delays, we let 
+where $p_{t}$ is the time-varying proportion of hospitalization and $q_{t,0}, \dots, q_{t,\frac{D}{7}}$ comprise the delay distribution. To make this identifiable we impose that $\sum_{k = 0}^{\frac{D}{7}} q_{t,k} = 1$.
+\Cref{fig:delay_hospitalization_probabilities} implies that the delay probabilities evolve rather smoothly, so we let the $\log$-probabilities $\log p_{t}$ perform a second order random walk, i.e. we model
 \begin{align*}
-    \log q_{t+1, k} = \log q_{k} + \varepsilon_{t+1, q_{k}}  
+    \log p^{}_{t + 1} &= \log p^{}_t + v_t \\
+    v_{t + 1} &= v_{t} + \varepsilon_{t + 1, v}.
 \end{align*}
-for fixed, but unknown $\log q_k$. As always, we assume that the innovations 
-\begin{align*}
-    \varepsilon_{t + 1} = \left( \varepsilon_{t + 1, p}, \varepsilon_{t + 1, q_{0}}, \dots, \varepsilon_{t + 1, q_{D / k}}  \right) && \cov \left( \varepsilon_{t + 1 } \right) = \Sigma_{t + 1} = \diag \left( \sigma^{2}_p, \sigma^2_{q}, \dots, \sigma^{2}_q \right)^{T}
-\end{align*} are centered, independent across all time points and Gaussian.
+For the delay distribution, we first reparameterize to consecutive conditional probabilities 
+$$
+    q^{c}_{t,k} = \frac{q_{t,k}}{1 - \sum_{l = 1}^{k - 1} q_{t,l}},
+$$
+i.e. $q^{c}_{t,k}$ is the probability of a delay of exactly $k$ weeks, conditional on having at least $k$ weeks of delay. This reparameterization is a diffeomorphism from the open simplex $\left\{p \in \R^{D / 7 + 1}_{> 0} \middle| \left\lVert p \right\rVert_{1} = 1 \right\}$ to $(0, 1)^{D / 7} \times \{1\}$ which has the advantage that $q_{t,k}$ only depends on $q^{c}_{t,l}$ for $l \leq k$ (rather than all of them, as was the case for the model in \Cref{sec:model_reporting_delay}). We then model the logits of these reparameterized delay probabilities to perform independent random walks 
+$$
+    \logit q^{c}_{t+1,k} = \logit q^{c}_{t,k} + \varepsilon_{t + 1,q,k}
+$$
+for $\varepsilon_{t + 1, q, k} \sim \mathcal N(0, \sigma^{2}_{q})$.
 
-These considerations lead to a \acrshort{pgssm} with linear signal. Let the states and signals be given by 
+From \Cref{fig:delay_hospitalization_probabilities} we additionally observe a weekday effect, at least for small $k$. Thus, we additionally add two multiplicative weekday effects for $q^{c}_0$ and $q^{c}_1$, i.e. we modify \eqref{eq:hosp_increment_distribution} to be
+\begin{align}
+    \label{eq:hosp_lambda_weekday}
+    \lambda_{t,k} = I_{t} p_{t} q_{t,k} W_{t,k} && \text{for } k = 0, 1,
+\end{align}
+where $W_{t,0}$ and $W_{t,1}$ are two independent, multiplicative weekday effects as for the model in \Cref{sec:model_reporting_delay}. The choice of having two weekday effects here is based on balancing the dimension of the model, and thus the computational resources required to run inferences and predictions, with its explainability and is based on numerical experiments. A more rigorous analysis, e.g. using information criteria, could be run as well, but is outside the scope of this thesis.
+
+As always, we assume that the innovations 
 \begin{align*}
-   X_{t} &= \left( \log p_{t}, \log q_{t,0}, \dots, \log q_{t, D / 7} \right) ^{T} \\
+    \varepsilon_{t + 1} &= \left( \varepsilon_{t + 1, v}, \varepsilon_{t + 1, q,0}, \dots, \varepsilon_{t + 1, q, D / k - 1}, \varepsilon_{t + 1, W, 0}, \varepsilon_{t + 1, W, 1}  \right) \\
+    \cov \left( \varepsilon_{t + 1 } \right) &= \Sigma_{t + 1} = \diag \left( \sigma^{2}_p, \sigma^2_{q}, \dots, \sigma^{2}_q, \sigma^{2}_W , \sigma^{2}_{W}\right)
+\end{align*} are centered, independent across all $t$ and Gaussian.
+
+These considerations lead to a \acrshort{pgssm} with linear signal \todo{rethink this term once again}. Let the states and signals be given by 
+\begin{align*}
+   X_{t} &= \left( \log p_{t}, \logit q_{t,0}, \dots, \logit q_{t, D / 7}, \log W_{t, 0}, \dots, \log W_{t - 5, 0}, \log W_{t, 1}, \dots, \log W_{t - 5, 1} \right) ^{T} \\
    S_{t} &= \begin{pmatrix}
-    \mathbf 1 & I_{D / 7 + 1}
-   \end{pmatrix} X_{t} = \left( \log p_{t} + \log q_{t,0}, \dots, \log p_{t} + \log q_{t, D / 7} \right)^{T}
+       e_{1} & \mathbf 0_{p} & e_{2} & \dots & e_{p} & e_{2} & \mathbf 0_{p \times 5} & e_{3} & \mathbf 0_{p \times 5}
+   \end{pmatrix} X_{t} \\
+   & = \left( \log p_{t}, \logit q_{t,0} + \log W_{t, 0}, \logit q_{t, 1} + \log W_{t, 1}, \logit q_{t, 2}, \dots, \logit q_{t, \frac{D}{7} - 1} \right)^{T}
 \end{align*}
 and let the observations be 
 $$
     Y_{t} = \left( H_{t,t},  H_{t, t + 7} - H^{}_{t, t} , \dots, H_{t, t + D} - H^{}_{t, t + D - 7}\right)^{T}
 $$
-with conditional distribution given by \Cref{eq:hosp_increment_distribution}.
+with conditional distribution given by \Cref{eq:hosp_increment_distribution} where $\lambda_{t,k}$ is given by \Cref{eq:hosp_lambda_weekday}.
+
 Notice that we do not need to specify the evolution of cases over time, as we are interested only in nowcasting hospitalizations for the current day. 
 On day $t$ there are many missing observations, in particular, we only observe the first component of $Y_{t - 6}, \dots, Y_{t}$, only the first two components of $Y_{t - 13}, \dots, Y_{t-7}$ and so on. These can be dealt with as in the Gaussian case, setting the corresponding rates $\lambda_{t,k}$ manually to $0$ and replacing the missing observations by $0$. For the approximating \acrshortpl{glssm}, we use the missing data strategy discussed in \Cref{sec:modelling_epidemiological_dessiderata_with_state_space_models}.
 
+For the initial distribution of use $X_{0} \sim \mathcal N(\E X_{0}, \Sigma_0)$ where 
+$$
+    \E X_{0} = \begin{pmatrix}
+        \log p_{0} \\
+        0 \\
+        \dots \\
+        0
+    \end{pmatrix}
+$$
+and $\Sigma_{0} = \sigma^{2}_0 I$ is a multiple of the identity matrix. We chose these initial conditions as they only introduce two further unknown parameters, making them amenable to maximum likelihood estimation. Of course specifying the same (large) variance $\sigma^{2}_0$ for all states may simultaneously over- and under-estimate the initial variance in some components. As an alternative, one could implement the diffuse initialization of the Kalman filter, see \citep{Ansley1985Estimation,Koopman1997Exact}.
+
 The model is parameterized by 
 $$
-    \theta = \left( \log \sigma^{2}_{p}, \log \sigma_{q}^{2}, \log q_{0}, \dots, \log q_{D / 7} \right)^{T},
+    \theta = \left( \log \sigma^{2}_{p}, \log \sigma_{q}^{2}, \log \sigma^{2}_W, \log \sigma^{2}_0, \log p_{0} \right)
 $$
 which we estimate by \acrshort{mle}. 
 
+\input{data/results/4_hospitalizations/showcase/hyperparams.tex}
+
+
 
 \subsection{Results}
+
+\begin{table}
+    \centering
+    \input{tables/hospitalization_showcase_ess.tex}
+    \caption{Efficiency factors (in \%) and weeks of delay for the seven models (one per age group) presented in this section. For younger age groups, there are few long delays, which causes numerical instabilities due to the consecutive conditional probability parametrization chosen in this section. For each of the age groups, we chose the longest delays that still allowed for a reasonable fit, with a maximum delay of $8$ weeks. While the efficiency factor for A05-14 is quite low, we use a large enough number of samples for the prediction of states and signals, so the \acrshort{ess} is still sufficiently large.}
+    \label{tab:hospitalization_showcase_ess}
+\end{table}
 
 \begin{itemize}
     \item explore model fit \& nowcasting for NCH period

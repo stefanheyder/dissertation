@@ -136,3 +136,7 @@ read_predictions <- function(fname, dates, variables, probs = default_probs) {
         pivot_wider(id_cols = c(date, variable), names_from = "type", values_from = "value")
     df_predictions
 }
+
+ordered_age_group <- function(age_group) {
+	ordered(age_group, levels = c("A00-04", "A05-14", "A15-34", "A35-59", "A60-79", "A80+", "A00+"))
+}
