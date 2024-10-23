@@ -466,6 +466,60 @@
       \endverb
       \warn{\item Datamodel: article entry 'AnDerHeiden2020Schatzung' (bibliography.bib): Invalid field 'publisher' for entrytype 'article'}
     \endentry
+    \entry{Ansley1985Estimation}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=42aa98fd64aef5d372bccca3751abe31}{%
+           family={Ansley},
+           familyi={A\bibinitperiod},
+           given={Craig\bibnamedelima F.},
+           giveni={C\bibinitperiod\bibinitdelim F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=eb1882a0a114f6c1c7967db0eb33d20d}{%
+           family={Kohn},
+           familyi={K\bibinitperiod},
+           given={Robert},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {JSTOR}%
+      }
+      \strng{namehash}{e52c90176287a799f267eeb6b1769419}
+      \strng{fullhash}{e52c90176287a799f267eeb6b1769419}
+      \strng{fullhashraw}{e52c90176287a799f267eeb6b1769419}
+      \strng{bibnamehash}{1067ce1feb842f5ad0740f2781f01bf6}
+      \strng{authorbibnamehash}{1067ce1feb842f5ad0740f2781f01bf6}
+      \strng{authornamehash}{e52c90176287a799f267eeb6b1769419}
+      \strng{authorfullhash}{e52c90176287a799f267eeb6b1769419}
+      \strng{authorfullhashraw}{e52c90176287a799f267eeb6b1769419}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprinttype}{jstor}
+      \field{journaltitle}{The Annals of Statistics}
+      \field{title}{Estimation, Filtering, and Smoothing in State Space Models with Incompletely Specified Initial Conditions}
+      \field{urlday}{15}
+      \field{urlmonth}{10}
+      \field{urlyear}{2024}
+      \field{year}{1985}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{1286\bibrangedash 1316}
+      \range{pages}{31}
+      \verb{eprint}
+      \verb 2241356
+      \endverb
+      \verb{urlraw}
+      \verb https://www.jstor.org/stable/2241356?casa_token=gV7gKqDaiGEAAAAA:4tRfNK4F6dxh-q6oMa9nZ3i72JTLy-urE2v0VFKSyONYmltb4kbUT-hE7LfLFcTLaSCK20Z7v4jLK1HEaHzzvYDuvhFc2ZdQ7FiCjljKZHfh6SJy6Met
+      \endverb
+      \verb{url}
+      \verb https://www.jstor.org/stable/2241356?casa_token=gV7gKqDaiGEAAAAA:4tRfNK4F6dxh-q6oMa9nZ3i72JTLy-urE2v0VFKSyONYmltb4kbUT-hE7LfLFcTLaSCK20Z7v4jLK1HEaHzzvYDuvhFc2ZdQ7FiCjljKZHfh6SJy6Met
+      \endverb
+      \warn{\item Datamodel: article entry 'Ansley1985Estimation' (bibliography.bib): Invalid field 'publisher' for entrytype 'article'}
+    \endentry
     \entry{Arratia1990Poisson}{article}{}{}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=896e3efc5c43352481a1bec00538f504}{%
@@ -4584,6 +4638,45 @@
       \verb 10.1080/01621459.1994.10476469
       \endverb
       \warn{\item Datamodel: article entry 'Kong1994Sequential' (bibliography.bib): Invalid field 'publisher' for entrytype 'article'}
+    \endentry
+    \entry{Koopman1997Exact}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=21f365c12bd59fa8a7120260bd39f1fc}{%
+           family={Koopman},
+           familyi={K\bibinitperiod},
+           given={Siem\bibnamedelima Jan},
+           giveni={S\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{21f365c12bd59fa8a7120260bd39f1fc}
+      \strng{fullhash}{21f365c12bd59fa8a7120260bd39f1fc}
+      \strng{fullhashraw}{21f365c12bd59fa8a7120260bd39f1fc}
+      \strng{bibnamehash}{21f365c12bd59fa8a7120260bd39f1fc}
+      \strng{authorbibnamehash}{21f365c12bd59fa8a7120260bd39f1fc}
+      \strng{authornamehash}{21f365c12bd59fa8a7120260bd39f1fc}
+      \strng{authorfullhash}{21f365c12bd59fa8a7120260bd39f1fc}
+      \strng{authorfullhashraw}{21f365c12bd59fa8a7120260bd39f1fc}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0162-1459, 1537-274X}
+      \field{journaltitle}{Journal of the American Statistical Association}
+      \field{langid}{english}
+      \field{month}{12}
+      \field{number}{440}
+      \field{title}{Exact {{Initial Kalman Filtering}} and {{Smoothing}} for {{Nonstationary Time Series Models}}}
+      \field{volume}{92}
+      \field{year}{1997}
+      \field{dateera}{ce}
+      \field{pages}{1630\bibrangedash 1638}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1080/01621459.1997.10473685
+      \endverb
+      \warn{\item Datamodel: article entry 'Koopman1997Exact' (bibliography.bib): Invalid ISSN in value of field 'issn'}
     \endentry
     \entry{Koopman1992Exact}{article}{}{}
       \name{author}{2}{}{%
