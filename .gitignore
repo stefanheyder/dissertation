@@ -312,3 +312,5 @@ build
 
 # nbdev
 _proc
+__pycache__/
+*.egg-info/*

@@ -94,6 +94,7 @@ From \Cref{fig:delay_hospitalization_probabilities} we additionally observe a we
     \label{eq:hosp_lambda_weekday}
     \lambda_{t,k} = I_{t} p_{t} q_{t,k} W_{t,k} && \text{for } k = 0, 1,
 \end{align}
+\todo{qs are now on logit scale}
 where $W_{t,0}$ and $W_{t,1}$ are two independent, multiplicative weekday effects as for the model in \Cref{sec:model_reporting_delay}. The choice of having two weekday effects here is based on balancing the dimension of the model, and thus the computational resources required to run inferences and predictions, with its explainability and is based on numerical experiments. A more rigorous analysis, e.g. using information criteria, could be run as well, but is outside the scope of this thesis.
 
 As always, we assume that the innovations 
