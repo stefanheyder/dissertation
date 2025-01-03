@@ -50,7 +50,7 @@ If the Radon-Nikodym derivative $w = \frac{\d\P}{\d\G}$ exists, then $v = fw$, w
 $$
 \hat \zeta = \frac{1}{N} \sum_{i = 1}^N f(X^{i})w(X^{i}),
 $$
-where $w(X^{i})$ is called the importance weight, or just weight, of the $i$-th sample. If the samples is clear from the context we sometimes write $w^{i} = w(X^{i})$. 
+where $w(X^{i})$ is called the importance weight, or just weight, of the $i$-th sample. If the samples are clear from the context we sometimes write $w^{i} = w(X^{i})$. 
 This motivates us to regard
 %If one is not interested in a particular function $f$, we may instead think of
 \begin{align}
@@ -137,6 +137,7 @@ $$
 \mathbb E U = \mathbb E - \log w(Z) = -\Dkl{\P}{\G}
 $$
 goes to $0$ as well.
+\todo{elaborate a bit more: constraint to the integral translates?}
 \begin{lemma}
     \label{lem:bounded-log-variance}
     For $a,b \in \R$, let $U \in [a,b]$ be a bounded random variable with variance $\sigma^{2}$ and $\mathbb E \exp U = 1$. Let $\mu = \mathbb E U$ be the mean of $U$. Then there exists a $\delta \in [a,b]$, such that 
@@ -154,7 +155,7 @@ goes to $0$ as well.
     $$
     1 = \exp(\mu)\mathbb E \exp (U - \mu) = \exp (\mu) \left( 1 + \mathbb E (U - \mu) + \mathbb E\left(\frac{(U-\mu)^{2}}{2} \exp(\xi)\right) \right).
     $$
-    Then $\xi' = \xi + \mu \in [a,b]$, and note that, unless $U = 1$ a.s., $\mathbb E \exp = 1$ forces $a < 0 < b$. 
+    Then $\xi' = \xi + \mu$ is in $[a,b]$, and note that, unless $U = 1$ a.s., $\mathbb E \exp U = 1$ forces $a < 0 < b$. 
     Thus
     $$
     1 = \exp(\mu) + \mathbb E\left(\frac{(U-\mu)^{2}}{2} \exp(\xi')\right),
@@ -302,7 +303,7 @@ This has several reasons: First of all, for most problems considered in this the
 $$
 \rnd{\mathbb P^{X| Y= y}}{\G}(x) = \frac{p(x|y)}{g(x)} = \frac{p(y|x)p(x)}{g(x)p(y)} \propto \frac{p(y|x)p(x)}{g(x)}.
 $$
-In these situations $p(y) = \int p(x,y)\d x$ is usually intractable. For $\G^{\ast}$ we are in the same situation, where the evaluation of the integration constant $\P \lvert f \rvert$ is infeasible, but the density $\lvert f(x)\rvert p(x)$ is available.
+In these situations $p(y) = \int p(x,y)\d x$ is usually intractable. For $\G^{\ast}$ \todo{optimal proposal reference} we are in the same situation, where the evaluation of the integration constant $\P \lvert f \rvert$ is infeasible, but the density $\lvert f(x)\rvert p(x)$ is available.
 % do not focus on a single f
 Second, focusing on the particle approximation allows us to consider multiple test functions $f$, e.g. focus on different marginals of $\P$, which is usually what practitioners are interested in. 
 %Third, for maximum likelihood estimation (\Cref{sec:maximum_likelihood_estimation}), we will see that these two notions coincide.

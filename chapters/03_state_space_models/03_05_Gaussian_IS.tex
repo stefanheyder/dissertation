@@ -27,7 +27,12 @@ In total, the \gls{glssm}-approach considers parametric proposals $\G_{\psi}$ of
     \Omega_{t} &= \diag \left( \omega^{2}_{t} \right) = \diag \left( \omega^{2}_{t,1}, \dots, \omega^{2}_{1,p} \right).
     \end{split}
 \end{align}
-where the distribution of $X$ is given by \eqref{eq:glssm_states}, $\psi = \left( z, \omega^{2} \right)$ for $z = \left( z_{0}, \dots, z_{n} \right) \in \R^{n \times m}$ and $\omega^{2} = \left( \omega^{2}_{0}, \dots, \omega^{2}_{n} \right) \in \R^{n \times m}$. Alternatively the natural parametrization $\psi = \left( z \oslash \omega^{2}, - 1 \oslash \left( 2 \omega^{2} \right) \right)$ may also be used, where $\oslash$ is the Hadamard, i.e. entry-wise, division. Simulation from $\G_{\psi}$ may be efficiently implemented by the FFBS algorithm, as $\G_{\psi}$ is the smoothing distribution of a \gls{glssm}. 
+where the distribution of $X$ is given by \eqref{eq:glssm_states}, $\psi = \left( z, \omega^{2} \right)$ for $z = \left( z_{0}, \dots, z_{n} \right) \in \R^{n \times m}$ and $\omega^{2} = \left( \omega^{2}_{0}, \dots, \omega^{2}_{n} \right) \in \R^{n \times m}$. Alternatively the natural parametrization 
+\begin{align}
+    \label{eq:eis_glssm_natural_parametrization}
+    \psi &= \left( z \oslash \omega^{2}, - 1 \oslash \left( 2 \omega^{2} \right) \right)
+\end{align}
+may also be used, where $\oslash$ is the Hadamard, i.e. entry-wise, division. Simulation from $\G_{\psi}$ may be efficiently implemented by the FFBS algorithm, as $\G_{\psi}$ is the smoothing distribution of a \gls{glssm}. 
 
 % weights
 In this setting, the importance sampling weights are given by 
@@ -545,3 +550,25 @@ After having determined $\hpce$ for model \eqref{eq:markov-proposal}, generating
 
 % problems: large state dimension: both $L$ and number of parameters
 However, the two algorithms presented in this section also come with some drawbacks, especially if the dimension $m$ of states is large. This affects the algorithms in multiple ways: when $m$ is large, computation of the Cholesky decomposition in \Cref{prop:cem-for-markov-proposal} becomes more time-intensive. Additionally, the dimension of the parameter $\psi$ increases quadratically in $m$, so we expect convergence to be slower, requiring a larger sample size $N$ to find the optimal $\hpce$. For an empirical study in this direction, see \Cref{sec:simulation_studies}.
+
+
+
+\subsection{Asymptotics of the \acrshort{cem} and \acrshort{eis} in \acrshortpl{pgssm}}
+\label{subsec:asymptotics_cem_eis}
+
+We now have two methods at hand for generating optimal importance sampling proposals in \acrshortpl{pgssm} with a linear signal \todo{check again the terminology}: we may either use the \acrshort{glssm}-approach combined with \acrshort{eis} or the Markov-approach, together with the \acrshort{cem}. Naturally, we may ask which of these two approaches is preferable over the other. In this section we focus on giving an answer in terms of the \acrshortpl{clt} derived in \Cref{sec:importance_sampling} and postpose further discussion of this multi-faceted question to \Cref{sec:simulation_studies}. 
+
+Several challenges arise: First the \acrshortpl{clt} \Cref{thm:eis-clt,thm:cem-clt} assume that the family of proposals $\G_{\psi}$ form a $k$-dimensional natural exponential family with convex parameter space $\Psi$, which is the case for the \acrshort{cem}, but not for \acrshort{eis}. Second, the parameterization of a \acrshort{glssm}-proposal is different to that of a Markov-proposal, so we have to reparameterize to make comparisons reasonable. 
+
+For the first challenge, note that for \acrshort{eis}, the natural parametrization \eqref{eq:eis_glssm_natural_parametrization} together with the reparameterization trick leads to a convex target function. As 
+\begin{align*}
+    \log g(z_{t} | w_{t}) &= -\frac{1}{2} \left( z_{t} - B_{t}x_{t} \right)^{T}\Omega^{-1}_{t} \left( z_{t} - B_{t}x_{t} \right) - \log\det \left(\Omega_{t} \right)  - \frac{p}{2} \log 2 \pi 
+\end{align*}
+is a convex function of $ \psi_{t} = \left( z_{t} \oslash \omega_{t}^{2}, - 1 \oslash \left( 2 \omega_{t}^{2} \right) \right)$, the same holds for the log-weights up to a constant
+\begin{align*}
+    \log \tilde w_{\psi} = \sum_{t = 1}^n \log p(y_{t} | x_{t}) - \log g(z_{t} | x_{t}) 
+\end{align*}
+as a function of $\psi = \left( \psi_{0}, \dots, \psi_{n} \right)$. Applying \Cref{prop:is-clt}, we obtain
+\begin{theorem}[CLT for EIS with the \acrshort{glssm}-proposal]
+    % define b(x, \psi') = -1/2 (\log p())
+\end{theorem}

@@ -158,6 +158,7 @@ In \Cref{alg:kalman_filter} every time point $t = 0, \dots, n$ is processed in t
 
 The Kalman filter is very efficient: each loop iteration requires inversion of the $p \times p$ matrix $\Psi_{t | t - 1}$. Assuming this operation dominates the time complexity, e.g. because $m \approx p$, the time complexity of the Kalman filter is $\mathcal O(n\,m^{3})$, a drastic improvement over the naïve $\mathcal O(n^{3}\,m^{3})$, obtained by applying \Cref{lem:gaussian_conditional} to the joint distribution of $(X,Y)$. Similarly, the space complexity of \Cref{alg:kalman_filter} is $\mathcal O \left( n \left( m^{2} + p^{2} \right) \right)$, and grows only linearly in the number of time steps $n$.
 
+\todo{comment on Yt depending on Yt-1}
 Notice that the Kalman filter iteratively calculates the negative log-likelihood $\ell_{t}$
 $$\ell_{t} = - \log p(y_{:t}) = - \log \sum_{s = 0}^t \log p(y_{s} | y_{:(s - 1)})$$ 
 while filtering. This is possible because of the dependency structure of the \acrshort{glssm}, which makes the increments in $\ell_{t}$ tractable, as
@@ -198,6 +199,7 @@ In \citep{Arroyo-Marioli2021Tracking} the authors construct a simple \acrshort{g
 \end{algorithm}
 
 The Kalman smoother (\Cref{alg:kalman_smoother}) computes the marginal distributions $X_{t} | Y$ for $t = 0, \dots, n$. Upon closer inspection, the mean and covariance updates resemble that of the Kalman filter (\Cref{alg:kalman_filter}). This is no coincidence: By the assumed dependence structure, we obtain the following lemma, which will allow us to prove the recursions.
+\todo{reference Chopin here}
 \begin{lemma}[conditional indepdence from future observations]
     Let $t \in \{0, \dots, n - 1\}$ and $s > t$. In a \acrshort{glssm}, conditional on $X_{t + 1}$, $X_{t}$ is independent of $Y_{s}$, $s > t$. 
 \end{lemma}

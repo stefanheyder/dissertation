@@ -69,7 +69,7 @@ Let us begin with the most general definition of a \acrshort{ssm}.
                   \label{eq:markov_property}
                   \P \left( X_{t} \in B \middle| X_0, \dots, X_{t - 1} \right) = \P \left( X_{t} \in B \middle| X_{t - 1} \right) \text{ a.s.}
               \end{align}
-              for all measurable $B \in \mathcal B_{\mathcal Y}$.
+              for all measurable $B \in \mathcal B_{\mathcal X}$.
         \item Conditional on the state $X_t$ and observation $Y_{t - 1}$, $Y_t$ is independent of $X_s$ and $Y_{s - 1}$, $s < t$, i.e.
               \begin{align*}
                   \P \left( Y_{t} \in B \middle| X_{0}, \dots, X_{t}, Y_{0}, \dots, Y_{t - 1} \right) & = \P \left( Y_{t} \in B | X_{t}, Y_{t - 1} \right)
@@ -83,7 +83,8 @@ Similarly we set $Y_{s:t} = \left(Y_s, \dots, Y_{t}\right)$, $Y_{:t} = Y_{0:t}$ 
 
 \todo{picture of dependency structure}
 
-The models that we consider in this thesis will usually admit densities for the state transitions w.r.t. a common dominating measure $\mu_{\mathcal X}$ and similar for the observations w.r.t. some dominating measure $\mu_{\mathcal Y}$. \todo{check whether models in Ch4 violate this}
+\todo{regular version of cond. distribution?}
+The models that we consider in this thesis will usually assume that densities for the state transitions w.r.t. a common dominating measure $\mu_{\mathcal X}$ and similar for the observations w.r.t. some dominating measure $\mu_{\mathcal Y}$. \todo{check whether models in Ch4 violate this}
 
 \begin{notation}[Densities, conditional densities]
     \label{not:densities}
@@ -145,7 +146,7 @@ While asymptotic confidence intervals for the \gls{mle} $\hat\theta$ can be deri
 To obtain the maximum likelihood estimates $\hat\theta$ one needs access to the likelihood
 \begin{align}
     \label{eq:likelihood}
-    p(y) = \int_{\mathcal X^n} p(x,y) \d x = \int p(y|x) p(x) \d x
+    p_{\theta}(y) = \int_{\mathcal X^n} p_{\theta}(x,y) \d x = \int p_{\theta}(y|x) p_{\theta}(x) \d x
 \end{align}
 which is usually not analytically available.
 Direct numerical evaluation of \Cref{eq:likelihood} is hopeless due to the high dimensionality of the state space $\mathcal X^n$.
