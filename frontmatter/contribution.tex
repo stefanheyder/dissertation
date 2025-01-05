@@ -1,10 +1,15 @@
 
 \pdfbookmark[1]{Publications and Contributions}{publications}
 \chapter*{Publications and Contributions}
-\begin{refsection}[ownpubs]
+\begin{refsection}%[ownpubs]
+
+\defbibheading{custom}[Custom Title]{%
+\subsection*{#1}} % This will format the heading as a subsection
+
 This thesis consists mostly of unpublished work. 
 During my time as a PhD student, I have, however, been fortunate to collaborate with many scientists on problems in mathematical epidemiology with a focus on COVID-19, resulting in several preprints and publications.
 In this section I aim to clarify my contributions to these works were and distinguish them from the contributions of the present thesis. Peer-reviewed publications are marked with a superscript$^{\mathparagraph}$.
+For the original contributions of this thesis, please see the start of each chapter where an overview of this chapters contributions is located.
 
 The first set of works follows the convention of sorting authors by their last name.
 
@@ -26,13 +31,20 @@ Sarah Grundel and Karl Worthmann came up with the idea of applying the optimal c
 
 \paragraph{\cite{Heyder2023Measures}}
 Thomas Hotz and I conceived with the idea of comparing different measures of COVID-19 spread with respect to ease of interpretation and communication. I then developed these ideas into an initial manuscript, except for the derivation of the renewal equation, which was contributed by Thomas Hotz. \\[18pt]
+
 The second set of works follows the convention of sorting authors by contribution.
 
-\paragraph{\cite{Bracher2021Preregistered}$^\mathparagraph$}
-\paragraph{\cite{Bracher2022National}$^\mathparagraph$}
-\paragraph{\cite{Sherratt2022Predictive}$^\mathparagraph$}
-\paragraph{\cite{Brockhaus2023Why}$^\mathparagraph$}
-\paragraph{\cite{Wolffram2023Collaborative}$^\mathparagraph$}
+\paragraph{\cite{Bracher2021Preregistered}$^\mathparagraph$ and \cite{Bracher2022National}$^\mathparagraph$}
+These two papers are a result of the joint efforts of the German and Polish ForecastHub\footnote{\url{https://github.com/KITmetricslab/covid19-forecast-hub-de}}, organized by the Chair of Econometrics and Statistics at Karlsruhe Institute of Technology and the Computational Statistics Group at Heidelberg Institute for Theoretical Studies. Together with the authors of \citep{Burgard2021Regional}, I contributed the \texttt{ITWW\_country\_repro} model, based on the same reference. This included automating the weekly submission of forecasts and actively participating in the weekly group discussions. Based on a pre-registered study protocol, these discussions, and extensive evaluations, the group from Karlsruhe, led by Johannes Bracher, wrote the initial manuscripts.
 
-\printbibliography[heading=none]
+\paragraph{\cite{Sherratt2022Predictive}$^\mathparagraph$}
+This paper is based on the results of the  European ForecastHub\footnote{\url{https://covid19forecasthub.eu/}}, spearheaded by the European Centre for Disease Prevention and Control (ECDC). Again, Thomas Hotz and I contributed the \texttt{ITWW} model from the German and Polish ForecastHub, participated in weekly discussions and additionally contributed the \texttt{ILM-EKF} model, based on Thomas Hotz's initial idea. 
+
+\paragraph{\cite{Brockhaus2023Why}$^\mathparagraph$}
+This paper was conceived and written by Elisabeth Brockhaus and Johannes Bracher. My contribution includes the estimates of the Ilmenau model for reproduction numbers over time, and I participated in discussion and interpretation of results. 
+
+\paragraph{\cite{Wolffram2023Collaborative}$^\mathparagraph$}
+The results of this work are based on the German NowcastHub\footnote{\url{https://covid19nowcasthub.de/}}, which Thomas Hotz and I contributed daily nowcasts of the \texttt{ILM-prop} to. Again, the results of this paper are based on weekly group discussions, and the initial manuscript was prepared by Johannes Bracher and Daniel Wolffram.\\[18pt]
+
+\printbibliography[heading=custom, title={Own publications}]
 \end{refsection}
