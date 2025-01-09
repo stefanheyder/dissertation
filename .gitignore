@@ -314,3 +314,6 @@ build
 _proc
 __pycache__/
 *.egg-info/*
+
+# MACOS
+.DS_Store

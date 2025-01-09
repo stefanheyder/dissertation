@@ -1,20 +1,19 @@
 \section{Measures of epidemic spread}
 \label{sec:measures_of_epidemic_spread}
-A key component of any epidemiological model is how the spread of the epidemic is accounted for. As argued before, an epidemic is a complex process, driven by many different factors. To make this complexity manageable we employ simplified models for the spread of cases and, depending on the assumptions made, different measures that quantify the epidemic's spread arise. Actually, we are not only interested in the spread of the epidemic but also in the speed, i.e. the change over time, with which cases proliferate, because it allows us to make predictions about future cases and thus give recommendations about whether countermeasures should be employed or lifted.
+A key component of any epidemiological model is how the spread of the epidemic is accounted for. As previously argued, an epidemic is a complex process, driven by a multitude of factors. To make this complexity manageable, we will employ simplified models for the spread of cases. We are interested not only in the spread of the epidemic but also in the speed, i.e. the change over time, with which cases proliferate, because it allows us to make predictions about future cases and thus provide recommendations on whether countermeasures should be employed or lifted.
 
-In this thesis, we will primarily focus on two of these measures: the growth factor and the reproduction number. As we will argue, these two measures come with simple interpretations and, as such, are valuable in communicating the results of our modeling efforts not only to other researchers but also to non-experts such as the public and political stakeholders.
+In this thesis, our primary focus lies on the growth factor; however, for the sake of completeness, we also introduce and discuss the reproduction number in this section. As we will argue, these two measures offer simple interpretations and, as such, are valuable in communicating the results of our modeling efforts not only to other researchers but also to non-experts, such as the public and political stakeholders.
 
-Additionally, we will be interested in measures that capture the severity of the epidemic, i.e. the morbidities and mortalities caused by the epidemic. As these events are consequences of infection that occur after a delay, they can be recovered from incidence data. Thus modeling the spread of the epidemic serves two goals: making inferences and predictions about the cases and associated measures, as well as morbidities.
+Additionally, we will be interested in measures that capture the severity of the epidemic, i.e. the morbidities and mortalities caused by the epidemic. Since these events are consequences of infection that occur after a delay, they can be inferred from incidence data. Thus, modeling the spread of the epidemic serves two goals: making inferences and predictions about the cases and associated measures, as well as morbidities.
 
-To introduce the different measures in the following, we will, for the moment, make some simplifying assumptions about the population in which the epidemic spreads and the time frame considered. Consecutively, we will relax these assumptions to accommodate more realistic populations. 
+To introduce the different measures in the following, we will initially make some simplifying assumptions about the population in which the epidemic spreads and the time frame considered. Subsequently, we will relax these assumptions to accommodate more realistic populations. 
 
-% homogenous population
-% homogenous mixing
-First of all, we consider a homogenous population with homogenous mixing. This means that any two individuals in the population are affected by the epidemic in the same way: the probabilities of becoming infected, infectious, hospitalized or recovering from infection are the same for every individual in the population. Additionally, homogenous mixing indicates that once an individual is infected, they meet and infect every other individual in the population with the same probability. 
-% large / infinite population, i.e. prob. of meeting / infectin twice is small
-Furthermore, we assume that the population is large enough that the probability of duplicate infections, i.e. becoming infected twice either from the same or different individuals, is negligibly small, and we assume that infections occur independently from one another. Similarly, we could also assume that the population is infinitely large or that the time frame under consideration is sufficiently short.
-% constant behavior
+First, we consider a homogenous population with homogeneous mixing. This means that any two individuals in the population are affected by the epidemic in the same way: the probabilities of becoming infected, infectious, hospitalized, or recovering from infection are the same for every individual in the population. Additionally, homogenous mixing indicates that once an individual is infected, they meet and infect every other individual in the population with the same probability. 
+
+Furthermore, we assume that the population is large enough that the probability of duplicate infections --- i.e. becoming infected twice either from the same or different individuals --- is negligibly small, and we assume that infections occur independently from one another. Similarly, we could also assume that the population is infinitely large or that the time frame under consideration is sufficiently short.
+
 Finally, we assume that the behavior of the population is constant over the period modeled. 
+The following subsections are loosely based on \citep{Diekmann2013Mathematical,Hotz2020Monitoring}
 
 
 \subsection{Reproduction number}
@@ -32,14 +31,14 @@ the so-called renewal equation. Here $I_{t - \tau} = 0$ if $\tau > t$. If case n
     \label{eq:renewal-model}
     I_{t} | I_{t - 1}, I_{t - 2}, \dots \sim \gls{sym:Pois} \left( \gls{sym:Rt} \sum _{\tau = 1}^\infty I_{t - \tau w_{\tau}} \right),
 \end{align}
-where the time-varying or instantaneous reproduction number $R_{t}$ is now allowed to vary over time as well. Working with the time-varying reproduction number $R_{t}$ over the case reproduction number $R_{c}$ has the advantage that $R_{t}$ can be estimated from data until day $t$ alone, while $R_{c} = \sum_{\tau = 1} w_{\tau} R_{ t + \tau }$ depends on future cases \citep{Fraser2007Estimating}. 
+where the time-varying or instantaneous reproduction number $R_{t}$ is now allowed to vary over time as well. Working with the time-varying reproduction number $R_{t}$ over the case reproduction number $R_{c}$ has the advantage that $R_{t}$ can be estimated from data until day $t$ alone, while $R_{c} = \sum_{\tau = 1} w_{\tau} R_{ t + \tau }$ depends on future cases \citep{Fraser2007Estimating}\footnote{Note that $R_{c}$ also depends on $t$ here and in the following, which we suppress for ease of notation.}. 
 
 Given incidence data $I_{t}, I_{t - 1}, \dots $ we can perform frequentist inference on $R_{t}$ in \Cref{eq:renewal-model} by estimating
 \begin{align}
     \label{eq:hatR}
     \hat R_{t} = \frac{I_{t}}{\sum_{\tau = 1}^{\infty} I_{t - \tau} w_{\tau}},
 \end{align}
-which is a moment- and maximum-likelihood estimator \citep{Hotz2020Monitoring}. Additionally \citep{Cori2021EpiEstim} provides a Bayesian framework, using conjugate gamma priors for $R_{t}$. If one is interested in the case reproduction number $R_{c}$ it can be recovered from estimates of $R_{t}$ as $\hat R_{c} = \sum_{\tau = 1}^\infty w_{\tau} \hat R_{t + \tau}$ or using the Wallinga-Teunis estimator \citep{Wallinga2004Different}.
+which is a moment- and maximum-likelihood estimator \citep{Hotz2020Monitoring}. Additionally \citep{Cori2021EpiEstim} provides a Bayesian framework, using conjugate gamma priors for $R_{t}$. If one is interested in the case reproduction number $R_{c}$, one can recover it from estimates of $R_{t}$ as $\hat R_{c} = \sum_{\tau = 1}^\infty w_{\tau} \hat R_{t + \tau}$ or using the Wallinga-Teunis estimator \citep{Wallinga2004Different}.
 
 The reproduction numbers $R_{c}$ and $R_{t}$ have a mechanistic interpretation: $R_{c}$ is the number of secondary cases an infectious individual can expect to infect over the time of their disease, and so is $R_{t}$ with the additional assumption that the behavior of the infection process stays the same for the whole duration of infection. 
 Assuming that contacts lead to infection independently and with the same probability, this means that the reproduction numbers are proportional to the total number of contacts a person has, and as such, they are an excellent measure of the efficacy of \acrshortpl{npi} \citep{Brauner2021Inferring,Khazaei2023Using,Flaxman2020Estimating}. 
@@ -67,16 +66,18 @@ Similarly to the time-varying reproduction number, we may alter \Cref{eq:exponen
     \label{eq:exponential-growth-time-varying}
     \E I_{t} = \rho_t \E I_{t - 1},
 \end{align}
-which can be estimated, e.g. by the moment-estimator $\hat \rho_{t} = \frac{I_{tj}}{I_{t - 1}}$. 
+which can be estimated, e.g. by the moment-estimator $\hat \rho_{t} = \frac{I_{t}}{I_{t - 1}}$. 
 
 Focusing on the growth factor over the reproduction number has the advantage that one does not need to specify a generation time distribution $w$ to estimate $\rho_{t}$, whereas it is essential for estimating $R_{t}$. 
 
 \subsection{Other indicators}
 \label{subsec:other_indicat}
-Instead of concentrating on the daily evolution of the epidemic, it may be beneficial to consider the weekly behavior instead. As we will see in \Cref{sec:data}, the incidence data available in Germany are strongly contaminated by weekday effects, with few cases reported on the weekends and more during the week. To avoid explicitly modeling these effects we will, in \Cref{sec:regional_growth_factor_model} group the case data by weeks and estimate the weekly growth factor
+Instead of concentrating on the daily evolution of the epidemic, it may be beneficial to consider the weekly behavior. Under the assumption of constant exponential growth, the weekly growth factor is simply $\rho^{7}$. However, for the reproduction number a weekly time scale is too coarse to be sensible, at least for \acrshort{c19}, with infections occurring on the daily, rather than weekly, scale.
+
+As we will see in \Cref{sec:data}, the incidence data available in Germany is strongly affected by weekday effects, with fewer cases reported on weekends and more during the week. To avoid explicitly modeling these effects, we will, in \Cref{sec:regional_growth_factor_model}, group the case data by weeks. In this case one could estimate the weekly growth factor $\rho^{7}$, e.g., by
 \begin{align}
     \label{eq:rho7_smooth}
-    \rho^{7} \approx \frac{ \E \sum_{s = 0}^{6} I_{t - s}}{\E \sum_{s = 0}^6 I_{t - 7 - s}}.
+    \widehat{\rho^{7}} \approx \frac{ \E \sum_{s = 0}^{6} I_{t - s}}{\E \sum_{s = 0}^6 I_{t - 7 - s}}.
 \end{align}
 Here we assumed, again, that the circumstances of the epidemic do not change over the period considered. By slight abuse of notation, we let $\rho^{7}_t$ be this weekly growth factor, where now $t$ is counting weeks instead of days. Notice that when $\rho_{t}$ is time-varying, it is not necessarily the case that $\rho^{7}_t = \prod_{s = 0}^{6} \rho_{t - s}$. Notice that if $\E W = 7$, i.e. the average infectious period is one week, the delta-method yields 
 $$
@@ -88,20 +89,20 @@ The exponential growth rate $r$ and doubling time $d$ are closely related to the
 \begin{align*}
     \gls{sym:r} = \log \rho && \gls{sym:d} = \log_{\rho} 2 = \frac{\log 2}{\log \rho}.
 \end{align*}
-Thus $r$ is the growth rate of the exponentially increasing cases, $\E I_{t} \approx \exp(rt) \E I_{0}$ and $d$ is the time it takes for cases to double under this exponential growth, $\E I_{t + d} \approx \E 2I_{t}$. Notice that the last equation only makes sense if $d \in \N$, or if we model the epidemic to evolve in continuous time instead. These two quantities are not as easy to interpret as, e.g., the weekly growth factor or the reproduction number. 
+Thus $r$ is the growth rate of the exponentially increasing cases, $\E I_{t} \approx \exp(rt) \E I_{0}$ and $d$ is the time it takes for cases to double under this exponential growth, $\E I_{t + d} \approx 2\E I_{t}$. Notice that the last equation only makes sense if $d \in \N$, or if we model the epidemic to evolve in continuous time instead. These two quantities are not as easy to interpret as, e.g., the weekly growth factor or the reproduction number. 
 
-\subsection{Usefulness of indicators for communication}
+\subsection{Usefulness of indicators}
 \label{subsec:usefulness_of_indicators}
 This subsection briefly summarizes the ideas published in \citep{Heyder2023Measures}.
 
-Given incidence data, which of the above indicators should one estimate and report? The answer depends, of course, on the goals of one's investigations and the data at hand as well as the audience to which one communicates these estimates. 
+Given incidence data, which of the above indicators should one estimate and report? The answer depends, of course, on the goals of one's investigations and the data at hand as well as the audience to whom one communicates these estimates. 
 
-When the audience is the general public, reproduction numbers and growth factors allow us to convey the exponential growth of the epidemic, either by an argument based on generations (reproduction number) or by exponential growth in time (growth factor).
+When the audience is the general public, reproduction numbers and growth factors help convey the exponential growth of the epidemic, either by an argument based on generations (reproduction number) or by exponential growth in time (growth factor).
 
-If data about the infectivity profile $w$ is available, e.g. from contact-tracing studies, reproduction numbers have the advantage of having a concrete, mechanistic interpretation as numbers of infectious contacts. If one is interested in containing the epidemic, i.e. \glqq{}flattening the curve\grqq{}, reducing contacts uniformly in the population by a factor of $c = 1 - \frac{1}{R}$ works. That is if $R = 1.25$, we have to reduce contacts by $20\%$ to reach $R = 1$. Such information is useful not only for policymakers but also for the general population. 
+If data about the infectivity profile $w$ is available, e.g. from contact-tracing studies, reproduction numbers have the advantage of having a concrete, mechanistic interpretation as numbers of infectious contacts. If one is interested in containing the epidemic, i.e., \glqq{}flattening the curve\grqq{}, reducing contacts uniformly in the population by a factor of $c = 1 - \frac{1}{R}$ works. That is if $R = 1.25$, we have to reduce contacts by $20\%$ to reach $R = 1$. Such information is useful not only for policymakers but also for the general population. 
 
 Another concern of monitoring is short-term forecasts of future cases, say, for one to four weeks ahead. Given just the estimated growth factor or reproduction number, this task is more easily achieved by the growth factor: it suffices to multiply current incidences by $\rho^{7}$ to get the expected number of cases in the next week. For reproduction numbers, forecasting is more involved, relying on simulation to repeatedly sample from \Cref{eq:renewal-model}.
 
-We recommend not communicating exponential growth rates and doubling times if at all possible. Exponential growth rates come with the disadvantages of the growth factor without the upside of having easily accessible forecasts. While doubling times allow for forecasts in terms of when the number of cases will double, such forecasts are usually not of primary interest. 
+We recommend avoiding the communication of exponential growth rates and doubling times if at all possible. Exponential growth rates come with the disadvantages of the growth factor without the upside of having easily accessible forecasts. While doubling times allow for forecasts in terms of when the number of cases will double, such forecasts are usually not of primary interest. 
 
-How well we can estimate these indicators depends on the available data and, in particular, their quality.
+How well we can estimate these indicators depends on the available data and, in particular, its quality.
