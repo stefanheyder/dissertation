@@ -1,7 +1,7 @@
 \section{Removing reporting delays and weekday effects}%
 \label{sec:model_reporting_delay}
 \subsection{Context}
-Retrospective analysis of the reported cases is one of the main tasks of epidemiological monitoring, see \Cref{sec:objectives}. For this analysis, it is crucial to have the finest temporal resolution possible, as we want, e.g., to link the dates on which \acrshortpl{npi} were enforced to the growth factors on, or surrounding these dates. However, as we have observed in \Cref{sec:data}, the data at our hand are contaminated by the reporting process, most notably the week-day effects, reporting delays, and reporting artifacts, e.g. due to public holidays.
+Retrospective analysis of the reported cases is one of the main tasks of epidemiological monitoring, see \Cref{sec:objectives}. For this analysis, it is crucial to have the finest temporal resolution possible, as we want, e.g., to link the dates on which \acrshortpl{npi} were enforced to the growth factors on, or surrounding these dates. However, as we have observed in \Cref{sec:data}, the data at our hand are contaminated by the reporting process, most notably the weekday effects, reporting delays, and reporting artifacts, e.g. due to public holidays.
 While we can make the influence of these effects small by aggregating data to the weekly level, see \Cref{sec:regional_growth_factor_model}, modeling on the daily level facilitates better retrospective analyses and as such it is the goal of this section.
 
 Here, we use the \acrshort{rki} case incidence data discussed in \Cref{sec:data}. As we have seen in \Cref{fig:reporting_delays_cases} \textbf{A} and \Cref{fig:survival_function_rep_tri_incidences}, most delays are shorter than $4$ days. Thus, ignoring any cases reported with longer delays, we get for any reporting date $t$ four observations, say 
@@ -34,7 +34,7 @@ for the growth factor $\rho_{t}$ on day $t$. It is then sensible to assume that 
 $$
     \log \rho_{t + 1} = \log \rho_{t} + \varepsilon_{t + 1, \rho}
 $$
-for $\varepsilon_{t + 1,\rho} \sim \mathcal N(0, \sigma^{2}_\rho)$. To incorporate week-day effects, consider a weekly seasonal component 
+for $\varepsilon_{t + 1,\rho} \sim \mathcal N(0, \sigma^{2}_\rho)$. To incorporate weekday effects, consider a weekly seasonal component 
 $$
     \log W_{t + 1} = - \sum_{s = 0}^{5} \log W_{t - s} + \varepsilon_{t + 1, W},
 $$
@@ -211,7 +211,7 @@ While we believe that our model already captures many of the relevant effects fo
 
 Most of these improvements require the use of additional data sources, which is straightforward to do with state space models: we just have to extend the states and dynamics accordingly. 
 \todo{ignores repeated Poisson noise -> need overdispersion}
-% extension: for true dealing with week-day effect, use information on symptom onset date
+% extension: for true dealing with weekday effect, use information on symptom onset date
 % extension: death data, both for forecasting and improving estimation
 % extension: longer delays
 % extension: keep number of cases in missing scenario constant
