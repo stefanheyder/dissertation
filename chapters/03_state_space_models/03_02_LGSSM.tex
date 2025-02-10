@@ -2,7 +2,7 @@
 \section{Gaussian Linear State Space Models}
 \label{sec:linear_gaussian_state_space_models}
 
-\acrfullpl{glssm} are the working horses of most methods used in this thesis because they are analytically tractable and computationally efficient. Indeed for fixed dimension of states $m$ and observations $p$ the runtime of algorithms that we consider in this thesis is $\mathcal O(n)$.
+\acrfullpl{glssm} are the working horses of most methods used in this thesis because they are analytically tractable and computationally efficient. Indeed, for fixed dimension of states $m$ and observations $p$ the runtime of algorithms that we consider in this thesis is $\mathcal O(n)$, i.e. linear in the number of time points observed. 
 
 \glsunset{glssm}
 \begin{definition}[\gls{glssm}]
@@ -266,7 +266,7 @@ The resulting algorithm is called the \gls{ffbs} (\Cref{alg:ffbs}) and was first
 % comment on simulation smoother
 
 The attractive feature of \glspl{glssm} is that a large part of inference is analytically feasible: we may calculate the likelihood, smoothing distribution and sample from it. 
-However, the modeling capacity of \glspl{glssm} is limited: most interesting phenomena in the context of this thesis follow neither linear dynamics nor are well modeled by a Gaussian distribution, see also the discussion in \Cref{sec:modelling_epidemiological_dessiderata_with_state_space_models}.
+However, the modeling capacity of \glspl{glssm} is limited: most interesting phenomena in the context of this thesis follow neither linear dynamics nor are well modeled by a Gaussian distribution.
 
 Nevertheless, linearization of non-linear dynamics suggests that \gls{glssm}s may have some use as approximations to these more complicated phenomena, provided they are sufficiently close to Gaussian models, e.g. unimodal and without heavy tails.
 We start to move away from linear Gaussian models by allowing observations that are non-Gaussian.
