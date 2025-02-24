@@ -6,18 +6,23 @@ Alternative approaches to importance sampling for performing inference in \glspl
 Recall from the introduction to this chapter that this inference concerns three objectives: maximum likelihood estimation, i.e. evaluation and optimization of the likelihood, access to the posterior distribution $X_{:n} | Y_{:n}$ and prediction of future states and observations. Let us give a concise comparison of these alternative approaches, weighing their advantages and disadvantages over importance sampling, in particular for the \glspl{ssm} that this thesis deals with. 
 
 % MCMC intro
-\gls{mcmc} \citep{Brooks2011Handbook} is a simulation technique that allows to simulation of correlated samples from a target distribution by constructing a Markov chain that has as its invariant distribution the desired distribution. For Metropolis-Hastings \gls{mcmc}, one needs access to the density of the sought distribution up to a constant to simulate a step in the Markov chain. While this method is very general, it fails in high dimensions and current research in \gls{mcmc} methods investigates this \todo{quotes} curse of dimensionality \todo{citep something}. 
+\gls{mcmc} \citep{Brooks2011Handbook} is a simulation technique that allows to simulation of correlated samples from a target distribution by constructing an ergodic Markov chain that has as its invariant distribution the desired distribution. 
+If one is able to simulate from such a Markov chain, one can generate samples whose marginal distributions are close to the target distribution.
+Thus, these samples can be used in \acrshort{mcint} to estimate expectations of interest, though one has to be mindful of autocorrelation of these samples.
+For standard variants of \acrshort{mcmc}, such as Metropolis-Hastings \gls{mcmc} or Hamiltonian Monte Carlo, one needs access to the density of the sought after distribution up to a constant to simulate a step in the Markov chain. While these methods are very general, in high dimensions, these are affected by the curse of dimensionality. 
 
 % MCMC vs IS
-\todo{MCMC vs. IS}
+Let us argue for our choice of using \acrshort{is} over \acrshort{mcmc} for estimating conditional expectations of the form $\E \left( f(X)|Y \right)$ for \acrshortpl{pgssm}. For the models we consider in this thesis, the dimension of $X$ ($(n+1)m$) can become quite large, so \acrshort{mcmc} suffers from the aforementioned curse of dimensionality. \acrshort{is} can also suffer from this curse, especially if the proposal is far from the target. If, however, the proposal is close to the target, \acrshort{is} can perform surprisingly well, see e.g. \citep{Chopin2017Leave} where it is used as the gold standard method against which other methods are benchmarked. 
+
+As \acrshort{is} is based on independent samples, it can be parallelized easily, whereas parallelizing \acrshort{mcmc} is more involved, using e.g. \citep{Neiswanger2014Asymptotically}. Additionally, analysis of convergence is much simpler than that of \acrshort{mcmc}, which requires consideration of burn-in samples, autocorrelation of samples and investigating trace plots for the chain getting stuck. 
 
 % SMC intro
 \gls{smc} \citep{Chopin2020Introduction} or particle filters, use sequential importance sampling to provide a particle approximation to the filtering distributions $X_{t} | Y_{:t}$, essentially decomposing the problem into a $n$ importance sampling steps. 
-To avoid particle collapse, \gls{smc} is usually equipped with a resampling step once the effective sample size of the current set of particles drops below a specified level. Once the final filtering distribution $X_{n}|Y_{:n}$ is approximated, the smoothing distribution may be obtained in several ways ... \todo{look up Chopin}.
+To avoid particle collapse, \gls{smc} is usually equipped with a resampling step once the effective sample size of the current set of particles drops below a specified level. Once the final filtering distribution $X_{n}|Y_{:n}$ is approximated, the smoothing distribution may be obtained in several ways, e.g., backwards sampling or a two-filter approach, see \citep[Chapter 12]{Chopin2020Introduction}.
 
 % SMC vs. IS
 Conveniently, \gls{smc} allows us to approximate the likelihood $\ell(\theta)$ for a single parameter by a single pass of the particle filter. However, the discrete nature of resampling makes the approximated likelihood non-continuous, complicating maximum likelihood inference. \citep[Chapter 14]{Chopin2020Introduction} discusses several strategies: the first amounts to importance sampling of the order as discussed in this thesis, where one fixes a reference parameter $\theta_{0}$ to perform importance sampling with $p_{\theta_{0}}(x|y)$ against $p_{\theta}(x|y)$. The second strategy only works in the univariate case and consists of approximating the non-continuous inverse CDFs appearing in the resampling step by continuous ones. Finally, if the dependence on the hyperparameters $\theta$ allows for application of the EM-algorithm, it may be used to perform the optimization. 
-Contrary to \gls{smc}, the global importance sampling approach we discuss in \Cref{sec:gaussian_importance_sampling_for_state_space_models,sec:maximum_likelihood_estimation} allows us to perform \todo{...}
+Contrary to \gls{smc}, the global importance sampling approach we discuss in \Cref{sec:gaussian_importance_sampling_for_state_space_models,sec:maximum_likelihood_estimation} allows us to perform importance sampling in an optimal way, and allows for use of numerical differentiation as the dependence of $\log p_{y} (\theta)$ on $\theta$ is smooth, as there is no resampling involved.
 
 This chapter proceeds with a general treatment of importance sampling, loosely based on \citep[Chapter 8]{Chopin2020Introduction} and \citep[Chapter 11]{Durbin2012Time}. Subsequently, we will focus our attention on methods to obtain good importance sampling proposals. 
 
@@ -26,15 +31,14 @@ Furthermore, suppose that we can write
 $$
     \int_{\mathcal X} h(x) \d \mu(x) = \int_{\mathcal X} f(x) \d \P(x) = \P [f],
 $$
-\todoTH{operatorschreibeweise everywehere}
-for a probability measure $\P$ and function $f: \mathcal X \to \R$, e.g. because $\P = p \mu$ and $h(x) = f(x) p(x)$ $\mu$-a.s. .
+for a probability measure $\P$ and function $f: \mathcal X \to \R$, e.g. because $\P = p \mu$ and $h(x) = f(x) p(x)$ $\mu$-a.s.. Here, and in the remainder of this chapter, we use the operator shorthand notation $\P [f] = \int f \d\P$ for a measure $\P$ and a $\P$-integrable function $f$.
 Let $\G$ be a another probability measure on $\mathcal X$ such that $f\P$ is absolutely continuous with respect to $\G$, $f\P \ll \G$, and let $v = \frac{\d f\P}{\d\G}$ be the corresponding Radon-Nikodym derivative. Then
 $$
-    \zeta = \P [f] = \int_{\mathcal X} f(x) \d \P(x) = \int_{\mathcal X} \left(\rnd{f\P}{\G}\right)\d\G(x) = \G [v]
+    \zeta = \P [f] = \int_{\mathcal X} f(x) \d \P(x) = \int_{\mathcal X} \left(\rnd{f\P}{\G}\right)(x)\d\G(x) = \G [v]
 $$
-which suggests to estimate $\zeta$ by Monte-Carlo integration: $$\hat \zeta = \frac 1 N \sum_{i=1}^{N} v(X^{i}), $$ the importance sampling estimate of $\zeta$. The importance samples $X^{i}, i = 1, \dots, N$ have distribution $\G$, and will usually be i.i.d. For this procedure to work, we want $\hat \zeta$ to fulfill a law of large numbers and a central limit theorem, so we will want $v \in L^{2}(\G)$, where $L^{p}(\nu)$ is the space of $p$-times $\nu$-integrable functions for a measure $\nu$. The i.i.d. assumption could also be dropped, e.g. when we employ antithetic variables, see \citep[Section 5.3]{Ripley2009Stochastic}. Here we call $\hat \zeta$ the importance sampling estimate of $\zeta$. 
+which suggests to estimate $\zeta$ by Monte-Carlo integration: $$\hat \zeta = \frac 1 N \sum_{i=1}^{N} v(X^{i}), $$ the importance sampling estimate of $\zeta$. The importance samples $X^{i}, i = 1, \dots, N$ have distribution $\G$, and will usually be i.i.d. For this procedure to work, we want $\hat \zeta$ to fulfill a law of large numbers and a central limit theorem, so we will want $v \in L^{2}(\G)$, where $L^{p}(\nu)$ is the space of $p$-times $\nu$-integrable functions for a measure $\nu$. The i.i.d. assumption could also be dropped, e.g. when we employ antithetic variables, see \citep[Section 5.3]{Ripley2009Stochastic} and \Cref{sec:maximum_likelihood_estimation}. Here we call $\hat \zeta$ the importance sampling estimate of $\zeta$. 
 
-If $v \in L^{2}(\G)$ and under i.i.d. sampling the Monte-Carlo variance of $\hat \zeta$ is $\frac{\var \left(v(X^{i})\right)}{N}$, and so naturally we want $\var \left(v(X^{i})\right)$ to be small to ensure fast convergence of $\hat \zeta$. As $v$ depends on the proposal $\G$, and we have the flexibility to choose $\G$, importance sampling acts as a variance reduction technique. 
+If $v \in L^{2}(\G)$ and under i.i.d. sampling the Monte-Carlo variance of $\hat \zeta$ is $\frac{\var \left(v(X^{i})\right)}{N}$, and so naturally we want $\var \left(v(X^{i})\right)$ to be small to ensure fast convergence of $\hat \zeta$. As $v$ depends on the proposal $\G$, and we have flexibility in choosing $\G$, importance sampling acts as a variance reduction technique: the better $\G$ approximates $f\P$, in the sense that the variance of $v$ w.r.t. $\G$ is small, the faster importance sampling will converge. 
 
 A classical result is that the minimum MSE proposal $\G^\ast$ has a closed form. Indeed it is given by the total variation measure of $f\P$, renormalized to be a probability measure, which can be shown by a simple application of Jensen's inequality. 
 \begin{proposition}[{\cite[Proposition 8.2]{Chopin2020Introduction}}][minimum MSE proposal]
@@ -46,7 +50,7 @@ A classical result is that the minimum MSE proposal $\G^\ast$ has a closed form.
 \end{proposition}
 Unfortunately, this optimality result has no practical use, indeed if $f$ is positive we would need to obtain $\P[f]$ first, the overall target of our endeavor. Additionally, sampling from $\G^{\ast}$ is not guaranteed to be practically feasible. 
 
-If the Radon-Nikodym derivative $w = \frac{\d\P}{\d\G}$ exists, then $v = fw$, which, for the problems we will study, is usually the case. In this case 
+If the Radon-Nikodym derivative $w = \frac{\d\P}{\d\G}$ exists, then $v = fw$, which, for the problems we will study, is the case. Then 
 $$
 \hat \zeta = \frac{1}{N} \sum_{i = 1}^N f(X^{i})w(X^{i}),
 $$
@@ -63,7 +67,7 @@ $$
 We will return to the question of which functions $f$ to consider further below and assume in the following discussion $fw \in L^{2}(\G)$.
 
 To perform importance sampling one must be able to evaluate $w$. In the context of \acrshortpl{pgssm} this is usually not possible: if $\P$ is the intractable conditional distribution of $X|Y$, then the integration constant of its density $p(y)$ is not analytically available.
-Still, we can usually evaluate the weights up to a constant, i.e. $$\tilde w(x) \propto \frac{\d \P}{\d \G}(x)$$ is available. The missing constant is then $\G \tilde w$, which is itself amenable to importance sampling: we may estimate it by $\sum_{i = 1}^N \tilde w(X^{i})$.
+Still, we can usually evaluate the weights up to a constant, i.e. $$\tilde w(x) \propto \frac{\d \P}{\d \G}(x)$$ is available. The missing constant is then $\G \tilde w$, which is itself amenable to importance sampling: we may estimate it by $\frac{1}{N}\sum_{i = 1}^N \tilde w(X^{i})$.
 This leads to the so-called self-normalized importance sampling weights 
 $$W_i = \frac{w(X^i)}{\sum_{i = 1}^N w(X^i)},$$
 Monte Carlo estimates 
@@ -95,7 +99,7 @@ Applying Jensen's inequality, we see that
 $$
 \Dkl{\P}{\G} = \P [\log w] \leq \log \P[w] = \log\rho,
 $$
-so small $\rho$ implies a small \acrshort{kld} as well. Conversely, the following theorem of \citeauthor{Chatterjee2018Sample} implies that a small \acrshort{kld} is both sufficient and necessary for importance sampling to perform well.
+so small $\rho$ implies a small \acrshort{kld} between $\P$ and $\G$ as well. Conversely, the following theorem of \citeauthor{Chatterjee2018Sample} implies that a small \acrshort{kld} is both sufficient and necessary for importance sampling to perform well.
 \begin{theorem}[{\cite[Theorem 1.1]{Chatterjee2018Sample}}]
     \label{thm:chatterje2018Thm1}
      Let $\P$ and $\G$ be probability measures on a measurable space $(\mathcal X, \mathcal B)$ such that $\P \ll \G$ and let $f \in \mathbf L^2(\P)$ be a function with $\lVert f \rVert_{L^{2}(\P)} = \left( \P f^{2} \right)^{1 / 2} < 
@@ -119,7 +123,7 @@ so small $\rho$ implies a small \acrshort{kld} as well. Conversely, the followin
 The proof of this theorem is based on splitting $\mathcal X$ into $\{\log w \leq L + \frac{t}{2}\} $ and its complement and straightforward, it may be found in the Appendix of \citep{Chatterjee2018Sample}. Theorem 1.2 in the same paper provides a qualitatively similar result for autonormalised importance sampling.
 
 Let us consider the implications of \Cref{thm:chatterje2018Thm1}, starting with \Cref{eq:chatterje-upper-bound}, by devising heuristics to decide when $\G$ is a good proposal for fixed sample size $N$, and assume for simplicity that $ \lVert f \rVert_{L^{2}(\P)} = 1 $.
-First of all, as $t = \log N - L$, we have $\exp(- t / 4) =  \frac{\exp (L / 4)}{N^{\tfrac{1}{4}}}$, so for large $N$ this term becomes negligible, and the interesting term in inequality \eqref{eq:chatterje-upper-bound} is the second one. As $\E \log w(Z) = L$, this term is a tail probability and we can use standard mass-concentration inequalities to analyze its behavior as $t$ (and so $N$) grows. Markov's inequality tells us that 
+First of all, as $t = \log N - L$, we have $\exp(- t / 4) =  \exp (L / 4)N^{-\tfrac{1}{4}}$, so for large $N$ this term becomes negligible, and the interesting term in inequality \eqref{eq:chatterje-upper-bound} is the second one. As $\E \log w(Z) = L$, this term is a tail probability and we can use standard mass-concentration inequalities to analyze its behavior as $t$ (and so $N$) grows. Markov's inequality tells us that 
 $$
 \mathbb P \left( \log w(Z) > L + \frac{t}{2} \right) \leq \frac{L}{L + t / 2} = \frac{2}{1 + \frac{\log N}{L}}.
 $$
@@ -140,13 +144,13 @@ goes to $0$ as well.
 \todo{elaborate a bit more: constraint to the integral translates?}
 \begin{lemma}
     \label{lem:bounded-log-variance}
-    For $a,b \in \R$, let $U \in [a,b]$ be a bounded random variable with variance $\sigma^{2}$ and $\mathbb E \exp U = 1$. Let $\mu = \mathbb E U$ be the mean of $U$. Then there exists a $\delta \in [a,b]$, such that 
+    For $a,b \in \R$, let $U \in [a,b]$ be a bounded random variable with variance $\sigma^{2}$ and $\mathbb E \exp U = 1$. Let $\mu = \mathbb E U$ be the mean of $U$. Then there exists a $\delta \in [\exp(a),\exp(b)]$, such that 
     $$
     0 \geq \mu = \log \left( 1 - \delta \frac{\sigma^{2}}{2} \right).
     $$
-    If, additionally, $\sigma^{2} < \frac{2}{b}$ then 
+    If, additionally, $\sigma^{2} < \frac{2}{\exp(b)}$ then 
     $$
-    \mu \geq \log \left( 1 - b \frac{\sigma^{2}}{2} \right).
+    \mu \geq \log \left( 1 - \exp(b) \frac{\sigma^{2}}{2} \right).
     $$
 \end{lemma}
 
@@ -160,19 +164,19 @@ goes to $0$ as well.
     $$
     1 = \exp(\mu) + \mathbb E\left(\frac{(U-\mu)^{2}}{2} \exp(\xi')\right),
     $$
-    and as $\xi' \in [a,b]$, the expectation is in $\left[\exp(a) \frac{\sigma^{2}}{2}, \exp(b) \frac{\sigma^{2}}{2}\right]$, i.e. $\mathbb E\left(\frac{(U-\mu)^{2}}{2} \exp(\xi')\right) = \delta \frac{\sigma^{2}}{2}$ for some $\delta \in [a,b]$. Solving for $\mu$, we get 
+    and as $\xi' \in [a,b]$, the expectation is in $\left[\exp(a) \frac{\sigma^{2}}{2}, \exp(b) \frac{\sigma^{2}}{2}\right]$, i.e. $\mathbb E\left(\frac{(U-\mu)^{2}}{2} \exp(\xi')\right) = \delta \frac{\sigma^{2}}{2}$ for some $\delta \in [\exp(a),\exp(b)]$. Solving for $\mu$, we get 
     $$
     \mu = \log \left( 1 - \delta \frac{\sigma^{2}}{2} \right),
     $$
     as promised.
 
-    The second statement follows from $\delta \leq b$ and the monotonicity of $\log$, where the condition ensures that the argument is positive.
+    The second statement follows from $\delta \leq \exp(b)$ and the monotonicity of $\log$, where the condition ensures that the argument is positive.
 \end{proof}
 
 \begin{corollary}
     Let $\P$ and $\G$ be equivalent probability measures with bounded Radon-Nikodym derivative $w = \frac{\d\P}{\d\G} \in [a,b]$, $a, b \in \R$ and \acrshort{kld} $\Dkl{\P}{\G} =\P [\log w]$.
     
-    If $\log w \in L^{2}(\P)$ with variance $\sigma^{2} = \P [(\log w - L)^2]$, and $\sigma^{2} < \frac{2}{b}$, then 
+    If $\log w \in L^{2}(\P)$ with variance $\sigma^{2} = \P [(\log w - L)^2]$, and $\sigma^{2} < \frac{2}{\exp(b)}$, then 
     $$
     \Dkl{\P}{\G} \leq - \log \left(1 - \exp(b) \frac{\sigma^{2}}{2} \right).
     $$
@@ -183,12 +187,12 @@ Let us now discuss the implications of \Cref{eq:chatterje-lower-bound}. We see t
 $$
 \hat \P_{N} [\mathbf 1 ] = \frac{1}{N} \sum_{i = 1}^N w_{i}
 $$
-is the mean of weights, which, for the standard weights $w$, does not have to sum to $1$. 
+is the mean of weights, which does not have to sum to $1$. 
 As a result, \citeauthor{Chatterjee2018Sample} recommend to choose $N = \mathcal O( \exp \left( \Dkl{\P}{\G} \right))$. 
 
 Based on this discussion, we see that choosing $\G$ such that either the \acrshort{kld} or the variance of the log-weights is small is sensible. Making the variance small has the additional advantage that it, at least for bounded log-weights, also implies an upper bound for the \acrshort{kld}. We will return to this train of thought when we discuss optimal ways of performing importance sampling, such as the \acem (minimizing the \acrshort{kld}) and \aeis (minimizing the variance of log-weights) in the following sub-chapters.
 
-In practice, we will want to judge whether for an actual sample $X^{1}, \dots X^{N} \iid \G$ importance sampling has converged, and there are several criteria available in the literature. The classic \gls{ess}\citep{Kong1994Sequential} 
+In practice, we will want to judge whether for an actual sample $X^{1}, \dots, X^{N} \iid \G$ importance sampling has converged, and there are several criteria available in the literature. The classic \gls{ess}\citep{Kong1994Sequential} 
 $$
 \text{ESS} = \frac{1}{\sum_{i = 1}^N W^{2}_{i}} \in \left[1, N\right]
 $$
@@ -204,17 +208,17 @@ $$
 \begin{align*}
     \var \left( \hat\zeta_{\text{IS}}  \right) \approx \var \left( \hat \zeta_{\text{MC}} \right)\left( 1 + \var \left( NW_{1}\right) \right).
 \end{align*}
-Note that this approximation does not depend on the specific $f$ considered, and it is not guaranteed that for large $N$ the remainder goes to $0$, as \citep{Kong1992Note} mentions. In particular, the approximation has to fail whenever $\var \left( \hat\zeta_{\text{IS}} \right) < \var \left( \hat \zeta_{\text{MC}} \right)$, i.e. when importance sampling actually performs variance reduction. Nevertheless, whenever the approximation is valid, we may interpret \todo{check W / w / tilde w in the following}
+Note that this approximation does not depend on the specific $f$ considered, and it is not guaranteed that for large $N$ the remainder goes to $0$, as \citep{Kong1992Note} mentions. In particular, the approximation has to fail whenever $\var \left( \hat\zeta_{\text{IS}} \right) < \var \left( \hat \zeta_{\text{MC}} \right)$, i.e. when importance sampling actually performs variance reduction. Nevertheless, whenever the approximation is valid, we may interpret 
 $$
 \frac{N}{1 + \var \left( NW_{1} \right)}
 $$
-as an effective sample size, in the sense that $N$ times the relative efficiency of $\hat\zeta_{\text{MC}}$ relative to $\hat \zeta_{\text{IS}}$ is approximately given by this expression. As the self-normalized \todo{replace auto by self} weights $W^{1}, \dots, W^{N}$ are exchangeable and sum to $1$, their expected value is $ \E W_{1} = \frac{1}N$. Estimating $\var \left( W_{1} \right)$ by the unadjusted sample covariance $\frac{1}{N} \sum_{i=1}^N W_{i}^2 - \frac{1}{N^{2}}$ then results in the promised
+as an effective sample size, in the sense that $N$ times the relative efficiency of $\hat\zeta_{\text{MC}}$ relative to $\hat \zeta_{\text{IS}}$ is approximately given by this expression. As the self-normalized weights $W_{1}, \dots, W_{N}$ are exchangeable and sum to $1$, their expected value is $ \E W_{1} = \frac{1}N$. Estimating $\var \left( W_{1} \right)$ by the unadjusted sample covariance $\frac{1}{N} \sum_{i=1}^N W_{i}^2 - \frac{1}{N^{2}}$ then results in the promised
 $$
 \text{ESS} = \frac{N}{1 + N^{2}\left(\frac{1}{N} \sum_{i = 1}^N W_{i}^2 - \frac{1}{N^{2}}\right)} = \frac{1}{\sum_{i = 1}^{N} W_{i}^{2}}.
 $$
 Notice that as the self-normalized weights sum to $1$, the \acrshort{ess} is at least $1$, as $0 \leq W_{i} \leq 1$ and at most $N$ by the Cauchy-Schwarz inequality. 
 
-If we write the \acrshort{ess} in terms of the unnormalized weights $\tilde w$ we see that the \gls{ef} $\text{EF} = \frac{\text{ESS}}{N}$ fulfills
+If we write the \acrshort{ess} in terms of the unnormalized weights $\tilde w$ we see that the \gls{ef} $\text{EF} = \frac{\text{ESS}}{N}$ fulfills, as $N\to\infty$,
 $$
 \text{EF} = \frac{\text{ESS}}{N} = \frac{\left(\frac{1}{N}\sum_{i = 1}^{N} \tilde w_{i}\right)^{2}}{\frac{1}{N}\sum_{i = 1} \tilde w_{i}^2} \stackrel{a.s}{\to} \frac{(\G [\tilde w])^{2}}{\G [\tilde w^{2}]} = \rho^{-1},
 $$
@@ -255,6 +259,8 @@ as the asymptotic relative efficiency of the two estimators, as long as this app
 
     We illustrate this by a simulation study, where we calculate the \acrshort{ef} $M=100$ times for different values of $N$ and $\varepsilon$. We used $N = 100, 1000, 10000$ and $\varepsilon^{2} = 0.01, 0.1, 0.5$; the results may be found in \Cref{fig:ess_failure}. Notice that for all values of $\varepsilon$ considered, we have $\rho = \infty$. We see that even for $N = 1000$ and $\varepsilon = \frac{1}{2}$ the upper quartile of \acrshortpl{ef} is $71\%$, which seems reasonable to declare importance sampling to perform well. 
 
+    Let us note that having access to the normalized weights $w$ here allows us to spot this deficiency of the \acrshort{ess} by recognizing that while \acrshort{ess} is high, the weights $w$ are not close to $1$, but rather $\frac{1}{2}$.
+
     \begin{figure}
         \centering
 
@@ -282,14 +288,13 @@ Indeed, the authors show that for any given threshold $\epsilon$ we may find an 
     $$
 \end{theorem}
 
-\todo{make eps / sigma consistent in all examples}
 The problem here is that $N$ does not depend on $\G$ and $\P$, so we may choose $\G$ almost singular to $\P$. As an example, take $\P = \mathcal N(0, 1)$ and $\G = \mathcal N(0, \sigma^{2})$ for $\sigma^{2} > \frac{1}{2}$. The weights are then given by $$w(x) = \sigma \exp \left( - \frac{x^{2}}{2} \left( 1 - \frac{1}{\sigma^{2}} \right) \right),$$
 and for $X \sim \G$ the variance of $w(X)X$ is 
 \begin{align}
     \label{eq:variance-wxx}
 \tau^{2} = \var \left( w(X)X \right) = \frac{\sigma^{4}}{\left( 2 \sigma^{2} - 1 \right)^{\frac{3}{2}}}
 \end{align}
-which goes to $\infty$ as $\sigma^2$ does, see the appendix for the calculations. Thus for a pre-specified $\epsilon > 0$, let $N$ be as in \Cref{thm:variance_failure} and choose $\sigma^{2}$ such that $\var \left( \hat\zeta_{N} \right) = \frac {\tau^{2}}N$ is larger than, say, $10\epsilon$. By the preceding theorem, we would, with large probability, observe a small empirical variance and thus declare $\hat\zeta_{N}$ to have converged, whereas, in reality, we would need a sample size that is $100$ times as large.
+which goes to $\infty$ as $\sigma^2$ does, see the appendix for details. Thus, for a pre-specified $\epsilon > 0$, let $N$ be as in \Cref{thm:variance_failure} and choose $\sigma^{2}$ such that $\var \left( \hat\zeta_{N} \right) = \frac {\tau^{2}}N$ is larger than, say, $10\epsilon$. By the preceding theorem, we would, with large probability, observe a small empirical variance and thus declare $\hat\zeta_{N}$ to have converged, whereas, in reality, we would need a sample size that is $100$ times as large.
 
 Thus using the empirical variance as a threshold for convergence should be avoided, at least for importance sampling where the weights can be evaluated exactly. For self-normalized importance sampling, the authors do not provide such a theorem. As a remedy \citep{Chatterjee2018Sample} suggest the heuristic $q_{N} = \mathbb E Q_{N}$ where
 $$
@@ -298,12 +303,12 @@ $$
 This judges whether importance sampling has collapsed to just a few particles and is itself amenable to Monte-Carlo integration, by repeatedly sampling $N$ samples from $\G$ and calculating the weights. 
 As this requires multiple runs of importance sampling, it may, however, be prohibitively expensive in practice.
 
-In the following sections, we will predominantly take the position that we are interested in finding a good particle approximation $\hat\P_{N}$ of the form \Cref{eq:is-particle-approximation} over finding the optimal proposal $\G^{\ast}$ \Cref{prop:minimum_MSE_IS} and assume that the importance sampling weights can only be evaluated up to a constant. 
+In the following sections, we will predominantly take the position that we are interested in finding a good particle approximation $\hat\P_{N}$ of the form \Cref{eq:is-particle-approximation} over finding the optimal proposal $\G^{\ast}$ from \Cref{prop:minimum_MSE_IS} and assume that the importance sampling weights can only be evaluated up to a constant. 
 This has several reasons: First of all, for most problems considered in this thesis $\P$ is usually a conditional distribution, e.g. $\P = \mathbb P^{X|Y=y}$ for states $X$ and observations $Y$ in the \acrshort{ssm} context. Should the appropriate densities exist, evaluating the weights amounts to calculating 
 $$
 \rnd{\mathbb P^{X| Y= y}}{\G}(x) = \frac{p(x|y)}{g(x)} = \frac{p(y|x)p(x)}{g(x)p(y)} \propto \frac{p(y|x)p(x)}{g(x)}.
 $$
-In these situations $p(y) = \int p(x,y)\d x$ is usually intractable. For $\G^{\ast}$ \todo{optimal proposal reference} we are in the same situation, where the evaluation of the integration constant $\P \lvert f \rvert$ is infeasible, but the density $\lvert f(x)\rvert p(x)$ is available.
+In these situations $p(y) = \int p(x,y)\d x$ is usually intractable. For $\G^{\ast}$ we are in the same situation, where the evaluation of the integration constant $\P \lvert f \rvert$ is infeasible, but the density $\lvert f(x)\rvert p(x)$ is available.
 % do not focus on a single f
 Second, focusing on the particle approximation allows us to consider multiple test functions $f$, e.g. focus on different marginals of $\P$, which is usually what practitioners are interested in. 
 %Third, for maximum likelihood estimation (\Cref{sec:maximum_likelihood_estimation}), we will see that these two notions coincide.
@@ -330,7 +335,6 @@ To obtain the \acrshort{la} in practice, a Newton-Raphson scheme may be used, wh
 % advantages / disadvantages
 The main advantage of the \gls{la} is that it is usually fast to obtain and, for sufficiently well-behaved distributions on a moderate dimensional space, provides reasonably high \gls{ess}. Additionally, the Newton-Raphson iterations to find the mode and Hessian are robust and require no simulation, unlike the other methods discussed further below.
 For the \glspl{ssm} we consider in this thesis, the numerical methods can be implemented using the Kalman filter and smoother \citep{Shephard1997Likelihood,Durbin1997Monte}, even in the degenerate case where $H$ is indefinite \citep{Jungbacker2007Monte}, see also \Cref{subsec:glssm-approach}.
-\todo{more theoretical background on LA?}
 
 However, as the \gls{la} is a local approximation, it may be an inappropriate description of the global behavior of the target, see \Cref{ex:la_failure} for a breakdown of \gls{la}, and the simulation studies presented in \Cref{sec:simulation_studies}. 
 Additionally, even if the \gls{la} works in principle, its \gls{ess} will usually degenerate quickly once the dimension increases whereas the \gls{cem} and \gls{eis} do so at a slower pace.

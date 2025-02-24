@@ -6,8 +6,8 @@ Once we have chosen a suitable \acrshort{pgssm} to model the observations $\left
 \subsection{Maximum likelihood estimation}
 % region introduction
 %% need for MLE: hyperparameters
-Until now, we have assumed that the \acrshort{ssm} under consideration is completely known, i.e. we have access to the true transition and observation kernels. For the models considered in this thesis (\Cref{cha:analysis_of_selected_models}), this is unrealistic, as they are not based on concrete physical processes but are rather statistical approximations of the true underlying dynamics. The transition densities of, e.g., \Cref{eq:glssm_states} will depend on the covariance matrix of innovations, of which we have no a priori knowledge and for negative binomially distributed observations the overdispersion parameter $r$ will be unknown. Let us denote by $\theta\in\R^{l}$ the vector of these hyperparameters. \todo{check l / k with psis}
-To make this dependence explicit, we will introduce subscripts $\theta$ where appropriate, i.e. $\P_{\theta}$ is a target distribution that additionally depends on $\theta$, $p_{\theta}$ its density et cetera. This section is loosely based on \citep[Chapter 7 \& 11]{Durbin2012Time} and \citep[Chapter 14]{Chopin2020Introduction}
+Until now, we have assumed that the \acrshort{ssm} under consideration is completely known, i.e. we have access to the true transition and observation kernels. For the models considered in this thesis (\Cref{cha:analysis_of_selected_models}), this is unrealistic, as they are not based on concrete physical processes but are rather statistical approximations of the true underlying dynamics. The transition densities of, e.g., \Cref{eq:glssm_states} will depend on the covariance matrix of innovations, of which we have no a priori knowledge and for negative binomially distributed observations the overdispersion parameter $r$ will be unknown. Let us denote by $\theta\in\R^{l}$ the vector of these hyperparameters. 
+To make this dependence explicit, we will introduce subscripts $\theta$ where appropriate, i.e. $\P_{\theta}$ is a target distribution that additionally depends on $\theta$, $p_{\theta}$ its density et cetera. This section is loosely based on \citep[Chapter 7 \& 11]{Durbin2012Time} and \citep[Chapter 14]{Chopin2020Introduction}.
 
 To determine a suitable value of $\theta$, multiple options are available. Here, we opt for a frequentist approach, using maximum likelihood estimation to determine an optimal $\hat \theta$. Therefore, given observations $y\in\R^{(n+1)\times p}$, $\hat\theta$ maximizes the likelihood $p_{\theta}(y)$ and can be obtained as the global maximum of the following optimization problem: 
 $$
@@ -256,7 +256,6 @@ If computations are so involved that we want to avoid running the optimal import
 
 \subsection{Posterior inference}
 \label{subsec:inference}
-\todo{rewrite only simulation based, (X,S,Y) samples, outlook could improve using mean/cdf, but use many samples anyways, could be used on case-by-case basis, but we dont}
 Once we have chosen $\theta$ (by maximum likelihood estimation), and thus a concrete \acrshort{pgssm} with which to perform statistical inference, we are interested in, e.g., the conditional distribution of states $X$ given observations $Y$, or functionals thereof. 
 Here we will assume, for computational reasons, that the \acrshort{pgssm} has a linear signal, otherwise the same arguments can be applied to the states directly as well, at the expense of higher computation cost.
 

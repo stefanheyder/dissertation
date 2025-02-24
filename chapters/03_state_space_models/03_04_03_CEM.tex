@@ -1,7 +1,7 @@
 \glsreset{cem}
 \subsection{The \texorpdfstring{\Acrfull{cem}}{Cross-Entropy method}}
 \label{subsec:cem}
-Recall from our discussion surrounding \Cref{thm:chatterje2018Thm1} that for importance sampling to be effective, a small \acrshort{kld} between the target $\P$ and the proposal $\G$ implies good performance for importance sampling. As the \acrshort{kld} depends on global properties of $\P$, i.e. the Radon-Nikodym derivative $\rnd{\P}{\G}$, minimizing it leads to a global approximation of $\P$, improving on the local-approximation provided by the \acrshort{la}.
+Recall from our discussion surrounding \Cref{thm:chatterje2018Thm1} that a small \acrshort{kld} between the target $\P$ and the proposal $\G$ implies good performance for importance sampling. As the \acrshort{kld} depends on global properties of $\P$, i.e. the Radon-Nikodym derivative $\rnd{\P}{\G}$, minimizing it leads to a global approximation of $\P$, improving on the local-approximation provided by the \acrshort{la}.
 
 The \gls{cem} \citep{Rubinstein1999CrossEntropy,Rubinstein2004CrossEntropy} implements this idea and selects from a parametric family $ \left( \G_{\psi} \right)_{\psi \in \Psi}$ of proposals the one that minimizes the \gls{kld} to the target. Here $\Psi$ is usually a subset of $\R^{k}$, which may be open, closed or neither. Thus, the \acrshort{cem} aims at solving the following optimization problem
 $$
@@ -25,12 +25,12 @@ $$
 $$
 and can be infinite, e.g. if $\P$ does not possess second moments and $\G_{\psi}$ are Gaussian distributions. If the \acrshort{kld} is infinite for all $\psi\in\Psi$, the \acrshort{cem} becomes uninteresting. As such we will require that the \acrshort{kld} is finite for at least one $\psi \in \Psi$, and restrict $\Psi$, without loss of generality, to those $\psi$ where the \acrshort{kld} is finite. 
 
-As the appropriate densities exist, we may reformulate the optimization problem to maximize the cross-entropy between $p$ and $g_{\psi}$ instead:
+As the densities w.r.t. a common dominating measure exist, we may reformulate the optimization problem to maximize the cross-entropy between $p$ and $g_{\psi}$ instead:
 \begin{align}
     \begin{split}
     \argmin_{\psi \in \Psi} \Dkl{\P}{\G_{\psi}} &=  \argmin_{\psi \in \Psi} \P \left[\log p \right] - \P \left[\log g_{\psi}\right] \\
-    &= \argmax_{\psi \in \Psi} \P \left[\log g_{\psi}\right]
-    \end{split} \label{eq:ce_argmax}.
+    &= \argmax_{\psi \in \Psi} \P \left[\log g_{\psi}\right].
+    \end{split} \label{eq:ce_argmax}
 \end{align}
 As the \acrshort{kld} is non-negative by the information inequality, the cross-entropy $\P \left[ \log g_{\psi} \right]$ is bounded from above by the differential entropy of $\P$, $\P [\log p]$. For centered distributions with covariance matrix $\Sigma$ the differential entropy is bounded above by the maximum entropy distribution in this setting, the Gaussian $\mathcal N(0, \Sigma)$ \citep[Example 12.2.8]{Cover2006Elements}. Thus, if second moments of $\P$ exist, the cross-entropy is bounded from above, and so a maximizer exists if the supremum over $\Psi$ is attained. This would be the case if $\Psi$ is compact and $\psi \mapsto \P [\log g_{\psi}]$ is continuous, however compact $\Psi$ is too restrictive for our purposes. Instead, we are going to focus on more realistic assumptions.
 
@@ -81,7 +81,7 @@ An additional attractive property of the \gls{cem} for exponential families with
     $$
         -H_{\xi} \log Z(\xi) = - \cov_{\G_{\xi}} [T],
     $$
-    which is negative semi-definite, so $b$ is concave. At $\xi = \psi$ it is even negative definite, so the critical point $\psi$ is a strict local maximum. By concavity, it is the unique global maximum, and thus the unique critical point, so $\psi = \psi'$.
+    which is negative semi-definite, so $b$ is concave. At $\xi = \psi$ it is negative definite, so the critical point $\psi$ is a strict local maximum. By concavity, it is the unique global maximum, and thus the unique critical point, so $\psi = \psi'$.
 \end{proof}
 
 \begin{proposition}[The \acrshort{cem} for exponential families]
@@ -103,7 +103,7 @@ An additional attractive property of the \gls{cem} for exponential families with
 \begin{proof}
     The target may be rewritten as
     $$
-    \psi \mapsto f(\psi) = \P \left[\log g_{\psi}(x)\right]= \log Z(\psi) + \psi^{T} \P [T].
+    \psi \mapsto f(\psi) = \P \left[\log g_{\psi}(x)\right]= -\log Z(\psi) + \psi^{T} \P [T].
     $$
     As $\log Z(\psi)$ is the cumulant-generating function of $\G_{\psi}$ it is twice differentiable, and so is $f$. The gradient of $\log Z(\psi)$ is 
     $$
@@ -164,9 +164,9 @@ The \gls{cem} is routinely used for estimating failure probabilities for rare ev
 \todo{more lit. review CEM}
 % curse of dimensionality
 \glsreset{cod}
-Importance sampling is well known to exhibit the \gls{cod} \cite{Bengtsson2008Curseofdimensionality}, i.e. the phenomenon that in many problems, unless $N$ grows exponentially with the dimension of $\mathcal X$, the weights collapse to a single particle, i.e. $W^{(N)} \to 1$ as the dimension of $\mathcal X$ goes to $\infty$. As the \acrshort{cem} employs importance sampling to obtain $\hpce$, it too is affected by this phenomenon, see also \Cref{sec:simulation_studies}. 
+Importance sampling is well known to exhibit the \gls{cod} \citep{Bengtsson2008Curseofdimensionality}, i.e. the phenomenon that in many problems, unless $N$ grows exponentially with the dimension of $\mathcal X$, the weights collapse to a single particle, i.e. $W^{(N)} \to 1$ as the dimension of $\mathcal X$ goes to $\infty$. As the \acrshort{cem} employs importance sampling to obtain $\hpce$, it too is affected by this phenomenon, see also \Cref{sec:simulation_studies}. 
 %% screening method
-The screening method \cite{Rubinstein2009How} deals with the \acrshort{cod} by keeping components of $\psi^{l}$ that vary too much from iteration to iteration fixed, in essence reducing the dimension of $\Psi$. 
+The screening method \citep{Rubinstein2009How} deals with the \acrshort{cod} by keeping components of $\psi^{l}$ that vary too much from iteration to iteration fixed, in essence reducing the dimension of $\Psi$. 
 Alternatively, the improved cross-entropy method \citep{Chan2012Improved} suggests generating approximately independent samples from $\P$ by, e.g., \acrshort{mcmc}-methods, and replacing the importance sampling version of $\hat\P_{N}$  in \Cref{eq:ee_hpce} by the actual empirical distribution.
 Still, in high dimensions both of these approaches may be difficult to implement: the screening method may not move far from the initial proposal and \acrshort{mcmc}-methods are expensive in high dimensions.
 
@@ -216,7 +216,7 @@ To apply this theorem to our setting, let us begin by extending it to incorporat
 \begin{proposition}
     \label{prop:is-consistency}
     Assume that the conditions of \Cref{thm:haberman-consistent} are fulfilled and let $\G \gg \P$ be another probability measure with Radon-Nikdoym derivative $w(x) = \rnd{\P}{\G}(x)$. 
-    Let $(X^{i})_{i \in \N} \iid \P$ and consider the particle approximations 
+    Let $(X^{i})_{i \in \N} \iid \G$ and consider the particle approximations 
     \begin{align*}
         \tilde \P_{N} &= \frac{1}{N}\sum_{i = 1}^N w(X^{i})\delta_{X^{i}},  \\ 
         \hat \P_{N} &= \sum_{i = 1}^{N} W^{i} \delta_{X^{i}},
@@ -260,7 +260,7 @@ Let us now prove the promised consistency of the \acrshort{cem}.
     $$
     as $T \in L^{1}(\P)$, while for $\psi \notin \Psi$ this integral is $-\infty$. Thus we only have to check that \ref{it:C1}-\ref{it:C3} are fulfilled. 
     
-    For condition \ref{it:C1} note that, as $\pce$ is in the interior of $\Psi$, we may choose $\varepsilon > 0$ such that the closed $\varepsilon$ ball around $\pce$, $\bar B_{\varepsilon} (\pce)$ is completely contained in $\Psi$, so letting $V = \bar B_{\varepsilon} (\pce)$ implies the condition. condition \ref{it:C2} is fulfilled by the definition of $b$ and condition \ref{it:C3} is fulfilled by considering the neighborhood of $\pce$ that is assumed to be contained in $\Psi$. Finally, by \Cref{prop:is-consistency}, $\hpce$ is strongly consistent.
+    For condition \ref{it:C1} note that, as $\pce$ is in the interior of $\Psi$, we may choose $\varepsilon > 0$ such that the closed $\varepsilon$ ball around $\pce$, $\bar B_{\varepsilon} (\pce)$ is completely contained in $\Psi$, so letting $V = \bar B_{\varepsilon} (\pce)$ implies the condition. Condition \ref{it:C2} is fulfilled by the definition of $b$ and condition \ref{it:C3} is fulfilled by considering the neighborhood of $\pce$ that is assumed to be contained in $\Psi$. Finally, by \Cref{prop:is-consistency}, $\hpce$ is strongly consistent.
 \end{proof}
 
 The assumptions on $\pce$ and $\Psi$ in \Cref{thm:cem-consistent} could be somewhat looser, as the concavity of the target function is a rather strong property. In natural exponential families, 
@@ -322,7 +322,7 @@ Similar to the consistency result above (\Cref{prop:is-consistency}), we need to
     \label{prop:is-clt}
     Assume that the conditions of \Cref{thm:haberman-clt} are fulfilled and use the same notation as in \Cref{prop:is-consistency}. Furthermore, assume that 
     \begin{enumerate}
-        \item \label{it:wbprimeL2} $w(\cdot) b'(\cdot, \psi, \xi) \in L^{2}(\G)$ in a neighborhood $N$ of $\psi^{\ast}$ for all $\xi \in \R^{k}$. \todo{rewrite differentiable + second moment}
+        \item \label{it:wbprimeL2} $w(\cdot) b'(\cdot, \psi, \xi) \in L^{2}(\G)$ in a neighborhood $N$ of $\psi^{\ast}$ for all $\xi \in \R^{k}$. %\todo{rewrite differentiable + second moment}
     \end{enumerate}
 
     Then 
@@ -373,7 +373,7 @@ We now have all the tools at our disposal to proof \Cref{thm:cem-clt}.
     $$
         \nabla_{\psi} b(x, \psi) = T(x) - \nabla_{\psi} \log Z(\psi) = T(x) - \G_{\psi} [T].
     $$
-    By assumption \ref{it:TinL2P}, $\nabla_{\psi} b(x,\psi) \in L^{2} (\P)$, showing that condition \ref{it:C10}.
+    By assumption \ref{it:TinL2P}, $\nabla_{\psi} b(x,\psi) \in L^{2} (\P)$, showing that condition \ref{it:C10} is fulfilled.
 
     To show that the central limit theorem applies to $\hpce$, we additionally show that assumption \ref{it:wbprimeL2} in \Cref{prop:is-clt} is fulfilled, which will finish the proof. To this end, note that 
     $$

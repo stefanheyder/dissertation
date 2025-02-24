@@ -1,13 +1,13 @@
 \section{Partially Gaussian state space models}
 \label{sec:logconcave_gaussian_state_space_models}
 
-The distribution of observations is never Gaussian - all we may hope for is that the data-generating mechanism is close enough to a Gaussian distribution that inferences made in an \acrshort{glssm} may carry over.
+For the applications considered in this thesis the distribution of observations is never Gaussian --- see \Cref{sec:dessiderata} --- and  all we can hope for is that the data-generating mechanism is close enough to a Gaussian distribution that inferences made in a \acrshort{glssm} may carry over.
 For epidemiological models, Gaussian distributions may be appropriate if incidences are high, e.g. during large outbreaks in a whole country. 
 When case numbers are small, the discrete nature of incidences is better captured by a distribution on $\mathbf N_{0}$, and standard distributions used are the Poisson and negative binomial distributions, see e.g. \citep{Lloyd-Smith2005Superspreadinga}.
 We thus want \acrshortpl{ssm} where observations are allowed to follow these non-Gaussian distributions. 
 
 % argue for keeping states linear and Gaussian
-Concerning the distribution of states, we keep the linear Gaussian assumption, i.e. \Cref{eq:glssm_states}. As demonstrated in \Cref{cha:analysis_of_selected_models}, using Gaussian states and transitions allows for flexible modeling of many epidemiological desiderata. Furthermore, keeping the states Gaussian will enable us to use \acrfull{eis} effectively, by constructing approximations via \acrshort{glssm} which possess the same state dynamics. Alternatively, t-distributed innovations or more general transition kernels could be employed and we refer the interested reader to \citep[Part II]{Durbin2012Time} for a selection of these models. The following definition is that of \citep{Koopman2019Modified}, which itself is an extension of earlier work of \citep{Shephard1994Partial}. \citep{Shephard1994Partial} considered only \acrshortpl{ssm} where, conditional on another Markov process $Z = (Z_{t})_{t = 0, \dots, n}$, model is a full \acrshort{glssm}. While this formulation allows for efficient inference if the distribution of $Z$ leads to a tractable conditional distribution $Z| (X, Y)$. As their definition involves a conditional \acrshort{glssm}, the observations still take values in $\R^{p}$, not $\N^{p}$ as is necessary for our endeavors. Thus we opt for the definition presented in \citep{Koopman2019Modified}, where we replace the Gaussian observations (\Cref{eq:glssm_observations}) with arbitrary distributions.
+Concerning the distribution of states, we keep the linear Gaussian assumption, i.e. \Cref{eq:glssm_states}. As demonstrated in \Cref{cha:analysis_of_selected_models}, using Gaussian states and transitions allows for flexible modeling of many epidemiological desiderata. Furthermore, keeping the states Gaussian will enable us to use \acrfull{eis} effectively, by constructing approximations via \acrshort{glssm} which possess the same state dynamics. Alternatively, t-distributed innovations or more general transition kernels could be employed and we refer the interested reader to \citep[Part II]{Durbin2012Time} for a selection of these models. The following definition is that of \citep{Koopman2019Modified}, which itself is an extension of earlier work of \citep{Shephard1994Partial}. \citep{Shephard1994Partial} considered only \acrshortpl{ssm} where, conditional on another Markov process $Z = (Z_{t})_{t = 0, \dots, n}$, model is a full \acrshort{glssm}, which allows for efficient inference if the conditional distribution $Z| (X, Y)$ is tractable. As their definition involves a conditional \acrshort{glssm}, the observations still take values in $\R^{p}$, not $\N^{p}$ as is necessary for our endeavors. Thus we opt for the definition presented in \citep{Koopman2019Modified}, where we replace the Gaussian observations (\Cref{eq:glssm_observations}) with arbitrary distributions.
 
 \glsreset{pgssm}
 \begin{definition}[\gls{pgssm}]
@@ -15,12 +15,13 @@ Concerning the distribution of states, we keep the linear Gaussian assumption, i
     \begin{align*}
         X_{t + 1}  &= A_{t}X_{t} + u_{t} + \varepsilon_{t + 1} &  & t = 0, \dots, n - 1,
     \end{align*}
-    with $X_{0} \sim \mathcal N(0, \Sigma_{0})$, $\varepsilon_{t} \sim \mathcal N (0, \Sigma_{t})$ for $t = 1, \dots, n$ and $X_{0}$, $(\varepsilon_{t})_{t = 1, \dots, n}$ jointly independent. 
+    with $X_{0} \sim \mathcal N(0, \Sigma_{0})$, $\varepsilon_{t} \sim \mathcal N (0, \Sigma_{t}), u_{t} \in \R^{m}$ for $t = 1, \dots, n$ and $X_{0}$, $(\varepsilon_{t})_{t = 1, \dots, n}$ jointly independent. 
 
-    Furthermore, the observations $Y$ form a conditional Markov process, conditional on states $X$, of the following form:
+    Furthermore, the observations $Y$ form a conditional Markov process, conditional on states $X$, where the conditional densities of observations, given states admit the following form
     $$
-    p(y | x) = \prod_{t = 0}^n p(y_{t} | x_{t}, y_{t - 1}).
+    p(y | x) = \prod_{t = 0}^n p(y_{t} | x_{t}, y_{t - 1}),
     $$
+    with respect to the dominating measure $\bigotimes_{t = 0}^n\mu_{\mathcal Y}$.
     Here $p(y_{t} | x_{t}, y_{t -1})$ are allowed to take any arbitrary density\footnote{Recall that we have not specified $\mu_{\mathcal Y}$, so it is always possible to use $p = \mathbf 1 _{\mathcal Y}$, the constant function.}.
 \end{definition}
 
@@ -34,7 +35,7 @@ It is straightforward to check that a \acrshort{pgssm} is indeed a \acrshort{ssm
     holds, and we will do so in the following to enhance readability. At points where this distinction matters, e.g. \todo{add example}, we will give appropriate remarks.
 \end{remark}
 
-Both the Poisson and negative binomial belong to the class of exponential family distributions. As such, their densities have a convenient structure, allowing only for a linear interaction between the natural parameter and the densities argument. We refer to \citep{Brown1986Fundamentals} for a comprehensive treatment of exponential families and use their definitions throughout this section.
+Both the Poisson and negative binomial distribution belong to the class of exponential family distributions. As such, their densities have a convenient structure, allowing only for a linear interaction between the natural parameter and the densities' argument. We refer to \citep{Brown1986Fundamentals} for a comprehensive treatment of exponential families and use their definitions throughout this section.
 
 \begin{definition}[exponential family]
     Let $\mu$ be a $\sigma$-finite measure on $\R^{p}$ and denote by 
@@ -47,14 +48,14 @@ Both the Poisson and negative binomial belong to the class of exponential family
     $$
         p_{\psi}(y) = \frac{\d \P_{\psi}}{\d \mu} = Z(\psi) h(y) \exp \left(\eta(\psi)^{T}T(y)\right),
     $$
-    then we call $\P_{\psi}, \psi \in \Psi$ and $p_{\psi}, \psi \in \Psi$ a \textbf{$p$-dimensional exponential family} and $\left(\P_{\psi}\right)_{\psi\in\Psi}$ a \textbf{$p$-dimensional natural exponential family}. If $\eta(\psi) = \psi$ we call $\psi$ the natural parameter. If $T(y) = y$, we call $y$ the natural observation. By reparametrization (in $\psi$) and sufficiency (in $y$) every $p$-dimensional exponential family can be written as an equivalent standard exponential family, see the elaborations in \citep[Chapter 1]{Brown1986Fundamentals}.
+    then we call $\left(\P_{\psi}\right)_{\psi \in \Psi} $ and $\left(p_{\psi}\right)_{ \psi \in \Psi}$ a \textbf{$p$-dimensional exponential family}. If $\eta(\psi) = \psi$ is the identity, we call $\psi$ the natural parameter. If $T(y) = y$, we call $y$ the natural observation. If $\psi$ is the natural parameter and $y$ the natural observation, we call $\left( \P_{\psi} \right)_{\psi \in \Psi}$ a \textbf{natural exponential family}. By reparametrization (in $\psi$) and sufficiency (in $y$) every $p$-dimensional exponential family can be written as an equivalent standard exponential family, see the elaborations in \citep[Chapter 1]{Brown1986Fundamentals}.
     % potentially more: natural parameter/statistic/observation, regular, full, minimal, convex support
 \end{definition}
 
 Exponential families have the attractive property that they are log-concave in their parameters. As such the Fisher-information is always positive semidefinite, which will be crucial in defining surrogate Gaussian models in \Cref{sec:gaussian_importance_sampling_for_state_space_models}.
 \begin{lemma}[log-concavity of exponential family distributions]
     \label{lem:log-concavity}
-    Let $p_{\psi}, \psi \in \Psi$ be a natural $p$-dimensional exponential family and $\Psi$ convex and open in $\R^{p}$. In this case $\psi \mapsto \log p_{\psi}(y)$ is concave for every $y \in \R^{p}$.
+    Let $\left(p_{\psi}\right)_{\psi \in \Psi}$ be a natural $p$-dimensional exponential family and $\Psi$ convex and open in $\R^{p}$. In this case $\psi \mapsto \log p_{\psi}(y)$ is concave for every $y \in \R^{p}$.
 \end{lemma}
 
 \begin{proof}
@@ -79,27 +80,27 @@ Additionally, the moment generating function $\psi \mapsto Z(\psi)$ is smooth on
     $$
         H_{\psi} \log Z(\psi) = \cov (T(X)),
     $$
-    where $X \sim \mathcal P_{\psi}$.
+    where $X \sim \P_{\psi}$.
     
 \end{theorem}
 
 \begin{example}[Poisson \& negative binomial distribution]
     \label{ex:pois_negbinom}
-    Both the family of Poisson distributions, parameterized by rate $\lambda$ and the negative binomial distribution, parameterized by success probability $p$ with fixed overdispersion $r$ form an exponential family.
+    Both the family of Poisson distributions, parameterized by rate $\lambda$ and the negative binomial distribution, parameterized by success probability $q$ with fixed overdispersion $r$ form an exponential family.
 
     The log-density of the Poisson distribution with rate $\lambda$, $\operatorname{Pois} (\lambda)$ w.r.t. the counting measure on $\N_{0}$ is 
     $$
     \log p_{\lambda} (x) = -\lambda + x\log \lambda - \log x!.
     $$
-    Thus the Poisson distribution forms an exponential family with natural parameter $\log \lambda$, natural statistic $\id$ (the identity), base measure $h(x) = \frac{1}{x!}$ and log-partition function $Z(\lambda) = \exp \left( -\lambda \right)$. 
+    Thus the Poisson distribution forms an exponential family with natural parameter $\log \lambda$, natural statistic $\id$ (the identity), base measure $h(x) = \frac{1}{x!}$ and moment-generating function function $Z(\lambda) = \exp \left( -\lambda \right)$. 
 
-    The log-density of the negative binomial distribution with overdispersion parameter $r$ and success probability $p$ $\operatorname{NegBinom} \left( p, r \right)$ is 
+    The log-density of the negative binomial distribution with overdispersion parameter $r$ and success probability $p$ $\operatorname{NegBinom} \left( q, r \right)$ is 
     $$
-    \log p_{r,p}(x) = \log \binom{x + r - 1}{x} + x \log (1 - p) + r \log p.
+    \log p_{q,r}(x) = \log \binom{x + r - 1}{x} + x \log (1 - q) + r \log q.
     $$
-    For fixed $r$ these distributions form an exponential family with natural parameter $\log (1 - p )$, natural statistic $T = \id$, base measure $h(x) = \log \binom{x + r - 1}{x}$ and log-partition function $Z(p) = r \log p$. 
+    For fixed $r$ these distributions form an exponential family with natural parameter $\log (1 - q )$, natural statistic $T = \id$, base measure $h(x) = \binom{x + r - 1}{x}$ and moment-generating function $Z(q) = r \log q$. 
 
-    In this parametrization the mean of the $\operatorname{NegBinom}(p,r)$ distribution is $\mu = r \frac{1 - p}{p}$ and its variance is $r \frac{1 - p}{p^{2}}$. An alternative parametrization that will become useful \Cref{cha:analysis_of_selected_models} is that by the log mean $\xi = \log \mu$ and overdisperision $r$. As $p = \frac{r}{r + \mu}$, this parametrization has log-density
+    In this parametrization the mean of the $\operatorname{NegBinom}(q,r)$ distribution is $\mu = r \frac{1 - q}{q}$ and its variance is $r \frac{1 - q}{q^{2}}$. An alternative parametrization that will become useful \Cref{cha:analysis_of_selected_models} is that by the log mean $\xi = \log \mu$ and overdisperision $r$. As $q = \frac{r}{r + \mu}$, this parametrization has log-density
     $$
     \log p_{r,\xi}(x) = \log \binom{x + r - 1}{x} + x \xi  - (r + x) \log (\exp \xi + r) - r \log r,
     $$
@@ -111,10 +112,10 @@ Additionally, the moment generating function $\psi \mapsto Z(\psi)$ is smooth on
 \end{example}
 
 
-The models we study in \Cref{cha:analysis_of_selected_models} belong, for the most part, \todo{check} to the following subclass of \acrshort{pgssm} models.
+The models we study in \Cref{cha:analysis_of_selected_models} belong, for the most part, to the following subclass of \acrshort{pgssm} models.
 \glsreset{egssm}
 \begin{definition}[\gls{egssm}]
-    \label{def:lcssm}
+    \label{def:egssm}
     An \acrfull{egssm} is a \acrshort{pgssm} where the conditional distribution of $Y_{t}$ given $X_{t}$ comes from an exponential family with respect to a base measure $\mu_{t}$, i.e.
     $$
     p (y_{t}|x_{t}) = h_{t}(y_{t}) Z_{t}(x_{t}) \exp \left( \eta_{t}(x_{t})^{T} T_{t}(y_{t}) \right)
@@ -125,11 +126,11 @@ The models we study in \Cref{cha:analysis_of_selected_models} belong, for the mo
     $$
     p(y_{t}|x_{t}) = \prod_{i = 1}^p h^{i}_{t}(y^{i}_{t})\, Z^{i}_{t} (s_{t})\, \exp \left( \eta^{i}_{t} (s^{i}_{t})\,T(y^{i}_{t}) \right),
     $$
-    for functions $h_{t}^{i}: \R \to \R, Z^{i}_{t}: \R \to \R, \eta^{i}_{t}: \R\to\R, T: \R\to\R$, $i = 1, \dots p$, we say the \gls{lcssm} has a \textbf{linear signal}, similar to the treatment in \citep[Part II]{Durbin2012Time}.
+    for functions $h_{t}^{i}: \R \to \R, Z^{i}_{t}: \R \to \R, \eta^{i}_{t}: \R\to\R, T: \R\to\R$, $i = 1, \dots p$, we say the \gls{egssm} has a \textbf{linear signal}, similar to the treatment in \citep[Part II]{Durbin2012Time}.
 \end{definition}
 
 \begin{remark}
-    To simplify notation we will usually assume that the functions $h, Z$ and $T$ are the same for all $t$ (and $i$, if the \gls{lcssm} has a linear signal) and drop in our notation the dependence of $h$, $Z$, and $T$ on $t$ (and $i$). Similarly, we assume that the base measure $\mu_t$ is the same for all $t$.
+    To simplify notation we will usually assume that the functions $h, Z$ and $T$ are the same for all $t$ (and $i$, if the \gls{egssm} has a linear signal) and drop in our notation the dependence of $h$, $Z$, and $T$ on $t$ (and $i$). Similarly, we assume that the base measure $\mu_t$ is the same for all $t$.
 \end{remark}
 
 From \Cref{lem:log-concavity}, we immediately obtain the following results \citep[Section 10.6.4]{Durbin2012Time}
@@ -141,7 +142,7 @@ From \Cref{lem:log-concavity}, we immediately obtain the following results \cite
     $$
     \log p(x|y) = \log p(y|x) + \log p(x) - \log p(y),
     $$
-    where the last term does not depend on $x$. $\log p(x)$ is concave, as $p(x)$ is the joint density of a multivariate Gaussian distribution. Furthermore 
+    where the last term does not depend on $x$. $\log p(x)$ is concave in $x$, as $p(x)$ is the joint density of a multivariate Gaussian distribution. Furthermore 
     $$
     \log p(y | x) = \sum_{t = 0}^n \log p(y_{t} | x_{t}, y_{t - 1}),
     $$

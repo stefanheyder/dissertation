@@ -26,7 +26,7 @@ Similar to the \gls{cem} we restrict our in-depth analysis to natural exponentia
     \min_{\psi \in \Psi, \lambda \in \R} \P \left[ \log p - \psi^{T}T - \lambda \right]^{2},
 \end{align}
 a weighted linear least squares problem. As we consider unnormalized weights $\tilde w$, we are additionally able to get rid of the potentially non-linear term $\log Z(\psi)$.
-Notice too that this is a convex objective function in $\psi$ which, similar to the \acrshort{cem}, will be very useful to derive asymptotics later on. For now, we begin with studying the existence and uniqueness of $\peis$ similar to \Cref{prop:cem_exponential_families}.
+Noticing that this is a convex objective function in $\psi$ which, similar to the \acrshort{cem}, will be very useful to derive asymptotics later on. For now, we begin with studying the existence and uniqueness of $\peis$ similar to \Cref{prop:cem_exponential_families}.
 
 \begin{lemma}[\acrshort{eis} for exponential families]
     \label{prop:eis_exponential_families}
@@ -50,11 +50,10 @@ Notice too that this is a convex objective function in $\psi$ which, similar to 
 
 \begin{proof}
     Under the proposed conditions, we may consider \Cref{eq:eis_exponential_families} instead, where the moment conditions on $\log p $ and $T$ ensure that the problem is well-posed, i.e. the target is finite for all $\psi \in \Psi$. 
-    Thus the optimal $ \left( \peis, \lambda_{\eis} \right)$ are given by the \gls{blup} of $\log p $ by the sufficient statistic $T$ under $\P$ for $\peis$ and $\P \left[ \log \tilde w_{\peis} \right]$ for $\lambda_{\eis}$. The \acrshort{blup} is given by any solution of
+    Thus the optimal $ \left( \peis, \lambda_{\eis} \right)$ are given by the \gls{blup} of $\log p $ by the sufficient statistic $T$ under $\P$ for $\peis$ and $\P \left[ \log \tilde w_{\peis} \right]$ for $\lambda_{\eis}$. Standard results from multivariate regression theory imply that the \acrshort{blup} is given by any solution of
     $$
         \cov_{\P} (T) \peis = \cov_{\P} (T, \log p),
     $$
-    \todo{cite something}
     i.e. $\peis$ as stated in the lemma. Furthermore, if $\cov_{\P} (T)$ is non-singular, the solution to this equation is unique.
     
 \end{proof}
@@ -165,7 +164,6 @@ As \Cref{eq:eis_exponential_families} is a linear least squares problem, the obj
 
     Thus $\hpeis$ is strongly consistent if $\G = \P$. If $\G$ is different from $\P$, we can apply \Cref{prop:is-consistency}, where the existence of M-estimators is ensured by \Cref{eq:hpeis-cov}, using the Moore-Penrose inverse if $\cov_{\hat\P_{N}}(T)$ is singular. 
 \end{proof}
-\todo{discussion of assumptions}
 
 As \Cref{eq:hpeis-cov} expresses $\hpeis$ in terms of empirical covariances, we could alternatively prove consistency by ensuring that the empirical covariances are consistent as well, for which we would need to ensure that fourth-order moments of $\log p$ and $T$ w.r.t. $\P$ exist. This strategy may be fruitful if $\peis$ does not lie in the interior of $\Psi$, although the more sophisticated treatment of \citep{Haberman1989Concavity} may also be applicable under these circumstances.
 
@@ -181,7 +179,7 @@ Additionally, if fourth-order moments exist, we can derive a central limit theor
     and convex parameter space $\Psi \subseteq \R^{k}$. Let $\G \gg \P$ be a proposal with weights $w = \rnd{\P}{\G}$. 
 
     \begin{enumerate}
-        \item\label{it:secondISmomentsexist}$w T_{i}T_{j}, w (\log p)^{2} \in L^{2}(\G)$ for $i = 1, \dots, k$, $j = 1, \dots, k$,
+        \item\label{it:secondISmomentsexist}$w T_{i}T_{j}, w (\log p)^{2} \in L^{2}(\G)$ for $i,j = 1, \dots, k$,
         \item\label{it:fourthmomentsexist} $\log p, T_i \in L^{4}(\P)$ for all $i = 1, \dots, k$
         \item $\cov_{\P}(T)$ is non-singular and $\peis \in \operatorname{int} \Psi$.
     \end{enumerate}
@@ -199,7 +197,7 @@ Additionally, if fourth-order moments exist, we can derive a central limit theor
 \begin{proof}
     Similar to the proof of \Cref{thm:cem-clt}, we combine \Cref{thm:haberman-clt} and \Cref{prop:is-clt}. Let 
     \begin{align*}
-        b : \mathcal X \times \R^{k + 1} \to [-\infty, \infty) && b(x, \psi') \begin{cases}
+        b : \mathcal X \times \R^{k + 1} \to [-\infty, \infty) && b(x, \psi') =  \begin{cases}
             -\frac{1}{2} \left( \log p(x) - \psi^{\prime T}T'(x) \right) & x \in \Psi \\
             -\infty & \text{else,}
         \end{cases}
@@ -298,3 +296,10 @@ Additionally, if fourth-order moments exist, we can derive a central limit theor
 \end{proof}
 % endregion 
 
+
+A discussion of the assumptions of \Cref{thm:eis-consistent,thm:eis-clt} is in order. We start with the consistency result \Cref{thm:eis-consistent}. The integrability condition, i.e that $\log p, T \in L^{2}(\P)$ is necessary to ensure existence of $\peis$ and the existence of $\cov_{\P}(T)$ as well as $\peis \in \operatorname{int} \Psi$ ensure uniqueness, see also \Cref{prop:eis_exponential_families}. 
+
+Regarding the central limit theorem \Cref{thm:eis-clt}, requiring the existence of higher order moments is natural. Unfortunately, there is no direct interpretation of these requirements as generalizations of the existence of $\rho$, as was the case for the \acrshort{cem}. 
+
+The only integrability conditions related to the proposal $\G$ are those for $wT_{i}T_{j}$ and $w \log(p)^{2}$. 
+Choosing $\left(\G_{\psi}\right)_{\psi \in \Psi}$ to consist of Gaussian distributions, the conditions on $T$ translate to the existence of certain polynomial moments of $w^{2}$ w.r.t. the proposal $\G$ (or $w$ w.r.t. $\P$). This technical condition, is not easily interpreted, as assuming existence of moments of the target distribution seem more natural than those involving the extra weighting term $w = \frac{p}{g}$, which depends on the proposal $\G$ as well. 
