@@ -1,3 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.1 Removing reporting delays and weekday effects/christmas_model.html</loc>
+    <lastmod>2025-03-09T10:58:31.081Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.1 Removing reporting delays and weekday effects/showcase_model.html</loc>
+    <lastmod>2025-03-09T10:58:31.015Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.1 Removing reporting delays and weekday effects/figures.html</loc>
+    <lastmod>2025-03-09T10:58:30.994Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.2 Regional growth factor model/data.html</loc>
+    <lastmod>2025-03-09T10:58:30.913Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.2 Regional growth factor model/model.html</loc>
+    <lastmod>2025-03-09T10:58:31.086Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.3 Nowcasting hospitalizations/nowcasting.html</loc>
+    <lastmod>2025-03-09T10:58:30.884Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.3 Nowcasting hospitalizations/showcase.html</loc>
+    <lastmod>2025-03-09T10:58:30.773Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.3 Nowcasting hospitalizations/model.html</loc>
+    <lastmod>2025-03-09T10:58:30.633Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/patch_full_dependencies.html</loc>
+    <lastmod>2025-03-09T10:58:30.535Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/3 SSMs/04_is.html</loc>
+    <lastmod>2025-03-09T10:58:30.490Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/3 SSMs/compare_ce_eis_mse.html</loc>
+    <lastmod>2025-03-09T10:58:30.804Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/3 SSMs/04_is_figures.html</loc>
+    <lastmod>2025-03-09T10:58:30.766Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/2 Epidemiology/03_data.html</loc>
+    <lastmod>2025-03-09T10:58:30.908Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/2 Epidemiology/04_desiderata.html</loc>
+    <lastmod>2025-03-09T10:58:30.738Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/3 SSMs/05_gaussian_is.html</loc>
+    <lastmod>2025-03-09T10:58:30.904Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/3 SSMs/compare_ce_eis_mse_figures.html</loc>
+    <lastmod>2025-03-09T10:58:30.263Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/3 SSMs/08_comparison_figures.html</loc>
+    <lastmod>2025-03-09T10:58:30.894Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/utilities.html</loc>
+    <lastmod>2025-03-09T10:58:31.229Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.3 Nowcasting hospitalizations/figures.html</loc>
+    <lastmod>2025-03-09T10:58:30.814Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.3 Nowcasting hospitalizations/data.html</loc>
+    <lastmod>2025-03-09T10:58:30.799Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.2 Regional growth factor model/figures.html</loc>
+    <lastmod>2025-03-09T10:58:30.835Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.2 Regional growth factor model/showcase.html</loc>
+    <lastmod>2025-03-09T10:58:30.920Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.1 Removing reporting delays and weekday effects/model.html</loc>
+    <lastmod>2025-03-09T10:58:31.045Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.1 Removing reporting delays and weekday effects/prediction_model.html</loc>
+    <lastmod>2025-03-09T10:58:30.993Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/4 Models/4.1 Removing reporting delays and weekday effects/data.html</loc>
+    <lastmod>2025-03-09T10:58:31.004Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stefanheyder.github.io/dissertation/index.html</loc>
+    <lastmod>2025-03-09T10:58:30.247Z</lastmod>
+  </url>
 </urlset>

@@ -17,6 +17,7 @@ website:
       - section: 4 Models
         contents:
           - 4 Models/00_utilities.ipynb
+          - 4 Models/10_patch_full_dependencies.ipynb
           - section: 4.1 Removing reporting delays and weekday effects
             contents:
               - 4 Models/4.1 Removing reporting delays and weekday effects/00_data.ipynb
@@ -30,5 +31,11 @@ website:
               - 4 Models/4.2 Regional growth factor model/00_data.ipynb
               - 4 Models/4.2 Regional growth factor model/10_model.ipynb
               - 4 Models/4.2 Regional growth factor model/20_showcase.ipynb
-              - 4 Models/4.2 Regional growth factor model/30_results.ipynb
-              - 4 Models/4.2 Regional growth factor model/40_figures.ipynb
+              - 4 Models/4.2 Regional growth factor model/30_figures.ipynb
+          - section: 4.3 Nowcasting hospitalizations
+            contents:
+              - 4 Models/4.3 Nowcasting hospitalizations/00_data.ipynb
+              - 4 Models/4.3 Nowcasting hospitalizations/10_model.ipynb
+              - 4 Models/4.3 Nowcasting hospitalizations/20_showcase.ipynb
+              - 4 Models/4.3 Nowcasting hospitalizations/21_nowcasting.ipynb
+              - 4 Models/4.3 Nowcasting hospitalizations/40_figures.ipynb
