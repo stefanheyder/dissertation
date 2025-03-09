@@ -229,6 +229,7 @@ $$
 as the asymptotic relative efficiency of the two estimators, as long as this approximation is valid. In practice, a small \acrshort{ess} can be an indicator that importance sampling with $\G$ may be inadequate. Note that relying solely on the empirical \acrshort{ess} may lead to problems, see the following example. To prepare, we prove a lemma regarding $\rho$ for Gaussian targets and proposals.
 
 \begin{lemma}
+    \label{lem:gaussian_proposal_factor_2}
     Let $\P = \mathcal N(\mu, \Sigma)$ and $\G = \mathcal N(\nu, \Omega)$ be two $p$-dimensional Gaussian distributions with means $\mu,\nu \in \R^{p}$ and \acrshort{spd} covariance matrices $\Sigma,\Omega \in \R^{p\times p}$. 
     Then $\rho$ is finite if, and only if, $\Omega \succ \frac{1}{2} \Sigma$. 
 \end{lemma}

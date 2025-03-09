@@ -4,11 +4,11 @@
 __all__ = ['vmm', 'log_weights_t', 'log_weights', 'laplace_approximation', 'triu', 'tril', 'optimal_parameters',
            'modified_efficient_importance_sampling', 'gnll']
 
-# %% ../../nbs/4 Models/10_patch_full_dependencies.ipynb 1
+# %% ../../nbs/4 Models/10_patch_full_dependencies.ipynb 2
 import jax.numpy as jnp
 from jaxtyping import Float, Array
 
-# %% ../../nbs/4 Models/10_patch_full_dependencies.ipynb 3
+# %% ../../nbs/4 Models/10_patch_full_dependencies.ipynb 4
 # log weights monkey patch
 # nansum to account for missing values
 # explicitly assumes that s_t = z_t!
@@ -57,7 +57,7 @@ def log_weights(
 isssm.importance_sampling.log_weights = log_weights
 isssm.importance_sampling.log_weights_t = log_weights_t
 
-# %% ../../nbs/4 Models/10_patch_full_dependencies.ipynb 4
+# %% ../../nbs/4 Models/10_patch_full_dependencies.ipynb 5
 # LA monkey patch
 from isssm.kalman import kalman, smoothed_signals
 from isssm.typing import GLSSM, GLSSMProposal, ConvergenceInformation, PGSSM
@@ -158,7 +158,7 @@ def laplace_approximation(
 isssm.laplace_approximation._initial_guess = _initial_guess
 isssm.laplace_approximation.laplace_approximation = laplace_approximation
 
-# %% ../../nbs/4 Models/10_patch_full_dependencies.ipynb 5
+# %% ../../nbs/4 Models/10_patch_full_dependencies.ipynb 6
 # MEIS monkey patch
 import jax.random as jrn
 from jaxtyping import PRNGKeyArray
@@ -344,7 +344,7 @@ isssm.modified_efficient_importance_sampling.modified_efficient_importance_sampl
     modified_efficient_importance_sampling
 )
 
-# %% ../../nbs/4 Models/10_patch_full_dependencies.ipynb 6
+# %% ../../nbs/4 Models/10_patch_full_dependencies.ipynb 7
 # monkey patch gnll to handle nans
 vmm = vmap(jnp.matmul, (0,0))
 from isssm.util import MVN_degenerate as MVN

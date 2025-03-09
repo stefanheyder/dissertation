@@ -64,7 +64,7 @@ and so if one is interested in the states, rather than the signals, importance s
 The \gls{glssm}-approach is the standard approach for finding the \gls{la} in \gls{egssm} \citep{Durbin1997Monte,Durbin2012Time} and may even be applied when the observation densities are not log-concave as \citep{Jungbacker2007Monte} show. The approach also leads to efficient implementation for \gls{eis} \citep{Koopman2019Modified}. However, as will become apparent in the later part of this section, it is infeasible for the \gls{cem} if $n$ is large. 
 
 We now give a concise overview over how to perform the \gls{la} and \gls{eis} for \gls{egssm}, but refer the reader for more details to the respective literature.
-\citep{Danielsson1993Accelerated} were the first to propose minimizing the variance of log-weights, which developed into the \acrshort{eis} method \citep{Liesenfeld2003Univariate, Richard2007Efficient}. However, as formulated in these earlier works, \acrshort{eis} requires careful tracking of integration constants.  For \acrshortpl{pgssm}, the modified \acrshort{eis} of \citep{Koopman2019Modified} provides a more straightforward approach to determine the proposal distribution, by noticing that it may be written as the posterior of an appropriately chosen \acrshort{glssm}, whose distribtion of states coincides with that of the original \acrshort{pgssm}. Instead of approximating the integrals in \acrshort{eis} using \acrshort{mcint}, \citep{Koopmann2015Numerically} suggest to do so using numerical integration, to reduce sampling error.
+\citep{Danielsson1993Accelerateda} were the first to propose minimizing the variance of log-weights, which developed into the \acrshort{eis} method \citep{Liesenfeld2003Univariate, Richard2007Efficient}. However, as formulated in these earlier works, \acrshort{eis} requires careful tracking of integration constants.  For \acrshortpl{pgssm}, the modified \acrshort{eis} of \citep{Koopman2019Modified} provides a more straightforward approach to determine the proposal distribution, by noticing that it may be written as the posterior of an appropriately chosen \acrshort{glssm}, whose distribtion of states coincides with that of the original \acrshort{pgssm}. Instead of approximating the integrals in \acrshort{eis} using \acrshort{mcint}, \citep{Koopman2015Numerically} suggest to do so using numerical integration, to reduce sampling error.
 
 The \acrshort{la} for \acrshort{pgssm} can be obtained efficiently, by noticing that the Newton-Raphson scheme to obtain the posterior mode (\Cref{eq:LA_approximation}) can be implemented using the Kalman smoother, see \citep[Chapter 10]{Durbin2012Time}. For \acrshort{egssm} with a linear signal, the \acrshort{la} is particularly easy to implement, as the conditional independence of individual observations translates to an approximating \acrshort{glssm} with independent observations as well ---  the resulting algorithm is presented in \Cref{alg:la}.
 
@@ -168,11 +168,11 @@ $$
 $$
 and so we require $\Gamma_{i,i} < \Sigma_{i,i}$. While the law of total covariance asserts that
 $$
-\Sigma = \E \underbrace{\cov \left( X | Y \right)}_{=\Gamma} + \cov \left( \E \left( X | Y \right) \right),
+\Sigma = \E \cov \left( X | Y \right) + \cov \left( \E \left( X | Y \right) \right),
 $$
-it does not guarantee $\Gamma \prec \Sigma$, which would imply $\Gamma_{i,i} < \Sigma_{i,i}$. 
+it does not guarantee $\Gamma \prec \Sigma$, as $\cov(X|Y) = \Gamma$ may not hold in the non-Gaussian case.
 
-Second, even if there is an analytical solution $\Omega$ to \Cref{eq:gamma_post}, in the \gls{cem} we replace $\Gamma_{i,i}$ by the observed marginal variances $\hat\Gamma_{i,i}$ obtained by importance sampling. The variation introduced by simulation can then lead to situations where $\hat\Gamma_{i,i} > \Sigma_{i,i}$. As an example take $X \sim \mathcal N(0, 1)$, and $Y = X + \eta$ for $\eta \sim \mathcal N(0, \omega^{2})$. Then the conditional variance of $X$ given $Y = y$ is $\Gamma = 1 - \frac{1}{1 + \omega^{2}}$. Given $N$ i.i.d. samples $X^{1}, \dots X^{N}$ from this distribution, their empirical variance $\hat \Gamma = \frac{1}{N} \sum_{i = 1}^{N} (X^{i} - \bar X)^{2} $ follows a scaled $\chi_{N - 1}^{2}$ distribution, i.e. $ \frac{N\hat\Gamma}{\Gamma} \sim \chi^{2}_{N - 1}$. Notice that we use the non-Bessel corrected version of the empirical variance here, as it is the maximum-likelihood estimate. 
+Second, even if there is an analytical solution $\Omega$ to \Cref{eq:gamma_post}, in the \gls{cem} we replace $\Gamma_{i,i}$ by the observed marginal variances $\hat\Gamma_{i,i}$ obtained by importance sampling. The variation introduced by simulation can then lead to situations where $\hat\Gamma_{i,i} > \Sigma_{i,i}$. As an example take $X \sim \mathcal N(0, 1)$, and $Y = X + \eta$ for $\eta \sim \mathcal N(0, \omega^{2})$. Then the conditional variance of $X$ given $Y = y$ is $\Gamma = 1 - \frac{1}{1 + \omega^{2}} < 1$. Given $N$ i.i.d. samples $X^{1}, \dots X^{N}$ from this distribution, their empirical variance $\hat \Gamma = \frac{1}{N} \sum_{i = 1}^{N} (X^{i} - \bar X)^{2} $ follows a scaled $\chi_{N - 1}^{2}$ distribution, i.e. $ \frac{N\hat\Gamma}{\Gamma} \sim \chi^{2}_{N - 1}$. Notice that we use the non-Bessel corrected version of the empirical variance here, as it is the maximum-likelihood estimate. 
 
 Then $$\P \left( \hat \Gamma > 1 \right) = \P \left( \frac{N \hat \Gamma}{\Gamma} > \frac{N}{\Gamma} \right) = 1 - F_{\chi^{2}_{N-1}} \left( N \left( 1 + \frac{1}{\omega^{2}} \right) \right)$$ is the probability that \Cref{eq:gamma_post} has no solution $\omega^{2} \in \R_{\geq 0}$. Here $F_{\chi^{2}_{N - 1}}$ is the cumulative distribution function of the $\chi^{2}_{N - 1}$ distribution. As $\omega^{2}$ goes to $\infty$, this probability approaches $1 - F_{\chi^{2}_{N - 1}}(N)$ which, for large $N$, is approximately $1 - F_{\chi^{2}_{N - 1}} (N - 1) \approx \frac{1}{2}$, as $\chi^{2}_{N-1} \approx \mathcal N\left(N - 1, 2 (N-1)\right)$ \citep[Section 18.5]{Johnson1994Continuous}.
 %We illustrate this in \Cref{fig:ce_prob_failure}, displaying the probability of failure in this setting for various combinations of $N$ and $\omega^{2}$. In this figure, we see that with growing $N$ the threshold for $\omega^{2}$ leading to non-negligible failure probability becomes larger, as expected. 
@@ -193,7 +193,7 @@ In higher-dimensional settings, e.g. when applying the \gls{cem} to \glspl{ssm},
 
 % numerical scheme to solve eq.
 Finally, in the multivariate setting, the system \eqref{eq:gamma_post} has no analytical solution. Instead, we have to resort to numerical methods to find a solution $\Omega$. Unfortunately, even evaluating the right-hand side of \eqref{eq:gamma_post} requires $\mathcal O(m^3)$ operations, as we have to invert $\Sigma + \Omega$. Additionally, we cannot hope to reuse a singular-value, LR, or eigenvalue-decomposition for further evaluations, as $\Sigma$ and $\Omega$ are not guaranteed to be jointly diagonalizable.
-In the \gls{ssm} context we may use the Kalman-smoother to compute the marginal variances, but have to re-run the smoother for every evaluation. 
+In the \gls{ssm} context we may use the Kalman-smoother to compute the marginal variances, but have to re-run the smoother for every evaluation, which is expensive. 
 
 If we admit noise variance $\infty$ in the univariate setting, then $\Gamma > 1$ implies that the \gls{cem} chooses this as the estimate, i.e. $\G_{\hpce}$ is $\mathcal N(0, 1)$, which is equal to the prior. We can interpret this as having a missing observation, which, going back to the \gls{ssm} context, the Kalman-filter (\Cref{alg:kalman_filter}) can handle with only simple modifications, see e.g. \citep[Section 4.10]{Durbin2012Time}. However, if there are a lot of failures, the optimally chosen $\G_{\hpce}$ will be close to the prior distribution of states $X$, and importance sampling is unlikely to be effective. Hence, we turn to another approach that allows us to apply the \gls{cem} to \glspl{ssm}.
 
@@ -304,7 +304,7 @@ From \Cref{thm:gelfand_gmrf} we immediately obtain the following:
 \begin{corollary}[sparsity of $L$ in model \eqref{eq:markov-proposal}]
     \label{cor:sparsity_L}
     Let $U \sim \G_{\psi}$ as in \Cref{eq:markov-proposal}, $P \succ 0$ be the precision matrix of $\overset{\leftarrow}{U} = \left( U_{n}, \dots, U_{0} \right)$ and $L$ be the Cholesky root of $P$. 
-    Then $L$ is a lower-block-diagonal matrix, with at most $n\,m^{2} + (n + 1)\,m\frac{m - 1}{2}$ non-zero entries:
+    Then $L$ is a lower-block-diagonal matrix, with at most $nm^{2} + (n + 1)m\frac{m - 1}{2}$ non-zero entries:
     
     \begin{align}
         \label{eq:L_structure}
@@ -404,7 +404,7 @@ We have thus shown the following: The covariance matrix of the KL-optimal Gaussi
 \end{align*}
 then its law $\mathcal L (X)$ is the one we seek. The following proposition puts all the pieces together.
 
-\begin{proposition}[the \acrshort{cem} for the Markov proposal]
+\begin{theorem}[the \acrshort{cem} for the Markov proposal]
     \label{prop:cem-for-markov-proposal}
     Let $\P$ be a probability measure on $\R^{(n+1)\times m}$ with mean $\mu$ and positive definite covariance matrix $\Gamma$, partitioned into blocks 
     $$
@@ -436,8 +436,8 @@ then its law $\mathcal L (X)$ is the one we seek. The following proposition puts
         R_{t} &= Z_{t + 1, t + 1}
     \end{align*}
 
-    Thus, given $\nu$ and $\Gamma$, $\pce$ can be obtained in $\mathcal O(n\,m^{3})$ many operations.
-\end{proposition}
+    Thus, given $\nu$ and $\Gamma$, $\pce$ can be obtained in $\mathcal O(nm^{3})$ many operations.
+\end{theorem}
 
 \begin{proof}
     It only remains to show the uniqueness and existence of $\pce$, as well as its representation.
@@ -522,11 +522,11 @@ In \Cref{step:cem-simulate} we use the standard praxis of \glspl{crn} to ensure 
 
 % runtime
 We give an overview of the time and space complexities of each line in \Cref{alg:cem-markov-proposal} in \Cref{tab:cem-time-space-complexity}
-The total time complexity of a single iteration of \Cref{alg:cem-markov-proposal} is $\mathcal O \left( N\,n\,m^{2} + n\,m^{3}\right)$ and its space complexity is $\mathcal O \left( N\,n\,m + n\,m^{2}\right)$. Let us elaborate on the complexities of each step:
+The total time complexity of a single iteration of \Cref{alg:cem-markov-proposal} is $\mathcal O \left( Nnm^{2} + nm^{3}\right)$ and its space complexity is $\mathcal O \left( Nnm + nm^{2}\right)$. Let us elaborate on the complexities of each step:
 \begin{enumerate}
     \item[\Cref{step:cem-simulate}] Generate $N$ i.i.d. samples from model \eqref{eq:markov-proposal}, where each simulation requires $\mathcal O(n)$ matrix-vector multiplications of dimension $m$. 
     \item[\Cref{step:cem-weights}] To evaluate the weights, \Cref{eq:weights_markov}, we have to evaluate for every sample $\mathcal O(n)$-times the density of a $m$-variate Gaussian distribution, while this usually has time-complexity $\mathcal O(m^{3})$, we have access to the Cholesky root $R_{t}$, so this step has only time-complexity $\mathcal O(m^{2})$. In \Cref{eq:weights_markov} we also need to compute $p(y_{t}|x_{t})$ and $p(x_{t}|x_{t - 1})$. Assuming conditional independence of observations, $p(y_{t}|x_{t}) = \prod_{i = 1}^{m}p(y_{t}^i|(B_{t}x_{t})^{i})$, evaluating the first term requires only $\mathcal O(m^{2})$ operations. For the second term, if we allow pre-computation of the Cholesky roots of innovations off-line (in $\mathcal O(m^{3})$ time), this step reduces to $\mathcal O(m^{2})$ as well.  
-    \item[\Cref{step:cem-est_v}] Calculating the weighted mean $\hat v \in\R^{(n+1)m}$, \Cref{eq:hat_v}, requires $\mathcal O(N\,n\,m)$ operations.
+    \item[\Cref{step:cem-est_v}] Calculating the weighted mean $\hat v \in\R^{(n+1)m}$, \Cref{eq:hat_v}, requires $\mathcal O(Nnm)$ operations.
     \item[\Cref{step:cem-est_cov}] Calculating the weighted covariance matrices, \Cref{eq:empirical_covs}, requires $(n+1)$ times multiplying $N$ many $m\times 1$ with $1 \times m$ vectors. 
     %\item[\Cref{step:cem-L}] To determine $L_{t,t}$ and $L_{t - 1, t}$ we have to solve $m$ times the linear systems of equations given in \Cref{eq:schafer_gamma}, where the dimension of the system is $2m,\dots, m + 1$. This requires $\mathcal O(m^{4})$ many operations, and we have to perform it for every one of the $n + 1$ time points. The result is $L$ with sparsity structure given by \Cref{eq:L_structure}, which has $\mathcal O (n m^{2})$ many non-zero entries.
     \item[\Cref{step:cem-C_R}] For each of the $\mathcal O(n)$ many $C_{t}$ and $R_{t}$ we have to calculate Cholesky decompositions and invert triangular matrices of dimension $m$. 
@@ -538,11 +538,11 @@ The total time complexity of a single iteration of \Cref{alg:cem-markov-proposal
         \toprule
         step & time complexity & space complexity \\
         \midrule 
-        simulation (\Cref{step:cem-simulate}) & $\mathcal O \left( N\,n\,m^{2}\right)$ & $\mathcal O \left( N\,n\,m \right)$\\
-        weights (\Cref{step:cem-weights}) & $\mathcal O (N\,n\,m^{2})$ & $\mathcal O \left( N \right)$\\
-        estimating $v$ (\Cref{step:cem-est_v}) & $\mathcal O (N\,n\,m)$ & $\mathcal O \left( n\,m \right)$\\
-        estimating covariances (\Cref{step:cem-est_cov}) & $\mathcal O (N\,n\,m^{2})$ & $\mathcal O \left( n\,m \right)$\\
-        determining $C$ and $R$ (\Cref{step:cem-C_R}) & $\mathcal O (n\,m^{3})$ & $\mathcal O (n\,m^{2})$\\
+        simulation (\Cref{step:cem-simulate}) & $\mathcal O \left( Nnm^{2}\right)$ & $\mathcal O \left( Nnm \right)$\\
+        weights (\Cref{step:cem-weights}) & $\mathcal O (Nnm^{2})$ & $\mathcal O \left( N \right)$\\
+        estimating $v$ (\Cref{step:cem-est_v}) & $\mathcal O (Nnm)$ & $\mathcal O \left( nm \right)$\\
+        estimating covariances (\Cref{step:cem-est_cov}) & $\mathcal O (Nnm^{2})$ & $\mathcal O \left( nm \right)$\\
+        determining $C$ and $R$ (\Cref{step:cem-C_R}) & $\mathcal O (nm^{3})$ & $\mathcal O (nm^{2})$\\
         \bottomrule
     \end{tabular}
     \caption{Time and space complexities of individual steps in \Cref{alg:cem-markov-proposal}.}
@@ -552,7 +552,7 @@ The total time complexity of a single iteration of \Cref{alg:cem-markov-proposal
 An efficient implementation of \Cref{alg:cem-markov-proposal} can improve on the practically relevant computational time. There is no need to calculate the $C_{t}$ matrices explicitly, instead we can calculate $C_{t}U_{t - 1} = J_{t + 1, t}J_{t,t}^{-1}U_{t - 1}$ efficiently by back-substitution, as $J_{t,t}$ is a lower triangular matrix. 
 
 % if space complexity is problematic, can compute weights first with fixed seed and then iterate forwards
-The main bottleneck for space lies in the $\mathcal O(N\,n\,m)$ simulation part, and we may reduce this by simulating twice from model \eqref{eq:markov-proposal} using \glspl{crn}, and only storing the samples for a single time step (dimension $\mathcal O (N\,m)$) in each simulation. In the first pass, we only calculate the weights, and in the second pass, we calculate $\hat v$ and the required covariance matrices. For this, we only need the $2N$ samples of dimension $m$ from time $t$ and $t + 1$, i.e. $\mathcal O(N\,m)$ space. This reduces the total space complexity to $\mathcal O(N\,m + n\,m^{2})$. 
+The main bottleneck for space lies in the $\mathcal O(Nnm)$ simulation part, and we may reduce this by simulating twice from model \eqref{eq:markov-proposal} using \glspl{crn}, and only storing the samples for a single time step (dimension $\mathcal O (Nm)$) in each simulation. In the first pass, we only calculate the weights, and in the second pass, we calculate $\hat v$ and the required covariance matrices. For this, we only need the $2N$ samples of dimension $m$ from time $t$ and $t + 1$, i.e. $\mathcal O(Nm)$ space. This reduces the total space complexity to $\mathcal O(Nm + nm^{2})$. 
 
 We demonstrate these improvements in \Cref{alg:cem-markov-proposal-fast}. Additionally, we calculate the weights on the log scale for numerical stability.
 
@@ -599,7 +599,7 @@ The advantage of \Cref{alg:cem-markov-proposal,alg:cem-markov-proposal-fast} ove
 Additionally, determining the optimal parameters $(v, C,R)$ or $(v,J,R)$ is numerically stable, involving only inversion of small matrices. Compare this with solving \Cref{eq:gamma_post}, where we need to employ a numerical scheme to solve for the diagonal entries of $\Omega$.
 
 % sampling faster 
-After having determined $\hpce$ for model \eqref{eq:markov-proposal}, generating $N$ samples requires only $\mathcal O(N\,n\,m^{2})$ operations, whereas sampling from model \eqref{eq:glssm-proposal} requires $\mathcal O(n\,m^{3} + N\,n\,m^{2})$ operations, as we need an initial run of the Kalman filter. Unless $N < m$, this difference is negligible, and the case where $N < m$ is not really of interest, as we would expect importance sampling to require a much larger number of samples, i.e. $N \gg m$. 
+After having determined $\hpce$ for model \eqref{eq:markov-proposal}, generating $N$ samples requires only $\mathcal O(Nnm^{2})$ operations, whereas sampling from model \eqref{eq:glssm-proposal} requires $\mathcal O(nm^{3} + Nnm^{2})$ operations, as we need an initial run of the Kalman filter. Unless $N < m$, this difference is negligible, and the case where $N < m$ is not really of interest, as we would expect importance sampling to require a much larger number of samples, i.e. $N \gg m$. 
 
 % problems: large state dimension: both $L$ and number of parameters
 However, the two algorithms presented in this section also come with some drawbacks, especially if the dimension $m$ of states is large. This affects the algorithms in multiple ways: when $m$ is large, computation of the Cholesky decomposition in \Cref{prop:cem-for-markov-proposal} becomes more time-intensive. Additionally, the dimension of the parameter $\psi$ increases quadratically in $m$, so we expect convergence to be slower, requiring a larger sample size $N$ to find the optimal $\hpce$. For an empirical study in this direction, see \Cref{sec:simulation_studies}.

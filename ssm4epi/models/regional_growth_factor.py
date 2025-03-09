@@ -6,7 +6,7 @@ __all__ = ['optimal_parameters', 'vmm', 'key', 'n_iterations', 'N_mle', 'N_meis'
            'log_weights_t', 'log_weights', 'laplace_approximation', 'modified_efficient_importance_sampling', 'gnll',
            'growth_factor_model', 'make_aux', 'par_to_theta', 'theta_to_par']
 
-# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 2
+# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 3
 import jax.numpy as jnp
 import jax.scipy as jsp
 from pyprojroot.here import here
@@ -26,7 +26,7 @@ from tensorflow_probability.substrates.jax.distributions import (
 
 jax.config.update("jax_enable_x64", True)
 
-# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 5
+# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 6
 def _call_sample_n_patched(self, sample_shape, seed, **kwargs):
     return self._sample_n(sample_shape, seed)
 
@@ -46,7 +46,7 @@ def _sample_n_patched(self, n, seed=None):
 NBinom._sample_n = _sample_n_patched
 NBinom._call_sample_n = _call_sample_n_patched
 
-# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 7
+# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 8
 def account_for_nans(model: PGSSM, y, missing_indices) -> tuple[PGSSM, Float]:
     # only works for Poisson!
     # missing_indices = jnp.isnan(y)
@@ -81,7 +81,7 @@ def account_for_nans(model: PGSSM, y, missing_indices) -> tuple[PGSSM, Float]:
 
     return model_missing, y_missing
 
-# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 8
+# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 9
 # log weights monkey patch
 # nansum to account for missing values
 # explicitly assumes that s_t = z_t!
@@ -135,7 +135,7 @@ def log_weights(
 isssm.importance_sampling.log_weights = log_weights
 isssm.importance_sampling.log_weights_t = log_weights_t
 
-# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 9
+# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 10
 # LA monkey patch
 from isssm.kalman import kalman, smoothed_signals
 from isssm.typing import GLSSM, GLSSMProposal, ConvergenceInformation
@@ -242,7 +242,7 @@ def laplace_approximation(
 isssm.laplace_approximation._initial_guess = _initial_guess
 isssm.laplace_approximation.laplace_approximation = laplace_approximation
 
-# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 10
+# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 11
 # MEIS monkey patch
 import jax.random as jrn
 from jaxtyping import PRNGKeyArray
@@ -355,7 +355,7 @@ isssm.modified_efficient_importance_sampling.modified_efficient_importance_sampl
     modified_efficient_importance_sampling
 )
 
-# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 11
+# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 12
 # monkey patch gnll to handle nans
 vmm = vmap(jnp.matmul, (0, 0))
 from isssm.util import MVN_degenerate as MVN
@@ -382,7 +382,7 @@ def gnll(
 
 isssm.estimation.gnll = gnll
 
-# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 13
+# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 14
 key = jrn.PRNGKey(452342342345)
 n_iterations = 20
 N_mle = 1000
@@ -394,7 +394,7 @@ percentiles_of_interest = jnp.array(
     [0.01, 0.025, *(0.05 * jnp.arange(1, 20)), 0.975, 0.99]
 )
 
-# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 16
+# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 17
 def _state_model(r0, u0, alpha, s2_rho, Omega, n) -> GLSSMState:
     (K,) = u0.shape
     A = jnp.broadcast_to(
@@ -412,7 +412,7 @@ def _state_model(r0, u0, alpha, s2_rho, Omega, n) -> GLSSMState:
 
     return GLSSMState(u, A, D, Sigma0, Sigma)
 
-# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 18
+# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 19
 from tensorflow_probability.substrates.jax.distributions import Poisson
 
 
@@ -443,14 +443,14 @@ def _observation_model(obs: Float[Array, "n+2 K"], P: Float[Array, "K K"], r: Fl
 
     return v, B, dist_obs_nb, xi
 
-# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 21
+# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 22
 def _P(C, q, n_ij, n_tot) -> Float[Array, "K K"]:
     p, _ = n_ij.shape
     m_ij = n_ij + jnp.diag(C * n_tot - n_ij.sum(axis=1))
     normalize_rows = lambda x: x / x.sum(axis=1).reshape((-1, 1))
     return jnp.full((p, p), q / p) + (1 - q) * normalize_rows(m_ij)
 
-# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 24
+# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 25
 def growth_factor_model(theta, aux) -> PGSSM:
 
     logit_alpha, log_s2_r, log_s2_spat, logit_q, log_Cm1, log_r = theta
@@ -481,7 +481,7 @@ def growth_factor_model(theta, aux) -> PGSSM:
 
     return PGSSM(*state, *obs)
 
-# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 25
+# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 26
 n_tot = jnp.array(
     pd.read_csv(here() / "data/processed/home_totals.csv").iloc[:, 2].to_numpy()
 )
@@ -493,7 +493,7 @@ n_ij = (
     .T
 )
 
-# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 28
+# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 29
 df_weekly_cases = pd.read_csv(here() / "data/processed/RKI_county_weekly.csv").pivot(
     index="date", columns="ags", values="cases"
 )
@@ -503,13 +503,13 @@ cases_full = jnp.asarray(df_weekly_cases.to_numpy(), dtype=jnp.float64)
 dates_full = df_weekly_cases.index.to_numpy()
 ags_full = df_weekly_cases.columns.to_numpy()
 
-# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 29
+# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 30
 def make_aux(date, cases_full, n_ij, n_tot, np1):
     iloc_of_date_in_index = jnp.where(dates_full == date)[0][0]
     cases = cases_full[iloc_of_date_in_index : iloc_of_date_in_index + np1 + 1]
     return cases, n_ij, n_tot
 
-# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 30
+# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 31
 import jax.scipy as jsp
 
 

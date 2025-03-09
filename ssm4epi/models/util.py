@@ -3,7 +3,7 @@
 # %% auto 0
 __all__ = ['visualize_pgssm', 'to_log_probs', 'to_consecutive_logits', 'from_consecutive_logits']
 
-# %% ../../nbs/4 Models/00_utilities.ipynb 2
+# %% ../../nbs/4 Models/00_utilities.ipynb 3
 # libraries
 import matplotlib.pyplot as plt
 from isssm.typing import PGSSM
@@ -13,7 +13,7 @@ import jax.numpy as jnp
 from jaxtyping import Float, Array
 import fastcore.test as fct
 
-# %% ../../nbs/4 Models/00_utilities.ipynb 4
+# %% ../../nbs/4 Models/00_utilities.ipynb 5
 def __zero_to_nan(arr, eps=1e-10):
     return jnp.where(jnp.abs(arr) < eps, jnp.nan, arr)
 
@@ -42,14 +42,14 @@ def visualize_pgssm(pgssm: PGSSM):
     plt.colorbar()
     plt.show()
 
-# %% ../../nbs/4 Models/00_utilities.ipynb 7
+# %% ../../nbs/4 Models/00_utilities.ipynb 8
 def to_log_probs(log_ratios: Float[Array, "k-1"]) -> Float[Array, "k"]:
     exp_q = jnp.exp(log_ratios)
     p_n_delay = 1 / (1 + exp_q.sum(axis=-1, keepdims=True))
     log_p = jnp.log(jnp.concatenate([exp_q * p_n_delay, p_n_delay], axis=-1))
     return log_p
 
-# %% ../../nbs/4 Models/00_utilities.ipynb 10
+# %% ../../nbs/4 Models/00_utilities.ipynb 11
 import jax.scipy as jsp
 
 
