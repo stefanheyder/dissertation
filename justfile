@@ -11,3 +11,5 @@ commit_yesterday:
 clean:
     rm -f thesis.{acn,aux,auxlock,bbl,bcf,fdb_latexmk,fls,glo,ist,log,out,run.xml,synctex.gz,toc,bbl-SAVE-ERROR,bcf-SAVE-ERROR}
     rm -rf $(biber --cache)
+    find . -type f -name "*.aux" -exec rm -f {} +
+

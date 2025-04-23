@@ -52,6 +52,9 @@
 
 % color box for writing
 \usepackage{tcolorbox}
+% tcolorbox and externalize combination is problematic
+% https://tex.stackexchange.com/questions/486102/problems-with-tcolorbox-and-tikz-external
+\tcbsetforeverylayer{shield externalize}
 
 \usepackage{xspace}
 
