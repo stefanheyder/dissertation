@@ -524,12 +524,12 @@ In \Cref{step:cem-simulate} we use the standard praxis of \glspl{crn} to ensure 
 We give an overview of the time and space complexities of each line in \Cref{alg:cem-markov-proposal} in \Cref{tab:cem-time-space-complexity}
 The total time complexity of a single iteration of \Cref{alg:cem-markov-proposal} is $\mathcal O \left( Nnm^{2} + nm^{3}\right)$ and its space complexity is $\mathcal O \left( Nnm + nm^{2}\right)$. Let us elaborate on the complexities of each step:
 \begin{enumerate}
-    \item[\Cref{step:cem-simulate}] Generate $N$ i.i.d. samples from model \eqref{eq:markov-proposal}, where each simulation requires $\mathcal O(n)$ matrix-vector multiplications of dimension $m$. 
-    \item[\Cref{step:cem-weights}] To evaluate the weights, \Cref{eq:weights_markov}, we have to evaluate for every sample $\mathcal O(n)$-times the density of a $m$-variate Gaussian distribution, while this usually has time-complexity $\mathcal O(m^{3})$, we have access to the Cholesky root $R_{t}$, so this step has only time-complexity $\mathcal O(m^{2})$. In \Cref{eq:weights_markov} we also need to compute $p(y_{t}|x_{t})$ and $p(x_{t}|x_{t - 1})$. Assuming conditional independence of observations, $p(y_{t}|x_{t}) = \prod_{i = 1}^{m}p(y_{t}^i|(B_{t}x_{t})^{i})$, evaluating the first term requires only $\mathcal O(m^{2})$ operations. For the second term, if we allow pre-computation of the Cholesky roots of innovations off-line (in $\mathcal O(m^{3})$ time), this step reduces to $\mathcal O(m^{2})$ as well.  
-    \item[\Cref{step:cem-est_v}] Calculating the weighted mean $\hat v \in\R^{(n+1)m}$, \Cref{eq:hat_v}, requires $\mathcal O(Nnm)$ operations.
-    \item[\Cref{step:cem-est_cov}] Calculating the weighted covariance matrices, \Cref{eq:empirical_covs}, requires $(n+1)$ times multiplying $N$ many $m\times 1$ with $1 \times m$ vectors. 
+    \item[Step \ref{step:cem-simulate}] Generate $N$ i.i.d. samples from model \eqref{eq:markov-proposal}, where each simulation requires $\mathcal O(n)$ matrix-vector multiplications of dimension $m$. 
+    \item[Step \ref{step:cem-weights}] To evaluate the weights, \Cref{eq:weights_markov}, we have to evaluate for every sample $\mathcal O(n)$-times the density of a $m$-variate Gaussian distribution, while this usually has time-complexity $\mathcal O(m^{3})$, we have access to the Cholesky root $R_{t}$, so this step has only time-complexity $\mathcal O(m^{2})$. In \Cref{eq:weights_markov} we also need to compute $p(y_{t}|x_{t})$ and $p(x_{t}|x_{t - 1})$. Assuming conditional independence of observations, $p(y_{t}|x_{t}) = \prod_{i = 1}^{m}p(y_{t}^i|(B_{t}x_{t})^{i})$, evaluating the first term requires only $\mathcal O(m^{2})$ operations. For the second term, if we allow pre-computation of the Cholesky roots of innovations off-line (in $\mathcal O(m^{3})$ time), this step reduces to $\mathcal O(m^{2})$ as well.  
+    \item[Step \ref{step:cem-est_v}] Calculating the weighted mean $\hat v \in\R^{(n+1)m}$, \Cref{eq:hat_v}, requires $\mathcal O(Nnm)$ operations.
+    \item[Step \ref{step:cem-est_cov}] Calculating the weighted covariance matrices, \Cref{eq:empirical_covs}, requires $(n+1)$ times multiplying $N$ many $m\times 1$ with $1 \times m$ vectors. 
     %\item[\Cref{step:cem-L}] To determine $L_{t,t}$ and $L_{t - 1, t}$ we have to solve $m$ times the linear systems of equations given in \Cref{eq:schafer_gamma}, where the dimension of the system is $2m,\dots, m + 1$. This requires $\mathcal O(m^{4})$ many operations, and we have to perform it for every one of the $n + 1$ time points. The result is $L$ with sparsity structure given by \Cref{eq:L_structure}, which has $\mathcal O (n m^{2})$ many non-zero entries.
-    \item[\Cref{step:cem-C_R}] For each of the $\mathcal O(n)$ many $C_{t}$ and $R_{t}$ we have to calculate Cholesky decompositions and invert triangular matrices of dimension $m$. 
+    \item[Step \ref{step:cem-C_R}] For each of the $\mathcal O(n)$ many $C_{t}$ and $R_{t}$ we have to calculate Cholesky decompositions and invert triangular matrices of dimension $m$. 
 \end{enumerate}
 
 \begin{table}
@@ -538,11 +538,11 @@ The total time complexity of a single iteration of \Cref{alg:cem-markov-proposal
         \toprule
         step & time complexity & space complexity \\
         \midrule 
-        simulation (\Cref{step:cem-simulate}) & $\mathcal O \left( Nnm^{2}\right)$ & $\mathcal O \left( Nnm \right)$\\
-        weights (\Cref{step:cem-weights}) & $\mathcal O (Nnm^{2})$ & $\mathcal O \left( N \right)$\\
-        estimating $v$ (\Cref{step:cem-est_v}) & $\mathcal O (Nnm)$ & $\mathcal O \left( nm \right)$\\
-        estimating covariances (\Cref{step:cem-est_cov}) & $\mathcal O (Nnm^{2})$ & $\mathcal O \left( nm \right)$\\
-        determining $C$ and $R$ (\Cref{step:cem-C_R}) & $\mathcal O (nm^{3})$ & $\mathcal O (nm^{2})$\\
+        simulation (Step \ref{step:cem-simulate}) & $\mathcal O \left( Nnm^{2}\right)$ & $\mathcal O \left( Nnm \right)$\\
+        weights (Step \ref{step:cem-weights}) & $\mathcal O (Nnm^{2})$ & $\mathcal O \left( N \right)$\\
+        estimating $v$ (Step \ref{step:cem-est_v}) & $\mathcal O (Nnm)$ & $\mathcal O \left( nm \right)$\\
+        estimating covariances (Step \ref{step:cem-est_cov}) & $\mathcal O (Nnm^{2})$ & $\mathcal O \left( nm \right)$\\
+        determining $C$ and $R$ (Step \ref{step:cem-C_R}) & $\mathcal O (nm^{3})$ & $\mathcal O (nm^{2})$\\
         \bottomrule
     \end{tabular}
     \caption{Time and space complexities of individual steps in \Cref{alg:cem-markov-proposal}.}

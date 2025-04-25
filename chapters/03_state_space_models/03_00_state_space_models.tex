@@ -28,7 +28,7 @@
 
     The contributions of the individual sections are as follows:
 
-    \paragraph{\nameref{sec:modelling_epidemiological_dessiderata_with_state_space_models}} 
+    %\paragraph{\nameref{sec:modelling_epidemiological_dessiderata_with_state_space_models}} 
 
     \paragraph{\nameref{sec:linear_gaussian_state_space_models}} This section is a condensed introduction to \acrfullpl{glssm} and is loosely based on \citep{Durbin2012Time}.
     \paragraph{\nameref{sec:logconcave_gaussian_state_space_models}}
@@ -159,7 +159,7 @@ To obtain the maximum likelihood estimates $\hat\theta$ one needs access to the 
 \end{align}
 which is usually not analytically available.
 Direct numerical evaluation of \Cref{eq:likelihood} is hopeless due to the high dimensionality of the state space $\mathcal X^n$.
-Instead, we will resort to simulation-based inference by importance sampling (see \Cref{sec:importance_sampling}), a Monte-Carlo method that approximates $p(y)$ by constructing a global tractable approximation to the integrand in \Cref{eq:likelihood}. Alternatively, \gls{smc} methods, i.e. particle filters, that perform importance sampling sequentially across the $n + 1$ time steps can be used. We will not follow this approach for reasons described later, but refer the reader to the excellent reference \citep{Chopin2020Introduction} for an introduction to these methods.\todo{check we do this below}
+Instead, we will resort to simulation-based inference by importance sampling (see \Cref{sec:importance_sampling}), a Monte-Carlo method that approximates $p(y)$ by constructing a global tractable approximation to the integrand in \Cref{eq:likelihood}. Alternatively, \gls{smc} methods, i.e. particle filters, that perform importance sampling sequentially across the $n + 1$ time steps can be used. We will not follow this approach for reasons described later, but refer the reader to the excellent reference \citep{Chopin2020Introduction} for an introduction to these methods.
 
 The performance of these simulations depends crucially on our ability to construct distributions that are close to the posterior $p(x|y)$ but are easy to sample from. To this end, we construct either \acrfullpl{glssm} (\Cref{subsec:glssm-approach}) in which sampling from the posterior is analytically possible, or Gaussian Markov processes (\Cref{subsec:markov-approach}) which are directly amenable to simulation.
 These two approaches are motivated by what we term \glqq{}optimal importance sampling\grqq{}, where we use a proposal distribution that solves an optimization problem. Two popular approaches for choosing such a proposal are \acrlong{eis} and the \acrlong{cem}, which minimize an $L^{2}$ or \acrshort{kld} loss, respectively. Empirically, it has been shown that \acrshort{eis} outperforms the \acrshort{cem}, to which we add theoretical insight in the form of two central limit theorems (\Cref{sec:importance_sampling}): As both methods rely on importance sampling to determine an optimal proposal, the asymptotic variance of this procedure is of practical relevance, and we argue that this asymptotic variance is smaller for \acrshort{eis}.
@@ -183,9 +183,4 @@ To perform these tasks, the setting defined in \Cref{def:ssm} is too general to 
 %\input{chapters/03_06_multimodality_heavy_tails.tex}
 \input{chapters/03_state_space_models/03_07_MLE.tex}
 \input{chapters/03_state_space_models/03_08_comparison.tex}
-
-\section{Conclusion}
-\label{sec:03_conclusion}
-\todo{note CEM fails because it cannot work with independent marginals compared to EIS}
-
-\todo{compare independent components exponential family}
+\input{chapters/03_state_space_models/03_09_conclusion.tex}

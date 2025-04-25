@@ -5,7 +5,38 @@ d = { 'settings': { 'branch': 'main',
                 'doc_host': 'https://stefanheyder.github.io',
                 'git_url': 'https://github.com/stefanheyder/dissertation',
                 'lib_path': 'ssm4epi'},
-  'syms': { 'ssm4epi.models.hospitalization': { 'ssm4epi.models.hospitalization._initial_guess': ( '4 Models/4.3 Nowcasting '
+  'syms': { 'ssm4epi.ce_method': { 'ssm4epi.ce_method.ce_cholesky_block': ( '3 SSMs/07_cross_entropy_method_utils.html#ce_cholesky_block',
+                                                                            'ssm4epi/ce_method.py'),
+                                   'ssm4epi.ce_method.ce_cholesky_last': ( '3 SSMs/07_cross_entropy_method_utils.html#ce_cholesky_last',
+                                                                           'ssm4epi/ce_method.py'),
+                                   'ssm4epi.ce_method.ce_cholesky_precision': ( '3 '
+                                                                                'SSMs/07_cross_entropy_method_utils.html#ce_cholesky_precision',
+                                                                                'ssm4epi/ce_method.py'),
+                                   'ssm4epi.ce_method.ce_log_weights': ( '3 SSMs/07_cross_entropy_method_utils.html#ce_log_weights',
+                                                                         'ssm4epi/ce_method.py'),
+                                   'ssm4epi.ce_method.cholesky_components': ( '3 '
+                                                                              'SSMs/07_cross_entropy_method_utils.html#cholesky_components',
+                                                                              'ssm4epi/ce_method.py'),
+                                   'ssm4epi.ce_method.final_precision_root': ( '3 '
+                                                                               'SSMs/07_cross_entropy_method_utils.html#final_precision_root',
+                                                                               'ssm4epi/ce_method.py'),
+                                   'ssm4epi.ce_method.forward_model_markov_process': ( '3 '
+                                                                                       'SSMs/07_cross_entropy_method_utils.html#forward_model_markov_process',
+                                                                                       'ssm4epi/ce_method.py'),
+                                   'ssm4epi.ce_method.joint_cov': ( '3 SSMs/07_cross_entropy_method_utils.html#joint_cov',
+                                                                    'ssm4epi/ce_method.py'),
+                                   'ssm4epi.ce_method.log_prob': ( '3 SSMs/07_cross_entropy_method_utils.html#log_prob',
+                                                                   'ssm4epi/ce_method.py'),
+                                   'ssm4epi.ce_method.marginals': ( '3 SSMs/07_cross_entropy_method_utils.html#marginals',
+                                                                    'ssm4epi/ce_method.py'),
+                                   'ssm4epi.ce_method.simulate': ( '3 SSMs/07_cross_entropy_method_utils.html#simulate',
+                                                                   'ssm4epi/ce_method.py'),
+                                   'ssm4epi.ce_method.simulate_backwards': ( '3 SSMs/07_cross_entropy_method_utils.html#simulate_backwards',
+                                                                             'ssm4epi/ce_method.py'),
+                                   'ssm4epi.ce_method.transition_precision_root': ( '3 '
+                                                                                    'SSMs/07_cross_entropy_method_utils.html#transition_precision_root',
+                                                                                    'ssm4epi/ce_method.py')},
+            'ssm4epi.models.hospitalization': { 'ssm4epi.models.hospitalization._initial_guess': ( '4 Models/4.3 Nowcasting '
                                                                                                    'hospitalizations/model.html#_initial_guess',
                                                                                                    'ssm4epi/models/hospitalization.py'),
                                                 'ssm4epi.models.hospitalization.account_for_nans': ( '4 Models/4.3 Nowcasting '

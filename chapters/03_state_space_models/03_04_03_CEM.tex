@@ -159,9 +159,7 @@ To apply the \acrshort{cem} in practice, one usually iterates the sampling and e
     \end{algorithmic}
 \end{algorithm}
 
-\todo{literature review CEM}
 The \gls{cem} is routinely used for estimating failure probabilities for rare events \citep{Homem-de-Mello2007Study} and has been applied to Bayesian posterior inference \citep{Engel2023Bayesian,Ehre2023Certified}, Bayesian marginal likelihood estimation \citep{Chan2012Marginal} and optimal control problems \citep{Kappen2016Adaptive,Zhang2014Applications}.
-\todo{more lit. review CEM}
 % curse of dimensionality
 \glsreset{cod}
 Importance sampling is well known to exhibit the \gls{cod} \citep{Bengtsson2008Curseofdimensionality}, i.e. the phenomenon that in many problems, unless $N$ grows exponentially with the dimension of $\mathcal X$, the weights collapse to a single particle, i.e. $W^{(N)} \to 1$ as the dimension of $\mathcal X$ goes to $\infty$. As the \acrshort{cem} employs importance sampling to obtain $\hpce$, it too is affected by this phenomenon, see also \Cref{sec:simulation_studies}. 

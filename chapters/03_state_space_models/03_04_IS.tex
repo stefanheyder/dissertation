@@ -36,7 +36,9 @@ Let $\G$ be a another probability measure on $\mathcal X$ such that $f\P$ is abs
 $$
     \zeta = \P [f] = \int_{\mathcal X} f(x) \d \P(x) = \int_{\mathcal X} \left(\rnd{f\P}{\G}\right)(x)\d\G(x) = \G [v]
 $$
-which suggests to estimate $\zeta$ by Monte-Carlo integration: $$\hat \zeta = \frac 1 N \sum_{i=1}^{N} v(X^{i}), $$ the importance sampling estimate of $\zeta$. The importance samples $X^{i}, i = 1, \dots, N$ have distribution $\G$, and will usually be i.i.d. For this procedure to work, we want $\hat \zeta$ to fulfill a law of large numbers and a central limit theorem, so we will want $v \in L^{2}(\G)$, where $L^{p}(\nu)$ is the space of $p$-times $\nu$-integrable functions for a measure $\nu$. The i.i.d. assumption could also be dropped, e.g. when we employ antithetic variables, see \citep[Section 5.3]{Ripley2009Stochastic} and \Cref{sec:maximum_likelihood_estimation}. Here we call $\hat \zeta$ the importance sampling estimate of $\zeta$. 
+which suggests estimating $\zeta$ by Monte-Carlo integration: $$\hat \zeta = \frac 1 N \sum_{i=1}^{N} v(X^{i}), $$ the importance sampling estimate of $\zeta$. The importance samples $X^{i}, i = 1, \dots, N$ have distribution $\G$, and will usually be i.i.d. For this procedure to work, we want $\hat \zeta$ to fulfill a law of large numbers and a central limit theorem, so we will want $v \in L^{2}(\G)$, where $L^{p}(\nu)$ is the space of $p$-times $\nu$-integrable functions for a measure $\nu$. 
+We call such a proposal admissible, and inadmissible otherwise.
+The i.i.d. assumption could also be dropped, e.g. when we employ antithetic variables, see \citep[Section 5.3]{Ripley2009Stochastic} and \Cref{sec:maximum_likelihood_estimation}. Here we call $\hat \zeta$ the importance sampling estimate of $\zeta$. 
 
 If $v \in L^{2}(\G)$ and under i.i.d. sampling the Monte-Carlo variance of $\hat \zeta$ is $\frac{\var \left(v(X^{i})\right)}{N}$, and so naturally we want $\var \left(v(X^{i})\right)$ to be small to ensure fast convergence of $\hat \zeta$. As $v$ depends on the proposal $\G$, and we have flexibility in choosing $\G$, importance sampling acts as a variance reduction technique: the better $\G$ approximates $f\P$, in the sense that the variance of $v$ w.r.t. $\G$ is small, the faster importance sampling will converge. 
 
@@ -257,7 +259,7 @@ as the asymptotic relative efficiency of the two estimators, as long as this app
     $$
     is finite if, and only if, $\varepsilon^{2} > \frac{1}{2}$, by the preceding lemma. Thus, for $\varepsilon^{2} \leq \frac{1}{2}$ interpreting the \acrshort{ess} or \acrshort{ef} is not sensible. Nevertheless, given samples $X^{1}, \dots, X^{N} \iid \G$, we may calculate the \acrshort{ess} in the usual way. If $N$ is only moderately large, there is a high probability that most samples do not lie in a region where weights are small, i.e. in the tails of the second component. Thus, unless $N$ is large, the empirical \acrshort{ess} will be large, deceiving us to think that importance sampling with $\G$ is feasible.
 
-    We illustrate this by a simulation study, where we calculate the \acrshort{ef} $M=100$ times for different values of $N$ and $\varepsilon$. We used $N = 100, 1000, 10000$ and $\varepsilon^{2} = 0.01, 0.1, 0.5$; the results may be found in \Cref{fig:ess_failure}. Notice that for all values of $\varepsilon$ considered, we have $\rho = \infty$. We see that even for $N = 1000$ and $\varepsilon = \frac{1}{2}$ the upper quartile of \acrshortpl{ef} is $71\%$, which seems reasonable to declare importance sampling to perform well. 
+    We illustrate this by a simulation study, where we calculate the \acrshort{ef} $M=100$ times for different values of $N$ and $\varepsilon$. We used $N = 100, 1\,000, 10\,000$ and $\varepsilon^{2} = 0.01, 0.1, 0.5$; the results may be found in \Cref{fig:ess_failure}. Notice that for all values of $\varepsilon$ considered, we have $\rho = \infty$. We see that even for $N = 1\,000$ and $\varepsilon = \frac{1}{2}$ the upper quartile of \acrshortpl{ef} is $71\%$, which seems reasonable to declare importance sampling to perform well. 
 
     Let us note that having access to the normalized weights $w$ here allows us to spot this deficiency of the \acrshort{ess} by recognizing that while \acrshort{ess} is high, the weights $w$ are not close to $1$, but rather $\frac{1}{2}$.
 
@@ -282,7 +284,7 @@ Indeed, the authors show that for any given threshold $\epsilon$ we may find an 
 
 \begin{theorem}[{\cite[Theorem 2.1]{Chatterjee2018Sample}}]
     \label{thm:variance_failure}
-    Given any $\epsilon > 0$, there exists \todo{lower bound on $N$?} $N \leq \epsilon^{-2} 2^{1 + \epsilon^{-3}}$ such that the following is true. Take any $\G$ and $\P$ as in \Cref{thm:chatterje2018Thm1}, and any $f: \mathcal X \to \R$ such that $ \lVert f \rVert_{L^{2}(\P)} \leq 1.$ Then 
+    Given any $\epsilon > 0$, there exists $N \leq \epsilon^{-2} 2^{1 + \epsilon^{-3}}$ such that the following is true. Take any $\G$ and $\P$ as in \Cref{thm:chatterje2018Thm1}, and any $f: \mathcal X \to \R$ such that $ \lVert f \rVert_{L^{2}(\P)} \leq 1.$ Then 
     $$
         \mathbb P \left( \widehat \var \left( \hat \zeta_{N} \right) < \epsilon\right) \geq 1 - 4 \epsilon.
     $$
