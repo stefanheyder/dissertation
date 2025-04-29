@@ -89,7 +89,12 @@ As the joint distribution of $(X, Y)$ is Gaussian, so are conditional distributi
 \end{lemma}
 
 \begin{remark}[generalized inverse]
-    If $\Sigma_{YY}$ in \Cref{lem:gaussian_conditional} \ref{it:cond_gaussian} is singular, the statement remains true if we choose as $\Sigma_{YY}^{-1}$ a generalized inverse of $\Sigma_{YY}$, see \citep[8.a Note 3]{Rao2002Linear}. A generalized inverse for a matrix $A\in\R^{m \times p}$ is any matrix $A^{-} \in \R^{m \times p}$ such that $AA^{-}A = A$. Given a singular value decomposition $A = UDV^{T}$, we may obtain the Moore-Penrose inverse $A^{\dagger} = V D^{-}U^{T}$ of $A$, which is a generalized inverse of $A$, by inverting the non-zero diagonal elements of $D$. 
+    If $\Sigma_{YY}$ in \Cref{lem:gaussian_conditional} \ref{it:cond_gaussian} is singular, the statement remains true if we choose as $\Sigma_{YY}^{-1}$ a generalized inverse of $\Sigma_{YY}$, see \citep[8.a Note 3]{Rao2002Linear}. A generalized inverse for a matrix $A\in\R^{m \times p}$ is any matrix $A^{-} \in \R^{m \times p}$ such that $AA^{-}A = A$. Given a singular value decomposition $A = UDV^{T}$, we may obtain the Moore-Penrose inverse $A^{\dagger} = V D^{-}U^{T}$ of $A$, which is a generalized inverse of $A$, by inverting the non-zero diagonal elements of $D$, i.e. $$
+    D^{-}_{i,i} = \begin{cases}
+        \frac{1}{D_{i,i}} & \text{if } D_{i,i} \neq 0 \\
+        0 & \text{else}
+    \end{cases}
+    $$ for all $i = 1, \dots, \min(m,p)$.
 \end{remark}
 
 \begin{proof}

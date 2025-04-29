@@ -23,6 +23,7 @@
 
 \chapter{Importance Sampling in State Space Models}
 \label{cha:state_space_models}
+\newpage
 \begin{tcolorbox}[title={Contributions}]
     The main contribution of this chapter consists of a rigorous comparison of two importance sampling frameworks: the \Acrfull{cem} and \Acrfull{eis}. Both methods determine optimal importance sampling proposals, but have, until now, been studied in separate communities: the \acem is popular in rare-event estimation and engineering disciplines, while \aeis is popular in the financial time series community. 
 
@@ -30,26 +31,36 @@
 
     %\paragraph{\nameref{sec:modelling_epidemiological_dessiderata_with_state_space_models}} 
 
-    \paragraph{\nameref{sec:linear_gaussian_state_space_models}} This section is a condensed introduction to \acrfullpl{glssm} and is loosely based on \citep{Durbin2012Time}.
-    \paragraph{\nameref{sec:logconcave_gaussian_state_space_models}}
-    \paragraph{\nameref{sec:importance_sampling}}
+    \paragraph{\nameref{sec:linear_gaussian_state_space_models}} This section is loosely based on \citep{Durbin2012Time}.
+    \paragraph{\nameref{sec:logconcave_gaussian_state_space_models}} This section is loosely based on \citep{Durbin2012Time,Brown1986Fundamentals}.
+    \paragraph{\nameref{sec:importance_sampling}} While the general treatment of importance sampling is based on \citep{Chopin2020Introduction,Durbin2012Time}, we contribute the following:
     \begin{itemize}
-        \item We prove \Cref{lem:bounded-log-variance}.
-        \item Discussion surrounding \citep{Chatterjee2018Sample}.
-        \item We prove central limit theorems for both methods (\Cref{subsec:cem,subsec:eis}). 
-        \item Proof \Cref{prop:eis-finite-sample}. 
+        \item We prove \Cref{lem:bounded-log-variance} and \Cref{cor:dkl_bounded}.
+        \item Discussion surrounding \Cref{thm:chatterje2018Thm1}, especially \Cref{ex:ess_failure}.
+        \item The analysis of asymptotics of importance sampling methods, i.e. \Cref{prop:is-consistency,prop:is-clt}.
+        \item The consistency and CLT results for the \acrshort{cem} (\Cref{thm:cem-consistent,thm:cem-clt}) and \acrshort{eis} (\Cref{thm:eis-consistent,thm:eis-clt}).
+        \item The discussion of assumptions required in the CLTs for practical applications.
     \end{itemize}
 
     \paragraph{\nameref{sec:interim-discussion}}
+    The whole section is newly contributed.
 
     \paragraph{\nameref{sec:gaussian_importance_sampling_for_state_space_models}}
-    derive an efficient algorithm to apply the \acem to state space models (\Cref{subsec:markov-approach})
+    \begin{itemize}
+        \item The discussion surrounding the difficulties the \acrshort{cem} faces when applied to the \acrshort{glssm} proposal.
+        \item The derivation of the \acrshort{cem} for Markov-proposals (\Cref{prop:cem-for-markov-proposal}), resulting in \Cref{alg:cem-markov-proposal} and the optimized \Cref{alg:cem-markov-proposal-fast}.
+    \end{itemize}
 
     \paragraph{\nameref{sec:maximum_likelihood_estimation}}
+    This section is for the largest part based on literature, however the following points are new:
+    \begin{itemize}
+        \item The discussion of calculating the gradient, \Cref{eq:gradient_infeasible}, for the \acrshort{la} / \acrshort{eis}.
+        \item We make the antithetic variable construction of \citep{Durbin1997Monte} rigorous. 
+        \item \Cref{subsec:inference} is a rigorous reformulation of \citep[Section 11.5]{Durbin2012Time}.
+    \end{itemize}
 
-    \paragraph{\nameref{sec:simulation_studies}} Extensively compare both methods on theoretical as well as practically relevant properties with instructive univariate and multivariate examples (\Cref{sec:simulation_studies}). 
-
-    \paragraph{\nameref{sec:03_conclusion}}
+    \paragraph{\nameref{sec:simulation_studies}} 
+    This whole section is a new contribution, extensively comparing the \acrshort{cem} with \acrshort{eis}.
 \end{tcolorbox}
 \newpage
 

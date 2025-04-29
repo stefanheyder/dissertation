@@ -100,9 +100,10 @@ $$
 The gradient of the \acrshort{glssm} log-likelihood can be obtained either numerically or analytically by employing the Kalman filter and smoother \citep{Koopman1992Exact}, however, numerical evaluation may be faster if the dimension of $\theta$ is small compared to the length of the time series, as evaluating the likelihood only requires a single application of the Kalman filter. 
 
 As the observation densities $g(z_{t}|s_{t})$ do not depend on $\theta$, their derivatives do not appear in the above estimate. However, when using \acrshort{eis} to determine an optimal proposal, the parameter $\psi = (z, \omega)$ implicitly depends on $\theta$. Accounting for this yields the gradient 
-$$
+\begin{align}
+    \label{eq:gradient_infeasible}
     \verywidehat{\nabla_{\theta} \log p_{\theta}(y)} = \nabla_{\theta} \log g_{\theta}(z) + \sum_{i=1}^N W^{i}_\theta \left(\sum_{t = 0}^n \nabla_{\theta} \log p_{\theta}(y_{t}|S_{t}^{i}) - \nabla_{\theta} \log g_{\theta}(z_{t}|S^{i}_{t})\right),
-$$
+\end{align}
 as $\nabla_{\theta} \frac{1}{g_{\theta}(z|s)} = - \frac{1}{g_{\theta}(z|s)} \nabla_{\theta} \log g_{\theta}(z|s)$. The computation of this additional term is much more involved, as the parameters $z,\Omega$ are found through an iterative numerical scheme. Instead, we favor numerical differentiation of the whole procedure to evaluate the likelihood at $\theta$, including the method of finding an optimal importance sampling scheme. 
 
 As an alternative one may try keeping proposal $\G$ fixed, which would avoid calculation of the involved derivatives in the previous equation. However, this makes the calculation of weights more involved, as then $p_{\theta}(x) \neq g(x)$. Additionally, we would expect the target $p_{\theta}(x|y)$ to be quite sensitive to small changes in $\theta$, as $\theta$ will likely contain parameters related to the covariance structure of model, leading to fast degeneration of weights. Nevertheless, a combination of analytical and numerical gradient descent steps may improve the performance of the optimization procedure, but is beyond the scope of this thesis.
