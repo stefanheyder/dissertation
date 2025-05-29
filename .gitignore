@@ -317,3 +317,7 @@ __pycache__/
 
 # MACOS
 .DS_Store
+
+
+# R
+.RData
