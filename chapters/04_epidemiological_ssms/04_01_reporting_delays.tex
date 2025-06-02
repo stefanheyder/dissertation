@@ -22,6 +22,12 @@ Let $\hat p_{t, \tau} = \frac{Y_{t,\tau}}{Y_{t,\cdot}}$ denote the empirical del
 
 To produce accurate retrospective analyses of the daily growth factor, we will construct a \acrshort{ssm} that accounts for these delays, weekday effects and epidemics' dynamics. This model will enable us to better understand the delay process, accommodate periods of inconsistent reporting, and generate daily growth factors useful for the interpretation of \acrshort{npi} efficacy.
 
+\todo{lit rev.}
+The problem of accounting for reporting delays is generally termed \glqq{}nowcasting\grqq{} in the literature, see also \Cref{sec:nowcasting_hospitalizations} and the literature review in therein. Here, however, we are interested in a different problem: that of reconstructing the actual course of the epidemic, i.e. removing both the reporting delay and weekday-effects.
+% literature review on models that deal with reporting delays
+%% McGough
+
+
 In addition, we will demonstrate the model's utility when handling reporting artifacts not explicitly modeled, e.g. the Christmas period of 2020. \Acrshortpl{ssm} handle missing data seamlessly, so removing observations in that period and fitting the model again is straightforward.
 
 \subsection{Model}
@@ -128,8 +134,8 @@ We start by a showcase of the models' capability, fitting it to the reported cas
 \begin{table}
     \centering
     \input{tables/showcase-parameters.tex}
-    \label{tab:showcase-parameters}
     \caption{Standard deviations for the models' showcase determined either by hand, by the initial search or by maximum likelihood estimation described in \Cref{sec:maximum_likelihood_estimation}. The difference between the initial search and the \acrshort{mle} is negligible and is not visible for the precision shown here.}
+    \label{tab:showcase-parameters}
 \end{table}
 \begin{figure}
     \resizebox{\textwidth}{!}{%
