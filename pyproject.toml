@@ -1,3 +1,28 @@
-[build-system]
-requires = ["setuptools>=64.0"]
-build-backend = "setuptools.build_meta"
+[project]
+name="ssm4epi"
+version = "0.1.0"
+description = "Code for the ssm4epi thesis"
+readme = "README.md"
+requires-python=">=3.7"
+dependencies = [
+    "fastcore>=1.8.2",
+    "isssm",
+    "jax>=0.6.1",
+    "jaxtyping>=0.3.2",
+    "jinja2>=3.1.6",
+    "matplotlib>=3.10.3",
+    "numpy",
+    "pandas>=2.2.3",
+    "pyprojroot>=0.3.0",
+    "setuptools>=80.9.0",
+    "tensorflow-probability>=0.25.0",
+]
+
+[dependency-groups]
+dev = [
+    "jupyter>=1.1.1",
+    "nbdev>=2.4.2",
+]
+
+[tool.uv.sources]
+isssm = { path = "../../packages/isssm", editable = true }

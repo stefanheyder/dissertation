@@ -26,6 +26,20 @@ py_versions = '3.6 3.7 3.8 3.9 3.10 3.11 3.12'.split()
 
 requirements = shlex.split(cfg.get('requirements', ''))
 if cfg.get('pip_requirements'): requirements += shlex.split(cfg.get('pip_requirements', ''))
+
+def read_pyproject_dependencies():
+    try:
+        import tomli
+        with open('pyproject.toml', 'rb') as f:
+            data = tomli.load(f)
+            return data.get('project', {}).get('dependencies', [])
+    except:
+        return []
+        
+# Add this to setup.py to merge dependencies
+project_deps = read_pyproject_dependencies()
+requirements.extend(project_deps)
+
 min_python = cfg['min_python']
 lic = licenses.get(cfg['license'].lower(), (cfg['license'], None))
 dev_requirements = (cfg.get('dev_requirements') or '').split()

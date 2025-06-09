@@ -105,9 +105,11 @@ def _initial_guess(xi_t, y_t, dist, link=isssm.laplace_approximation.default_lin
     delay_probs_est = (y_t + 1.0) / (y_t + 1.0).sum()
     logit_delay_est = to_consecutive_logits(delay_probs_est)
 
-    non_nan_guess = jnp.array([log_p_est, *logit_delay_est]) * jnp.concatenate((jnp.array([1.]), is_y_available[:-1]))
-    #any_missing = jnp.any(xi_t[..., 0] == 0)
-    #return cond(any_missing, lambda *_: nan_guess, lambda *_: non_nan_guess)
+    non_nan_guess = jnp.array([log_p_est, *logit_delay_est]) * jnp.concatenate(
+        (jnp.array([1.0]), is_y_available[:-1])
+    )
+    # any_missing = jnp.any(xi_t[..., 0] == 0)
+    # return cond(any_missing, lambda *_: nan_guess, lambda *_: non_nan_guess)
     return non_nan_guess
 
 
@@ -143,7 +145,7 @@ delays_per_age = pd.DataFrame(
     {"a_index": range(len(unique_a)), "n_delays": [5, 5, 7, 7, 8, 8, 8]}
 )
 
-# %% ../../nbs/4 Models/4.3 Nowcasting hospitalizations/10_model.ipynb 19
+# %% ../../nbs/4 Models/4.3 Nowcasting hospitalizations/10_model.ipynb 20
 from isssm.importance_sampling import mc_integration
 from isssm.kalman import state_mode
 from jax import vmap
@@ -190,7 +192,7 @@ def visualize_model_fit(samples, log_weights, model, i_start, np1, y, a_index):
 
     plt.show()
 
-# %% ../../nbs/4 Models/4.3 Nowcasting hospitalizations/10_model.ipynb 22
+# %% ../../nbs/4 Models/4.3 Nowcasting hospitalizations/10_model.ipynb 24
 from jaxtyping import Array, Float
 
 
@@ -228,7 +230,7 @@ def account_for_nans(
 
     return model_missing, y_missing
 
-# %% ../../nbs/4 Models/4.3 Nowcasting hospitalizations/10_model.ipynb 24
+# %% ../../nbs/4 Models/4.3 Nowcasting hospitalizations/10_model.ipynb 26
 from jax.lax import fori_loop
 
 
