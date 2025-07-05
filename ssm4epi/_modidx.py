@@ -36,12 +36,18 @@ d = { 'settings': { 'branch': 'main',
                                    'ssm4epi.ce_method.transition_precision_root': ( '3 '
                                                                                     'SSMs/07_cross_entropy_method_utils.html#transition_precision_root',
                                                                                     'ssm4epi/ce_method.py')},
-            'ssm4epi.models.hospitalization': { 'ssm4epi.models.hospitalization._initial_guess': ( '4 Models/4.3 Nowcasting '
+            'ssm4epi.models.hospitalization': { 'ssm4epi.models.hospitalization.LA_missing': ( '4 Models/4.3 Nowcasting '
+                                                                                               'hospitalizations/model.html#la_missing',
+                                                                                               'ssm4epi/models/hospitalization.py'),
+                                                'ssm4epi.models.hospitalization._initial_guess': ( '4 Models/4.3 Nowcasting '
                                                                                                    'hospitalizations/model.html#_initial_guess',
                                                                                                    'ssm4epi/models/hospitalization.py'),
                                                 'ssm4epi.models.hospitalization.account_for_nans': ( '4 Models/4.3 Nowcasting '
                                                                                                      'hospitalizations/model.html#account_for_nans',
                                                                                                      'ssm4epi/models/hospitalization.py'),
+                                                'ssm4epi.models.hospitalization.estimate_theta0_missing': ( '4 Models/4.3 Nowcasting '
+                                                                                                            'hospitalizations/model.html#estimate_theta0_missing',
+                                                                                                            'ssm4epi/models/hospitalization.py'),
                                                 'ssm4epi.models.hospitalization.hospitalization_model': ( '4 Models/4.3 Nowcasting '
                                                                                                           'hospitalizations/model.html#hospitalization_model',
                                                                                                           'ssm4epi/models/hospitalization.py'),

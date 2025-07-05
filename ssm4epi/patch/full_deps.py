@@ -74,6 +74,7 @@ from isssm.laplace_approximation import _initial_guess, default_link
 def default_link(y):
     return jnp.log(jnp.clip(y, 0.05))
 
+
 def laplace_approximation(
     y: Float[Array, "n+1 p"],  # observation
     model: PGSSM,
@@ -128,7 +129,7 @@ def laplace_approximation(
         Gamma = -vdd_log_lik(s, xi, y)
         # pinv for missing values: if Gamma is 0, we want Omega to be 0 as well
         # requries exact derivatives, not numerical ones!
-        Omega = jnp.linalg.pinv(Gamma, hermitian=True, rcond=1e-10)
+        Omega = jnp.linalg.pinv(Gamma, hermitian=True, rcond=1e-5)
 
         # z = s + jnp.linalg.solve(Gamma, grad[..., None])[..., 0]
         z = s + (Omega @ grad[..., None])[..., 0]
@@ -353,9 +354,11 @@ isssm.modified_efficient_importance_sampling.modified_efficient_importance_sampl
 
 # %% ../../nbs/4 Models/10_patch_full_dependencies.ipynb 10
 # monkey patch gnll to handle nans
-vmm = vmap(jnp.matmul, (0,0))
+vmm = vmap(jnp.matmul, (0, 0))
 from isssm.util import MVN_degenerate as MVN
 import isssm.estimation
+
+
 @jit
 def gnll(
     y: Float[Array, "n+1 p"],  # observations $y_t$
@@ -369,5 +372,6 @@ def gnll(
     Psi_pred = vmm(vmm(B, Xi_pred), jnp.transpose(B, (0, 2, 1))) + Omega
 
     return jnp.nansum(-MVN(y_pred, Psi_pred).log_prob(y))
+
 
 isssm.estimation.gnll = gnll

@@ -2,7 +2,7 @@
 
 # %% auto 0
 __all__ = ['hospitalization_data', 'unique_a', 'dates', 'h_by_age', 'I_by_age', 'delays_per_age', 'hospitalization_model',
-           'visualize_model_fit', 'account_for_nans', 'make_y_nan']
+           'visualize_model_fit', 'account_for_nans', 'make_y_nan', 'estimate_theta0_missing', 'LA_missing']
 
 # %% ../../nbs/4 Models/4.3 Nowcasting hospitalizations/10_model.ipynb 3
 from pyprojroot.here import here
@@ -145,7 +145,7 @@ delays_per_age = pd.DataFrame(
     {"a_index": range(len(unique_a)), "n_delays": [5, 5, 7, 7, 8, 8, 8]}
 )
 
-# %% ../../nbs/4 Models/4.3 Nowcasting hospitalizations/10_model.ipynb 20
+# %% ../../nbs/4 Models/4.3 Nowcasting hospitalizations/10_model.ipynb 21
 from isssm.importance_sampling import mc_integration
 from isssm.kalman import state_mode
 from jax import vmap
@@ -192,7 +192,7 @@ def visualize_model_fit(samples, log_weights, model, i_start, np1, y, a_index):
 
     plt.show()
 
-# %% ../../nbs/4 Models/4.3 Nowcasting hospitalizations/10_model.ipynb 24
+# %% ../../nbs/4 Models/4.3 Nowcasting hospitalizations/10_model.ipynb 25
 from jaxtyping import Array, Float
 
 
@@ -230,7 +230,7 @@ def account_for_nans(
 
     return model_missing, y_missing
 
-# %% ../../nbs/4 Models/4.3 Nowcasting hospitalizations/10_model.ipynb 26
+# %% ../../nbs/4 Models/4.3 Nowcasting hospitalizations/10_model.ipynb 27
 from jax.lax import fori_loop
 
 
@@ -240,3 +240,127 @@ def make_y_nan(y: Float):
     for i in range(n_delay):
         y_nan = y_nan.at[(-7 * (i + 1) + 1) :, (i + 1) :].set(jnp.nan)
     return y_nan
+
+# %% ../../nbs/4 Models/4.3 Nowcasting hospitalizations/10_model.ipynb 30
+def estimate_theta0_missing(y_nan, theta0, aux, i_start):
+
+    np1 = aux[-1].shape[0]
+    n_delay = aux[1]
+    n_weekday = aux[2]
+
+    # build model with full observations to determine theta
+    # use only time points where all y values are available
+    y_available = y_nan[~jnp.isnan(y_nan).any(axis=-1)]
+    n_available, _ = y_available.shape
+    aux_available = (
+        n_available,
+        n_delay,
+        n_weekday,
+        I[i_start + (np1 - n_available) : i_start + np1],
+    )
+    theta0_missing_result = initial_theta(
+        y_available, hospitalization_model, theta0, aux_available, 100
+    )
+    return theta0_missing_result
+
+# %% ../../nbs/4 Models/4.3 Nowcasting hospitalizations/10_model.ipynb 32
+from ..patch.full_deps import default_link
+from isssm.typing import GLSSMProposal, ConvergenceInformation, GLSSM
+from functools import partial
+from jax import jit, jacfwd, jacrev, vmap
+from jax.lax import while_loop
+from isssm.util import converged
+from isssm.kalman import kalman, smoothed_signals
+
+
+def LA_missing(
+    y: Float[Array, "n+1 p"],  # observation
+    model: PGSSM,
+    n_iter: int,  # number of iterations
+    log_lik=None,  # log likelihood function
+    d_log_lik=None,  # derivative of log likelihood function
+    dd_log_lik=None,  # second derivative of log likelihood function
+    eps: Float = 1e-5,  # precision of iterations
+    link=default_link,  # default link to use in initial guess
+) -> tuple[GLSSMProposal, ConvergenceInformation]:
+    u, A, D, Sigma0, Sigma, v, B, dist, xi = model
+    np1, p, m = B.shape
+
+    s_init = vmap(partial(_initial_guess, dist=dist, link=link))(xi, y)
+
+    s_missing = (xi[..., 0] == 0.0).any(axis=-1)
+    # if missing values, we want to have a larger initial guess
+    # this is due to numerical issues with the Hessian:
+    # it is ill-conditioned when $y \\approx \\lambda_1$
+    s_init = s_init.at[s_missing, 0].set(s_init[s_missing, 0] + jnp.log(1.1))
+    # s_init = jnp.zeros((np1, p))  # initial guess for the signal
+    # missing values have zero obs. -> 0.
+    # s_init = jnp.hstack(
+    #    (jnp.log(y.sum(axis=1, keepdims=True) + 1.0), jnp.zeros((np1, 3)))
+    # )
+
+    def default_log_lik(
+        s_t: Float[Array, "p"], xi_t: Float[Array, "p"], y_t: Float[Array, "p'"]
+    ):
+        return dist(s_t, xi_t).log_prob(y_t).sum()
+
+    if log_lik is None:
+        log_lik = default_log_lik
+
+    if d_log_lik is None:
+        d_log_lik = jacfwd(log_lik, argnums=0)
+    if dd_log_lik is None:
+        dd_log_lik = jacrev(d_log_lik, argnums=0)
+
+    vd_log_lik = jit(vmap(d_log_lik))
+    vdd_log_lik = jit(vmap(dd_log_lik))
+
+    def _break(val):
+        _, i, z, Omega, z_old, Omega_old = val
+
+        z_converged = jnp.logical_and(converged(z, z_old, eps), i > 0)
+        Omega_converged = jnp.logical_and(converged(Omega, Omega_old, eps), i > 0)
+        all_converged = jnp.logical_and(z_converged, Omega_converged)
+
+        iteration_limit_reached = i >= n_iter
+
+        return jnp.logical_or(all_converged, iteration_limit_reached)
+
+    def _iteration(val):
+        s, i, z_old, Omega_old, _, _ = val
+
+        grad = vd_log_lik(s, xi, y)
+        Gamma = -vdd_log_lik(s, xi, y)
+        # pinv for missing values: if Gamma is 0, we want Omega to be 0 as well
+        # requries exact derivatives, not numerical ones!
+        Omega = jnp.linalg.pinv(Gamma, hermitian=True, rcond=1e-5)
+
+        # z = s + jnp.linalg.solve(Gamma, grad[..., None])[..., 0]
+        z = s + (Omega @ grad[..., None])[..., 0]
+        approx_glssm = GLSSM(u, A, D, Sigma0, Sigma, v, B, Omega)
+
+        filtered = kalman(z, approx_glssm)
+        s_new = smoothed_signals(filtered, z, approx_glssm)
+
+        return s_new, i + 1, z, Omega, z_old, Omega_old
+
+    empty_z = jnp.empty_like(s_init)
+    empty_Omega = jnp.empty((np1, p, p))
+    init = (s_init, 0, empty_z, empty_Omega, empty_z, empty_Omega)
+
+    _keep_going = lambda *args: jnp.logical_not(_break(*args))
+    s, n_iters, z, Omega, z_old, Omega_old = while_loop(_keep_going, _iteration, init)
+
+    delta_z = jnp.max(jnp.abs(z - z_old))
+    delta_Omega = jnp.max(jnp.abs(Omega - Omega_old))
+    information = ConvergenceInformation(
+        converged=jnp.logical_and(
+            converged(z, z_old, eps), converged(Omega, Omega_old, eps)
+        ),
+        n_iter=n_iters,
+        delta=jnp.max(jnp.array([delta_z, delta_Omega])),
+    )
+
+    final_proposal = GLSSMProposal(u, A, D, Sigma0, Sigma, v, B, Omega, z)
+
+    return final_proposal, information
