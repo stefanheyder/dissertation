@@ -242,9 +242,10 @@ def make_y_nan(y: Float):
     return y_nan
 
 # %% ../../nbs/4 Models/4.3 Nowcasting hospitalizations/10_model.ipynb 30
-def estimate_theta0_missing(y_nan, theta0, aux, i_start):
+from isssm.estimation import initial_theta
 
-    np1 = aux[-1].shape[0]
+
+def estimate_theta0_missing(y_nan, theta0, aux, I):
     n_delay = aux[1]
     n_weekday = aux[2]
 
@@ -256,7 +257,7 @@ def estimate_theta0_missing(y_nan, theta0, aux, i_start):
         n_available,
         n_delay,
         n_weekday,
-        I[i_start + (np1 - n_available) : i_start + np1],
+        I[-n_available:], 
     )
     theta0_missing_result = initial_theta(
         y_available, hospitalization_model, theta0, aux_available, 100

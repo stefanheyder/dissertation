@@ -6,6 +6,8 @@ readme = "README.md"
 requires-python=">=3.7"
 dependencies = [
     "fastcore>=1.8.2",
+    "ipykernel>=6.29.5",
+    "ipympl>=0.9.7",
     "isssm",
     "jax>=0.6.1",
     "jaxtyping>=0.3.2",
@@ -16,6 +18,8 @@ dependencies = [
     "pyprojroot>=0.3.0",
     "setuptools>=80.9.0",
     "tensorflow-probability>=0.25.0",
+    "tqdm>=4.67.1",
+    "ward>=0.68.0b0",
 ]
 
 [dependency-groups]
