@@ -2626,3 +2626,35 @@
     <bcf:citekey order="209" intorder="1">Keller2022Tracking</bcf:citekey>
     <bcf:citekey order="210" intorder="1">ODea2022Semiparametric</bcf:citekey>
     <bcf:citekey order="211" intorder="1">Jungbacker2007Monte</bcf:citekey>
+    <bcf:citekey order="212" intorder="1">Durbin2012Time</bcf:citekey>
+    <bcf:citekey order="213" intorder="1">RobertKoch-Institut2021COVID19Hospitalisierungen</bcf:citekey>
+    <bcf:citekey order="214" intorder="1">Wolffram2023Collaborative</bcf:citekey>
+    <bcf:citekey order="215" intorder="1">Kaminsky1987Prediction</bcf:citekey>
+    <bcf:citekey order="216" intorder="1">Zeger1989Statistical</bcf:citekey>
+    <bcf:citekey order="216" intorder="2">Lawless1994Adjustments</bcf:citekey>
+    <bcf:citekey order="217" intorder="1">Farrington1996Statistical</bcf:citekey>
+    <bcf:citekey order="218" intorder="1">Lawless1994Adjustments</bcf:citekey>
+    <bcf:citekey order="219" intorder="1">Zeger1989Statistical</bcf:citekey>
+    <bcf:citekey order="220" intorder="1">Midthune2005Modeling</bcf:citekey>
+    <bcf:citekey order="221" intorder="1">Hohle2014Bayesian</bcf:citekey>
+    <bcf:citekey order="221" intorder="2">AnDerHeiden2020Schatzung</bcf:citekey>
+    <bcf:citekey order="222" intorder="1">Renshaw1998Stochastic</bcf:citekey>
+    <bcf:citekey order="223" intorder="1">Hohle2014Bayesian</bcf:citekey>
+    <bcf:citekey order="223" intorder="2">vandeKassteele2019Nowcasting</bcf:citekey>
+    <bcf:citekey order="224" intorder="1">McGough2020Nowcasting</bcf:citekey>
+    <bcf:citekey order="225" intorder="1">Midthune2005Modeling</bcf:citekey>
+    <bcf:citekey order="226" intorder="1">Salmon2015Bayesian</bcf:citekey>
+    <bcf:citekey order="226" intorder="2">Bastos2019Modelling</bcf:citekey>
+    <bcf:citekey order="227" intorder="1">AnDerHeiden2020Schatzung</bcf:citekey>
+    <bcf:citekey order="227" intorder="2">Gunther2021Nowcasting</bcf:citekey>
+    <bcf:citekey order="227" intorder="3">Schneble2021Nowcasting</bcf:citekey>
+    <bcf:citekey order="227" intorder="4">Akhmetzhanov2021Estimation</bcf:citekey>
+    <bcf:citekey order="228" intorder="1">Desai2019Realtime</bcf:citekey>
+    <bcf:citekey order="229" intorder="1">Gunther2021Nowcasting</bcf:citekey>
+    <bcf:citekey order="229" intorder="2">vandeKassteele2019Nowcasting</bcf:citekey>
+    <bcf:citekey order="230" intorder="1">Midthune2005Modeling</bcf:citekey>
+    <bcf:citekey order="231" intorder="1">Noufaily2015Modelling</bcf:citekey>
+    <bcf:citekey order="232" intorder="1">Ray2020Ensemble</bcf:citekey>
+    <bcf:citekey order="232" intorder="2">Bracher2021Preregistered</bcf:citekey>
+    <bcf:citekey order="233" intorder="1">2022Nowcasts</bcf:citekey>
+    <bcf:citekey order="234" intorder="1">2022Hospitalization</bcf:citekey>

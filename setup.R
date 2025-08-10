@@ -116,7 +116,18 @@ four_weekly_breaks <- function(x) {
 }
 
 scale_x_four_weekly <- function() {
-	scale_x_date(breaks = four_weekly_breaks, minor_breaks = weekly_breaks, date_labels = "%d %b %y", expand = expansion(mult= c(0.01, 0.01)))
+	list(
+		scale_x_date(
+			breaks = four_weekly_breaks,
+			minor_breaks = weekly_breaks,
+			date_labels = "%d %b %y",
+			expand = expansion(mult = c(0.01, 0.01))
+		),
+		theme(
+			panel.grid.major.x = element_line(linewidth = 1.2),
+			panel.grid.minor.x = element_line(linewidth = 0.5)
+		)
+	)
 }
 
 default_probs <- c(0.01, 0.025, 0.05 * 1:19, 0.975, 0.99)
@@ -139,3 +150,17 @@ read_predictions <- function(fname, dates, variables, probs = default_probs) {
 ordered_age_group <- function(age_group) {
 	ordered(age_group, levels = c("A00-04", "A05-14", "A15-34", "A35-59", "A60-79", "A80+", "A00+"))
 }
+
+# plotting helpers for age groups
+age_group_labels <- c(
+    `00+` = "all ages",
+    `00-04` = "ages 00-04",
+    `05-14` = "ages 05-14",
+    `15-34` = "ages 15-34",
+    `35-59` = "ages 35-59",
+    `60-79` = "ages 60-79",
+    `80+` = "ages 80+"
+)
+
+age_group_labeller <- as_labeller(age_group_labels)
+age_order_4cols <- c("00-04", "05-14", "15-34", "00+", "35-59", "60-79", "80+")

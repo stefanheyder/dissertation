@@ -1,0 +1,16 @@
+
+\begin{tabular}[t]{l>{}r>{}r>{}r}
+\toprule
+ & ILM-prop42 & MeanEnsemble & SSM\\
+\midrule
+Mean Absolute Error & 589.3 & \textbf{502.9} & 526.4\\
+Coverage 95\% PI [\%] & 69.0 & \textbf{86.7} & 67.7\\
+Coverage 50\% PI [\%] & 42.4 & \textbf{46.2} & 29.1\\
+\addlinespace[0.3em]
+\multicolumn{4}{l}{\textbf{WIS}}\\
+\hspace{1em}WIS & 377.6 & \textbf{282.7} & 352.1\\
+\hspace{1em}Sharpness & 101.4 & 110.2 & \textbf{75.3}\\
+\hspace{1em}Underprediction & \textbf{33.9} & 40.5 & 100.5\\
+\hspace{1em}Overprediction & 162.5 & \textbf{61.6} & 97.0\\
+\bottomrule
+\end{tabular}
