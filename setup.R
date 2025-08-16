@@ -164,3 +164,59 @@ age_group_labels <- c(
 
 age_group_labeller <- as_labeller(age_group_labels)
 age_order_4cols <- c("00-04", "05-14", "15-34", "00+", "35-59", "60-79", "80+")
+
+
+WIS_decompose <- function(prob, quant, actual) {
+  # Identify the median forecast
+  median_idx <- which(prob == 0.5)
+  median_forecast <- quant[median_idx]
+  mean_error <- abs(actual - median_forecast)
+  
+  # Remove median for interval processing
+  interval_idx <- setdiff(seq_along(prob), median_idx)
+  prob_intervals <- prob[interval_idx]
+  quant_intervals <- quant[interval_idx]
+  
+  K <- length(prob_intervals) / 2
+  total_weight <- 0.5 + K  # 0.5 for median, alpha/2 per interval
+  
+  sharpness <- 0
+  overprediction <- 0
+  underprediction <- 0
+  
+  for (i in seq_len(K)) {
+    lower_idx <- i
+    upper_idx <- length(prob_intervals) - i + 1
+    alpha <- 2 * prob_intervals[lower_idx]
+    lower <- quant_intervals[lower_idx]
+    upper <- quant_intervals[upper_idx]
+    weight <- alpha / 2
+    
+    # Interval score components
+    sharpness <- sharpness + weight * (upper - lower)
+
+    underprediction <- underprediction + weight * ifelse(actual > upper, (2/alpha)*(actual - upper), 0)
+    overprediction <- overprediction + weight * ifelse(actual < lower, (2/alpha)*(lower - actual), 0)
+  }
+  
+  normalized_sharpness <- sharpness / total_weight
+  normalized_underprediction <- underprediction / total_weight
+  normalized_overprediction <- overprediction / total_weight
+  normalized_mean_error <- (0.5 * mean_error) / total_weight
+  
+  wis <- normalized_sharpness + normalized_overprediction + normalized_underprediction + normalized_mean_error
+  return(list(
+    wis = wis,
+    sharpness = normalized_sharpness,
+    underprediction = normalized_underprediction,
+    overprediction = normalized_overprediction,
+    mean_error = normalized_mean_error
+  ))
+}
+
+# Example usage:
+# prob <- c(0.025, 0.25, 0.5, 0.75, 0.975)
+# quant <- c(10, 15, 20, 25, 30)
+# actual <- 18
+# result <- calculate_wis_components(prob, quant, actual)
+# print(result)

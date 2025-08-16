@@ -164,11 +164,10 @@ for all age groups. We can observe that starting in the middle of December 2021 
 \newcommand*{\ilmprop}{\texttt{ILM-prop42}\xspace}
 \newcommand*{\ensemble}{\texttt{MeanEnsemble}\xspace}
 To evaluate the predictive capabilities of our model, we use it to perform retrospective nowcasting of hospitalizations, emulating the setting of the German NowcastHub. 
-We focus on same-day nowcasting, i.e. only nowcasting for the current day, with a maximum delay of $6$ weeks (setting ),   performing all predictions for every age group separately. 
+We focus on same-day nowcasting, i.e. only nowcasting for the current day, with a maximum delay of $6$ weeks, performing all predictions for every age group separately. Let us call this model \ssm in the remainder of this section.
 
-For every day, $s$ say, in the period of 22nd November 2021 to 14th April 2022 we fit the model to the data of the past $50$ days that were available on day $s$. 
-We exclude the Easter period starting with Good Friday on 15th April 2022 to avoid having to deal with data artifacts with inconsistent reporting in that period.
-
+For every day, $s$ say, in the period of 22nd November 2021 to 29th April 2022 we fit the model to the data of the past $100$ days that were available on day $s$. 
+%We exclude the Easter period starting with Good Friday on 15th April 2022 to avoid having to deal with data artifacts with inconsistent reporting in that period.
 Thus, the observations of the model consist of $y_{t}$ for $s - 100 < t \leq s$, but as 
 $$
     y_{t} = \left( H_{t,t}, H_{t, t + 7} - H_{t,t}, \dots, H_{t, t + D}  - H_{t,t + D - 7}\right),
