@@ -13,6 +13,7 @@
 A major challenge for scientific inquiry during an ongoing epidemic is the multitude of uncertainties one must consider. 
 In this thesis, we detail the demands that epidemiological data impose and demonstrate that state space models (SSMs) offer a flexible class of statistical models capable of capturing these effects while delivering results that are straightforward to interpret. 
 To facilitate inference and predictions in these models, we use importance sampling techniques, for which two popular choices are the Cross-Entropy method (CE-method) and Efficient Importance Sampling (EIS), which are based on Kullback-Leibler and least-squares loss, respectively. For these two methods we provide central limit theorems that shed light on the empirical observation that EIS provides better importance sampling approximations. Our theoretical results reveal that this is likely due to the lower asymptotic variance of EIS. 
+
 To demonstrate the capabilities of such models, we fit models for three real-world applications using Germany's COVID-19 data. 
 The first model illustrates how SSMs can be employed to account for the reporting process in detail, which may be used to handle reporting artifacts caused by factors such as holiday periods.
 Second, we provide a model that explicitly accounts for the exchange of cases between spatial regions. We use this model to perform one-week-ahead forecasts of reported cases for Germany and validate them against the ECDC's ForecastHub dataset, consisting of such forecasts made in real-time.
@@ -23,7 +24,15 @@ Finally, we introduce a model for the delayed reporting of hospitalizations in G
 \begin{otherlanguage}{ngerman}
 %\pdfbookmark[1]{Zusammenfassung}{Zusammenfassung}
 \chapter*{Zusammenfassung}
-Kurze Zusammenfassung des Inhaltes in deutscher Sprache\dots
+Eine zentrale Herausforderung, der sich die Wissenschaft während einer laufenden Epidemie stellen muss, ist die Mannigfaltigkeit von Unsicherheiten. In dieser Dissertation erläutern wir die Anforderungen, die epidemiologische Daten stellen, und zeigen, dass Zustandsraummodelle (engl. State Space Models, SSMs) eine flexible Klasse statistischer Modelle bieten, die diese Effekte erfassen und gleichzeitig leicht interpretierbare Ergebnisse liefern können.
+Um Inferenz und Vorhersagen in diesen Modellen zu ermöglichen, verwenden wir Importance-Sampling-Techniken, für die zwei populäre Ansätze existieren: Die Cross-Entropy-Methode (CE-Methode) optimiert die Kullback-Leibler Divergenz zwischen Vorschlags- und Zielverteilung, währen die Efficient Importance Sampling (EIS) Method einen geeignenten Kleinste-Quadrate Abstand minimiert.
+Für diese beiden Methoden stellen wir neue zentrale Grenzwertsätze vor, die die empirische Beobachtung erklären, dass EIS bessere Importance-Sampling-Approximationen liefert. Unsere theoretischen Ergebnisse zeigen, dass dies wahrscheinlich auf die niedrigere asymptotische Varianz von EIS zurückzuführen ist.
+
+Um die Anwendungsmöglichkeiten dieser Modelle zu demonstrieren, wenden wir diese auf drei reale Anwendungen von COVID-19-Daten aus Deutschland an.
+Das erste Modell veranschaulicht, wie SSMs eingesetzt werden können, um den Meldeprozess von COVID-19 Infektionen detailliert zu berücksichtigen und damit Meldeanomalien, wie sie beispielsweise durch Ferienzeiten entstehen, zu behandeln.
+Als Zweites stellen wir ein Modell vor, das explizit den Austausch von Fällen zwischen räumlichen Regionen berücksichtigt. Wir nutzen dieses Modell für Kurzzeitprognosen gemeldeter Fälle für Deutschland und validieren diese anhand des ECDC-ForecastHub-Datensatzes, der aus solchen Echtzeit-Prognosen besteht.
+Schließlich führen wir ein Modell für die verzögerte Meldung von Hospitalisierungen in Deutschland ein, das wir zur Nowcasting der Hospitalisierungsinzidenz verwenden. Wir vergleichen auch die Vorhersageleistung dieses Modells mit Echtzeit-Nowcasts, die vom deutschen NowcastHub bereitgestellt werden.
+
 \end{otherlanguage}
 
 \endgroup
