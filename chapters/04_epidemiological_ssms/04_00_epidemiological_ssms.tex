@@ -2,13 +2,16 @@
 \label{cha:analysis_of_selected_models}
 \newpage
 \begin{tcolorbox}[title={Contributions of this chapter}]
-    The main contribution of this chapter is to apply the methods derived in \Cref{cha:state_space_models} to selected inference and prediction problems in the context of \acrshort{c19} in Germany.
+    The main contribution of this chapter is to apply the methods derived in \Cref{cha:state_space_models} to selected inference and prediction problems in the context of \acrshort{c19} in Germany. Each model is an extension of model we have used during the \acrshort{c19} pandemic to produce forecasts of cases, deaths and hospitalizations. As all content of this chapter is newly contributed, we give a short overview over the improvements that these models contribute.
+
     \paragraph{\nameref{sec:model_reporting_delay}}
-    \phantom{stuff}
+    The model developed in this section is based on the \texttt{ILM-EKF} model that Thomas Hotz and the author have submitted to the ECDCs COVID-19 ForecastHub. The original model was also based on a \acrshort{ssm}, however fit with an extended Kalman-filter, ignoring the integer nature of the data at hand. This model also did not include delays and was based on reproduction numbers.
+
     \paragraph{\nameref{sec:regional_growth_factor_model}}
-    \phantom{stuff}
+    This model is based on the \texttt{ITWW-county\_repro} model that Thomas Hotz, Tyll Krüger, Jan Pablo Burgard, Przemyslaw Biecek, Viktor Bezborodov, Marcin Bodych and the author have submitted to both the German-Polish COVID-19 ForecastHub and the ECDC's ForecastHub. This model was not based on a \acrshort{ssm}, but rather ignored the dependencies over time. Additionally, it was based on reproduction numbers, which were fit to the incidence data using methods from small-area estimation. The main idea for this model is available in \citep{Heyder2022Regional}.
+
     \paragraph{\nameref{sec:nowcasting_hospitalizations}}
-    \phantom{stuff}
+    The model designed in this section is based on the \texttt{ILM-prop} model that Thomas Hotz and the author submitted to the German NowcastHub. Again, this model was note based on a \acrshort{ssm}. It quantified the uncertainty by past performance, which requires a substantial amount of computation - something that the model presented in this section avoids.
 \end{tcolorbox}
 \newpage
 Having established the practical advantages of \acrshort{eis} over the \acrshort{cem} in the previous chapter, we now demonstrate the usefulness of \acrshortpl{ssm} for epidemiological modeling. We present three applications: accounting for reporting artifacts (\Cref{sec:model_reporting_delay}), modeling regional effects (\Cref{sec:regional_growth_factor_model}), and performing fore- and nowcasting (\Cref{sec:nowcasting_hospitalizations}). These applications illustrate how \acrshortpl{ssm} provide a flexible modeling framework that allows practitioners to tailor interpretable models to specific research questions.
