@@ -394,7 +394,7 @@
       \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{eprinttype}{pmid}
+      \field{eprinttype}{pubmed}
       \field{journaltitle}{Epidemiology and Infection}
       \field{title}{Estimation of Delay-Adjusted All-Cause Excess Mortality in the {{USA}}: {{March-December}} 2020.}
       \field{year}{2021}
@@ -562,7 +562,7 @@
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{day}{13}
-      \field{eprinttype}{pmid}
+      \field{eprinttype}{pubmed}
       \field{journaltitle}{PLOS ONE}
       \field{month}{1}
       \field{number}{1}
@@ -1215,6 +1215,7 @@
       \field{extraname}{1}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradate}{1}
       \field{extradatescope}{labelyear}
       \field{labeldatesource}{}
       \field{labelnamesource}{author}
@@ -1236,6 +1237,80 @@
       \verb 10.1038/s41467-021-25207-0
       \endverb
       \warn{\item Datamodel: article entry 'Bracher2021Preregistered' (bibliography.bib): Invalid field 'publisher' for entrytype 'article'}
+    \endentry
+    \entry{Bracher2021Evaluating}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=bf4e0b1559f41753a5f8f0e193bf5f98}{%
+           family={Bracher},
+           familyi={B\bibinitperiod},
+           given={Johannes},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d16a29b1c1bff8d354890977bae93ae5}{%
+           family={Ray},
+           familyi={R\bibinitperiod},
+           given={Evan\bibnamedelima L.},
+           giveni={E\bibinitperiod\bibinitdelim L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=cf94799d213c0ab2fd2012473da7440b}{%
+           family={Gneiting},
+           familyi={G\bibinitperiod},
+           given={Tilmann},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=68b4dbf033ecb04ab5bf0af268e2da21}{%
+           family={Reich},
+           familyi={R\bibinitperiod},
+           given={Nicholas\bibnamedelima G.},
+           giveni={N\bibinitperiod\bibinitdelim G\bibinitperiod},
+           givenun=0}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=1f190b3ba0d69aa93194f2102f5f2da5}{%
+           family={Pitzer},
+           familyi={P\bibinitperiod},
+           given={Virginia\bibnamedelima E.},
+           giveni={V\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Public Library of Science (PLoS)}%
+      }
+      \strng{namehash}{057518eeab9da06b877bc329dd050981}
+      \strng{fullhash}{65a2317506fc68bba293dee27218077f}
+      \strng{fullhashraw}{65a2317506fc68bba293dee27218077f}
+      \strng{bibnamehash}{057518eeab9da06b877bc329dd050981}
+      \strng{authorbibnamehash}{057518eeab9da06b877bc329dd050981}
+      \strng{authornamehash}{057518eeab9da06b877bc329dd050981}
+      \strng{authorfullhash}{65a2317506fc68bba293dee27218077f}
+      \strng{authorfullhashraw}{65a2317506fc68bba293dee27218077f}
+      \strng{editorbibnamehash}{1f190b3ba0d69aa93194f2102f5f2da5}
+      \strng{editornamehash}{1f190b3ba0d69aa93194f2102f5f2da5}
+      \strng{editorfullhash}{1f190b3ba0d69aa93194f2102f5f2da5}
+      \strng{editorfullhashraw}{1f190b3ba0d69aa93194f2102f5f2da5}
+      \field{extraname}{2}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradate}{2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{12}
+      \field{issn}{1553-7358}
+      \field{journaltitle}{PLoS Comput Biol}
+      \field{langid}{english}
+      \field{month}{2}
+      \field{number}{2}
+      \field{title}{Evaluating Epidemic Forecasts in an Interval Format}
+      \field{volume}{17}
+      \field{year}{2021}
+      \field{dateera}{ce}
+      \field{pages}{e1008618}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1371/journal.pcbi.1008618
+      \endverb
+      \warn{\item Datamodel: article entry 'Bracher2021Evaluating' (bibliography.bib): Invalid field 'publisher' for entrytype 'article'}
     \endentry
     \entry{Bracher2022National}{article}{}{}
       \name{author}{42}{}{%
@@ -1503,7 +1578,7 @@
       \strng{authornamehash}{057518eeab9da06b877bc329dd050981}
       \strng{authorfullhash}{3ed1a5a43d0267f58e35cccf46400260}
       \strng{authorfullhashraw}{3ed1a5a43d0267f58e35cccf46400260}
-      \field{extraname}{2}
+      \field{extraname}{3}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{extradatescope}{labelyear}
@@ -2552,7 +2627,7 @@
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{day}{1}
-      \field{eprinttype}{pmid}
+      \field{eprinttype}{pubmed}
       \field{issn}{1473-3099, 1474-4457}
       \field{journaltitle}{The Lancet Infectious Diseases}
       \field{langid}{english}
@@ -3197,7 +3272,7 @@
       \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{eprinttype}{pmid}
+      \field{eprinttype}{pubmed}
       \field{issn}{1476-4687}
       \field{journaltitle}{Nature}
       \field{langid}{english}
@@ -3719,7 +3794,7 @@
       \field{labelnamesource}{author}
       \field{labeltitlesource}{shorttitle}
       \field{day}{1}
-      \field{eprinttype}{pmid}
+      \field{eprinttype}{pubmed}
       \field{issn}{1473-3099, 1474-4457}
       \field{journaltitle}{The Lancet Infectious Diseases}
       \field{langid}{english}
@@ -5676,7 +5751,7 @@
       \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{eprinttype}{pmid}
+      \field{eprinttype}{pubmed}
       \field{journaltitle}{PLOS Computational Biology}
       \field{title}{Nowcasting by {{Bayesian Smoothing}}: {{A}} Flexible, Generalizable Model for Real-Time Epidemic Tracking.}
       \field{year}{2020}
@@ -7158,7 +7233,7 @@
       \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{eprinttype}{pmid}
+      \field{eprinttype}{pubmed}
       \field{journaltitle}{Biometrical Journal}
       \field{title}{Bayesian Outbreak Detection in the Presence of Reporting Delays}
       \field{year}{2015}
@@ -8623,7 +8698,7 @@
       \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{eprinttype}{pmid}
+      \field{eprinttype}{pubmed}
       \field{journaltitle}{Epidemiology}
       \field{title}{Nowcasting the Number of New Symptomatic Cases during Infectious Disease Outbreaks Using Constrained P-Spline Smoothing}
       \field{year}{2019}
@@ -9190,7 +9265,7 @@
       \field{labelnamesource}{author}
       \field{labeltitlesource}{shorttitle}
       \field{day}{1}
-      \field{eprinttype}{pmid}
+      \field{eprinttype}{pubmed}
       \field{issn}{2213-2600, 2213-2619}
       \field{journaltitle}{The Lancet Respiratory Medicine}
       \field{langid}{english}

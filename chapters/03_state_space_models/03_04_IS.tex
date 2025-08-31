@@ -221,9 +221,10 @@ $$
 Notice that as the self-normalized weights sum to $1$, the \acrshort{ess} is at least $1$, as $0 \leq W_{i} \leq 1$ and at most $N$ by the Cauchy-Schwarz inequality. 
 
 If we write the \acrshort{ess} in terms of the unnormalized weights $\tilde w$ we see that the \gls{ef} $\text{EF} = \frac{\text{ESS}}{N}$ fulfills, as $N\to\infty$,
-$$
+\begin{align}
+\label{eq:efficency_factor}
 \text{EF} = \frac{\text{ESS}}{N} = \frac{\left(\frac{1}{N}\sum_{i = 1}^{N} \tilde w_{i}\right)^{2}}{\frac{1}{N}\sum_{i = 1} \tilde w_{i}^2} \stackrel{a.s}{\to} \frac{(\G [\tilde w])^{2}}{\G [\tilde w^{2}]} = \rho^{-1},
-$$
+\end{align}
 if $\tilde w \in L^{2}(\G)$ \citep[Section 2.3.2]{Agapiou2017Importance}. Thus, asymptotically, a large \acrshort{ess} leads to small bias and \acrshort{mse} for bounded functions $f$. Additionally, the above derivations allow us to interpret the second moment
 $$
 \rho = \G [(NW_1)^2] = \left(\G [NW_1]\right)^{2} + \var \left( NW_1 \right) = 1 + \var \left(NW_1\right) \approx \frac{\var \left(\hat\zeta_{\text{IS}}\right)}{\var \left(\hat\zeta_{\text{MC}}\right)}

@@ -92,7 +92,7 @@ The \gls{la} has the fastest and most space-efficient iteration of the three met
 For $p \ll m$, \gls{eis} is faster than \gls{cem} as it is based on the signals $S$ only, thus having access to the efficient simulation and signal smoother algorithms. The same is true for the space complexity. If, however, $p\approx m$, there is no linear signal or the observations are not conditionally independent given the states or signals, the speed of a single iteration of \gls{eis} and \gls{cem} are comparable. 
 While theoretically, the \gls{cem} performs sampling faster than the other two methods, for large numbers of samples $N$ the difference is negligible because the additional computations only have to be performed once. 
 
-\subsection{Finite-sample and asymptotic variance and relative efficiencies}
+\subsection{Relative efficiencies of finite-sample and asymptotic variances}
 As we have seen in the previous section, the number of samples $N$ used to estimate $\pce$ and $\peis$ enter linearly into the computational complexities. Naturally, we want to know how big a sample size we should choose for our procedures to estimate a proposal that is close to the true optimal value and whether one of the two simulation-based procedures requires fewer samples than the other. To answer this question we turn to the two central limit theorems, \Cref{thm:cem-clt,thm:eis-clt}. If $N$ is large, the asymptotic variances (or rather: the asymptotic standard deviations) tell us how much stochastic variation we should expect around the optimal value, and can thus guide us in choosing $N$. 
 We start with two examples in an univariate setting, where both the \gls{cem} and \gls{eis} use Gaussian proposals with either fixed variance (\Cref{ex:univ-gaussian-s2-fixed}) or mean (\Cref{ex:univ-gaussian-mu-fixed}).
 %This allows us to compare the methods for either the mean (variance) if the variance (mean) is fixed and potentially misspecified, i.e. not the global optimum. Additionally, the univariate setting allows us, in some cases, to derive analytical expressions of the efficiencies involved, allowing us to interpret them.
@@ -250,6 +250,64 @@ On the left-hand side of \Cref{fig:are} we see that for $\mu$ close to the optim
 % sigma2s
 In \Cref{fig:cem_eis_sigma2} we see that, except for the extreme scale mixtures, \aeis tends to produce proposals that have a larger variance than those produced by the \acem. As we will see in the discussion of \Cref{fig:rho_mu}, this might be advantageous for \aeis as proposals with a small variance run the risk of missing a large part of the probability mass of the target. 
 
+Finally, we compare the \acrshort{cem} and \acrshort{eis} in a situation closer to the applications in \Cref{cha:analysis_of_selected_models}. 
+\begin{example}[Growth factor \acrshort{ssm}]
+    \label{ex:growth_factor_ssm_are}
+    Consider the following \acrshort{egssm}: The states are given by 
+    $$
+        X_{t} = \begin{pmatrix}
+            \log I_{t}\\
+            \log \rho_{t + 1}
+        \end{pmatrix}, t = 0, \dots, n
+    $$
+    with 
+    $$
+        X_{t + 1} = \begin{pmatrix}
+            \log I_{t+1} \\
+            \log \rho_{t + 2}
+        \end{pmatrix} = \begin{pmatrix}
+            \log I_{t} + \log \rho_{t+1} \\
+            \log \rho_{t + 1} + \varepsilon_{t + 1}
+        \end{pmatrix}, t = 0, \dots, n - 1
+    $$
+    where $\varepsilon_{t + 1} \sim \mathcal N (0, \sigma^{2})$ and $X_{0} \sim \mathcal N( x_{0}, \Sigma_{0})$. 
+    The observations $Y_{t}$ follow a conditional Poisson distribution $Y_{t} \sim \operatorname{Pois} \left( I_{t} \right)$. It is easy to see that this forms an \acrshort{egssm} with linear signal $\log I_{t}$.
+    This model is a simplified version of the exponential growth factor model presented in \Cref{sec:model_reporting_delay}, and we defer the reader to this section for a detailed motivation of the model.
+
+    For the initial states we set $I_{0} = 1\,000$ and $\rho_{1} = 1$, and let $\Sigma_{0} = \begin{pmatrix}
+        1 & 0 \\
+        0 & 0.1 
+    \end{pmatrix}$. Finally, we choose $\sigma^{2} = \frac{0.05}{n}$. This ensures that the change in  $\log \rho$ over the whole time period, $\log \rho_{n + 2} - \log \rho_{1}$ has variance $0.05$, which makes large and small growth factors $\rho$ improbable.
+
+    We then perform the following simulation protocol for varying values of $n$. 
+    \begin{enumerate}
+        \item Simulate a single observation $y=(y_{0}, \dots, y_{n})$ from the model.
+        \item Obtain the \acrshort{la} to the conditional distribution $X|Y = y$.
+        \item $M$ times, using different seeds, perform the \acrshort{cem} (\Cref{alg:cem-markov-proposal-fast}) to obtain proposals $\G^{1}_{\text{CEM}}, \dots, \G^{M}_{\text{CEM}}$, using the \acrshort{la} as a starting point.
+        \item $M$ times, using different seeds, perform \acrshort{eis} (\Cref{alg:eis}) to obtain proposals $\G^{1}_{\text{EIS}}, \dots, \G^{M}_{\text{EIS}}$, using the \acrshort{la} as a starting point. 
+    \end{enumerate}
+    
+    Unfortunately, there is no straightforward way to define the relative efficiencies in this scenario. First, we are in the same scenario as in \Cref{ex:univ-gaussian-mu-fixed}: \acrshort{eis} and the \acrshort{cem} estimate different parameters. Additionally, the parameters estimated by the optimal importance sampling methods are now multivariate. 
+    To deal with this, we compare the determinants of the estimated covariance matrices of the signals $S = \left( \log I_{0}, \dots, \log I_{n} \right)$ instead.
+
+    We set the number of iterations of the \acrshort{cem} and \acrshort{eis} to $100$, which, in our experience, suffices to determine whether the numerical scheme converges or diverges. We use $M=10$ samples to obtain the covariance matrices. For both methods we use $N = 10\,000$ samples for estimation.  
+
+    The above procedure generates a single asymptotic relative efficiency for a fixed number of time points $n$. As the performance of importance sampling is likely influenced by the sample $y$, we repeat the simulation $K=10$ times to obtain $K$ different outcomes. 
+
+    \begin{figure}
+        \centering
+
+        \resizebox{\textwidth}{!}{%
+            \input{tikz/ssm_comparison_asymptotic_variance.tex}%
+        }
+        \caption{Boxplots of asymptotic relative efficiencies of \acrshort{eis} and the \acrshort{cem} for \Cref{ex:growth_factor_ssm_are}. Note the log-scale of the $y$-axis. Values smaller than $1$ indicate that the \acrshort{cem} has smaller asymptotic variance, while values larger than $1$ indicate that \acrshort{eis} has smaller asymptotic variance than the \acrshort{cem}.}
+        \label{fig:ssm_comparison_asymptotic_variance}
+    \end{figure}
+
+    We show the resulting asymptotic relative efficiencies in \Cref{fig:ssm_comparison_asymptotic_variance}. For small values of $n$, the \acrshort{cem} actually outperforms \acrshort{eis} in terms of asymptotic variance, but starting with $n = 5$, \acrshort{eis} begins to vastly outperform the \acrshort{cem}. 
+    
+\end{example}
+
 %\input{chapters/03_state_space_models/03_08_comparison_old.tex}
 \subsection{Performance of the optimal proposal}
 \label{subsec:performance_at_optimal}
@@ -298,17 +356,36 @@ Compared to \Cref{fig:rho_mu}, we see that already small misspecification in $\m
 If $\mu = 0 $ is correctly specified, both methods have comparable performance, except for extreme cases of the mixture models, i.e. when $\omega^{2} = 0.1$ or when $\varepsilon^{2} = 100$. 
 For small misspecification of $\mu$, this remains true, but for larger misspecification, the \acem has a larger efficiency factor, especially for the bimodal location mixture with $\omega^{2} = 0.1$, where the performance of \aeis deteriorates. 
 
+Let us also return to the \acrshort{ssm} from \Cref{ex:growth_factor_ssm_are}. We use a similar simulation routine to estimate efficiency factors:
 
-%% rho
-%For the model from \Cref{ex:negbinom-ar1} we cannot determine $\rho$ analytically, so we fall back to a simulation study.
-%Thus, we also estimate $\text{EF}$ for each of the $M$ runs, using the same number of samples $N = N_{\text{true}}$ as was used to determine the true optimal parameter.
-%We display the resulting efficiency factors in \Cref{fig:ef_time_dimension}. The parameters $\alpha, r, N, M$ may be found in the bottom right corner of the figure.
-%For a low number of time steps $n$, all three methods perform comparably. With increasing $n$, their performance expectedly worsens, however, more so for the local \gls{la}, while the \gls{cem} and \gls{eis} perform comparably around their optimal value. 
-%
-%\begin{figure}
-%    \resizebox{\textwidth}{!}{%
-%        \input{tikz/ef_time_dimension.tex}%
-%    }
-%    \caption{The asymptotic efficiency factor degenerates as the number of time steps $n$ increases. We show the estimated efficiency factor over $100$ replications of estimating the optimal parameters for \Cref{ex:negbinom-ar1} with the \gls{cem} and \gls{eis} with $N_{\text{true}} = 10^{6}$ and the resulting estimated efficiency factors at the optimum. Notice the log scale of the x-axis. The performance of the optimal \gls{cem} and \gls{eis} parameters is comparable and superior to that of the \gls{la}}
-%    \label{fig:ef_time_dimension}
-%\end{figure}
+\begin{enumerate}
+    \item Simulate a single observation $y=(y_{0}, \dots, y_{n})$ from the model.
+    \item Obtain $\G_{\text{LA}}$ by the \acrshort{la}.
+    \item Obtain $\G_{\text{CEM}}$ by the \acrshort{cem}, using the \acrshort{la} as a starting point.
+    \item Obtain $\G_{\text{EIS}}$ by \acrshort{eis} (\Cref{alg:eis}), using the \acrshort{la} as a starting point. 
+    \item Draw $N = 10\,000$ samples from each proposal and estimate the efficiency factor by  \Cref{eq:efficency_factor}.
+\end{enumerate}
+
+\begin{figure}
+    \centering
+
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/ssm_comparison_efficiency_factor.tex}%
+    }
+    \caption{Boxplots of efficiency factors for the \acrshort{ssm} from \Cref{ex:growth_factor_ssm_are}. Note that the $x$-axis is not to scale, presenting only the values that $n$ takes in the simulations.} 
+    \label{fig:ssm_comparison_efficiency_factor}
+\end{figure} 
+
+Again, we repeat this procedure $10$ times for varying levels of $n$ and use $100$ iterations of for all three methods, as well as $10\,000$ samples to estimate the optimal proposal.
+The resulting efficiency factors are presented in \Cref{fig:ssm_comparison_efficiency_factor}. As expected, the efficiency factor declines as $n$ grows for all methods. For small $n$, both \acrshort{eis} and the \acrshort{cem} produce better proposals --- as measured by the efficiency factor --- than the \acrshort{la}. There are some issues for the \acrshort{la} and \acrshort{eis} for $n=1$, which we believe is due to the initialization scheme that is optimized with multiple observations in mind. From our experience, it is also the case that the optimal parameters for \acrshort{eis} are close to the optimal parameters produced by the \acrshort{la} - which may explain the bad performance of \acrshort{eis} in this case. 
+
+Up to $n=20$, the \acrshort{cem} produces adequate proposals, however, with starting at $n=50$, the performance deteriorates. Additionally, we had already seen in the previous section, that the asymptotic variance of the \acrshort{cem} grows much more rapidly than that of \acrshort{eis}. 
+
+\begin{table}
+    \centering
+    \input{tables/ssm_comparison_missing_values.tex}
+    \label{tab:ssm_comparison_missing_values}
+    \caption{Number of invalid efficiency factors (out of $K=10$) per size $n$ and method. This includes cases where either the numerical scheme of the method failed to converge, or the proposal generated is numerically singular to the target.}
+\end{table}
+
+In addition to these observations, we report some numerical issues which result in invalid efficiency factors. The number of occurrences are displayed in \Cref{tab:ssm_comparison_missing_values}. Again, the \acrshort{cem} is much more unstable than the \acrshort{la} or \acrshort{eis}, with the \acrshort{la} having the least amount of dropout. As both methods use the \acrshort{la} as their initial value, we would expect such numerical issues when the \acrshort{la} provides bad proposals - which is the case for some proposals at $n=100$.
