@@ -55,9 +55,10 @@ As the joint distribution of $(X, S)$ is a Gaussian distribution, by \Cref{lem:g
 with known conditional mean and covariance matrix and density $p(x|s) = g(x|s)$. If $(\tilde X_{t})_{t=0,\dots,n}$ is a draw from this conditional distribution a quick calculation reveals that a.s. $B_{t} \tilde X_{t} = S_{t}$, and so, as expected, the weights $w(\tilde X_{t})$ are a.s. constant and given by (up to the integration constant) \Cref{eq:weights_only_on_signal}. Producing a draw from this conditional distribution can be achieved by the FFBS algorithm (\Cref{alg:ffbs}), as $(X, S)$ form a \gls{glssm} with degenerate observation covariance matrices $\Omega_{t} = 0$.
 
 By the assumed conditional independence of observations given signals, we have
-$$
+\begin{align}
+\label{eq:two_step_sample_ssms}
 p(x, s|y) \propto p(x|s) p(s|y),
-$$
+\end{align}
 and so if one is interested in the states, rather than the signals, importance sampling with the proposal \Cref{eq:glssm-proposal} can be achieved in a two-step procedure: first sample from $g(s|z)$, then run the FFBS algorithm to sample from $g(x|s) = p(x|s)$ using the same weights for MC-integration. 
 
 % degenerate distribution, exponential family of proposals for signals
@@ -99,10 +100,11 @@ $$
 over the parameters of interest, $(z, \omega^{2})$, and the nuisance parameter $\lambda$.
 
 However, the dimension of $\psi$ is quite high ($2p(n+1)$), so one resorts to solving the lower dimensional problems 
-$$
+\begin{align}
+    \label{eq:eis_marginals_problem}
     \Pps \left[ \left( \log p(y_{t}|\cdot_{t}) -  \log g(z_{t}|\cdot_{t}) - \lambda_{t} \right)^{2} \right] = \mathbb P^{X_{t}|Y=y} \left[ \left( \log p(y_{t}|\cdot_{t}) -  \log g(z_{t}|\cdot_{t}) - \lambda_{t} \right)^{2} \right],
-$$
-which only depends on the marginal of $X_{t}$.
+\end{align}
+which only depends on the marginal of $X_{t}$. While this only yields approximate solutions to the problem at hand, it turns out that the proposals produced by this procedure perform well (see \Cref{sec:simulation_studies}).
 
 \acrshort{eis} for \acrshort{pgssm} then proceeds as in \Cref{subsec:eis}, using importance sampling to obtain a particle approximation $\hat \P_{N}$ to $\Pps$ and solving the resulting approximate problem. As 
 $$
@@ -170,9 +172,9 @@ and so we require $\Gamma_{i,i} < \Sigma_{i,i}$. While the law of total covarian
 $$
 \Sigma = \E \cov \left( X | Y \right) + \cov \left( \E \left( X | Y \right) \right),
 $$
-it does not guarantee $\Gamma \prec \Sigma$, as $\cov(X|Y) = \Gamma$ may not hold in the non-Gaussian case.
+it does not guarantee $\Gamma \prec \Sigma$ (which would imply $\Gamma_{i,i} < \Sigma_{i,i}$), as $\cov(X|Y) = \Gamma$ may not hold in the non-Gaussian case.
 
-Second, even if there is an analytical solution $\Omega$ to \Cref{eq:gamma_post}, in the \gls{cem} we replace $\Gamma_{i,i}$ by the observed marginal variances $\hat\Gamma_{i,i}$ obtained by importance sampling. The variation introduced by simulation can then lead to situations where $\hat\Gamma_{i,i} > \Sigma_{i,i}$. As an example take $X \sim \mathcal N(0, 1)$, and $Y = X + \eta$ for $\eta \sim \mathcal N(0, \omega^{2})$. Then the conditional variance of $X$ given $Y = y$ is $\Gamma = 1 - \frac{1}{1 + \omega^{2}} < 1$. Given $N$ i.i.d. samples $X^{1}, \dots X^{N}$ from this distribution, their empirical variance $\hat \Gamma = \frac{1}{N} \sum_{i = 1}^{N} (X^{i} - \bar X)^{2} $ follows a scaled $\chi_{N - 1}^{2}$ distribution, i.e. $ \frac{N\hat\Gamma}{\Gamma} \sim \chi^{2}_{N - 1}$. Notice that we use the non-Bessel corrected version of the empirical variance here, as it is the maximum-likelihood estimate. 
+Second, even if there is an analytical solution $\Omega$ to \Cref{eq:gamma_post}, in the \gls{cem} we replace $\Gamma_{i,i}$ by the observed marginal variances $\hat\Gamma_{i,i}$ obtained by importance sampling. The variation introduced by simulation can then lead to situations where $\hat\Gamma_{i,i} > \Sigma_{i,i}$. As an example take $X \sim \mathcal N(0, 1)$, and $Y = X + \eta$ for $\eta \sim \mathcal N(0, \omega^{2})$. Then the conditional variance of $X$ given $Y = y$ is $\Gamma = 1 - \frac{1}{1 + \omega^{2}} < 1$. Given $N$ i.i.d. samples $X^{1}, \dots X^{N} \sim \mathcal N(0,1)$, their empirical variance $\hat \Gamma = \frac{1}{N} \sum_{i = 1}^{N} (X^{i} - \bar X)^{2} $ follows a scaled $\chi_{N - 1}^{2}$ distribution, i.e. $ \frac{N\hat\Gamma}{\Gamma} \sim \chi^{2}_{N - 1}$. Notice that we use the non-Bessel corrected version of the empirical variance here, as it is the maximum-likelihood estimate. 
 
 Then $$\P \left( \hat \Gamma > 1 \right) = \P \left( \frac{N \hat \Gamma}{\Gamma} > \frac{N}{\Gamma} \right) = 1 - F_{\chi^{2}_{N-1}} \left( N \left( 1 + \frac{1}{\omega^{2}} \right) \right)$$ is the probability that \Cref{eq:gamma_post} has no solution $\omega^{2} \in \R_{\geq 0}$. Here $F_{\chi^{2}_{N - 1}}$ is the cumulative distribution function of the $\chi^{2}_{N - 1}$ distribution. As $\omega^{2}$ goes to $\infty$, this probability approaches $1 - F_{\chi^{2}_{N - 1}}(N)$ which, for large $N$, is approximately $1 - F_{\chi^{2}_{N - 1}} (N - 1) \approx \frac{1}{2}$, as $\chi^{2}_{N-1} \approx \mathcal N\left(N - 1, 2 (N-1)\right)$ \citep[Section 18.5]{Johnson1994Continuous}.
 %We illustrate this in \Cref{fig:ce_prob_failure}, displaying the probability of failure in this setting for various combinations of $N$ and $\omega^{2}$. In this figure, we see that with growing $N$ the threshold for $\omega^{2}$ leading to non-negligible failure probability becomes larger, as expected. 
@@ -282,7 +284,6 @@ P = \begin{pmatrix}
     0 & 0 & 0 & \cdots & 0 & P_{n, n - 1} & P_{n,n} 
 \end{pmatrix}.
 \end{align}
-As the precision matrix is the natural parameter for the multivariate Gaussian exponential family, we see that model \eqref{eq:markov-proposal}, parameterized by $(P^{-1}v, P)$ form a natural exponential family and we can apply \Cref{thm:cem-clt} to obtain a central limit theorem when applying the \acrshort{cem} for this model. 
 
 % show Cholesky root of precision matrix is also sparse -> Katzfuss (or refs therein), Lauritzen, Bernstein?, same as Schäfer paper?
 The sparsity of $P$ implies that $P = LL^{T}$ has a sparse Cholesky root $L$, which will make computations efficient. 
@@ -625,3 +626,134 @@ However, the two algorithms presented in this section also come with some drawba
 %\begin{theorem}[CLT for EIS with the \acrshort{glssm}-proposal]
 %    % define b(x, \psi') = -1/2 (\log p())
 %\end{theorem}
+
+
+\subsection{Central Limit Theorems for Importance Sampling in PGSSMs}
+\label{subsec:clt_pgssms}
+
+% yada yada
+Consider a \acrshort{pgssm} with states $X = (X_{0}, \dots, X_{n})$ and observations $y = (y_{0}, \dots, y_{n})$. The target of interest is then $\P^{X} = \mathbb P^{X| Y=y}$ or $\P^{S} = \mathbb P^{S | Y=y}$, if such a signal exists. As argued in the discussion surrounding \Cref{eq:two_step_sample_ssms} the two targets are equivalent. Using a similar approach to the on presented in \Cref{sec:importance_sampling}, it seems obvious that both the \acrshort{cem} and \acrshort{eis} fulfill a central limit theorem: we are constructing Gaussian proposals which form an exponential family, and so we should be able to apply \Cref{thm:cem-clt} and \Cref{thm:eis-clt} directly to this setting. 
+
+However, we have to be somewhat more careful: the assumptions of the central limit theorems have to be checked thoroughly. Additionally, upon closer inspection, we see that the proposal distributions created by \acrshort{eis} do not necessarily form a natural exponential family, as we will see later. Lastly, the proposal we generate are Gaussian, which allows us to simplify some of the technical assumptions made earlier.
+
+We will formulate all results in the matrix formulation of \acrshortpl{ssm}, see \citep[Section 4.13]{Durbin2012Time}. This form considers $X\in\R^{(n+1)m}$, $Y\in\R^{(n+1)p}$ and so on, ignoring the Markov-structure introduced by the \acrshort{ssm}. However, as we have seen in \Cref{eq:P_structure}, the Markov-structure is still present, if only in the precision matrix of the states $X$. 
+
+%% CEM
+We begin with the \acrshort{cem}. As the precision matrix is the natural parameter for the multivariate Gaussian exponential family, we see that model \eqref{eq:markov-proposal}, parameterized by $(P^{-1}v, P)$, with $P$ as in \Cref{eq:P_structure}, form a natural exponential family. Thus, we can apply \Cref{thm:cem-clt} to obtain a central limit theorem when applying the \acrshort{cem} for this model. 
+
+\begin{lemma}[Markov-proposal forms exponential family]
+    \label{lem:markov_proposal_exponential_family}
+    Let $\G_{\psi}$, $\psi \in \Psi$ be the family of Gaussian proposals from \Cref{eq:markov-proposal}, reparameterized by 
+    $$
+        \psi = \left( Pv, P \right),
+    $$
+    where $P$ is as in \Cref{eq:P_structure}. Then $(\G_{\psi})_{\psi \in \Psi}$ form an exponential family.
+\end{lemma}
+
+\begin{proof}
+    As 
+    $$\Psi \subseteq \left\{(\Sigma ^{-1} \mu, \Sigma^{-1}) | \mu \in \R^{(n+1)m}, \Sigma \in \R^{((n+1)m)\times ((n+1)m)}\text{ positive definite}\right\},$$
+    it suffices to show that $\Psi$ is a subspace, i.e. closed under addition and scalar multiplication. That $\Psi$ is closed under scalar multiplication is obvious. For $(P_{1}v_{1}, P_{1}), (P_{2}v, P_{2}) \in \Psi$ we have 
+    $$
+        (P_1v_{1}, P_{1}) + (P_2v_{2}, P_{2}) = \left( (P_{1} + P_{2}) (P_{1} + P_{2})^{-1} (P_{1}v_{1} + P_{2}v_{2}, P_{1} + P_{2})\right).
+    $$
+    Furthermore, as $P_{1}$ and $P_{2}$ possess the sparsity structure given by \Cref{eq:P_structure}, so does $P_{1} + P_{2}$, so $(P_1v_{1}, P_{1}) + (P_2v_{2}, P_{2}) \in \Psi$.
+\end{proof}
+
+
+Thus, the proposals $(\G_{\psi})_{\psi \in \Psi}$ form a natural exponential family, a sub-family of the full Gaussian exponential family. Its sufficient statistic is $T(x) = \begin{pmatrix}
+    x \\ xx^{T}
+\end{pmatrix}$. The central limit theorem for the \acrshort{cem} follows:
+
+\begin{theorem}[\acrshort{clt} for the \acrshort{cem} in \acrshortpl{pgssm}]
+    \label{thm:cem_clt_ssm}
+    Let $\G_{\psi}$ be as in \Cref{lem:markov_proposal_exponential_family} and let $\G \gg \P^{X}$ be a proposal distribution. Suppose the following additional assumptions hold:
+    \begin{enumerate}
+        \item $w, w\id, w\id^2 \in L^{2}(\G)$,
+        \item $\P^{X}$ posses all fourth order moments, and
+        \item the covariance matrix of $\P^{X}$ is positive-definite.
+    \end{enumerate}
+    
+    Then $\hpce$ fulfills a \acrshort{clt} of the form 
+    $$
+        \sqrt{N} \left(\hpce - \pce \right) \to \mathcal N(0, BMB)
+    $$
+    where $B$ and $M$ are as in \Cref{thm:cem-clt}.
+\end{theorem}
+
+\begin{proof}
+    We will check that all assumptions of \Cref{thm:cem-clt} are fulfilled. 
+
+    That $\pce\in\Psi$ is the unique maximizer of \Cref{eq:ce_argmax} follows from \Cref{prop:cem_exponential_families}, as the full Gaussian exponential family has non-degenerate Fisher information. That $T \in L^{2} (\P)$ follows from the definition of $T$ and the existence of forth order moments.
+\end{proof}
+
+The case for \acrshort{eis} is more involved. Let us start with the simplest case where $n=0$, where there is only a single observation $Y = y_{0} \in \R^{m}$. Indeed, all \acrshortpl{ssm} may be viewed this way, by simply ignoring the time-dependence structure and vectorizing all involved states, signals and observations. 
+In this setting, proposal densities for $\P^{X}$ are of the form 
+\begin{align*}
+    p_{\psi}(x|z) &\propto p_{\psi}(z|x) p(x) \\
+    &\propto \det(\Omega^{-1}) \exp \left( - \frac{1}{2} (z-Bx)^{T}\Omega^{-1}(z - Bx) \right) \det (\Sigma^{-1}) \exp \left( - \frac{1}{2}(x - \mu)^{T}\Sigma^{-1} (x - \mu) \right),
+\end{align*}
+which suggests $\psi = \left( B\Omega ^{-1}z, B^{T}\Omega^{-1}B \right)$. However, unless $B$ is invertible, the exponential family under consideration will, in general, fail to fulfill the uniqueness properties required for consistency and the central limit theorem, e.g. \Cref{prop:eis_exponential_families} can fail to apply. Additionally, working with $\psi = \left( B\Omega ^{-1}z, B^{T}\Omega^{-1}B \right)$ is tedious, as we have to take care of $B$ potentially being rank-deficient. Instead, we will focus on the target $\P^{S}$ from which we can reconstruct $\P^{X}$, as long as $s = Bx$ has a $\P^{S}$ a.s. solution. As the support of $\P^{S} = \mathbb P^{S | Y = y}$ can only be smaller than that of $\mathbb P^{S}$, this is always the case. For simplicity, we assume that $B$ has full row-rank, i.e. $\operatorname{image}(B) = \R^{(n+1)p}$
+
+Furthermore, the proofs of \Cref{thm:eis-consistent} and \Cref{thm:eis-clt} only involve the densities of the proposal through the log-weights, up to additive constants that do not depend on $s$. In our setting, we can write the log-weights as 
+$$
+    \log w_{\psi}(s) = \log p(s|y) - \log g_{\psi}(s|z) = \log p(y|s) - \log  g_{\psi}(z|s) - (\log p(y) -  \log g_\psi(z)).
+$$
+Now $g_{\psi}(z|s)$ is just a Gaussian natural-exponential family with parameter $\psi = (\Omega^{-1}z, \Omega^{-1})$ and sufficient statistic $T(x) = \begin{pmatrix} x\\xx^{T} \end{pmatrix}$. The parameter space is 
+$$
+    \Psi = \left\{ (\Omega^{-1}z, \Omega^{-1}) \middle|
+        z \in \R^{(n+1)p}, \Omega \in \operatorname{BDiagSPD((n+1),p)}
+    \right\}
+$$
+where $\operatorname{BDiagSPD((n+1),p)}$ consists of all block-diagonal matrices $\Omega$ whose $n+1$ blocks on the diagonal are symmetric, positive-definite matrices of dimension $p\times p$.
+
+In this setup, we can prove the central limit theorem for \acrshort{eis}.
+
+\begin{theorem}[\acrshort{clt} for \acrshort{eis} in \acrshortpl{pgssm}]
+    \label{thm:eis_clt_ssm}
+
+    Let $(\G_{\psi})_{\psi\in\Psi}$ be the family of proposals with densities $g_{\psi}(\cdot|z)$, as described above. Assume that $B$ has full row-rank and let $\G \gg \P^{S}$ be a proposal with weights $w$. Furthermore, assume that the following conditions hold for $T_{s,i} = \begin{pmatrix}
+        x_{s,i} \\
+        x_{s,i}x_{s,i}
+    \end{pmatrix}$, $s = 0, \dots, n$, $i=1,\dots,m$.
+
+    \begin{enumerate}
+        \item $wT_{s,i}T_{s',j} \in L^{2}(\G)$ for $i,j = 1,\dots, m$ and $s,s' = 0, \dots, n$.
+        \item $\log p \in L^{4}(\P^{S})$ and
+        \item $\cov _{\P^{S}}(T)$ is non-singular and $\peis \in \operatorname{int} \Psi$. 
+    \end{enumerate}
+
+    Then $\hpeis$ fulfills a \acrshort{clt} of the form 
+    $$
+        \sqrt{N} \left( \hpce - \pce \right) \to \mathcal N (0, BMB),
+    $$
+    where $B$ and $M$ are as in \Cref{thm:eis-clt}.
+\end{theorem}
+
+\begin{proof}
+    We adapt the proof of \Cref{thm:eis-clt} to account for the new setup. The assumptions are the same, except that we can drop the assumption that $T_{s,i} \in L^{4}(\P^{S})$, as $\P^{S}$ possess all finite moments.
+
+    Consider the weights $\log w_{\psi} = \log p(s|y) - \log g_{\psi}(s|z)$ and recall that \acrshort{eis} solves the optimization problem 
+    $$
+        \min_{\psi \in \Psi} \P^{S} \left[\log w_{\psi} - \P^{S} [\log w_{\psi} ]\right].
+    $$
+    Now 
+    \begin{align*}
+        \log w_{\psi} - \P^{S} [\log w_{\psi}] &= \log p(y|s) - \log g_{\psi}(z|s) - (\log p(y) - \log g_{\psi}(z))\\
+        &= \log p(y|s) - \psi^{T}T(s) + \frac{(n+1)p}{2} \log 2\pi - Z(\psi) - (\log p(y) - \log g_{\psi}(z)),
+    \end{align*}
+    which motivates setting $\log \tilde w_{\psi} = \log p(y|s) - \psi^{T}T(s)$ and $\lambda = \P^{S} \log \tilde w_{\psi} = \frac{(n+1)p}{2} \log 2\pi - Z(\psi) - (\log p(y) - \log g_{\psi}(z))$. 
+    This is precisely the setup from \Cref{eq:eis_exponential_families} which is all that is necessary for \Cref{thm:eis-clt} to apply.
+\end{proof}
+
+Notice that we did not give the precise structure of $B$ and $M$ for both \acrshortpl{clt}. The reason for this is that although we have imposed additional structure (Gaussian proposals), the matrices involved in the asymptotic covariance matrix are not more tractable. 
+
+Let us close this section with a short recapitulation on what we have achieved. We have seen that both the \acrshort{cem} and \acrshort{eis} are able to exploit the Markov-structure of \acrshort{pgssm}, albeit in different ways. 
+
+The \acrshort{cem} does not apply well to the \acrshort{glssm}-approach, the reason being, that matching the covariance matrix of the target to the proposal cannot be achieved by looking at marginals only. Instead, the \acrshort{glssm}-approach, which exploits the Markov-structure in the precision matrix, is more suited for the \acrshort{cem}. As the Markov-approach contains proposals that directly form an exponential family, the associated \acrshort{clt} follows naturally.
+
+\acrshort{eis} is able to use the \acrshort{glssm}-approach, which has two benefits. First, the number of parameters is smaller, especially when there is a linear signal --- which is often the case in applications. Second, the optimization problem solved in \acrshort{eis} can be broken down into multiple smaller problems, see \Cref{eq:eis-marignals-target}. While the proposals for \acrshort{eis} do not form an exponential family, we still obtain \Cref{thm:eis_clt_ssm} by focusing on the signals and noting that the objective function is still, after appropriate reparametrization, a linear least squares problem of the parameters of interest, which is all that is necessary for the \acrshort{clt} to hold.
+
+Similar to the \acrshortpl{clt} in \Cref{sec:importance_sampling}, we argue that \Cref{thm:cem_clt_ssm} and \Cref{thm:eis_clt_ssm} are widely applicable. The integrability assumptions on weights and targets are natural if we want importance sampling with Gaussian proposals to work, while the remaining assumptions are required for the optimal parameters $\pce$ and $peis$ to exist and be unique.
+
+However, while the \acrshortpl{clt} provide theoretical justifications for using the two methods, the practical applicability, especially numerical stability, especially when the number of samples $N$ is low, does not follow from them. We will come back to this point in \Cref{sec:simulation_studies}.

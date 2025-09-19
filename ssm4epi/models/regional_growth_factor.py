@@ -2,7 +2,7 @@
 
 # %% auto 0
 __all__ = ['optimal_parameters', 'vmm', 'key', 'n_iterations', 'N_mle', 'N_meis', 'N_posterior', 'percentiles_of_interest',
-           'n_tot', 'n_ij', 'df_weekly_cases', 'cases_full', 'dates_full', 'ags_full', 'account_for_nans',
+           'n_tot', 'n_ij', 'n_pop', 'df_weekly_cases', 'cases_full', 'dates_full', 'ags_full', 'account_for_nans',
            'log_weights_t', 'log_weights', 'laplace_approximation', 'modified_efficient_importance_sampling', 'gnll',
            'growth_factor_model', 'make_aux', 'par_to_theta', 'theta_to_par']
 
@@ -400,8 +400,8 @@ def _state_model(r0, u0, alpha, s2_rho, Omega, n) -> GLSSMState:
     A = jnp.broadcast_to(
         jsp.linalg.block_diag(1, alpha * jnp.eye(K)), (n, K + 1, K + 1)
     )
-    # Sigma0 = jsp.linalg.block_diag(s2_rho, 1 / (1 - alpha**2) * Omega)
-    Sigma0 = jnp.eye(K + 1)
+    Sigma0 = jsp.linalg.block_diag(1, 1 / (1 - alpha**2) * Omega)
+    # Sigma0 = jnp.eye(K + 1)
     Sigma = jsp.linalg.block_diag(s2_rho * jnp.eye(1), Omega)
     Sigma = jnp.broadcast_to(Sigma, (n, K + 1, K + 1))
 
@@ -492,6 +492,7 @@ n_ij = (
     .reshape((400, 400))
     .T
 )
+n_pop = pd.read_csv(here() / "data/processed/population.csv").iloc[:, -1].to_numpy()
 
 # %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 29
 df_weekly_cases = pd.read_csv(here() / "data/processed/RKI_county_weekly.csv").pivot(

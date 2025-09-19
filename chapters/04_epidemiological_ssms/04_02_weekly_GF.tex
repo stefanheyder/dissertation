@@ -1,7 +1,6 @@
 \section{Regional growth factor model}%
 \label{sec:regional_growth_factor_model}
 
-\subsection{Context}
 
 Modeling the epidemics spread on a regional level allows us to differentiate between localized and global outbreaks, such as the one in June 2020, highlighted in \Cref{fig:cases_germany}. Additionally, regional level prediction and growth factors are of interest on their own, because \acrshortpl{npi} are enforced on the regional level. Moreover, having access to the spread on the regional level enables, e.g., regression of the growth rate against regional covariates, which in turn sheds light on which factors drive the epidemic.
 
@@ -15,12 +14,16 @@ However, modeling cases on the regional level comes with its own challenges, as 
 % for small regions, have to consider exchange of cases as well
 
 \subsection{Model}
-Similar to the last section, we start by modeling the evolution of cases in time. We now have incidences $I_{t,r}$ reported for reporting date $t$ and region $r$, where there are a total of $R$ regions. 
-\todo{comment on Gebietsreform in 2021 (?)}
+Similar to the last section, we start by modeling the evolution of cases in time. We now have incidences $I_{t,r}$ reported for reporting date $t$ and region $r$, where there are a total of $R$ regions. For Germany we use the $R=400$ counties as of the Gebietsreform 2021, which united the free city Eisenach with the county of Wartburgkreis \citep{FreistaatThueringen2019Thueringer}. This has several implications for the raw data published by the \acrshort{rki}:
+\begin{itemize}
+    \item For data published before 30. June 2021, cases were reported separately for Eisenach and the Wartburgkreis. In pre-processing the data on the county level, we merge these two regions into a single one.
+    \item The \acrshort{rki} reports cases for Berlin's districts separately. Again, we aggregate all of them into a single number of cases for Berlin. 
+\end{itemize}
+
 Again, we model the evolution of cases by 
 \begin{align}
     \label{eq:log-growth-regional-model}
-    \log I_{t + 1, r} \approx \log I_{t + 1, r} + \log \rho_{t + 1, r}
+    \log I_{t + 1, r} \approx \log I_{t, r} + \log \rho_{t + 1, r}
 \end{align}
 where $\rho_{t+1, r}$ is the weekly growth factor in region $r$. Now we deviate from the previous model and model 
 $$
@@ -29,18 +32,18 @@ $$
 where $\overline{\log\rho}_{t}$ is the average growth rate and $u_{t,r}$ is the difference between the growth rate in region $r$ and the country wide average. 
 We will model $u_{t,r}, r = 1, \dots, R$ to be jointly Gaussian, but correlated, which will enable us to model regional dependencies. To motivate our choice for the covariance structure, let us consider how cases are transferred between regions first.
 
-As we are modeling cases on a regional level, we have to account for an exchange of cases as well. To illustrate our approach, suppose that we have for region $r$ $S^{r}$ many secondary cases generated where the primary case belongs to region $r$, but the secondary case may belong to another region $r'$. Here \glqq{}belonging to\grqq{} signifies that the case is reported in that region, which means that the infectee has registered their center of living to be in this region. Denote by $p_{r,r'}$ the fraction of such cases and set $p_{r,r} = 1 - \sum_{r' \neq r} p_{r,r'}$. 
+As we are modeling cases on a regional level, we have to account for an exchange of cases as well. To illustrate our approach, suppose that we have for region $r$ $S^{r}$ many secondary cases generated where the primary case belongs to region $r$, but the secondary case may belong to another region $r'$. Here ``{}belonging to''{} signifies that the case is reported in that region, which means that the infectee has registered their center of living to be in this region. Denote by $p_{r,r'}$ the fraction of such cases and set $p_{r,r} = 1 - \sum_{r' \neq r} p_{r,r'}$. 
 
 Under these assumptions, the newly reported cases in region $r$ are 
 $$
-    \tilde S^{r} = \sum_{r'} p_{r',r} S^{r'} = (P^{T}S)_{r}
+    \tilde S^{r} = \sum_{r'=1}^{R} p_{r',r} S^{r'} = (P^{T}S)_{r}
 $$
-for $ P = \left( p_{r, r'} \right)_{r,r' = 1, \dots, R}$. Assuming now that $S^{r}, r= 1, \dots, R$ are random and i.i.d. with variance $\sigma^{2}_S$, we have 
+for $ P = \left( p_{r, r'} \right)_{r,r' = 1, \dots, R} \in \R^{R\times R}$. As $P \mathbf 1 = \mathbf 1$, $P$ is a stochastic matrix. Assuming now that $S^{r}, r= 1, \dots, R$ are random and i.i.d. with variance $\sigma^{2}_S$, we have 
 $$
     \cov \left( \tilde S\right) = \cov \left( P^{T}S, P^{T}S \right) = \sigma^{2}_SP^{T}P.
 $$
 
-However, modeling the correlation of newly reported cases turns out to be difficult: the cases will surely be modeled by a Poisson or Negative Binomial distribution, so we would have to decide on a copula to introduce this dependency structure. While this is feasible in principle, we opt for an easier way. Instead of modeling correlated incidences $I_{t + 1, r}$, we model correlated growth rates $\log \rho_{t + 1, r}$, by taking $\cov \left( u_{t} \right)$ to be $\sigma^{2}_SP^{T}P$. By \Cref{eq:log-growth-regional-model}, conditional on $I_{t,r}$, this also captures regional correlation, without having to specify an involved joint distribution for the incidences.
+However, modeling the correlation of newly reported cases turns out to be difficult: the cases will surely be modeled by a Poisson or Negative Binomial distribution, so we would have to decide on a copula to introduce this dependency structure. While this is feasible in principle, we opt for an easier way. Instead of modeling correlated incidences $I_{t + 1, r}$, we model correlated growth rates $\log \rho_{t + 1, r}$, by taking $\cov \left( u_{t} \right)$ to be $\sigma^{2}_SP^{T}P$. By \Cref{eq:log-growth-regional-model}, conditional on $I_{t,r}$, this also captures regional correlation, without having to specify an involved joint distribution for the incidences. Note however, that this is just a convenient modeling choice whose aim is to replicate the covariance structure of the --- somewhat artificial --- case of having i.i.d. number of secondary cases across all regions.
 
 As elaborated in \Cref{sec:dessiderata}, we want the regional effects $u_{t,r}$ to be both flexible, but also, in some sense, stable over time. Thus, it makes sense to model $u_{t}$ as a stationary process in time. The simplest, non-trivial, stationary process is a vector-autoregressive process 
 $$
@@ -56,29 +59,112 @@ $$
 $$
 conditionally independent. While the previous observations $I_{t}$ are now conditioned on as well, recall from our discussion in the beginning of \Cref{cha:state_space_models}, that this is not problematic.
 
-To fully specify the model, we have to provide the transfer probabilities $p_{r,r'}$. For these, we use official data by Germany's federal employment agency on commuters \todo{ref}. From these data, we calculate $q_{r,r'}$, the fraction of socially insured employees that have their center of life in region $r$, but are registered to work in region $r'$. As this is only a crude approximation to the actual exchange between regions, we let 
-$$
-    p_{r,r'} \propto \bar q + (1- \bar q) \frac{q_{r,r'}}{\sum_{r'' \neq r'} q_{r,r''} + C q_{r,r}}
-$$
-where we interpret $\bar q$ as a constant socket of exchange between regions and $C \geq 1$ as an additional proportion of stay at home inhabitants that are not captured by $q_{r,r}$, e.g. elderly or children. 
+To fully specify the model, we have to provide the transfer probabilities $p_{r,r'}$. For these, we use official data by Germany's federal employment agency on commuters. We use two datasets: the number of employees subject to social security contributions per county \citep{BundesagenturfuerArbeitStatistik2021Sozialversicherungspflichtig} and the number of commuters per county  \citep{BundesagenturfuerArbeitStatistik2024Pendleratlas}. We use the number of commuters per county from December 2022, which are no longer directly available on the homepage of the federal employment agency, but can be obtained through the Pendleratlas interface. In any case, these data are additionally available in the accompanying zenodo repository of this thesis \todo{link to it}. Notice that both datasets are dated after the Gebietsreform in June 2021. Counties are uniquely identified by the Allgemeiner Gemeinde Schlüssel (AGS), a five-digit code, which are also available in the \acrshort{rki} dataset. 
 
-Thus, our final model is parameterized by
+In this dataset a commuter is someone whose center of living (as registered with the German authorities) is a different county than the county of their workplace.
+For two regions $r,r'$ we let $n_{r}$ be the total number of employees subject to social security contributions per county and $c_{r,r'}$ be the number of commuters from county $r$ to county $r'$, with $c_{r,r} = n_{r} - \sum_{r'\neq r} c_{r,r'}$.
+From these data, we calculate $q_{r,r'} = \frac{c_{r,r'}}{n_{r}}$, the fraction of socially insured employees that have their center of life in region $r$, but are registered to work in region $r'$. 
+
+As this is only a crude approximation to the actual exchange between regions, we let
+$$
+    p_{r,r'} \propto \bar q + (1- \bar q) \frac{q_{r,r'}}{\sum_{r'' \neq r} q_{r,r''} + C q_{r,r}} \phantom{......} r' \neq r
+$$
+where we interpret $\bar q$ as a constant socket of exchange between regions and $C \geq 1$ as an additional proportion of stay at home inhabitants that are not captured by $q_{r,r}$, e.g. elderly or children. The proportionality is owed to $\sum_{r' = 1}^R p_{r,r'} = 1$. Let us highlight some instances of $P$.  
+
+If $\bar q = 0$ and $C = 1$, then $p_{r,r'} = q_{r,r'}$, which would distribute secondary cases according to the commuting given by the official data from Germany's federal employment agency. 
+
+If $\bar q = 1$ or $\bar q \to 1$ with fixed $C$, $P = \frac{1}{R}J\in\R^{R\times R}$, where $J$ is the matrix with all entries equal to $1$. We can interpret this as choosing the region a secondary case is reported in as uniformly as random across all regions, regardless of the original region of the primary case. 
+
+If $\bar q \in [0,1)$ and $C \to \infty$, then $P \to I\in\R^{R \times R}$, where $I$ is to identity matrix. In this setting all regions evolve independently of one another.
+Thus, the model is flexible enough to account for these practically relevant scenarios, and interpolate between them.
+
+Our final model is parameterized by
 $$
     \theta = \left( \log \sigma^{2}_S, \operatorname{logit} \alpha, \log (C - 1), \logit \bar q, \log \sigma^{2}_{\overline{\log \rho}}, \log r\right),
 $$
-where chose a parametrization that is unconstrained. The model has a linear signal 
+where we reparameterized to an unconstrained $\theta \in \R^{6}$. The model has a linear signal 
 $$
     S_{t} = \left(\log \rho_{t} + u_{t,r}\right)_{r = 1, \dots, R},
 $$
-which makes inference fast, as the approximating \acrshort{glssm} in the \acrshort{eis} method only requires $\mathcal O(n\,R)$ many parameters. Again, we use \acrshort{mle} to estimate $\theta$, using the methods from \Cref{sec:maximum_likelihood_estimation}.
+which makes inference fast, as the approximating \acrshort{glssm} in the \acrshort{la} and \acrshort{eis} method only requires $\mathcal O(n\,R)$ many parameters. Again, we use \acrshort{mle} to estimate $\theta$, using the methods from \Cref{sec:maximum_likelihood_estimation}.  \todo{describe setup/parameters}
+% computational stuff /setup
+%% N_samples, iterations, convergence criteria
+%% how predictions are done: cap at n_pop per county
+
+We aggregate the reported cases from the \acrshort{rki} on a weekly level. We orient ourselves at the ECDC's ForecastHub, whose guidelines read
+\begin{quote}
+    Forecast horizons should use the Epidemiological Week (EW) format, defined by the US CDC. Each week starts on Sunday and ends on Saturday. \footnote{\url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe/wiki/targets-and-horizons}}
+\end{quote}
+Thus, the observations $I_{t, r}$ $t=0, \dots, n$ and $r = 1, \dots, R$ consist of the number of reported cases in region $r$ that were reported from the $t$-th Sunday up until the $t$-the Saturday in the period of interest and for identification purposes we identify $t$ with the $t$-th Saturday in the period under consideration. 
 
 \subsection{Results}
 
-\begin{itemize}
-    \item fit model by MLE + show inference for Toennies outbreak, interpret covariance matrix estimates
-    \item predict incidences on regional level and show that we outperform simple Poisson / NB baseline that only uses a single region
-    \item maybe: perform predictions for 1-4 weeks ahead, compare to regional FCH
-\end{itemize}
+
+\paragraph{showcase}
+Similar to the last section, we start out with a motivational example on the capabilities of our model. For this, we use the local outbreak highlighted in \Cref{fig:cases_germany}, which occurred in the middle of June 2020 \citep{Gunther2020SARSCoV2}. We consider the time period from 25 April 2020\footnote{Recall that this weekly observation includes cases reported from 19 April 2020 to 25 April 2020.} up until 20 June 2020 as observations, consider the observation on 27 June 2020 to be missing, and fit the \acrshort{ssm} to this data. 
+
+\begin{table}
+    \centering
+    \input{tables/regional_showcase_theta.tex}
+    \caption{Estimated parameters for the regional showcase model.}
+    \label{tab:regional_showcase_theta}
+\end{table}
+
+% parameter interpretation
+
+\begin{figure}
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/regional_showcase_prediction.tex}%
+    }
+    \caption{Incidences $I_{t,\cdot} = \sum_{r = 1}^R I_{t,r}$ in Germany in the period under consideration in the regional showcase model. We additionally show predictions (median, $80\%$ and $95\%$ prediction intervals) as shaded regions for three different approaches: the \acrshort{ssm} presented in this section and two negative binomial baselines (see text for details). The \acrshort{ssm} approach is the only approach with the actual incidences ending up within the $80\%$ prediction interval, the two baselines completely miss this target.}
+    \label{fig:regional_showcase_prediction.tex}
+\end{figure}
+
+\begin{figure}
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/regional_showcase_rho.tex}%
+    }
+    \caption{Growth factors for the showcase model estimated by the \acrshort{ssm} approach (blue boxplots and lines) and the empirical approach (red boxplots and lines). For the $400$ counties in Germany, we summarize the estimated growth factors with boxplots. The top of the y-axis is cutoff at $\rho = 2$ omitting the many outliers produced by the empirical approach, which is due to the overall small number of reported cases. The estimates of the \acrshort{ssm} approach are much more concentrated than those based on the empirical approach, as the \acrshort{ssm} approach regularizes the (log-)growth rates both in time an space. While the country level estimates (shown by dashed lines) mostly agree, they diverge at the end of the observational period, as the local outbreak \citep{Gunther2020SARSCoV2} has less of an impact in the \acrshort{ssm} approach.}
+    \label{fig:regional_showcase_rho.tex}
+\end{figure}
+% prediction: use n_pop
+
+
+% why model good for this situation
+
+% results:
+% figure of estimated states (log rho) and table of parameters
+% compare growth factor estimates in NRW based on SSM w/ those based on simple estimates
+% figure of cases + predictions on country level w/ poisson baseline + nb baseline
+% WIS across all counties compare to poisson and nb baseline in that week (see talk at Karlsruhe)
+
+\paragraph{one-week ahead predictions}
+
+\begin{figure}
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/regional_forecasts_comparison.tex}%
+    }
+    \caption{Comparison of the $39$ one-week ahead forecasts (showing median, 50\% and 95\% prediction intervals) produced by four different model: three from the ECDCs ForecastHub (\texttt{baseline}, \texttt{ensemble}, \texttt{itww}) and our novel \texttt{ssm} approach. For the \texttt{ssm} approach, each forecast is obtained by a single run of the model, with the observations to be forecasts missing. The true reported cases after one week are indicated by a dashed line. Notice the log-scale of the $y$-axis. While the forecasts provided by the \texttt{baseline} and \texttt{itww} models occasionally miss the true reported cases, the \texttt{ensemble} and \texttt{ssm} approach provides more adequate coverage, see also \Cref{tab:regional_forecasts_combined_metrics} for a quantitative comparison of the four approaches.}
+
+    \label{fig:regional_forecasts_comparison.tex}
+\end{figure}
+
+
+\begin{table}
+    \centering
+    \input{tables/regional_forecasts_combined_metrics.tex}
+    \caption{}
+    \label{tab:regional_forecasts_combined_metrics}
+\end{table}
+
+
+% setup: ECDC FCH -> compare to baseline and ensemble
+% computational setup
+% figure comparison
+% interpret results
+% caveat: only 1-week ahead forecasts
+
+% comparison ECDC FCH not totaly valid: reporting delay, but minor
 
 \subsection{Discussion}
 

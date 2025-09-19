@@ -1964,6 +1964,88 @@
       \field{year}{1986}
       \field{dateera}{ce}
     \endentry
+    \entry{BundesagenturfuerArbeitStatistik2021Sozialversicherungspflichtig}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=e44fa8dfa3b510c299d069e27b5df166}{%
+           family={{Bundesagentur für Arbeit, Statistik}},
+           familyi={B\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Nürnberg, Deutschland}%
+      }
+      \list{organization}{1}{%
+        {Bundesagentur für Arbeit}%
+      }
+      \strng{namehash}{e44fa8dfa3b510c299d069e27b5df166}
+      \strng{fullhash}{e44fa8dfa3b510c299d069e27b5df166}
+      \strng{fullhashraw}{e44fa8dfa3b510c299d069e27b5df166}
+      \strng{bibnamehash}{e44fa8dfa3b510c299d069e27b5df166}
+      \strng{authorbibnamehash}{e44fa8dfa3b510c299d069e27b5df166}
+      \strng{authornamehash}{e44fa8dfa3b510c299d069e27b5df166}
+      \strng{authorfullhash}{e44fa8dfa3b510c299d069e27b5df166}
+      \strng{authorfullhashraw}{e44fa8dfa3b510c299d069e27b5df166}
+      \field{extraname}{1}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{langid}{german}
+      \field{title}{Sozialversicherungspflichtig beschäftigte nach ausgewählten merkmalen (quartalszahlen)}
+      \field{type}{Amtliche Statistik}
+      \field{year}{2021}
+      \field{dateera}{ce}
+      \verb{urlraw}
+      \verb https://statistik.arbeitsagentur.de/Statistikdaten/Detail/202109/iiia6/beschaeftigung-sozbe-svb-kreise-merkmale/svb-kreise-merkmale-d-0-202109-xlsx.xlsx?__blob=publicationFile&v=1
+      \endverb
+      \verb{url}
+      \verb https://statistik.arbeitsagentur.de/Statistikdaten/Detail/202109/iiia6/beschaeftigung-sozbe-svb-kreise-merkmale/svb-kreise-merkmale-d-0-202109-xlsx.xlsx?__blob=publicationFile&v=1
+      \endverb
+      \warn{\item Datamodel: misc entry 'BundesagenturfuerArbeitStatistik2021Sozialversicherungspflichtig' (bibliography.bib): Field 'urlaccessdate' invalid in data model - ignoring}
+    \endentry
+    \entry{BundesagenturfuerArbeitStatistik2024Pendleratlas}{online}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=e44fa8dfa3b510c299d069e27b5df166}{%
+           family={{Bundesagentur für Arbeit, Statistik}},
+           familyi={B\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Nürnberg, Deutschland}%
+      }
+      \list{organization}{1}{%
+        {Pendleratlas - Statistik der Bundesagentur für Arbeit}%
+      }
+      \strng{namehash}{e44fa8dfa3b510c299d069e27b5df166}
+      \strng{fullhash}{e44fa8dfa3b510c299d069e27b5df166}
+      \strng{fullhashraw}{e44fa8dfa3b510c299d069e27b5df166}
+      \strng{bibnamehash}{e44fa8dfa3b510c299d069e27b5df166}
+      \strng{authorbibnamehash}{e44fa8dfa3b510c299d069e27b5df166}
+      \strng{authornamehash}{e44fa8dfa3b510c299d069e27b5df166}
+      \strng{authorfullhash}{e44fa8dfa3b510c299d069e27b5df166}
+      \strng{authorfullhashraw}{e44fa8dfa3b510c299d069e27b5df166}
+      \field{extraname}{2}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{langid}{german}
+      \field{title}{Pendleratlas}
+      \field{type}{Amtliche Statistik}
+      \field{year}{2024}
+      \field{dateera}{ce}
+      \verb{urlraw}
+      \verb https://statistik.arbeitsagentur.de/DE/Navigation/Statistiken/Interaktive-Statistiken/Pendleratlas/Pendleratlas-Nav.html
+      \endverb
+      \verb{url}
+      \verb https://statistik.arbeitsagentur.de/DE/Navigation/Statistiken/Interaktive-Statistiken/Pendleratlas/Pendleratlas-Nav.html
+      \endverb
+      \warn{\item Datamodel: online entry 'BundesagenturfuerArbeitStatistik2024Pendleratlas' (bibliography.bib): Field 'urlaccessdate' invalid in data model - ignoring}
+      \warn{\item Datamodel: online entry 'BundesagenturfuerArbeitStatistik2024Pendleratlas' (bibliography.bib): Invalid field 'location' for entrytype 'online'}
+      \warn{\item Datamodel: online entry 'BundesagenturfuerArbeitStatistik2024Pendleratlas' (bibliography.bib): Invalid field 'type' for entrytype 'online'}
+    \endentry
     \entry{Burgard2021Regional}{unpublished}{}{}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=f7560193f01140eac23cc1fb22dfbf55}{%
@@ -3385,6 +3467,42 @@
       \verb 10.1109/TAC.1969.1099196
       \endverb
     \endentry
+    \entry{FreistaatThueringen2019Thueringer}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=9c78cad4e83557ba4c42562287bd2c80}{%
+           family={{Freistaat Thüringen}},
+           familyi={F\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Erfurt}%
+      }
+      \strng{namehash}{9c78cad4e83557ba4c42562287bd2c80}
+      \strng{fullhash}{9c78cad4e83557ba4c42562287bd2c80}
+      \strng{fullhashraw}{9c78cad4e83557ba4c42562287bd2c80}
+      \strng{bibnamehash}{9c78cad4e83557ba4c42562287bd2c80}
+      \strng{authorbibnamehash}{9c78cad4e83557ba4c42562287bd2c80}
+      \strng{authornamehash}{9c78cad4e83557ba4c42562287bd2c80}
+      \strng{authorfullhash}{9c78cad4e83557ba4c42562287bd2c80}
+      \strng{authorfullhashraw}{9c78cad4e83557ba4c42562287bd2c80}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labeldatesource}{nodate}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Gesetz- und Verordnungsblatt}
+      \field{langid}{german}
+      \field{title}{Thüringer Gesetz- und Verordnungsblatt Nr. 12/2019}
+      \field{pages}{429\bibrangedash 453}
+      \range{pages}{25}
+      \verb{urlraw}
+      \verb https://parldok.thueringer-landtag.de/ParlDok/dokument/72572/gesetz_und_verordnungsblatt_nr_12_2019.pdf
+      \endverb
+      \verb{url}
+      \verb https://parldok.thueringer-landtag.de/ParlDok/dokument/72572/gesetz_und_verordnungsblatt_nr_12_2019.pdf
+      \endverb
+      \warn{\item Datamodel: misc entry 'FreistaatThueringen2019Thueringer' (bibliography.bib): Invalid field 'pages' for entrytype 'misc'}
+      \warn{\item Datamodel: misc entry 'FreistaatThueringen2019Thueringer' (bibliography.bib): Invalid value of field 'year' must be datatype 'datepart' - ignoring field}
+    \endentry
     \entry{Fruhwirth-Schnatter1994Data}{article}{}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=83485dfde2678ca0bd6138144fcfe9ff}{%
@@ -4046,6 +4164,82 @@
       \verb 10.15585/mmwr.mm7338a1
       \endverb
       \warn{\item Datamodel: article entry 'Havers2024COVID19Associateda' (bibliography.bib): Invalid ISSN in value of field 'issn'}
+    \endentry
+    \entry{Heyder2022Regional}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=62aea11d18878abad805cac399a7537f}{%
+           family={Heyder},
+           familyi={H\bibinitperiod},
+           given={Stefan},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f7560193f01140eac23cc1fb22dfbf55}{%
+           family={Burgard},
+           familyi={B\bibinitperiod},
+           given={Jan\bibnamedelima Pablo},
+           giveni={J\bibinitperiod\bibinitdelim P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=363adbdc5cb19dc178104d9cc123abd9}{%
+           family={Krueger},
+           familyi={K\bibinitperiod},
+           given={Tyll},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=73074c606c194c4ae0e4f6ab7d40d7df}{%
+           family={Hotz},
+           familyi={H\bibinitperiod},
+           given={Thomas},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+      }
+      \name{editor}{2}{}{%
+        {{hash=06162f840633e2adae140efa3535ba7a}{%
+           family={Ehrhardt},
+           familyi={E\bibinitperiod},
+           given={Matthias},
+           giveni={M\bibinitperiod}}}%
+        {{hash=36e06ec0bef21ce0f1cb5421ff73bacc}{%
+           family={Günther},
+           familyi={G\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Cham}%
+      }
+      \list{publisher}{1}{%
+        {Springer International Publishing}%
+      }
+      \strng{namehash}{61d68ebe588b918bc845c93ef153ddcc}
+      \strng{fullhash}{a1ae1f718216537b41de94883ed494a4}
+      \strng{fullhashraw}{a1ae1f718216537b41de94883ed494a4}
+      \strng{bibnamehash}{61d68ebe588b918bc845c93ef153ddcc}
+      \strng{authorbibnamehash}{61d68ebe588b918bc845c93ef153ddcc}
+      \strng{authornamehash}{61d68ebe588b918bc845c93ef153ddcc}
+      \strng{authorfullhash}{a1ae1f718216537b41de94883ed494a4}
+      \strng{authorfullhashraw}{a1ae1f718216537b41de94883ed494a4}
+      \strng{editorbibnamehash}{ee6b2f97cdc644cd2a969d8e60b615a1}
+      \strng{editornamehash}{955b249c77fc17b475079bd99fc24c26}
+      \strng{editorfullhash}{955b249c77fc17b475079bd99fc24c26}
+      \strng{editorfullhashraw}{955b249c77fc17b475079bd99fc24c26}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Progress in {{Industrial Mathematics}} at {{ECMI}} 2021}
+      \field{isbn}{978-3-031-11818-0}
+      \field{langid}{english}
+      \field{series}{Mathematics in {{Industry}}}
+      \field{title}{Regional {{Estimates}} of {{Reproduction Numbers}} with {{Application}} to {{COVID-19}}}
+      \field{year}{2022}
+      \field{dateera}{ce}
+      \field{pages}{163\bibrangedash 171}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1007/978-3-031-11818-0_22
+      \endverb
     \endentry
     \entry{Heyder2023Measures}{incollection}{}{}
       \name{author}{2}{}{%
@@ -10364,6 +10558,82 @@
       \verb 10.1137/20M1377783
       \endverb
       \warn{\item Datamodel: article entry 'Grundel2022How' (bibliography.bib): Invalid ISSN in value of field 'issn'}
+    \endentry
+    \entry{Heyder2022Regional}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=62aea11d18878abad805cac399a7537f}{%
+           family={Heyder},
+           familyi={H\bibinitperiod},
+           given={Stefan},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f7560193f01140eac23cc1fb22dfbf55}{%
+           family={Burgard},
+           familyi={B\bibinitperiod},
+           given={Jan\bibnamedelima Pablo},
+           giveni={J\bibinitperiod\bibinitdelim P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=363adbdc5cb19dc178104d9cc123abd9}{%
+           family={Krueger},
+           familyi={K\bibinitperiod},
+           given={Tyll},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=73074c606c194c4ae0e4f6ab7d40d7df}{%
+           family={Hotz},
+           familyi={H\bibinitperiod},
+           given={Thomas},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+      }
+      \name{editor}{2}{}{%
+        {{hash=06162f840633e2adae140efa3535ba7a}{%
+           family={Ehrhardt},
+           familyi={E\bibinitperiod},
+           given={Matthias},
+           giveni={M\bibinitperiod}}}%
+        {{hash=36e06ec0bef21ce0f1cb5421ff73bacc}{%
+           family={Günther},
+           familyi={G\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Cham}%
+      }
+      \list{publisher}{1}{%
+        {Springer International Publishing}%
+      }
+      \strng{namehash}{61d68ebe588b918bc845c93ef153ddcc}
+      \strng{fullhash}{a1ae1f718216537b41de94883ed494a4}
+      \strng{fullhashraw}{a1ae1f718216537b41de94883ed494a4}
+      \strng{bibnamehash}{61d68ebe588b918bc845c93ef153ddcc}
+      \strng{authorbibnamehash}{61d68ebe588b918bc845c93ef153ddcc}
+      \strng{authornamehash}{61d68ebe588b918bc845c93ef153ddcc}
+      \strng{authorfullhash}{a1ae1f718216537b41de94883ed494a4}
+      \strng{authorfullhashraw}{a1ae1f718216537b41de94883ed494a4}
+      \strng{editorbibnamehash}{ee6b2f97cdc644cd2a969d8e60b615a1}
+      \strng{editornamehash}{955b249c77fc17b475079bd99fc24c26}
+      \strng{editorfullhash}{955b249c77fc17b475079bd99fc24c26}
+      \strng{editorfullhashraw}{955b249c77fc17b475079bd99fc24c26}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Progress in {{Industrial Mathematics}} at {{ECMI}} 2021}
+      \field{isbn}{978-3-031-11818-0}
+      \field{langid}{english}
+      \field{series}{Mathematics in {{Industry}}}
+      \field{title}{Regional {{Estimates}} of {{Reproduction Numbers}} with {{Application}} to {{COVID-19}}}
+      \field{year}{2022}
+      \field{dateera}{ce}
+      \field{pages}{163\bibrangedash 171}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1007/978-3-031-11818-0_22
+      \endverb
     \endentry
     \entry{Heyder2023Measures}{incollection}{}{}
       \name{author}{2}{}{%

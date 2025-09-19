@@ -149,6 +149,18 @@ As such, we are able to focus on specifying of either the mean or variance and d
         \label{fig:are}
     \end{figure}
 
+
+    We show the target densities we will consider in this example in \Cref{fig:targets}.
+    \begin{figure}
+        \centering
+
+        \resizebox{\textwidth}{!}{%
+            \input{tikz/targets.tex}%
+        }
+        \caption{Targets used for the \acrshort{cem} and \acrshort{eis} in \Cref{ex:univ-gaussian-s2-fixed} and \Cref{ex:univ-gaussian-s2-fixed}. In addition to the standard normal distribution, we use location and scale mixtures. The location mixture is chosen for its bimodality for the smaller two values of $\omega^{2}$, while the scale mixture is chosen for its different tail behavior compared to the behavior at the mode.}
+        \label{fig:targets}
+    \end{figure}
+
     
     \paragraph{Normal distribution}
     If $\P = \mathcal N(0, \tau^{2})$ is a normal distribution, this reduces to
@@ -157,11 +169,6 @@ As such, we are able to focus on specifying of either the mean or variance and d
     \end{align*}
     and so for $\tau^{2} = \sigma^{2}$ we have $V_{\eis} = 0$, so $\hpeis$ might converge faster than the standard $\mathcal O( N^{-\frac{1}{2}})$ rate. Indeed, in this case $\hpeis = \peis$ a.s. for $N > 1$, see \Cref{prop:eis-finite-sample}.
 
-    %For importance sampling to be consistent, it is necessary that $\sigma^{2} > \frac{\tau^{2}}{2}$. The left-hand side of \Cref{fig:are} displays the behavior of the relative efficiency
-    %$$
-    %\frac{V_{\eis}}{V_{\ce}} = \frac{5}{2} \frac{(V_{\ce} - 1)^{2}}{V_{\ce}^{2}} = \frac{5}{2} \left( 1 - \frac{2}{V_{\ce}} + \frac{1}{V_{\ce}^2} \right).
-    %$$
-    
     \paragraph{Gaussian location mixture}
     Consider now the case where $\P = \frac{1}{2} \mathcal N(-1, \omega^{2}) + \frac{1}{2}\mathcal N(1, \omega^{2})$ is a Gaussian location mixture. The second moment is $\tau^{2} = 1 + \omega^{2} = -\frac{1}{2\pce}$. Unfortunately, there is no closed-form expression for many of the terms required for the analysis of \gls{eis}. Instead, we resort to a simulation study to determine the asymptotic variances and relative efficiencies for three different values of $\omega^{2} \in \{0.1, 0.5, 1.0\}$. 
     
@@ -228,7 +235,32 @@ For the Gaussian scale mixture, the case is less clear. Here the true variance i
         \intertext{and}
         V_{\eis} &= \frac{\mu^{2} \left(2 \mu^{6} + 45 \mu^{4} \tau^{2} + 15 \tau^{6}\right)}{4 \tau^{4} \left(2 \mu^{2} + \tau^{2}\right)^{4}},
     \end{align*}
-    see the Appendix for details. 
+    which we show in the following. By standard properties of the single parameter Gaussian exponential family $I(\psi_{\ce})^{-1} = \frac{ \left(2\mu^{2} + 2\tau^{2}\right)^{2}}{2} $, so $B_{\ce} = \frac{2}{\left(2\mu^{2} + 2\tau^{2}\right)^{2}}$. 
+
+    Additionally,
+    \begin{align*}
+    M_{\ce} = \cov_{\P} (T) & = \P \left( \left((\id - \mu)^{2} - \tau^{2} - \mu^{2} \right)^{2}\right)\\
+        &= \P \left( \left( \id^{2} - \tau^{2} + 2\mu\id \right)^{2} \right) \\
+        &= \P \left(\id^{4} - 2\id^{2}\tau^{2} + 4 \mu \id^{3} + \tau^{4} + 4\mu^{2}\id^{2}\right)\\
+        &= \nu + 4 \mu^{2}\tau^{2} - \tau^{4},
+    \end{align*}
+    as $\P \id^{3} = 0$ and $\P \id^{2} = \tau^{2}$. In total 
+    $$
+        V_{\ce} = B_{\ce} M_{\ce} B_{\ce} = \frac{4 \left(\nu + 4 \mu^{2}\tau^{2} - \tau^{4}\right)}{\left(2\mu^{2} + 2\tau^{2}\right)^{4}} = \frac{\nu + 4 \mu^{2}\tau^{2} - \tau^{4}}{4 \left( \mu^{2} + \tau^{2}\right)^{4}}.
+    $$
+
+    For \acrshort{eis}, we have $\log p(x) = -\frac{1}{2} \frac{x^{2}}{\tau^{2}} - \frac{1}{2\sqrt{\pi\tau^{2}}}$, so the log-weights are, up to an additive constant, given by
+    $$
+        - \frac{1}{2} \frac{\id^{2}}{\tau^{2}} - T \psi_{\eis}.
+    $$
+
+    $M_{\eis}$ is then given by 
+    $$
+        \P \left( (\id - \mu)^{4} \left( \log w - \P \log w \right)^{2}  \right)
+    $$
+    which is the expectation of a sixth order polynomial with respect to the standard normal distribution $\P$, so its value is analytically tractable and turns out to be\footnote{See \texttt{03\_08\_comparison.ipynb} in the accompanying code for calculations.}
+    $$ M_{\eis} = \frac{\mu^{2} \left(2 \mu^{6} + 45 \mu^{4} \tau^{2} + 15 \tau^{6}\right)}{\left(2 \mu^{2} + \tau^{2}\right)^{2}}.
+    $$
 
     \paragraph{Gaussian location and scale mixture}
     To estimate asymptotic relative efficiencies for the Gaussian location and scale mixtures, for the same targets as in \Cref{ex:univ-gaussian-s2-fixed}, we again perform a simulation study with the same parameters ($M = 400 $ repetitions, $10\,000$ bootstrap samples estimate the standard error of estimation).

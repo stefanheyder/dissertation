@@ -46,9 +46,9 @@ Both the Poisson and negative binomial distribution belong to the class of expon
 
     Conversely, let $\P_{\psi}, \psi \in \Psi$ be a given parametric family of probability measures on some space $\mathcal Y$ that is absolutely continuous with respect to a common dominating measure $\mu$. Suppose there exist a reparametrization $\eta : \Psi \to \R^{p}$, a statistic $T: \mathcal Y \to \R^{p}$ and functions $Z: \Psi\to \R$, $h:\mathcal Y \to \R$, such that
     $$
-        p_{\psi}(y) = \frac{\d \P_{\psi}}{\d \mu} = Z(\psi) h(y) \exp \left(\eta(\psi)^{T}T(y)\right),
+        p_{\psi}(y) = \frac{\d \P_{\psi}}{\d \mu} = \frac{h(y)}{Z(\psi) } \exp \left(\eta(\psi)^{T}T(y)\right),
     $$
-    then we call $\left(\P_{\psi}\right)_{\psi \in \Psi} $ and $\left(p_{\psi}\right)_{ \psi \in \Psi}$ a \textbf{$p$-dimensional exponential family}. If $\eta(\psi) = \psi$ is the identity, we call $\psi$ the natural parameter. If $T(y) = y$, we call $y$ the natural observation. If $\psi$ is the natural parameter and $y$ the natural observation, we call $\left( \P_{\psi} \right)_{\psi \in \Psi}$ a \textbf{natural exponential family}. By reparametrization (in $\psi$) and sufficiency (in $y$) every $p$-dimensional exponential family can be written as an equivalent standard exponential family, see the elaborations in \citep[Chapter 1]{Brown1986Fundamentals}.
+    then we call $\left(\P_{\psi}\right)_{\psi \in \Psi} $ and $\left(p_{\psi}\right)_{ \psi \in \Psi}$ a \textbf{$p$-dimensional exponential family}. If $\eta(\psi) = \psi$ is the identity, we call $\psi$ the natural parameter. If $T(y) = y$, we call $y$ the natural observation. If $\psi$ is the natural parameter, we call $\left( \P_{\psi} \right)_{\psi \in \Psi}$ a \textbf{natural exponential family}. By reparametrization (in $\psi$) and sufficiency (in $y$) every $p$-dimensional exponential family can be written as an equivalent standard exponential family, see the elaborations in \citep[Chapter 1]{Brown1986Fundamentals}.
     % potentially more: natural parameter/statistic/observation, regular, full, minimal, convex support
 \end{definition}
 

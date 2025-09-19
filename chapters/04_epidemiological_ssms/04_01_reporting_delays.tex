@@ -23,10 +23,7 @@ Let $\hat p_{t, \tau} = \frac{Y_{t,\tau}}{Y_{t,\cdot}}$ denote the empirical del
 To produce accurate retrospective analyses of the daily growth factor, we will construct a \acrshort{ssm} that accounts for these delays, weekday effects and epidemics' dynamics. This model will enable us to better understand the delay process, accommodate periods of inconsistent reporting, and generate daily growth factors useful for the interpretation of \acrshort{npi} efficacy.
 
 \todo{lit rev.}
-The problem of accounting for reporting delays is generally termed \glqq{}nowcasting\grqq{} in the literature, see also \Cref{sec:nowcasting_hospitalizations} and the literature review in therein. Here, however, we are interested in a different problem: that of reconstructing the actual course of the epidemic, i.e. removing both the reporting delay and weekday-effects.
-% literature review on models that deal with reporting delays
-%% McGough
-
+The problem of accounting for reporting delays is generally termed ``{}nowcasting''{} in the literature, see also \Cref{sec:nowcasting_hospitalizations} and the literature review therein. Here, however, we are interested in a different problem: that of reconstructing the actual course of the epidemic, i.e. removing both the reporting delay and weekday-effects.
 
 In addition, we will demonstrate the model's utility when handling reporting artifacts not explicitly modeled, e.g. the Christmas period of 2020. \Acrshortpl{ssm} handle missing data seamlessly, so removing observations in that period and fitting the model again is straightforward.
 
@@ -67,7 +64,7 @@ We can recover the delay probabilities $p_{t, \tau}$ from the log-ratios by
 \end{align}
 for $\tau = 1, 2, 3$.
 
-Finally, there are reporting artifacts and other effects that we have not yet considered in our model that contribute to the variation in the data. To account for these effects, we model daily, multiplicative, \glqq{}muck\grqq{} $M_{t}$, for date $t$, such that the total expected number of reported cases on this date is $M_{t}I_{t}$ instead of $I_{t}$. We assume that $(\log M_{t})_{t = 0, \dots, n} \iid \mathcal N(-\frac{1}{2}\sigma^{2}_M, \sigma^{2}_{M})$, independent of all other states. Thus, $M_{t}$ follows a log-normal distribution with mean $1$. 
+Finally, there are reporting artifacts and other effects that we have not yet considered in our model that contribute to the variation in the data. To account for these effects, we model daily, multiplicative, ``{}muck''{} $M_{t}$, for date $t$, such that the total expected number of reported cases on this date is $M_{t}I_{t}$ instead of $I_{t}$. We assume that $(\log M_{t})_{t = 0, \dots, n} \iid \mathcal N(-\frac{1}{2}\sigma^{2}_M, \sigma^{2}_{M})$, independent of all other states. Thus, $M_{t}$ follows a log-normal distribution with mean $1$. 
 
 With these components at our disposal, we can model the observed incidences $Y_{t, \tau}$ by
 \begin{align}
@@ -129,6 +126,7 @@ The parameters of the model are $\theta = \left( \log \sigma^{2}_{\rho}, \log \s
 
 % results
 \subsection{Results}
+\paragraph{Showcase}
 We start by a showcase of the models' capability, fitting it to the reported case date in the period from April 5th to September 1st 2020, starting from the first day when $4$ delays are available in the dataset to the initial period of exponential growth in the fall of 2020. We estimate the parameters $\theta = \left( \log \sigma^{2}_{\rho}, \log \sigma^{2}_W, \log \sigma^{2}_q, \log \sigma^{2}_M, \log \sigma^{2}_{W_{q}}\right)$ by maximum-likelihood estimation, yielding the parameters displayed in \Cref{tab:showcase-parameters}. There, we see that $\log \rho_{t}$, $\log W_{t}$, $q_{t,1}, q_{t,2}$ and $ q_{t,3}$ vary slowly over time, compared to the faster varying $W^{q, 1}, W^{q,2}, W^{q,3}$. 
 
 \begin{table}
@@ -153,7 +151,7 @@ For the daily growth factor $\rho$ we additionally display the corresponding wee
     \resizebox{\textwidth}{!}{%
         \input{tikz/showcase_prediction_intervals.tex}%
     }
-    \caption{Importance sampling estimates of mean (black lines) and $95\%$ prediction intervals (green ribbons) for weekday effect, \glqq{}muck\grqq{} and delay probabilities in the showcase model, based on the method described in \Cref{subsec:inference}. We omit the small prediction intervals for delay probabilities for better readability. Note that all variables are not included directly in the model, but may be written as a function of states, either taking the exponential or converting from log-ratios to probabilities. The minor breaks in the x-axis grid indicate Sundays.} \label{fig:showcase_prediction_intervals}
+    \caption{Importance sampling estimates of mean (black lines) and $95\%$ prediction intervals (green ribbons) for weekday effect, ``{}muck''{} and delay probabilities in the showcase model, based on the method described in \Cref{subsec:inference}. We omit the small prediction intervals for delay probabilities for better readability. Note that all variables are not included directly in the model, but may be written as a function of states, either taking the exponential or converting from log-ratios to probabilities. The minor breaks in the x-axis grid indicate Sundays.} \label{fig:showcase_prediction_intervals}
 \end{figure}
 % muck
 
@@ -165,6 +163,7 @@ The weekday effect $W$ exhibits the expected seasonal pattern: on Sundays, which
 % delay probabilities
 Finally, for the delay probabilities, we compute both the signals probabilities, given by \Cref{eq:p-from-log-ratios}, and a smoothed version, obtained by setting $\log W_{t}^{q,\tau}$ to $0$ in \Cref{eq:p-from-log-ratios}. From \Cref{fig:showcase_prediction_intervals}, we see that starting in the middle of April, reporting became faster, with a larger share of cases being reported with a delay of only a single day. While this seems to reverse at the end of the considered period, this is likely due to the reporting artifacts at the end of August, indicated by the large spike in $p_{t,2}$. 
 
+\paragraph{reporting artifacts in Christmas season 2020}
 Now that we have seen an application of the model, we use it to demonstrate how easily we can incorporate missing or faulty observations. Recall from \Cref{fig:cases_germany} the problem of reporting artifacts during the 2020 Christmas season. In \Cref{fig:christmas_prediction_intervals_I_rho} we show undesirable effects of directly applying our model to the data in this period. In this figure, the red lines correspond to inferences made using all available observations, while turquoise lines correspond to inferences made where we remove all observations from December 19th 2020 until January 17th 2021, marked by the gray background in the figure. 
 \begin{figure}
     \resizebox{\textwidth}{!}{%

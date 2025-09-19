@@ -298,7 +298,18 @@ and for $X \sim \G$ the variance of $w(X)X$ is
     \label{eq:variance-wxx}
 \tau^{2} = \var \left( w(X)X \right) = \frac{\sigma^{4}}{\left( 2 \sigma^{2} - 1 \right)^{\frac{3}{2}}}
 \end{align}
-which goes to $\infty$ as $\sigma^2$ does, see the appendix for details. Thus, for a pre-specified $\epsilon > 0$, let $N$ be as in \Cref{thm:variance_failure} and choose $\sigma^{2}$ such that $\var \left( \hat\zeta_{N} \right) = \frac {\tau^{2}}N$ is larger than, say, $10\epsilon$. By the preceding theorem, we would, with large probability, observe a small empirical variance and thus declare $\hat\zeta_{N}$ to have converged, whereas, in reality, we would need a sample size that is $100$ times as large.
+which goes to $\infty$ as $\sigma^2$ does. To show \Cref{eq:variance-wxx} we calculate the second moment of $w(X)X$,
+\begin{align*}
+    \mathbb E (w(X)X)^{2} &= \int w(x)^{2} x^{2} g(x) \d x \\
+    &= \int \sigma^{2} \exp \left( - x^{2} \left( 1 - \frac{1}{\sigma^{2}} \right)\right)\, x^{2}\, \frac{1}{\sqrt{2\pi\sigma^{2}}} \exp \left( -\frac{x^{2}}{2\sigma^{2}} \right)  \d x \\
+    &= \int \sigma x^{2} \frac{1}{\sqrt{2\pi}}\exp \left( - \frac{x^{2}}{2} \left( 2 - \frac{2}{\sigma^{2}} + \frac{1}{\sigma^{2}} \right) \right)\d x \\
+    &= \int \sigma x^{2} \frac{1}{\sqrt{2\pi}}\exp \left( - \frac{x^{2}}{2} \frac{2\sigma^{2} - 1}{\sigma^{2}} \right)\d x \\
+    &= \nu \sigma \int x^{2} \frac{1}{\sqrt{2\pi\nu^{2}}} \exp \left( - \frac{x^{2}}{2\nu^{2}}\right)\d x \\
+    &= \nu^{3} \sigma = \frac{\sigma^{4}}{(2\sigma^{2} - 1)^{\frac{3}{2}}}
+\end{align*}
+where $\nu^{2} = \frac{\sigma^{2}}{2\sigma^{2} - 1}$.
+
+Thus, for a pre-specified $\epsilon > 0$, let $N$ be as in \Cref{thm:variance_failure} and choose $\sigma^{2}$ such that $\var \left( \hat\zeta_{N} \right) = \frac {\tau^{2}}N$ is larger than, say, $10\epsilon$. By the preceding theorem, we would, with large probability, observe a small empirical variance and thus declare $\hat\zeta_{N}$ to have converged, whereas, in reality, we would need a sample size that is $100$ times as large.
 
 Thus using the empirical variance as a threshold for convergence should be avoided, at least for importance sampling where the weights can be evaluated exactly. For self-normalized importance sampling, the authors do not provide such a theorem. As a remedy \citep{Chatterjee2018Sample} suggest the heuristic $q_{N} = \mathbb E Q_{N}$ where
 $$
