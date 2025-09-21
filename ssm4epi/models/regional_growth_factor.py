@@ -466,7 +466,7 @@ def growth_factor_model(theta, aux) -> PGSSM:
     p = K
     l = K + 1
 
-    alpha = jsp.special.expit(logit_alpha)
+    alpha = jsp.special.expit(logit_alpha) * 2 - 1
     s2_rho = jnp.exp(log_s2_r)
     s2_spat = jnp.exp(log_s2_spat)
     r = jnp.exp(log_r)
@@ -494,7 +494,7 @@ n_ij = (
 )
 n_pop = pd.read_csv(here() / "data/processed/population.csv").iloc[:, -1].to_numpy()
 
-# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 29
+# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 30
 df_weekly_cases = pd.read_csv(here() / "data/processed/RKI_county_weekly.csv").pivot(
     index="date", columns="ags", values="cases"
 )
@@ -504,13 +504,13 @@ cases_full = jnp.asarray(df_weekly_cases.to_numpy(), dtype=jnp.float64)
 dates_full = df_weekly_cases.index.to_numpy()
 ags_full = df_weekly_cases.columns.to_numpy()
 
-# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 30
+# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 31
 def make_aux(date, cases_full, n_ij, n_tot, np1):
     iloc_of_date_in_index = jnp.where(dates_full == date)[0][0]
     cases = cases_full[iloc_of_date_in_index : iloc_of_date_in_index + np1 + 1]
     return cases, n_ij, n_tot
 
-# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 31
+# %% ../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 32
 import jax.scipy as jsp
 
 
@@ -518,7 +518,7 @@ def par_to_theta(params):
     alpha, s2_r, s2_spat, q, C, r = params
     return jnp.array(
         [
-            jsp.special.logit(alpha),
+            2*jsp.special.logit(alpha) - 1,
             jnp.log(s2_r),
             jnp.log(s2_spat),
             jsp.special.logit(q),
@@ -532,7 +532,7 @@ def theta_to_par(theta):
     alpha, s2_r, s2_spat, q, Cm1, r = theta
     return jnp.array(
         [
-            jsp.special.expit(alpha),
+            jsp.special.expit((alpha + 1)/2),
             jnp.exp(s2_r),
             jnp.exp(s2_spat),
             jsp.special.expit(q),

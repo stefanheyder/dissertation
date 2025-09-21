@@ -3,20 +3,21 @@
 \toprule
 metric & baseline & ensemble & itww & ssm\\
 \midrule
+MAPE & 19,664.56 & 11,874.82 & 18,227.64 & 15,182.32\\
+WIS & 13,907.18 & 6,877.50 & 14,486.06 & 9,337.43\\
 \addlinespace[0.3em]
-\multicolumn{5}{l}{\textbf{absolute performance}}\\
-\hspace{1em}Mean Absolute Error & 19,664.56 & 11,874.82 & 18,227.64 & 16,697.13\\
-\hspace{1em}WIS & 13,907.18 & 6,877.50 & 14,486.06 & 9,637.17\\
-\hspace{1em}Sharpness & 1,462.87 & 2,742.61 & 850.62 & 7,563.06\\
-\hspace{1em}Underprediction & 7,055.17 & 1,637.46 & 141.15 & 598.20\\
-\hspace{1em}Overprediction & 4,493.27 & 1,973.11 & 12,686.54 & 865.97\\
+\multicolumn{5}{l}{\textbf{WIS components}}\\
+\hspace{1em}sharpness & 1,462.87 & 2,742.61 & 850.62 & 7,377.42\\
+\hspace{1em}underprediction & 7,055.17 & 1,637.46 & 141.15 & 719.02\\
+\hspace{1em}overprediction & 4,493.27 & 1,973.11 & 12,686.54 & 690.43\\
+\hspace{1em}rescaled MAPE & 895.88 & 524.31 & 807.76 & 550.57\\
 \addlinespace[0.3em]
 \multicolumn{5}{l}{\textbf{coverage}}\\
-\hspace{1em}Coverage 50\% PI [\%] & 25.64 & 43.59 & 23.08 & 74.36\\
-\hspace{1em}Coverage 95\% PI [\%] & 82.05 & 94.87 & 46.15 & 100.00\\
+\hspace{1em}\hspace{1em}coverage 50\% PI [\%] & 25.64 & 43.59 & 23.08 & 76.92\\
+\hspace{1em}\hspace{1em}coverage 95\% PI [\%] & 82.05 & 94.87 & 46.15 & 100.00\\
 \addlinespace[0.3em]
 \multicolumn{5}{l}{\textbf{relative to baseline}}\\
-\hspace{1em}Mean Absolute Error & 1.00 & 0.60 & 0.93 & 0.85\\
-\hspace{1em}WIS & 1.00 & 0.49 & 1.04 & 0.69\\
+\hspace{1em}MAPE & 1.00 & 0.60 & 0.93 & 0.77\\
+\hspace{1em}WIS & 1.00 & 0.49 & 1.04 & 0.67\\
 \bottomrule
 \end{tabular}

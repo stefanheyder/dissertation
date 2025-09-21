@@ -100,7 +100,7 @@ Additionally, the moment generating function $\psi \mapsto Z(\psi)$ is smooth on
     $$
     For fixed $r$ these distributions form an exponential family with natural parameter $\log (1 - q )$, natural statistic $T = \id$, base measure $h(x) = \binom{x + r - 1}{x}$ and moment-generating function $Z(q) = r \log q$. 
 
-    In this parametrization the mean of the $\operatorname{NegBinom}(q,r)$ distribution is $\mu = r \frac{1 - q}{q}$ and its variance is $r \frac{1 - q}{q^{2}}$. An alternative parametrization that will become useful \Cref{cha:analysis_of_selected_models} is that by the log mean $\xi = \log \mu$ and overdisperision $r$. As $q = \frac{r}{r + \mu}$, this parametrization has log-density
+    In this parametrization the mean of the $\operatorname{NegBinom}(q,r)$ distribution is $\mu = r \frac{1 - q}{q}$ and its variance is $r \frac{1 - q}{q^{2}}$. An alternative parametrization that will become useful \Cref{cha:analysis_of_selected_models} is that by the log mean $\xi = \log \mu$ and overdisperision $r$, with variance $\mu + \frac{\mu^{2}}{r}$. Thus, the $ \operatorname{NegBinom}$ distribution has $1 + \frac{\mu}{r}$ times the variance of a Poisson distribution with the same mean. As $q = \frac{r}{r + \mu}$, this parametrization has log-density
     $$
     \log p_{r,\xi}(x) = \log \binom{x + r - 1}{x} + x \xi  - (r + x) \log (\exp \xi + r) - r \log r,
     $$

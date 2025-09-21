@@ -98,10 +98,24 @@ We aggregate the reported cases from the \acrshort{rki} on a weekly level. We or
 Thus, the observations $I_{t, r}$ $t=0, \dots, n$ and $r = 1, \dots, R$ consist of the number of reported cases in region $r$ that were reported from the $t$-th Sunday up until the $t$-the Saturday in the period of interest and for identification purposes we identify $t$ with the $t$-th Saturday in the period under consideration. 
 
 \subsection{Results}
-
+We will demonstrate the usefulness of our new model by applying it to two scenarios. First, recalling the local outbreak highlighted in \Cref{fig:cases_germany}, occurring in the middle of June 2022 \citep{Gunther2020SARSCoV2}, we show that using our model gives reasonable estimates of growth rates when incidences are low and local outbreaks can occur, which can then be used to give sensible forecasts, outperforming baseline models on the country as well as the regional level. We will use this as a \textbf{showcase} of the models capabilities, and comment on the estimated parameters, especially $P$, which accounts for cross-regional infections.
+Second, we show that our model is able to give reasonable \textbf{one-week ahead forecasts} of \acrshort{c19} cases by comparing its predictive performance to that of real-time forecasts created in the ECDC's ForecastHub from April 2021 to January 2022.
 
 \paragraph{showcase}
-Similar to the last section, we start out with a motivational example on the capabilities of our model. For this, we use the local outbreak highlighted in \Cref{fig:cases_germany}, which occurred in the middle of June 2020 \citep{Gunther2020SARSCoV2}. We consider the time period from 25 April 2020\footnote{Recall that this weekly observation includes cases reported from 19 April 2020 to 25 April 2020.} up until 20 June 2020 as observations, consider the observation on 27 June 2020 to be missing, and fit the \acrshort{ssm} to this data. 
+Similar to the last section, we start out with a motivational example on the capabilities of our model. For this, we use the local outbreak highlighted in \Cref{fig:cases_germany}, which occurred in the middle of June 2020 \citep{Gunther2020SARSCoV2}. We consider the time period from 25 April 2020\footnote{Recall that this weekly observation includes cases reported from 19 April 2020 to 25 April 2020.} up until 20 June 2020 as observations, consider the observation on 27 June 2020 to be missing, and fit the \acrshort{ssm} to this data. \Cref{fig:regional_showcase_prediction} shows the number of reported cases used to fit this model, aggregated to the whole of Germany. The local outbreak accounts for a total of $1\,413$ cases in the county of Gütersloh between 17 June 2020 and 23 June 2020 (see \citep[Figure 1]{Gunther2020SARSCoV2}), noticeable in this figure by the large jump between 13 June 2020 ($2324$ cases) and 20 June 2020 ($3872$ cases). 
+
+\begin{figure}
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/regional_showcase_prediction.tex}%
+    }
+    \caption{Incidences $I_{t,\cdot} = \sum_{r = 1}^R I_{t,r}$ in Germany in the period under consideration in the regional showcase model. We additionally show predictions (median, $50\%$ and $95\%$ prediction intervals) as shaded regions for three different approaches: the \acrshort{ssm} presented in this section and three negative binomial baselines (see text for details). The \acrshort{ssm} approach is the only approach with the actual incidences ending up within the $95\%$ prediction interval, the three baselines completely miss this target. Note that all four prediction intervals are located at 27 June 2020, but are shifted horizontally for better visibility.}
+    \label{fig:regional_showcase_prediction}
+\end{figure}
+
+We fit the model using maximum likelihood estimation and present the estimated parameters in \Cref{tab:regional_showcase_theta}. 
+The estimated auto-regressive parameter $\alpha$ is negative, which has can be interpreted as follows: when a region's log-growth factor is above the country-wide average at time $t$, it tends to decrease below the average in the following week. Similarly, regions with below-average growth factors tend to increase back toward the mean. This negative autocorrelation is sensible for the low-incidence setting we consider here, where large outbreaks are typically localized and temporary, rather than sustained.
+
+The standard deviation of the average growth rate, $\sigma_{\overline{\log \rho}}$, is small compared to that of the spatial effect, $\sigma_{S}$. This is visible from \Cref{fig:regional_showcase_rho.tex} as well, where we show the predicted median growth factors (not on the log scale) for the model with a blue dashed line ($\overline{\log \rho}_{t}$) and boxplots for the median growth rates for each county (summarized by blue boxplots). Here we can see that the variation over time at the county level is much larger than that at the country level, which is also evident when examining $\log \rho_{t,r}$ directly (figures not shown).
 
 \begin{table}
     \centering
@@ -110,35 +124,62 @@ Similar to the last section, we start out with a motivational example on the cap
     \label{tab:regional_showcase_theta}
 \end{table}
 
-% parameter interpretation
+The estimated proportion of stay at home inhabitants, $C \approx 2.4$, is remarkably close to the Germany-wide ratio of total inhabitants to employees subject to social security contributions, which is $2.5$—despite the model having no direct access to total population data. The estimated overdispersion parameter $r$ indicates significant overdispersion in the data: as explained in \Cref{ex:pois_negbinom}, the variance of a $\operatorname{NegBinom}$ distribution with mean $\mu$ and overdispersion parameter $r$ is $1 + \frac{\mu}{r}$ times larger than that of a Poisson distribution with the same mean. 
 
-\begin{figure}
-    \resizebox{\textwidth}{!}{%
-        \input{tikz/regional_showcase_prediction.tex}%
-    }
-    \caption{Incidences $I_{t,\cdot} = \sum_{r = 1}^R I_{t,r}$ in Germany in the period under consideration in the regional showcase model. We additionally show predictions (median, $80\%$ and $95\%$ prediction intervals) as shaded regions for three different approaches: the \acrshort{ssm} presented in this section and two negative binomial baselines (see text for details). The \acrshort{ssm} approach is the only approach with the actual incidences ending up within the $80\%$ prediction interval, the two baselines completely miss this target.}
-    \label{fig:regional_showcase_prediction.tex}
-\end{figure}
+This overdispersion becomes practically significant when $\mu \geq r$, as this corresponds to at least doubling the variance compared to a Poisson model. For the date of 20 June 2020, this threshold was exceeded by 32 out of 400 counties, indicating that overdispersion was relevant for the larger counties during this period.
+
+% comment on predictions and neg binom baselines
+Having fitted the model, we can use it to obtain forecasts for the next observation, that on 27 June 2020, using the techniques detailed in \Cref{subsec:inference}. We show predictions (median, $50\%$ and $95\%$ prediction intervals) in \Cref{fig:regional_showcase_prediction}, indicated by the blue regions. As the predictions on the country level consist of those on the regional level, we additionally use the data on total inhabitants in a county, capping the number of predicted cases by the total inhabitants, that is we predict in region $r$ with samples
+$$
+    \min \left\{\log \rho^{i}_{T,r}I_{T-1,r}, \text{pop}_{r}\right\},
+$$
+where $i=1,\dots,N$, $T$ is the index for which we want to perform predictions and $\text{pop}_{r}$ is the total number of inhabitants in each region.
+
+To assess the performance, we compare it to three simple baseline models. 
+
+\begin{itemize}
+    \item The \texttt{nbinom} model uses a $ \operatorname{NegBinom}$ distribution with mean $\mu = 6451.1$ set to the country wide growth factor from 13 June 2020 to 20 June 2020 ($\rho = 1.67$) times the total number of cases reported for Germany for 20 June 2020 ($I_{t,\cdot} = 3872$). The overdispersion parameter is estimated by fitting the model to past observations with maximum likelihood estimation, resulting in $r = 143.1$. The median and prediction intervals presented in the figure are given by the respective quantiles of this distribution.
+    \item The \texttt{reg.nbinom} model uses the same strategy, but applied to observations on the county level, estimating an individual $r$ for each county. To take care of unrealisticly high growth factors, we cap all growth factors at $3$. Should the empirical growth factor be infinite or indeterminante due to the number of old cases being $0$, we set it to $1$.  The median and prediction intervals presented in the figure are obtained by simulating $10\,000$ samples from each county, independently, then taking empirical prediction intervals on the number of cases aggregated to the country level. We also apply the same capping strategy by the total number of inhabitants as for the \texttt{ssm} model.
+    \item The \texttt{reg.nbinom no GL} model is the same as the \texttt{reg.nbinom} model, but with cases for the county of Gütersloh set to $0$. 
+\end{itemize}
+
+It is clear from \Cref{fig:regional_showcase_prediction} that the \texttt{ssm} approach outperforms the baseline models: it is the only model where the prediction interval contains, or is even close to the true observation. There are multiple reasons for this behavior. First, the simple \texttt{nbinom} overpredicts the number of total cases because the number of reported cases from the local outbreak in Gütersloh county dominate the country-wide development of cases. While the regional level \texttt{reg.nbinom} model is able to account for this, the empirical growth factor for Gütersloh is $\hat \rho_{T, \text{Gütersloh}} = 11.7$ with $856$ cases reported for 20 June 2020, which results in $\approx 10\,000$ cases predicted for that county alone. Recalling that we have capped the growth factor at $3$, the \texttt{reg.nbinom}  model would only predict $\approx 2\,600$ cases, which is still noticeable in the predictions. 
+The best of the three baseline models --- in terms of predictive performance for this single observation --- is the \texttt{reg.nbinom no GL} model, where we have removed Gütersloh from the prediction completely. However, it still overpredicts by a relevant margin which we attribute to the fact that the same effect --- albeit less pronounced may be at work in other counties: due to small numbers of reported cases there are many large outliers in the empirical growth factors, see \Cref{fig:regional_showcase_rho.tex}. 
 
 \begin{figure}
     \resizebox{\textwidth}{!}{%
         \input{tikz/regional_showcase_rho.tex}%
     }
-    \caption{Growth factors for the showcase model estimated by the \acrshort{ssm} approach (blue boxplots and lines) and the empirical approach (red boxplots and lines). For the $400$ counties in Germany, we summarize the estimated growth factors with boxplots. The top of the y-axis is cutoff at $\rho = 2$ omitting the many outliers produced by the empirical approach, which is due to the overall small number of reported cases. The estimates of the \acrshort{ssm} approach are much more concentrated than those based on the empirical approach, as the \acrshort{ssm} approach regularizes the (log-)growth rates both in time an space. While the country level estimates (shown by dashed lines) mostly agree, they diverge at the end of the observational period, as the local outbreak \citep{Gunther2020SARSCoV2} has less of an impact in the \acrshort{ssm} approach.}
+    \caption{Growth factors for the showcase model estimated by the \acrshort{ssm} approach (blue boxplots and lines) and the empirical approach (red boxplots and lines). For the $400$ counties in Germany, we summarize the estimated growth factors with boxplots. The top of the y-axis is cutoff at $\rho = 4$ omitting the many outliers produced by both approaches, which is due to the overall small number of reported cases. The estimates of the \acrshort{ssm} approach tend to be more concentrated than those based on the empirical approach, as the \acrshort{ssm} approach regularizes the (log-)growth rates both in time an space. While the country level estimates (shown by dashed lines) mostly agree, they diverge at the end of the observational period, as the local outbreak \citep{Gunther2020SARSCoV2} has less of an impact in the \acrshort{ssm} approach.}
     \label{fig:regional_showcase_rho.tex}
 \end{figure}
-% prediction: use n_pop
 
+Another advantage of the \texttt{ssm} model are the regional and country level growth factors we obtain. In \Cref{fig:regional_showcase_rho.tex} we show median estimates of these growth factors, together with their empirical counterparts, i.e. the growth factors used in the \texttt{nbinom} and \texttt{reg.nbinom} baseline models (without the cap at $\rho = 3$ introduced there). 
+In this figure, we observe that the country level estimates of the growth factor are smaller for the \acrshort{ssm} approach, compared to the empirical one. The reason for this is that $\overline{\log \rho}_{t}$ is not the logarithm of a country wide growth factor, but the mean (on the log-scale) of all regional growth factors, so by Jensen's inequality it has to be smaller than the country level growth factor. Its estimate is close to the median growth factor on the county level, indicated by the bar in the blue boxplots.  For the county level growth factors in this figure, we additionally observe less variation of growth factors across counties due to the regularization our model imposes.
 
-% why model good for this situation
+Finally, we can interpret the entries in $P$, which informs both the redistribution of cases between regions, and the covariance of regional effects $u_{t}$. As $P$ is a $400\times 400$ matrix, we focus only on a small section of it: the counties in the federal state of Saxony. Saxony is interesting because it contains two large cities (``Leipzig, Stadt'' and ``Dresden, Stadt'') with commuters commuting from the surrounding area to these cities. In the fitted model, this results in a larger row-sum for the indices associated with these cities, see the right-hand side of \Cref{fig:P_matrix_saxony.tex}.
+
+\begin{figure}
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/P_matrix_saxony.tex}%
+    }
+    \caption{We show part of the estimated $P$ for the showcase example for Saxonian counties. On the left-hand side we present $p_{r,r'}$ for $r,r'$ in Saxony. As the diagonal elements are much larger than the off-diagonal ones, we only apply the color gradient to the off-diagonal elements. The right-hand shows the proportion of in-county infections $p_{r',r'}$ (blue bars) and out-of-county infections $\sum_{r \neq r'} p_{r,r'}$ (red bars). For the two big cities, ``Leipzig, Stadt'' and ``Dresden, Stadt'', we see a larger influx of cases, compared to the more rural regions, e.g. ``Görlitz''.} 
+    \label{fig:P_matrix_saxony.tex}
+\end{figure}
 
 % results:
-% figure of estimated states (log rho) and table of parameters
-% compare growth factor estimates in NRW based on SSM w/ those based on simple estimates
-% figure of cases + predictions on country level w/ poisson baseline + nb baseline
 % WIS across all counties compare to poisson and nb baseline in that week (see talk at Karlsruhe)
 
-\paragraph{one-week ahead predictions}
+\paragraph{one-week ahead forecasts}
+
+% explain setup for testing: replicating ECDC Hub setting
+% 
+
+\begin{itemize}
+    \item The \texttt{baseline} model ...
+    \item \texttt{ensemble} 
+    \item \texttt{itww}
+\end{itemize}
 
 \begin{figure}
     \resizebox{\textwidth}{!}{%
@@ -153,7 +194,8 @@ Similar to the last section, we start out with a motivational example on the cap
 \begin{table}
     \centering
     \input{tables/regional_forecasts_combined_metrics.tex}
-    \caption{}
+    \caption{Quantitative comparison of the four approaches to one-week ahead forecasts. All metrics are averaged across the $39$ forecasts made by each model. To be consistent with the \gls{wis} we use the median as the point forecast for the \gls{mape}. For the \gls{wis} we show additional the decomposition into four components and the relative performance of the \texttt{ensemble}, \texttt{itww} and 
+    \texttt{ssm} approaches to the baseline. }
     \label{tab:regional_forecasts_combined_metrics}
 \end{table}
 
