@@ -172,23 +172,28 @@ Finally, we can interpret the entries in $P$, which informs both the redistribut
 
 \paragraph{one-week ahead forecasts}
 
-% explain setup for testing: replicating ECDC Hub setting
-% 
+In the last section we have seen that our regional \acrshort{ssm} provides accurate forecasts in a low incidence setting. We now want to investigate if that holds true in higher incidence settings.
+To that end, we will compare the predictions made by our model to that of some models that participated in the \acrlong{gfch} \citep{Bracher2021Preregistered,Bracher2022National} and \acrlong{efch} \citep{Sherratt2023Predictive}, a collaborative forecasting challenge for \acrshort{c19} cases, deaths and hospitalizations. From 8 March 2021 to 7 March 2021 the hub gathered weekly real-time forecast for \acrshort{c19} indicators for 32 countries in the EU and EFTA region and constructed an ensemble model from all submissions. The participating teams were required to submit their forecast in a standardized format, providing selected quantiles from their predictive distributions. To evaluate the predictive performance of our model, we compare it to three models submitted to the Hub:
 
 \begin{itemize}
-    \item The \texttt{baseline} model ...
-    \item \texttt{ensemble} 
-    \item \texttt{itww}
+    \item The \texttt{baseline} model takes the number of reported cases for this week as next weeks median, and adds uncertainty based on the past behavior of the epidemic, see \citep{Cramer2021Evaluation}.
+    \item The \texttt{ensemble} model produces forecasts by averaging all submission to the \acrlong{efch}, i.e. for each predictive quantile of one-week ahead cases, its predictive quantile is the average of all submissions for the same day, target and quantile, see \citep{Sherratt2023Predictive} for details.
+    \item The \texttt{itww} model makes predictions based on a county-level reproduction number model, with forecasts based on repeated simulations from the renewal equatino \Cref{eq:renewal-model}. See \citep{Heyder2022Regional} for details.
 \end{itemize}
+
+% RKI data
+
 
 \begin{figure}
     \resizebox{\textwidth}{!}{%
         \input{tikz/regional_forecasts_comparison.tex}%
     }
-    \caption{Comparison of the $39$ one-week ahead forecasts (showing median, 50\% and 95\% prediction intervals) produced by four different model: three from the ECDCs ForecastHub (\texttt{baseline}, \texttt{ensemble}, \texttt{itww}) and our novel \texttt{ssm} approach. For the \texttt{ssm} approach, each forecast is obtained by a single run of the model, with the observations to be forecasts missing. The true reported cases after one week are indicated by a dashed line. Notice the log-scale of the $y$-axis. While the forecasts provided by the \texttt{baseline} and \texttt{itww} models occasionally miss the true reported cases, the \texttt{ensemble} and \texttt{ssm} approach provides more adequate coverage, see also \Cref{tab:regional_forecasts_combined_metrics} for a quantitative comparison of the four approaches.}
+    \caption{Comparison of the $53$ one-week ahead forecasts (showing median, 50\% and 95\% prediction intervals) produced by four different model: three from the ECDCs ForecastHub (\texttt{baseline}, \texttt{ensemble}, \texttt{itww}) and our novel \texttt{ssm} approach. For the \texttt{ssm} approach, each forecast is obtained by a single run of the model, with the observations to be forecasts missing. The true reported cases after one week are indicated by a dashed line. Notice the log-scale of the $y$-axis. While the forecasts provided by the \texttt{baseline} and \texttt{itww} models occasionally miss the true reported cases, the \texttt{ensemble} and \texttt{ssm} approach provides more adequate coverage, see also \Cref{tab:regional_forecasts_combined_metrics} for a quantitative comparison of the four approaches.}
 
     \label{fig:regional_forecasts_comparison.tex}
 \end{figure}
+
+We show median, $50\%$ and $95\%$ prediction intervals of all four models in \Cref{fig:regional_forecasts_comparison.tex}. 
 
 
 \begin{table}
@@ -198,6 +203,10 @@ Finally, we can interpret the entries in $P$, which informs both the redistribut
     \texttt{ssm} approaches to the baseline. }
     \label{tab:regional_forecasts_combined_metrics}
 \end{table}
+
+% ITWW just beats the baseline
+% SSM somewhere between baseline and ensemble
+% replicating ensemble performance not sensible
 
 
 % setup: ECDC FCH -> compare to baseline and ensemble
