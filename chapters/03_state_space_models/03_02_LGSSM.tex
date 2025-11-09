@@ -64,9 +64,9 @@ As the joint distribution of $(X, Y)$ is Gaussian, so are conditional distributi
             $$
             and 
             $$
-            \cov \left( X | Y = y \right) = \Sigma - K \Sigma K^{T} = \left( I  -  KB \right) \Sigma,
+            \cov \left( X | Y = y \right) = \Sigma - K \Sigma_{YY} K^{T} = \left( I  -  KB \right) \Sigma,
             $$
-            as long as $B \Sigma B^{T} + \Omega$ is non-singular.
+            as long as $\Sigma_{YY} = B \Sigma B^{T} + \Omega$ is non-singular.
             Here $K = \Sigma B^{T} \left( B \Sigma B^{T} + \Omega \right)^{-1}$.
 
         \item If $\Sigma_{XX}$ is non-singular, then $Y - BX$ is independent of $X$ for $B = \Sigma_{YX} \Sigma_{XX}^{-1}$ and we may write
@@ -101,13 +101,9 @@ As the joint distribution of $(X, Y)$ is Gaussian, so are conditional distributi
     For the first statement, we refer the reader to \citep[Chapter 4, Lemma 1]{Durbin2012Time}.
     
     The second statement follows from substituting the value of $K$. 
-    
-    The third statement follows from noting that $Y-BX = \begin{pmatrix}
-        -B & I
-    \end{pmatrix} \begin{pmatrix}
-        X \\ Y
-    \end{pmatrix}$ follows a Gaussian distribution. A quick calculation reveals that $$\cov \left( Y- BX, X \right) = \Sigma_{YX} - B \Sigma_{XX} = \Sigma_{YX} - \Sigma_{YX} = 0,$$
-    showing the independence. Thus $\eta = Y - BX - v$ follows a centered Gaussian distribution and equating covariance matrices, we see that $\Omega$ has the desired form.
+
+    The third statement follows from noting that $Y-BX$ is jointly Gaussian with $X$. A quick calculation reveals that $$\cov \left( Y- BX, X \right) = \Sigma_{YX} - B \Sigma_{XX} = \Sigma_{YX} - \Sigma_{YX} = 0,$$
+    showing the independence. Thus, $\eta = Y - BX - v$ follows a centered Gaussian distribution and equating covariance matrices, we see that $\Omega$ has the desired form.
 
     For the final statement, notice that $\xi = X - KY - GZ - v$ fulfills 
     $$
@@ -123,13 +119,13 @@ As the joint distribution of $(X, Y)$ is Gaussian, so are conditional distributi
         \intertext{as well as}
         \cov \left( X | Y = y \right) &= \cov \left(KY + GZ+v +\xi|  Y = y\right) \\
             &= \cov \left( GZ + \xi | Y = y  \right) \\
-            &= \cov (GZ + \xi) - \cov(GZ + \xi, Y) \Sigma_{YY}^{-1} \cov (Y, GZ + \varepsilon)\\
+            &= \cov (GZ + \xi) - \cov(GZ + \xi, Y) \Sigma_{YY}^{-1} \cov (Y, GZ + \xi)\\
             &= G \Sigma_{ZZ}G^{T} + \Xi - G \Sigma_{ZY}\Sigma_{YY}^{-1}\Sigma_{YZ}G^{T}\\
             &= \Xi + G \cov(Z|Y) G^{T}.
     \end{align*}
 \end{proof}
 
-After having observed $Y = y$, our main interest lies in the conditional distribution of states $X$ given $Y= y$, which we could obtain by applying \Cref{lem:gaussian_conditional}, i.e. where $B = \bdiag (B_{0}, \dots, B_{n})$ and $\Omega = \bdiag \left( \Omega_{0}, \dots, \Omega_{n} \right)$ are block-diagonal matrices. However, this would require inversion of the $(n+1)p\times(n+1)p$ matrix $\left( B\Sigma B + \Omega \right)$ which becomes numerical infeasible quickly. Instead, we can exploit the sequential structure of the \acrshort{glssm}, which will allow us to perform conditioning on only a single observation at a time. 
+After having observed $Y = y$, our main interest lies in the conditional distribution of states $X$ given $Y= y$, which we could obtain by applying \Cref{lem:gaussian_conditional} to the block-diagonal matrices $B = \bdiag (B_{0}, \dots, B_{n})$ and $\Omega = \bdiag \left( \Omega_{0}, \dots, \Omega_{n} \right)$. However, this would require inversion of the $(n+1)p\times(n+1)p$ matrix $\left( B\Sigma B + \Omega \right)$ which becomes numerical infeasible quickly. Instead, we can exploit the sequential structure of the \acrshort{glssm}, which will allow us to perform conditioning on only a single observation at a time. 
 
 To this end, let us denote by $\hat X_{t | s} = \E \left( X_{t} | Y_{:s} = y_{:s}\right)$ the conditional expectation of $X_{t}$ given a set of observations $y_{:s}$ and by $\Xi_{t | s} = \cov \left( X_{t} | Y_{:s} = y_{:s} \right)$ the conditional covariance matrix of $X_{t}$ given $Y_{:s} = y_{:s}$. Then $$X_{t} | Y_{:s} = y_{:s} \sim \mathcal N \left( \hat X_{t|s}, \Xi_{t|s} \right).$$ For a given $t$, three values of $s$ are of particular interest: If $s = t - 1$ determining this conditional distribution is called a \textbf{prediction problem}, if $s = t$ this is a \textbf{filtering problem} and if $s = n$ a \textbf{smoothing problem}, and we call the distributions we seek the \textbf{predictive, filtering} or \textbf{smoothing distribution} respectively. 
 Similarly we define $\hat Y_{t|s} = \E \left( Y_{t} \middle| Y_{:s} = y_{:s} \right)$ to be the conditional expectation of $Y_{t}$ given $Y_{:s}=y_{:s}$, note that $\hat Y_{t|s} = Y_{t}$ if $s \geq t$. Finally, let $\Psi_{t|s} = \cov \left( Y_{t} | Y_{:s} = y_{:s} \right)$ be the conditional covariance matrix of $Y_{t}$ given $Y_{:s} = y_{:s}$. Again $\Psi_{t|s} = 0$ if $s \geq t$. 
@@ -175,12 +171,12 @@ From this discussion we can see how we may alter the Kalman filter to accommodat
 \begin{align*}
     Y_{t} = B_{t}X_{t} + C_{t-1}Y_{t - 1} + \eta_{t} && t  = 0, \dots, n
 \end{align*}
-we would still be able to perform the filtering step of \Cref{alg:kalman_filter} by determining the conditional distribution of $Y_{t}$ given $Y_{:(t-1)}$ using \Cref{lem:gaussian_conditional} --- .
+we would still be able to perform the filtering step of \Cref{alg:kalman_filter} by determining the conditional distribution of $Y_{t}$ given $Y_{:(t-1)}$ using \Cref{lem:gaussian_conditional}.
 
 Depending on the situation at hand, one of the many variants of the basic algorithm presented in \Cref{alg:kalman_filter} may be used. If the inversion of $\Psi_{t|t-1}$ is numerically unstable, the filtered covariance matrices $\Xi_{t|t}$ may become numerically non-positive definite. In this case, the square root filter and smoother \citep{Morf1975Squareroot} may be used. It is based on Cholesky roots of the involved covariance matrices, ensuring them to be \acrshort{psd}.
 
 When the dimension of observations is much larger than that of the states, $p \gg m$, the information filter \citep{Fraser1969Optimum} can be used. Instead of performing operations on the covariance matrices, i.e. $\Xi_{t|t-1}$ and $\Psi_{t|t-1}$, the information filter operates on their inverses, the precision matrices $\Xi_{t|t - 1}^{-1}$ and $\Psi_{t|t-1}^{-1}$ as well as rescaled states $\Xi_{t | t - 1}^{-1}
-\hat X_{t | t - 1}$ and observation $\Psi_{t | t-1}^{-1}\hat Y_{t|t -1}$ estimates. This makes the filtering step more efficient, as the most intensive step is the calculation of $\Psi_{t | t- 1}^{-1}$. However, the price one pays is that the prediction step now requires inversion of a $m\times m$ matrix, and as such the computational gains only manifest when $p$ is sufficiently large compared to $m$ \citep{Assimakis2012Information}.
+\hat X_{t | t - 1}$ and observation $\Psi_{t | t-1}^{-1}\hat Y_{t|t -1}$ estimates. This makes the filtering step more efficient, as the most expensive step is the calculation of $\Psi_{t | t- 1}^{-1}$. However, the price one pays is that the prediction step now requires inversion of an $m\times m$ matrix, and as such the computational gains only manifest when $p$ is sufficiently large compared to $m$ \citep{Assimakis2012Information}.
 
 If the dimensions of the model are so large that calculating the $m\times m$ and $p\times p$ covariance matrices becomes an issue, the simulation based \acrfull{enkf} \citep{Evensen1994Sequential} can be used. Instead of calculating the covariance matrices analytically, the \acrshort{enkf} stores a particle approximation to the Gaussian filtering distribution and iteratively performs a prediction and update step with a particle approximation, similar to the analytical update the Kalman filter performs. Despite being based on linear Gaussian dynamics, the \acrshort{enkf} is successfully employed in many high-dimensional non-linear non Gaussian problems \citep{Katzfuss2016Understanding}. 
 
@@ -234,11 +230,11 @@ Going back to the proof of the last statement in \Cref{lem:gaussian_conditional}
     X_{t} &= \hat X_{t|t} + G_{t}(X_{t + 1} - \hat X_{t + 1 | t}) + \xi_{t},
 \end{align}
 for a $\xi_{t} \sim \mathcal N \left( 0, \Xi_{t | t} - G_{t} \Xi_{t + 1|t}G_{t} \right)$ which is independent of $Y_{:n}$ and $X_{t + 1}$.
-This recurrence may be used to generate samples from the joint smoothing distribution, which is useful if one is interested in non-linear functionals of the smoothing distribution that involve multiple states at once, such as a moving median or maximum. It is based on the following decomposition of the smoothing density
+This recurrence may be used to sample from the joint smoothing distribution, which is useful if one is interested in non-linear functionals of the smoothing distribution that involve multiple states at once, such as a moving median or maximum. It is based on the following decomposition of the smoothing density
 $$
 p(x|y) = p(x_{n}|y) \prod_{t = n - 1}^0 p(x_{t}|x_{t+1}, y_{:t}).
 $$
-The resulting algorithm is called the \gls{ffbs} (\Cref{alg:ffbs}) and was first described in \citep{Fruhwirth-Schnatter1994Data} in the context of a data augmentation algorithm for Bayesian analysis of \acrshort{glssm}. %In this paper, the hyperparameters $\theta$ follow an inverse gamma distribution, and one is interested in the posterior marginals of $p(\theta|Y)$, e.g. to determine the posterior marginals of states $p(X|Y)$ using \acrshort{mcint}.
+The resulting algorithm (\Cref{alg:ffbs}) is called the \gls{ffbs}  and was first described in \citep{Fruhwirth-Schnatter1994Data} in the context of a data augmentation algorithm for Bayesian analysis of \acrshort{glssm}. 
 
 \begin{algorithm}
     \begin{algorithmic}[1]
@@ -250,7 +246,7 @@ The resulting algorithm is called the \gls{ffbs} (\Cref{alg:ffbs}) and was first
             \State Set $\check X_{t|n} = \hat X_{t|t} + G_{t} \left( \check X_{t + 1} - \hat X_{t + 1| t} \right) + \xi_{t}$
         \EndFor
     \end{algorithmic}
-    \caption{Forwards filter, backwards smoother \citep[Proposition 1]{Fruhwirth-Schnatter1994Data}} \label{alg:ffbs}
+    \caption{Forwards filter, backwards sampling \citep[Proposition 1]{Fruhwirth-Schnatter1994Data}} \label{alg:ffbs}
 \end{algorithm}
 
 % comment on regularity assumptions
@@ -270,7 +266,7 @@ In \citep{Arroyo-Marioli2021Tracking} the authors construct a simple \acrshort{g
 \citep{Zhu2021Extended,Song2021Maximum} directly apply the \acrshort{ekf} to time-discretized compartmental models, fitting them either to simulated \citep{Zhu2021Extended} or real \citep{Song2021Maximum} data. Similarly, \citep{Engbert2020Sequential} use the \acrshort{enkf} to fit a stochastic compartmental model to German regional data, where the \acrshort{enkf} allows to deal with the non-linear and non-Gaussian properties on these small spatial scales.
 
 The attractive feature of \glspl{glssm} is that a large part of inference is analytically feasible: we can calculate the likelihood, smoothing distribution and sample from it. 
-However, the modeling capacity of \glspl{glssm} is limited: most interesting phenomena in the context of this thesis follow neither linear dynamics nor are well modeled by a Gaussian distribution.
+However, the modeling capacity of \glspl{glssm} is limited: most interesting phenomena in the context of this thesis follow neither linear dynamics nor are they well modeled by a Gaussian distribution.
 
 Nevertheless, linearization of non-linear dynamics suggests that \gls{glssm}s can have some use as approximations to these more complicated phenomena, provided they are sufficiently close to Gaussian models, e.g. unimodal and without heavy tails.
 We start to move away from linear Gaussian models by allowing observations that are non-Gaussian.

@@ -95,7 +95,7 @@ Let us start from a very general definition of a \acrshort{ssm}.
 For notational convenience, we will write $\gls{sym:Xs-to-t} = \left(X_s, \dots, X_{t}\right)$ for the vector that contains all states from $s$ to $t$, $s \leq t$, dropping the first index if we consider the whole set of observations up to time $t$, so $\gls{sym:X-to-t} = X_{0:t}$, and dropping the subscript if we consider all states at once, $X = X_{:n}$.
 Similarly we set $Y_{s:t} = \left(Y_s, \dots, Y_{t}\right)$, $Y_{:t} = Y_{0:t}$ and $Y = Y_{:n}$.
 
-The models that we consider in this thesis will usually assume that densities for the state transitions with respect to a common dominating measure $\mu_{\mathcal X}$ and similar for the observations with respect to some dominating measure $\mu_{\mathcal Y}$. 
+The models that we consider in this thesis will usually assume that densities for the state transitions with respect to a common dominating measure $\mu_{\mathcal X}$ and similar for the observations with respect to some dominating measure $\mu_{\mathcal Y}$ exist. 
 
 \begin{notation}[Densities, conditional densities]
     \label{not:densities}
@@ -104,7 +104,7 @@ The models that we consider in this thesis will usually assume that densities fo
 
     Note that this notation also implicitly includes the time $t$ and allows for changes in, e.g., the state transition over time.
 
-    When densities come from a parametric model parametrized by $\gls{sym:theta}\in \gls{sym:Theta} \subseteq \mathbf{R}^{l}$ and the dependence of the model on $\theta$ is of interest, i.e. because we try to estimate $\theta$, we indicate this by adding a subscript to the densities.
+    When densities come from a parametric model parametrized by $\gls{sym:theta}\in \gls{sym:Theta} \subseteq \mathbf{R}^{l}$ and the dependence of the model on $\theta$ is of interest, e.g. because we try to estimate $\theta$, we indicate this by adding a subscript to the densities.
     If this dependence is not of interest, e.g. because $\theta$ is fixed, we omit $\theta$ for better readability.
 
     In this notation, the joint density of a parametric \gls{ssm} factorizes as
@@ -130,7 +130,7 @@ The models that we consider in this thesis will usually assume that densities fo
     $$
     p(x|y) \propto p(x,y) =p (x_0)\prod_{t = 1}^{n} p(x_{t}|x_{t - 1}) \prod_{t = 0}^{n} p(y_t | x_t, y_{t - 1}).
     $$
-    Thus, the dependence of $Y_{t}$ on $Y_{t - 1}$ only affects our inferences through $p(y_{t} | x_{t}, y_{t - 1})$, where, as $Y_{t - 1}$ is observed, the argument $y_{t - 1}$ is fixed. 
+    Thus, the dependence of $Y_{t}$ on $Y_{t - 1}$ only affects our inferences through $p(y_{t} | x_{t}, y_{t - 1})$, where, as $Y_{t - 1}$ is observed, the argument $y_{t - 1}$ is fixed. By a similar argument, we could allow $Y_{t}$ to depend on all previous observations $Y_{0}, \dots, Y_{t - 1}$ without changing any of our inferences. However, the models presented in \Cref{cha:analysis_of_selected_models} will not make use of this further generalization.
     Consequently, all results we present in this chapter for \acrshortpl{ssm} where $Y_{t}$ depends only on $X_{t}$ that concern only the conditional distribution $X|Y=y$ carry over to those given by \Cref{def:ssm}. We will reiterate this argument at appropriate points in this thesis.
 
     In most \acrshortpl{ssm} we consider in this thesis we use $\mathcal X = \R^m$ and $\mathcal Y = \R^p$ or $\mathcal Y = \Z^p$ so that $\mathcal X$ is $m$ dimensional and $\mathcal Y$ is $p$ dimensional and equip these spaces with the usual $\sigma$-Algebras. Unless noted otherwise, we use for $\mu_{\mathcal X}$ the $m$-dimensional Lebesgue measure and for $\mu_{\mathcal Y}$ either the $p$-dimensional Lebesgue measure ($\mathcal Y = \R^{p}$) or the $p$-dimensional counting measure ($\mathcal Y = \Z^{p}$).
@@ -153,38 +153,41 @@ Given data $y = (y_t)_{t = 0, \dots, n}$ that may be modeled with a \gls{ssm} th
     \item\label{it:smoothing_problem} Infer the latent states $X$ from the observations by determining, either analytically or through simulation, the smoothing distribution $X|Y$.
 \end{enumerate}
 
-The first step, \Cref{it:model_choice}, requires that the practitioner specifies a joint probability distribution for the states and observations (see \Cref{cha:analysis_of_selected_models} for examples of this).
+The first step, \cref{it:model_choice}, requires that the practitioner specifies a joint probability distribution for the states and observations (see \Cref{cha:analysis_of_selected_models} for examples of this).
 Due to the assumed dependency structure, this boils down to specifying transition kernels for the states and observations.
 The setting given in \Cref{def:ssm} is too abstract to perform inference in, so further assumptions on the types of distributions for the latent states and observations are needed.
-In this chapter, we will discuss \gls{glssm}  (\Cref{sec:linear_gaussian_state_space_models}), where both the posterior distribution and the likelihood can be derived analytically. For the epidemiological application we have in mind, these are, however, insufficient due to the non-linear behavior of incidences and the low count per region (\Cref{sec:dessiderata}).
+In this chapter, we will discuss \glspl{glssm}  (\Cref{sec:linear_gaussian_state_space_models}), where both the posterior distribution and the likelihood can be derived analytically. For the epidemiological application we have in mind, these are, however, insufficient due to the non-linear behavior of incidences and the low count per region (\Cref{sec:dessiderata}).
 Such observations are better modeled with distributions on the natural numbers, i.e. with a Poisson or negative binomial distribution, both of which are exponential families of distributions. This will lead to the class of \acrfullpl{pgssm} (\Cref{sec:logconcave_gaussian_state_space_models}) which will become the main focus of our study.
 
-Regarding the second step, \Cref{it:model_fitting}, a frequentist practitioner will want to perform maximum likelihood inference on $\theta$.
+Regarding the second step, \cref{it:model_fitting}, a frequentist practitioner will want to perform maximum likelihood inference on $\theta$.
 While asymptotic confidence intervals for the \gls{mle} $\hat\theta$ can be derived both theoretically and practically \citep[Chapter 7]{Durbin2012Time}, they are, in the context of this thesis, usually of little interest. For these asymptotic frequentist procedures to be meaningful, an appropriate central limit theorem must hold. However, as the time series we study are non-stationary and the dependence on parameters $\theta$ is allowed to be arbitrary, it is in general not obvious that such a theorem holds for the model under consideration. Instead, we approach this fitting as an Empirical Bayes procedure and our main practical interest lies in analyzing the posterior distribution $X|Y$ where we set $\theta$ equal to $\hat\theta$. 
 
 
 To obtain the maximum likelihood estimates $\hat\theta$ one needs access to the likelihood
 \begin{align}
     \label{eq:likelihood}
-    p_{\theta}(y) = \int_{\mathcal X^n} p_{\theta}(x,y) \d x = \int_{\mathcal X^{n}} p_{\theta}(y|x) p_{\theta}(x) \d x
+    p_{\theta}(y) = \int_{\mathcal X^{(n + 1)}} p_{\theta}(x,y) \d (\mu_{\mathcal X})^{(n+1)}x =\int_{\mathcal X^{(n + 1)}} p_{\theta}(x,y) \d x = \int_{\mathcal X^{(n + 1)}} p_{\theta}(y|x) p_{\theta}(x) \d x
 \end{align}
-which is usually not analytically available.
+which is usually not analytically available. Here and in the following we assume that $\mathcal X = \R^{m}$ for some $m \in \N$, that $p$ is absolutely continuous with respect to the $m$-dimensional Lebesgue measure and that $p$ is regular enough that the integral is a Riemann integral.
 Direct numerical evaluation of \Cref{eq:likelihood} is hopeless due to the high dimensionality of the state space $\mathcal X^n$.
 Instead, we will resort to simulation-based inference by importance sampling (see \Cref{sec:importance_sampling}), a Monte-Carlo method that approximates $p(y)$ by constructing a global tractable approximation to the integrand in \Cref{eq:likelihood}. Alternatively, \gls{smc} methods, i.e. particle filters, that perform importance sampling sequentially across the $n + 1$ time steps can be used. We will not follow this approach for reasons described later, but refer the reader to the excellent reference \citep{Chopin2020Introduction} for an introduction to these methods.
 
-The performance of these simulations depends crucially on our ability to construct distributions that are close to the posterior $p(x|y)$ but are easy to sample from. To this end, we construct either \acrfullpl{glssm} (\Cref{subsec:glssm-approach}) in which sampling from the posterior is analytically possible, or Gaussian Markov processes (\Cref{subsec:markov-approach}) which are directly amenable to simulation.
-These two approaches are motivated by what we term ``{}optimal importance sampling''{}, where we use a proposal distribution that solves an optimization problem. Two popular approaches for choosing such a proposal are \acrlong{eis} and the \acrlong{cem}, which minimize an $L^{2}$ or \acrshort{kld} loss, respectively. Empirically, it has been shown that \acrshort{eis} outperforms the \acrshort{cem}, to which we add theoretical insight in the form of two central limit theorems (\Cref{sec:importance_sampling}): As both methods rely on importance sampling to determine an optimal proposal, the asymptotic variance of this procedure is of practical relevance, and we argue that this asymptotic variance is likely smaller for \acrshort{eis}.
+The performance of such simulation-based estimates depends crucially on our ability to construct distributions that are close to the posterior $p(x|y)$ but are easy to sample from. To this end, we construct either \acrfullpl{glssm} (\Cref{subsec:glssm-approach}) in which sampling from the posterior is analytically possible, or Gaussian Markov processes (\Cref{subsec:markov-approach}) which are directly amenable to simulation.
+These two approaches are motivated by what we term ``{}optimal importance sampling''{}, where we use a proposal distribution that solves an optimization problem. Two popular approaches for choosing such a proposal are \acrlong{eis} and the \acrlong{cem}, which minimize an $L^{2}$ or \acrshort{kld} loss, respectively. Empirically, it has been shown that \acrshort{eis} outperforms the \acrshort{cem}, to which we add theoretical insight in the form of two central limit theorems (\Cref{sec:importance_sampling}): as both methods rely on importance sampling to determine an optimal proposal, the asymptotic variance of this procedure is of practical relevance, and we argue that this asymptotic variance is typically smaller for \acrshort{eis}.
 To this end, we provide extensive simulation studies investigating the asymptotic variance of the two methods in \Cref{sec:simulation_studies}. 
 To the best of the authors' knowledge, this is the first rigorous investigation comparing these two methods. 
 %This will be a good strategy if the target posterior $p(x|y)$ can be well approximated by a Gaussian distribution --- otherwise, we may want to account for multiple modes by considering mixtures of Gaussian state space models or account for heavy tails with t-distributed errors (\Cref{sec:accouting_for_multimodality_and_heavy_tails}) \todo{keep this here?}.
 
-As an alternative to the \acrshort{mle} approach, a fully Bayesian approach would regard $\theta$ as random and administer a prior distribution, say with density $p(\theta)$. In this setting, the main interest still lies in determining the posterior distribution of $X|Y=y$, but due to the prior put on $\theta$, its density, should it exist, is now given by
+Finally, \cref{it:smoothing_problem} concerns the actual inference of the latent states $X$ given observations $Y=y$, a classical problem in Bayesian inference. Except for the \acrshort{glssm} (\Cref{sec:linear_gaussian_state_space_models}), the posterior distribution $X|Y=y$ is usually not analytically tractable, and we have to resort to simulation-based methods. We favor importance sampling over \gls{mcmc} methods due to the ease of implementation and the possibility to parallelize the simulations.
+
+As an alternative to the above, \acrshort{mle}-based approach, a fully Bayesian approach would regard $\theta$ as random and administer a prior distribution, say with density $p(\theta)$. In this setting, the main interest still lies in determining the posterior distribution of $X|Y=y$, but due to the prior put on $\theta$, its density, should it exist, is now given by
 $$
 p(x|y) = \int p(x,\theta|y) \d \theta,
 $$
 where $p(x,\theta|y)$ is the joint posterior of states and hyperparameters, conditional on observations $y$. To tackle this problem, one may again use importance sampling methods, see e.g. \citep[Chapter 13.1]{Durbin2012Time}, or use \acrshort{mcmc}-methods tailored to \acrshortpl{ssm}, e.g. Particle-\acrshort{mcmc} \citep[Chapter 16]{Chopin2020Introduction} --- however this approach is outside the scope of this thesis.
 
-To perform the above tasks, the setting defined in \Cref{def:ssm} is too general to have numerically tractable solutions, as such we restrict our studies to more structured \acrshortpl{ssm}. We begin with assuming a joint Gaussian distribution for states and observations. Subsequently, we will relax this assumption to allow the observations $Y$ to have more general distributions. 
+
+To perform the above tasks, the setting defined in \Cref{def:ssm} is too general to have numerically tractable solutions. Thus we restrict our studies to more structured \acrshortpl{ssm}. We begin with assuming a joint Gaussian distribution for states and observations. Subsequently, we will relax this assumption to allow the observations $Y$ to have more general distributions. 
 %\input{chapters/03_state_space_models/03_01_Modelling.tex}
 \input{chapters/03_state_space_models/03_02_LGSSM.tex}
 \input{chapters/03_state_space_models/03_03_LCSSM.tex}

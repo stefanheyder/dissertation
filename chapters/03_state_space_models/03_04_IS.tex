@@ -6,7 +6,7 @@ Alternative approaches to importance sampling for performing inference in \glspl
 Recall from the introduction to this chapter that this inference concerns three objectives: maximum likelihood estimation, i.e. evaluation and optimization of the likelihood, access to the posterior distribution $X_{:n} | Y_{:n}$ and prediction of future states and observations. Let us give a concise comparison of these alternative approaches, weighing their advantages and disadvantages over importance sampling, in particular for the \glspl{ssm} that this thesis deals with. 
 
 % MCMC intro
-\gls{mcmc} \citep{Brooks2011Handbook} is a simulation technique that allows to simulation of correlated samples from a target distribution by constructing an ergodic Markov chain that has as its invariant distribution the desired distribution. 
+\gls{mcmc} \citep{Brooks2011Handbook} is a simulation technique that allows simulation of samples from a target distribution by constructing an ergodic Markov chain that has as its invariant distribution the desired distribution. 
 If one is able to simulate from such a Markov chain, one can generate samples whose marginal distributions are close to the target distribution.
 Thus, these samples can be used in \acrshort{mcint} to estimate expectations of interest, though one has to be mindful of autocorrelation of these samples.
 For standard variants of \acrshort{mcmc}, such as Metropolis-Hastings \gls{mcmc} or Hamiltonian Monte Carlo, one needs access to the density of the sought after distribution up to a constant to simulate a step in the Markov chain. While these methods are very general, in high dimensions, these are affected by the curse of dimensionality. 
@@ -21,7 +21,7 @@ As \acrshort{is} is based on independent samples, it can be parallelized easily,
 To avoid particle collapse, \gls{smc} is usually equipped with a resampling step once the effective sample size of the current set of particles drops below a specified level. Once the final filtering distribution $X_{n}|Y_{:n}$ is approximated, the smoothing distribution may be obtained in several ways, e.g., backwards sampling or a two-filter approach, see \citep[Chapter 12]{Chopin2020Introduction}.
 
 % SMC vs. IS
-Conveniently, \gls{smc} allows us to approximate the likelihood $\ell(\theta)$ for a single parameter by a single pass of the particle filter. However, the discrete nature of resampling makes the approximated likelihood non-continuous, complicating maximum likelihood inference. \citep[Chapter 14]{Chopin2020Introduction} discusses several strategies: the first amounts to importance sampling of the order as discussed in this thesis, where one fixes a reference parameter $\theta_{0}$ to perform importance sampling with $p_{\theta_{0}}(x|y)$ against $p_{\theta}(x|y)$. The second strategy only works in the univariate case and consists of approximating the non-continuous inverse CDFs appearing in the resampling step by continuous ones. Finally, if the dependence on the hyperparameters $\theta$ allows for application of the EM-algorithm, it may be used to perform the optimization. 
+Conveniently, \gls{smc} allows us to approximate the likelihood $\ell(\theta)$ for a single parameter by a single pass of the particle filter. However, the discrete nature of resampling makes the approximated likelihood non-continuous, complicating maximum likelihood inference. \citet[Chapter 14]{Chopin2020Introduction} discuss several strategies: the first amounts to the same strategy employed in this thesis, where one fixes a reference parameter $\theta_{0}$ to perform importance sampling with $p_{\theta_{0}}(x|y)$ against $p_{\theta}(x|y)$. The second strategy only works in the univariate case and consists of approximating the non-continuous inverse CDFs appearing in the resampling step by continuous ones. Finally, if the dependence on the hyperparameters $\theta$ allows for application of the EM-algorithm, it may be used to perform the optimization.
 Contrary to \gls{smc}, the global importance sampling approach we discuss in \Cref{sec:gaussian_importance_sampling_for_state_space_models,sec:maximum_likelihood_estimation} allows us to perform importance sampling in an optimal way, and allows for use of numerical differentiation as the dependence of $\log p_{y} (\theta)$ on $\theta$ is smooth, as there is no resampling involved.
 
 This chapter proceeds with a general treatment of importance sampling, loosely based on \citep[Chapter 8]{Chopin2020Introduction} and \citep[Chapter 11]{Durbin2012Time}. Subsequently, we will focus our attention on methods to obtain good importance sampling proposals. 
@@ -43,14 +43,14 @@ The i.i.d. assumption could also be dropped, e.g. when we employ antithetic vari
 If $v \in L^{2}(\G)$ and under i.i.d. sampling the Monte-Carlo variance of $\hat \zeta$ is $\frac{\var \left(v(X^{i})\right)}{N}$, and so naturally we want $\var \left(v(X^{i})\right)$ to be small to ensure fast convergence of $\hat \zeta$. As $v$ depends on the proposal $\G$, and we have flexibility in choosing $\G$, importance sampling acts as a variance reduction technique: the better $\G$ approximates $f\P$, in the sense that the variance of $v$ w.r.t. $\G$ is small, the faster importance sampling will converge. 
 
 A classical result is that the minimum MSE proposal $\G^\ast$ has a closed form. Indeed it is given by the total variation measure of $f\P$, renormalized to be a probability measure, which can be shown by a simple application of Jensen's inequality. 
-\begin{proposition}[{\cite[Proposition 8.2]{Chopin2020Introduction}}][minimum MSE proposal]
+\begin{proposition}[{\cite[Proposition 8.2]{Chopin2020Introduction}} --- minimum MSE proposal]
     \label{prop:minimum_MSE_IS}
     The proposal $\G^{\ast}$ that minimizes the MSE of importance sampling is given by
     $$
     \G^{\ast}  = \frac{\lvert f \rvert}{\P\left[\lvert f \rvert \right]} \P.
     $$
 \end{proposition}
-Unfortunately, this optimality result has no practical use, indeed if $f$ is positive we would need to obtain $\P[f]$ first, the overall target of our endeavor. Additionally, sampling from $\G^{\ast}$ is not guaranteed to be practically feasible. 
+Unfortunately, this optimality result has no practical use. Indeed, if $f$ is positive we would need to obtain $\P[f]$ first, the overall target of our endeavor. Additionally, sampling from $\G^{\ast}$ is not guaranteed to be practically feasible. 
 
 If the Radon-Nikodym derivative $w = \frac{\d\P}{\d\G}$ exists, then $v = fw$, which, for the problems we will study, is the case. Then 
 $$
@@ -69,7 +69,7 @@ $$
 We will return to the question of which functions $f$ to consider further below and assume in the following discussion $fw \in L^{2}(\G)$.
 
 To perform importance sampling one must be able to evaluate $w$. In the context of \acrshortpl{pgssm} this is usually not possible: if $\P$ is the intractable conditional distribution of $X|Y$, then the integration constant of its density $p(y)$ is not analytically available.
-Still, we can usually evaluate the weights up to a constant, i.e. $$\tilde w(x) \propto \frac{\d \P}{\d \G}(x)$$ is available. The missing constant is then $\G \tilde w$, which is itself amenable to importance sampling: we may estimate it by $\frac{1}{N}\sum_{i = 1}^N \tilde w(X^{i})$.
+Still, we can usually evaluate the weights up to a constant, i.e. $$\tilde w(x) \propto \frac{\d \P}{\d \G}(x)$$ is available. The missing constant is then $\G [\tilde w]$, which is itself amenable to importance sampling: we may estimate it by $\frac{1}{N}\sum_{i = 1}^N \tilde w(X^{i})$.
 This leads to the so-called self-normalized importance sampling weights 
 $$W_i = \frac{w(X^i)}{\sum_{i = 1}^N w(X^i)},$$
 Monte Carlo estimates 
@@ -78,7 +78,7 @@ and particle approximation
 $$\hat \P_N = \sum_{i = 1}^{N} W_i \delta_{X^i}.$$
 
 % introduces bias
-Unless $\tilde w$ is degenerate, i.e. constant, $$\hat\zeta = \frac{\sum_{i = 1}^N \tilde w (X^{i} f(X^{i}))}{\sum_{i = 1}^{N} \tilde w(X^{i})}$$ is a ratio of two non-constant, unbiased estimators and so is itself biased. Nevertheless, noticing that the rescaled denominator $\frac{1}{N} \sum_{i = 1}^{N} \tilde w(X^{i})$ consistently estimates the integration constant $\G \tilde w$, allows us to apply Slutsky's lemma and obtain a central limit theorem for $\hat \zeta$ (recall that we assumed $fw \in L^{2}(\G)$).
+Unless $\tilde w$ is degenerate, i.e. constant, $$\hat\zeta = \frac{\sum_{i = 1}^N \tilde w (X^{i} f(X^{i}))}{\sum_{i = 1}^{N} \tilde w(X^{i})}$$ is a ratio of two non-constant, unbiased estimators and so is itself biased. Nevertheless, noticing that the rescaled denominator $\frac{1}{N} \sum_{i = 1}^{N} \tilde w(X^{i})$ consistently estimates the integration constant $\G \tilde w$, we may apply Slutsky's lemma and obtain a central limit theorem for $\hat \zeta$ (recall that we assumed $fw \in L^{2}(\G)$).
 
 % introduce probabilit metrics from Agapiou
 The class for test functions $f$ for which this holds depends on $\P$ and $\G$. \citep{Agapiou2017Importance} study the behavior of uniformly bounded test functions $\lVert f \rVert \leq 1$. For these functions it suffices that $w \in L^{2}(\G)$ to ensure asymptotic normality of $\zeta$. 
@@ -104,13 +104,16 @@ $$
 so small $\rho$ implies a small \acrshort{kld} between $\P$ and $\G$ as well. Conversely, the following theorem of \citeauthor{Chatterjee2018Sample} implies that a small \acrshort{kld} is both sufficient and necessary for importance sampling to perform well.
 \begin{theorem}[{\cite[Theorem 1.1]{Chatterjee2018Sample}}]
     \label{thm:chatterje2018Thm1}
-     Let $\P$ and $\G$ be probability measures on a measurable space $(\mathcal X, \mathcal B)$ such that $\P \ll \G$ and let $f \in \mathbf L^2(\P)$ be a function with $\lVert f \rVert_{L^{2}(\P)} = \left( \P f^{2} \right)^{1 / 2} < 
-     \infty$. Let $Y$ be an $\mathcal X$ valued random variable with law $\P$. 
+     Let $\P$ and $\G$ be probability measures on a measurable space $(\mathcal X, \mathcal B)$ such that $\P \ll \G$ and let $f \in \mathbf L^2(\P)$ be a function and denote by $\lVert f \rVert_{L^{2}(\P)} = \left( \P [f]^{2} \right)^{1 / 2} < 
+     \infty$ its $L^{2}(\P)$-norm. Let $Z$ be an $\mathcal X$ valued random variable with law $\P$. 
      
-     Let $L = \Dkl{\P}{\G} = \mathbb E \log w(Y)$ be the \acrshort{kld} between $\P$ and $\G$, and let $$\hat \P_N = \sum_{i = 1}^N w(X^i) \delta_{X^i}$$ be the particle approximations of $\P$  based on samples $X^1, \dots, X^N\iid \G$, $N \in \N$. 
+     Let $L = \Dkl{\P}{\G} = \mathbb E \log w(Z)$ be the \acrshort{kld} between $\P$ and $\G$, and let $$\hat \P_N = \sum_{i = 1}^N w(X^i) \delta_{X^i}$$ be the particle approximations of $\P$  based on samples $X^1, \dots, X^N\iid \G$, $N \in \N$. 
      
-     If the sample size $N$ is given by $N = \exp\left( L + t \right)$ for a $t \geq 0$,
-     \begin{align} \label{eq:chatterje-upper-bound}\mathbb E \left\lvert \hat \P_N[f] - \P [f] \right\rvert \leq \lVert f \rVert_{L^2(\P)} \left(\exp(-t / 4) + 2 \sqrt{\mathbb P \left( \log w(Z) > L + t / 2 \right)}\right). \end{align}
+     If the sample size $N$ is given by $N = \exp\left( L + t \right)$ where $t \geq 0$,
+     \begin{align} 
+        \label{eq:chatterje-upper-bound}
+        \mathbb E \left\lvert \hat \P_N[f] - \P [f] \right\rvert \leq \lVert f \rVert_{L^2(\P)} \left(\exp(-t / 4) + 2 \sqrt{\mathbb P \left( \log w(Z) > L + t / 2 \right)}\right). 
+    \end{align}
 
     Conversely, if $N = \exp \left( L - s \right)$ for $s \geq 0$, then for any $\delta \in (0,1)$ 
     \begin{align}
@@ -119,16 +122,50 @@ so small $\rho$ implies a small \acrshort{kld} between $\P$ and $\G$ as well. Co
     \end{align}
     where $\mathbf 1$ is the constant function $x \mapsto 1$.
 
-     Notice the boldface $\mathbb P$ and $\mathbb E$ to differentiate the measures $\P$ and $\G$ from expectations and probabilities with respect to the abstract probability space $\left( \Omega, \mathcal A, \mathbb P \right)$ where the random variables $X_{1}, \dots, X_{N}$ and $Y$ live.
 \end{theorem}
+Notice the boldface $\mathbb P$ and $\mathbb E$ to differentiate the measures $\P$ and $\G$ from expectations and probabilities with respect to the abstract probability space $\left( \Omega, \mathcal A, \mathbb P \right)$ where the random variables $X_{1}, \dots, X_{N}$ and $Z$ live.
+Theorem 1.2 in the same paper provides a qualitatively similar result for autonormalised importance sampling.
 
-The proof of this theorem is based on splitting $\mathcal X$ into $\{\log w \leq L + \frac{t}{2}\} $ and its complement and straightforward, it may be found in the Appendix of \citep{Chatterjee2018Sample}. Theorem 1.2 in the same paper provides a qualitatively similar result for autonormalised importance sampling.
+However, there is room for improvement in \Cref{eq:chatterje-upper-bound}: as $t = \log N - L$, the first term of the right-hand side is $N^{-\frac{1}{4}} \exp(\frac{L}{4})$, a much slower rate of convergence than the usual $N^{-\frac{1}{2}}$ found in the law of large numbers. A small adaptation of the proof given in \citep{Chatterjee2018Sample} fixes this.
 
-Let us consider the implications of \Cref{thm:chatterje2018Thm1}, starting with \Cref{eq:chatterje-upper-bound}, by devising heuristics to decide when $\G$ is a good proposal for fixed sample size $N$, and assume for simplicity that $ \lVert f \rVert_{L^{2}(\P)} = 1 $.
-First of all, as $t = \log N - L$, we have $\exp(- t / 4) =  \exp (L / 4)N^{-\tfrac{1}{4}}$, so for large $N$ this term becomes negligible, and the interesting term in inequality \eqref{eq:chatterje-upper-bound} is the second one. As $\E \log w(Z) = L$, this term is a tail probability and we can use standard mass-concentration inequalities to analyze its behavior as $t$ (and so $N$) grows. Markov's inequality tells us that 
+\begin{proposition}
+    \label{prop:chatterje_improve}
+    Under the conditions of \Cref{thm:chatterje2018Thm1} and for $\varepsilon \in (0,1)$ we have
+    \begin{align}
+        \label{eq:chatterje-upper-bound-eps}
+        \mathbb E \left\lvert \hat \P_N[f] - \P [f] \right\rvert \leq \lVert f \rVert_{L^2(\P)} \left(\exp(- (1-\varepsilon)\frac{t}{2}) + 2 \sqrt{\mathbb P \left( \log w(Z) > L + \varepsilon t \right)}\right). 
+    \end{align}
+\end{proposition}
+
+\begin{proof}
+    We reiterate the proof of \Cref{eq:chatterje-upper-bound} as given in Section 4 of \citep{Chatterjee2018Sample}, changing only $a$ to incorporate $\varepsilon$. Let $a = \exp \left( L + \varepsilon t \right)$ and set $h = f \cdot \mathbf 1_{w \leq a}$. By the triangle inequality,
+    $$
+        \mathbb E \lvert \hat\P_{N}[f] - \P[f] \rvert \leq \mathbb E \lvert \hat \P_{N}[f - h] \rvert + \mathbb E \lvert \hat \P_{N} [h] - \P [h] \rvert + \lvert \P[f-h]\rvert
+    $$
+    holds. Noticing that $f - h$ = $f \mathbf 1_{w > a}$ and applying the Cauchy-Schwarz inequality, the last term is bounded by $$\lVert f \rVert_{L^{2}(\P)} \lVert \mathbf 1_{w > a} \rVert_{L^{2}(\P)} = \lVert f \rVert_{L^{2}(\P)} \sqrt{\mathbf P ( \log w(Z) > L + \varepsilon t)}.$$
+    For the first term, the same argument applies, it is also bounded by $\lVert f \rVert_{L^{2}(\P)} \sqrt{\mathbf P (\log w(Z) > L + \varepsilon t)}$.
+
+    To bound the middle term, as $\mathbb E \hat \P_{N}[h] = \P[h]$, we have 
+    \begin{align*}
+        \mathbb E \lvert \hat \P_{N}[h] - \P[h] \rvert &\leq \sqrt{\var \left( \hat \P_{N}(h) \right)} = \sqrt{\frac{\var \left(w(X^{1})h(X^{1})\right)}{N}} \\
+        &\leq \sqrt{\frac{\mathbb E \left(w(X^{1})^{2}h(X^{1})^{2}\right)}{N}} \leq \sqrt{\frac{a\mathbb E \left(w(X^{1})f(X^{1})^{2}\right)}{N}} = \sqrt{\frac{a}{N}} \lVert f \rVert _{L^{2}(\P)}.
+    \end{align*}
+    Noticing that $ \frac{a}{N} = \exp(-(1-\varepsilon) t)$ and putting everything together, we obtain \Cref{eq:chatterje-upper-bound-eps}.
+\end{proof}
+
+With this slight adaptation, the first term in the upper bound is now $N^{-\frac{1-\varepsilon}{2}}$, and so can be made arbitrarily close to $N^{-\frac{1}{2}}$. 
+
+%The proof of this theorem is based on splitting $\mathcal X$ into $\{\log w \leq L + \frac{t}{2}\} $ and its complement and straightforward, it may be found in the Appendix of \citep{Chatterjee2018Sample}. 
+
+Let us consider the implications of \Cref{thm:chatterje2018Thm1} and \Cref{prop:chatterje_improve}, starting with \Cref{eq:chatterje-upper-bound-eps}, by devising heuristics to decide when $\G$ is a good proposal for fixed sample size $N$, and assume for simplicity that $ \lVert f \rVert_{L^{2}(\P)} = 1 $.
+
+First, as $t = \log N - L$, we have $\exp(- (1-\varepsilon) \frac{t}{2}) =  \exp (L \frac{(1-\varepsilon)}{2})N^{-\tfrac{1 - \varepsilon}{2}}$, so for large $N$ this term becomes negligible, and the interesting term in inequality \eqref{eq:chatterje-upper-bound} is the second one. As $\E \log w(Z) = L$, this term is a tail probability, and we can use standard mass-concentration inequalities to analyze its behavior as $t$ (and so $N$) grows. Markov's inequality tells us that 
 $$
-\mathbb P \left( \log w(Z) > L + \frac{t}{2} \right) \leq \frac{L}{L + t / 2} = \frac{2}{1 + \frac{\log N}{L}}.
+\mathbb P \left( \log w(Z) > L + \varepsilon t \right) \leq \frac{L}{L + \varepsilon t} = \frac{1}{1 + \varepsilon\frac{\log N - L}{L}},
 $$
+so, as $L \to 0$, the upper bound goes to $0$. 
+
+\todo{ausführlichere Diskussion}
 
 Second, if, additionally, $\log w(Z)$ has finite variance, Chebyshev's inequality yields 
 $$
