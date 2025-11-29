@@ -104,10 +104,10 @@ $$
 so small $\rho$ implies a small \acrshort{kld} between $\P$ and $\G$ as well. Conversely, the following theorem of \citeauthor{Chatterjee2018Sample} implies that a small \acrshort{kld} is both sufficient and necessary for importance sampling to perform well.
 \begin{theorem}[{\cite[Theorem 1.1]{Chatterjee2018Sample}}]
     \label{thm:chatterje2018Thm1}
-     Let $\P$ and $\G$ be probability measures on a measurable space $(\mathcal X, \mathcal B)$ such that $\P \ll \G$ and let $f \in \mathbf L^2(\P)$ be a function and denote by $\lVert f \rVert_{L^{2}(\P)} = \left( \P [f]^{2} \right)^{1 / 2} < 
+     Let $\P$ and $\G$ be probability measures on a measurable space $(\mathcal X, \mathcal B)$ such that $\P \ll \G$ and let $f \in \mathbf L^2(\P)$ be a function and denote by $\lVert f \rVert_{L^{2}(\P)} = \left( \P [f^{2}] \right)^{1 / 2} < 
      \infty$ its $L^{2}(\P)$-norm. Let $Z$ be an $\mathcal X$ valued random variable with law $\P$. 
      
-     Let $L = \Dkl{\P}{\G} = \mathbb E \log w(Z)$ be the \acrshort{kld} between $\P$ and $\G$, and let $$\hat \P_N = \sum_{i = 1}^N w(X^i) \delta_{X^i}$$ be the particle approximations of $\P$  based on samples $X^1, \dots, X^N\iid \G$, $N \in \N$. 
+     Let $L = \Dkl{\P}{\G} = \mathbb E \log w(Z)$ be the \acrshort{kld} between $\P$ and $\G$, and let $$\hat \P_N = \sum_{i = 1}^N w(X^i) \delta_{X^i}$$ be the particle approximation of $\P$  based on samples $X^1, \dots, X^N\iid \G$, $N \in \N$. 
      
      If the sample size $N$ is given by $N = \exp\left( L + t \right)$ where $t \geq 0$,
      \begin{align} 
@@ -133,29 +133,31 @@ However, there is room for improvement in \Cref{eq:chatterje-upper-bound}: as $t
     Under the conditions of \Cref{thm:chatterje2018Thm1} and for $\varepsilon \in (0,1)$ we have
     \begin{align}
         \label{eq:chatterje-upper-bound-eps}
-        \mathbb E \left\lvert \hat \P_N[f] - \P [f] \right\rvert \leq \lVert f \rVert_{L^2(\P)} \left(\exp(- (1-\varepsilon)\frac{t}{2}) + 2 \sqrt{\mathbb P \left( \log w(Z) > L + \varepsilon t \right)}\right). 
+        \mathbb E \left\lvert \hat \P_N[f] - \P [f] \right\rvert \leq \lVert f \rVert_{L^2(\P)} \left(\exp\left(- (1-\varepsilon)\frac{t}{2}\right) + 2 \sqrt{\mathbb P \left( \log w(Z) > L + \varepsilon t \right)}\right). 
     \end{align}
 \end{proposition}
 
 \begin{proof}
-    We reiterate the proof of \Cref{eq:chatterje-upper-bound} as given in Section 4 of \citep{Chatterjee2018Sample}, changing only $a$ to incorporate $\varepsilon$. Let $a = \exp \left( L + \varepsilon t \right)$ and set $h = f \cdot \mathbf 1_{w \leq a}$. By the triangle inequality,
+    We reiterate the proof of \Cref{eq:chatterje-upper-bound} as given in Section 4 of \citep{Chatterjee2018Sample}, changing only the cutoff parameter, $a$, to incorporate $\varepsilon$. Let $a = \exp \left( L + \varepsilon t \right)$ and set $h = f \cdot \mathbf 1_{w^{-1}((-\infty, a])}$. By the triangle inequality,
     $$
         \mathbb E \lvert \hat\P_{N}[f] - \P[f] \rvert \leq \mathbb E \lvert \hat \P_{N}[f - h] \rvert + \mathbb E \lvert \hat \P_{N} [h] - \P [h] \rvert + \lvert \P[f-h]\rvert
     $$
-    holds. Noticing that $f - h$ = $f \mathbf 1_{w > a}$ and applying the Cauchy-Schwarz inequality, the last term is bounded by $$\lVert f \rVert_{L^{2}(\P)} \lVert \mathbf 1_{w > a} \rVert_{L^{2}(\P)} = \lVert f \rVert_{L^{2}(\P)} \sqrt{\mathbf P ( \log w(Z) > L + \varepsilon t)}.$$
-    For the first term, the same argument applies, it is also bounded by $\lVert f \rVert_{L^{2}(\P)} \sqrt{\mathbf P (\log w(Z) > L + \varepsilon t)}$.
+    holds. Noticing that $f - h$ = $f \mathbf 1_{w^{-1}((a, \infty))}$ and applying the Cauchy-Schwarz inequality, the last term is bounded by $$\lVert f \rVert_{L^{2}(\P)} \lVert \mathbf 1_{w^{-1}((a, \infty))} \rVert_{L^{2}(\P)} = \lVert f \rVert_{L^{2}(\P)} \sqrt{\mathbf P ( \log w(Z) > L + \varepsilon t)}.$$
+    For the first term, a similar argument applies: 
+    $$
+        \mathbb E \lvert \hat \P_{N}[f - h] \rvert = \mathbb E \lvert \frac{1}{N} \sum_{i = 1}^{N} (f- h)\left(X^{i}\right)\rvert \leq  \mathbb E \lvert (f - h) \left( X^{i} \right) \rvert \leq \lVert f \rVert_{L^{2}(\P)} \sqrt{\mathbf P (\log w(Z) > L + \varepsilon t)}.
+    $$
 
-    To bound the middle term, as $\mathbb E \hat \P_{N}[h] = \P[h]$, we have 
+    To bound the middle term, as $\mathbb E \hat \P_{N}[h] = \P[h]$, we have
     \begin{align*}
         \mathbb E \lvert \hat \P_{N}[h] - \P[h] \rvert &\leq \sqrt{\var \left( \hat \P_{N}(h) \right)} = \sqrt{\frac{\var \left(w(X^{1})h(X^{1})\right)}{N}} \\
-        &\leq \sqrt{\frac{\mathbb E \left(w(X^{1})^{2}h(X^{1})^{2}\right)}{N}} \leq \sqrt{\frac{a\mathbb E \left(w(X^{1})f(X^{1})^{2}\right)}{N}} = \sqrt{\frac{a}{N}} \lVert f \rVert _{L^{2}(\P)}.
+        &\leq \sqrt{\frac{\mathbb E \left(w(X^{1})^{2}h(X^{1})^{2}\right)}{N}} \leq \sqrt{\frac{a\mathbb E \left(w(X^{1})f(X^{1})^{2}\right)}{N}} = \sqrt{\frac{a}{N}} \lVert f \rVert _{L^{2}(\P)},
     \end{align*}
+    as $h^{2} = f^{2} \mathbf 1_{w^{-1}((-\infty, a])}$ and so $\mathbb E \left(w(X^{1})^{2}h(X^{1})^{2}\right) \leq a \mathbb E \left(w(X^{1})f(X^{1})^{2}\right)$.
     Noticing that $ \frac{a}{N} = \exp(-(1-\varepsilon) t)$ and putting everything together, we obtain \Cref{eq:chatterje-upper-bound-eps}.
 \end{proof}
 
 With this slight adaptation, the first term in the upper bound is now $N^{-\frac{1-\varepsilon}{2}}$, and so can be made arbitrarily close to $N^{-\frac{1}{2}}$. 
-
-%The proof of this theorem is based on splitting $\mathcal X$ into $\{\log w \leq L + \frac{t}{2}\} $ and its complement and straightforward, it may be found in the Appendix of \citep{Chatterjee2018Sample}. 
 
 Let us consider the implications of \Cref{thm:chatterje2018Thm1} and \Cref{prop:chatterje_improve}, starting with \Cref{eq:chatterje-upper-bound-eps}, by devising heuristics to decide when $\G$ is a good proposal for fixed sample size $N$, and assume for simplicity that $ \lVert f \rVert_{L^{2}(\P)} = 1 $.
 
@@ -197,8 +199,8 @@ goes to $0$ as well.
     $$
     1 = \exp(\mu)\mathbb E \exp (U - \mu) = \exp (\mu) \left( 1 + \mathbb E (U - \mu) + \mathbb E\left(\frac{(U-\mu)^{2}}{2} \exp(\xi)\right) \right).
     $$
-    Then $\xi' = \xi + \mu$ is in $[a,b]$, and note that, unless $U = 1$ a.s., $\mathbb E \exp U = 1$ forces $a < 0 < b$. 
-    Thus
+    Then $\xi' = \xi + \mu$ is in $[a,b]$, and note that, unless $U = 0$ a.s., $\mathbb E \exp U = 1$ forces $a < 0 < b$. 
+    Thus,
     $$
     1 = \exp(\mu) + \mathbb E\left(\frac{(U-\mu)^{2}}{2} \exp(\xi')\right),
     $$

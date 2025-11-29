@@ -6,11 +6,12 @@ Our discussion of \citep{Chatterjee2018Sample}, \Cref{thm:chatterje2018Thm1}, es
 Thus, \acrshort{eis} finds $\peis$ which is a feasible solution to the following optimization problem
 \begin{align}
     \label{eq:eis_optim}
-\min_{\psi \in \Psi} \text{Var}_{\P} \left[ \log w_{\psi} \right] = \min_{\psi \in \Psi} \P \left[ \log w_{\psi} - \P \log w_{\psi} \right]^{2},
+\min_{\psi \in \Psi} \text{Var}_{\P} \left[ \log w_{\psi} \right] = \min_{\psi \in \Psi} \P \left[ \log w_{\psi} - \P [\log w_{\psi}] \right]^{2},
 \end{align}
 where, as in the last section, $\log w_{\psi} = \log p - \log g_{\psi}$.
 
-Two problems arise: $\P [\log w_{\psi}] = \Dkl{\P}{\G_{\psi}}$ is usually intractable and we usually only have access to the unnormalized weights $\frac{\tilde w_{\psi}}{\G_{\psi} \left[ w_{\psi} \right]} = w_{\psi}$, with unknown integration constant $\G_{\psi} \left[ w_{\psi} \right]$. Both can be dealt with by introducing the nuisance parameter $\lambda = \P \left[ \log \tilde w_{\psi} \right]$, utilizing the fact that the mean is the minimizer of the squared distance functional with the minimum value equal to the variance, should it exist. Indeed 
+It is easy to see that we can replace the normalized weights in \Cref{eq:eis_optim} by unnormalized weights $\tilde w_{\psi} = \frac{p}{g_{\psi}}$, as the normalization constant cancels out, so no access to the normalized weights is required.
+However, $\P [\log w_{\psi}] = \Dkl{\P}{\G_{\psi}}$ is usually intractable. This can be dealt with by introducing the nuisance parameter $\lambda = \P \left[ \log \tilde w_{\psi} \right]$, utilizing the fact that the mean is the minimizer of the squared distance functional with the minimum value equal to the variance, should it exist. Indeed,
 $$
     \log w_{\psi} - \P [\log w_{\psi}] = \log \tilde w_{\psi} - \log \G_{\psi} [\tilde w_{\psi}] - \P \left[ \log \tilde w_{\psi} \right] + \log \G_{\psi}[\tilde w_{\psi}] = \log \tilde w_{\psi} - \P \left[ \log \tilde w_{\psi} \right],
 $$
@@ -20,13 +21,15 @@ $$
 $$
 where $\psi\in \Psi$ is a minimizer of the left-hand side if, and only if, $(\psi, \lambda) \in \Psi \times \R$ with $\lambda = \P \left[ \log \tilde w_{\psi} \right]$ is a minimizer of the right-hand side. 
 
-Similar to the \gls{cem} we restrict our in-depth analysis to natural exponential family proposals where $$\log g_{\psi}(x) = \psi^{T}T(x) - \log Z(\psi).$$ In this case the optimization problem is reduced to
+Similar to the \gls{cem} we restrict our in-depth analysis to natural exponential family proposals where $$\log g_{\psi}(x) = \psi^{T}T(x) - \log Z(\psi).$$ 
+Letting $\log \tilde w_{\psi} = \log p - \psi^{T}(T - \P [T])$, we may rewrite \Cref{eq:eis_optim} as
 \begin{align}
     \label{eq:eis_exponential_families}
-    \min_{\psi \in \Psi, \lambda \in \R} \P \left[ \log p - \psi^{T}T - \lambda \right]^{2},
+    \min_{\psi \in \Psi, \lambda \in \R} \P \left[ \log p - \psi^{T}(T - \P [T]) - \lambda \right]^{2},
 \end{align}
-a weighted linear least squares problem. As we consider unnormalized weights $\tilde w$, we are additionally able to get rid of the potentially non-linear term $\log Z(\psi)$.
-Noticing that this is a convex objective function in $\psi$ which, similar to the \acrshort{cem}, will be very useful to derive asymptotics later on. For now, we begin with studying the existence and uniqueness of $\peis$ similar to \Cref{prop:cem_exponential_families}.
+a weighted linear least squares problem. The rationale for centering $T$ under $\P$ will become apparent in \Cref{thm:eis-clt}.
+As we consider unnormalized weights $\tilde w$, we are additionally able to get rid of the potentially non-linear term $\log Z(\psi)$.
+We note that this is a convex objective function in $\psi$ which, similar to the \acrshort{cem}, will be very useful to derive asymptotics later on. For now, we begin with studying the existence and uniqueness of $\peis$ similar to \Cref{prop:cem_exponential_families}.
 
 \begin{lemma}[\acrshort{eis} for exponential families]
     \label{prop:eis_exponential_families}
@@ -58,12 +61,14 @@ Noticing that this is a convex objective function in $\psi$ which, similar to th
     
 \end{proof}
 
+
 As the optimal $\peis$ depends on several unknown quantities, \gls{eis} proceeds like the \gls{cem} and employs importance sampling with a proposal $\G$, estimating $\peis$ by
 $$
 \left(\hat \lambda,\hat \psi_{\text{EIS}}\right) = \argmin_{\lambda,\psi} \hat\P_{N} \left[ \log \tilde w_{\psi} - \lambda \right]
 $$
 where $X^{1}, \dots, X^{N} \iid \G$. 
-Again, if $\G_{\psi}, \psi \in \Psi$ form an exponential family with natural parameter $\psi$, this optimization problem turns into a weighted least squares problem, so we can estimate $\peis$ with the standard weighted least squares estimator
+Again, if $\G_{\psi}, \psi \in \Psi$ form an exponential family with natural parameter $\psi$, this optimization problem turns into a weighted least squares problem. As $\P[T]$ is not known, we use other unnormalised log-weights $\log\tilde w_{\psi} = \log p - \psi^{T}T$ instead.
+We can then estimate $\peis$ with the standard weighted least squares estimator
 $$
 \left( \hat\lambda', \hpeis \right) = \left(\mathbf X^{T}\mathbf W\mathbf X\right)^{-1}\mathbf X^{T}\mathbf W y%
 $$
@@ -101,9 +106,9 @@ An attractive feature of \gls{eis} is that if the target $\P$ is a member of the
 
 \begin{proof}
    As $\P$ stems from the same exponential family as $\G_{\psi}$, the pseudo-observations are $$\log p  = \psi_{\P}^T T - \log Z(\psi_{\P}).$$ Thus $\cov_{\hat \P_{N}} \left( T, \log p  \right) = \cov_{\hat \P_{N}} \left( T \right)\psi_{\P}$. 
-   If we can show that $\cov_{\hat\P_{N}} T$ is non-singular, \Cref{eq:hpeis-cov} implies that $\hpeis = \psi_{\P}$ a.s.. 
+   If we can show that $\cov_{\hat\P_{N}} (T)$ is non-singular, \Cref{eq:hpeis-cov} implies that $\hpeis = \psi_{\P}$ a.s.. 
 
-   If $\cov_{\hat \P_{N}} T$ were singular, there would exist a $\psi \in \R^{k}$ such that
+   If $\cov_{\hat \P_{N}} (T)$ were singular, there would exist a $\psi \in \R^{k}$ such that
    $$
    \psi^{T} \cov_{\hat\P_{N}} (T) \psi = \cov_{\hat \P_{N}} \left( \psi^{T}T \right) = 0.
    $$
@@ -142,20 +147,20 @@ As \Cref{eq:eis_exponential_families} is a linear least squares problem, the obj
     We follow the same strategy as in the proof of \Cref{thm:cem-consistent}. Let 
     \begin{align*}
         b: \R^{p} \times \R^{k + 1} \to [-\infty, \infty)  && b(x,\psi') = \begin{cases}
-            -\frac{1}{2} \left( \log p(x) - \psi^{T}T(x) - \lambda \right)^{2} & \psi \in \Psi \\
+            -\frac{1}{2} \left( \log p(x) - \psi^{T}(T(x) - \P [T]) - \lambda \right)^{2} & \psi \in \Psi \\
             -\infty &  \text{ else,}
         \end{cases}
     \end{align*}
     where $\psi' = (\psi, \lambda) \in \R^{k + 1}$. For fixed $x$ this function is concave, as its Hessian is negative semi-definite:
     $$
         H_{\psi'} b(x, \psi') = -\begin{pmatrix}
-            1 & T(x)^{T} \\
-            T(x) & T(x)T(x)^{T}
-        \end{pmatrix} = -\begin{pmatrix} 1 & T(x)^{T} \end{pmatrix} \begin{pmatrix} 1 & T(x)^{T} \end{pmatrix}^{T},
+            T(x)T(x)^{T} & T(x) \\
+            T(x)^{T} &  1
+        \end{pmatrix} = -\begin{pmatrix} T(x)^{T} & 1 \end{pmatrix} \begin{pmatrix} T(x)^{T}& 1 \end{pmatrix}^{T},
     $$
     if $\psi \in \Psi$. Let $X^{1}, \dots, X^{N} \iid \P$ and let $\tilde \P _{N}$ be their empirical distribution. For $\psi \in \Psi, \lambda \in \R$ we have 
     $$
-        \P \left[ b(\cdot, \psi') \right] = - \frac{1}{2} \P \left[ \left( \log p - \psi^{T}T - \lambda\right)^{2} \right] < \infty,
+        \P \left[ b(\cdot, \psi') \right] = - \frac{1}{2} \P \left[ \left( \log p - \psi^{T}(T - \P[T]) - \lambda\right)^{2} \right] < \infty,
     $$
     as $\log p, T\in L^{2}(\P)$. Let us now check that conditions \ref{it:C1} - \ref{it:C3} are fulfilled. 
 
@@ -180,7 +185,7 @@ Additionally, if fourth-order moments exist, we can derive a central limit theor
 
     Assume that
     \begin{enumerate}
-        \item\label{it:secondISmomentsexist}$w T_{i}T_{j}, w (\log p)^{2} \in L^{2}(\G)$ for $i,j = 1, \dots, k$,
+        \item\label{it:secondISmomentsexist}$w (T_{i} - \P[T_{i}])(T_{j} - \P[T_{j}]), w (\log p)^{2} \in L^{2}(\G)$ for $i,j = 1, \dots, k$,
         \item\label{it:fourthmomentsexist} $\log p, T_i \in L^{4}(\P)$ for all $i = 1, \dots, k$
         \item $\cov_{\P}(T)$ is non-singular and $\peis \in \operatorname{int} \Psi$.
     \end{enumerate}
@@ -191,7 +196,7 @@ Additionally, if fourth-order moments exist, we can derive a central limit theor
     $$
     where $B = \cov_{\P}(T)^{-1}$ and 
     $$
-    M = \cov_{\G} \left( w \left( \log p - \peis^{T}T - \lambda_{\eis} - \P[T] \right)T \right).
+    M = \cov_{\G} \left( w \left( \log p - \peis^{T}(T - \P[T]) - \lambda_{\eis} \right)(T - \P[T]) \right).
     $$
 \end{theorem}
 
@@ -203,26 +208,20 @@ Additionally, if fourth-order moments exist, we can derive a central limit theor
             -\infty & \text{else,}
         \end{cases}
     \end{align*}
-    where $\psi' = (\psi, \lambda) \in \Psi \times\R$ and $T'(x) = \begin{pmatrix} T(x) & 1 \end{pmatrix}$. For $\psi \in \Psi$ the map $(\psi, \lambda) \to \P [b(\cdot, (\psi, \lambda))]$ is differentiable with gradient 
+    where $\psi' = (\psi, \lambda) \in \Psi \times\R$ and $T'(x) = \begin{pmatrix} (T(x) - \P[T]) & 1 \end{pmatrix}$. For $\psi \in \Psi$ the map $(\psi, \lambda) \to \P [b(\cdot, (\psi, \lambda))]$ is differentiable with gradient 
     $$
-        \nabla_{\psi'} \P [b(\cdot, \psi')] = - \P \left[\left( \log p - \psi^{\prime T}T' \right) T'\right] = \begin{pmatrix}
-            - \P \left[ T'\log p - T'T^{\prime T}\psi' \right] \\
-            -\P \left[ \log p - \psi'^{T}T' \right]
-        \end{pmatrix}
-    $$
+        \nabla_{\psi'} \P [b(\cdot, \psi')] = - \P \left[\left( \log p - \psi^{\prime T}T' \right) T'\right] $$
     and Hessian 
     $$
         H_{\psi'} \P[b(\cdot, \psi')] = -\P\left[T'T^{\prime T}\right] = - \begin{pmatrix}
-            \P \left[ TT^{T} \right] & \P [T^{T}] \\
-            \P [T] & 1
+            \P \left[ (T - \P[T])(T - \P[T])^{T} \right] & 0 \\
+            0 & 1
+        \end{pmatrix} = - \begin{pmatrix}
+            \cov_{\P}(T) & 0 \\
+            0 & 1
         \end{pmatrix}.
     $$
-    The Hessian is negative definite, as for all $\psi\in \R^{k}, \lambda \in \R$ we have
-    \begin{align*}
-        \begin{pmatrix} \psi^{T} & \lambda \end{pmatrix} H_{\psi'} \P \left[ b(\cdot, \psi') \right]\begin{pmatrix} \psi^{T} & \lambda \end{pmatrix}^{T} &= - \left( \psi^{T} \cov_{\P} (T) \psi + \psi^{T}\P[T]\P[T]^{T}\psi + 2 \psi^{T}\P[T] \lambda + \lambda^{2}\right) \\
-                                 &= - \left( \psi^{T}\cov_{\P}(T)\psi + (\lambda + \psi^{T}\P[T])^{2} \right) \leq 0,
-    \end{align*}
-    with equality if, and only if, both $\lambda$ and $\psi$ are $0$, as $\cov_{\P}(T)$ is assumed to be positive definite. Thus condition \ref{it:C7} is fulfilled.
+    The Hessian is negative definite, as $\cov_{\P}(T)$ is assumed to be positive definite. Thus condition \ref{it:C7} is fulfilled.
 
     For condition \ref{it:C10}, we can verify that for all $i,j = 1,\dots, k+ 1$ 
     $$
@@ -234,66 +233,24 @@ Additionally, if fourth-order moments exist, we can derive a central limit theor
     $$
         w^{2}(\nabla_{\psi'} b(\cdot, \psi'))_{i}(\nabla_{\psi'} b(\cdot, \psi'))_{j} = w^{2}\left( \log p - \psi^{\prime T}T' \right)^{2} T'_{i}T'_{j}
     $$
-    is in $L^{1}(\G)$, which holds, again, by assumption \Cref{it:secondISmomentsexist} and the Hölder inequality.
+    is in $L^{1}(\G)$, which holds, again, by assumption \ref{it:secondISmomentsexist} and the Hölder inequality.
 
     We have thus shown a central limit theorem for $\hat\psi'_{\eis} = \left( \hpeis, \hat\lambda_{\eis} \right)$, i.e. 
     $$
         \sqrt{N} \left( \hat\psi'_{\eis} - \peis \right) \to \mathcal N(0, M'B'M')
     $$
-    with $B' = - \left(H_{\psi'_{\eis}} \P \left[ b(\cdot, \psi'_{\eis}) \right]\right)^{-1}$ and $M' = \cov \left( w(X) \nabla_{\psi'_{\eis}} b(X,\psi'_{\eis}) \right)$ for $X \sim \G$. By using the inversion formula for block matrices, we obtain 
-    \begin{align*}
-        B' &= \begin{pmatrix}
-            \P \left[ TT^{T} \right] & \P [T^{T}] \\
-            \P [T] & 1
-        \end{pmatrix}^{-1} = \begin{pmatrix}
-            \Sigma + \mu\mu^{T} & \mu^{T} \\
-            \mu & 1
-        \end{pmatrix}^{-1} \\
-        &= \begin{pmatrix}
-            (\Sigma + \mu\mu^{T} - \mu\mu^{T})^{-1} & 0 \\
-            0 & 1 - \mu^{T} (\Sigma + \mu\mu^{T})^{-1}\mu
-        \end{pmatrix} \begin{pmatrix}
-            I_{k} & - \mu^{T} \\
-            -\mu(\Sigma + \mu\mu^{T})^{-1}& 1
-        \end{pmatrix} \\
-        &= \begin{pmatrix}
-            \Sigma^{-1} & - \mu^{T}\Sigma^{-1}\\
-            -\Sigma^{-1}\mu& 1 - \mu^{T} \left( \Sigma + \mu\mu^{T} \right)^{-1}\mu
+    with $$
+        B' = - \left(H_{\psi'_{\eis}} \P \left[ b(\cdot, \psi'_{\eis}) \right]\right)^{-1} = \begin{pmatrix}
+            \cov_{\P}(T)^{-1} & 0 \\
+            0 & 1 
         \end{pmatrix}
-    \end{align*}
-    where $\Sigma = \cov_{\P} (T)$ and $\mu = \P [T]$. Similarly, 
+    $$ and $$
+        M' = \cov \left( w(X) \nabla_{\psi'_{\eis}} b(X,\psi'_{\eis}) \right) 
+    $$ 
+    for $X \sim \G$. As $B'$ is block-diagonal, to obtain the marginal distribution of $\hpeis - \peis$, we only need the upper left $k \times k$ block of $M'$, which is given by
     $$
-        M' = \begin{pmatrix}
-            \cov_{\G} \left( w W_{\peis}T \right) &\cov_{\G} \left( w W_{\peis}T, w W_{\peis} \right) \\
-            \cov_{\G} \left( w W_{\peis}, w W_{\peis}T \right) & \cov_{\G} \left( w W_{\peis} \right) 
-        \end{pmatrix},
+        M = \cov \left( w \left( \log p - \peis^{T}(T - \P[T]) - \lambda_{\eis} \right)(T - \P [T]) \right).
     $$
-    where $W_{\peis} = \log p - \psi^{\prime T}_{\eis}T'$.
-
-    If $\mu \neq 0$, we may change the sufficient statistic of the exponential family such that this holds, i.e. let $\tilde T = T - \P [T]$, then 
-    $$
-        \log g_{\psi}(x) = \psi^{T}T(x) - \log Z(\psi) = \psi^{T}\tilde T(x) - \log \tilde Z(\psi)
-    $$
-    where $\tilde Z(\psi) = \log Z(\psi) + \P [T]$. As $\peis$, \Cref{eq:peis-analytical}, only depends on $T - \P[T]$ under $\P$, this does not change $\peis$. Similarly, $\hpeis$, \Cref{eq:hpeis-cov}, is unaffected by subtracting a constant from $T$. Only 
-    $$
-        \tilde \lambda_{\eis} = \lambda_{\eis} + \P[T]
-    $$
-    and similarly $\hat\lambda_{\eis}$ are changed.
-    
-    Thus, without loss of generality, we may assume that $\P[T] = 0$. 
-    Then 
-    $$
-        B' = \begin{pmatrix}
-            \Sigma^{-1} & 0 \\
-            0 & 1
-        \end{pmatrix}
-    $$
-    is a diagonal matrix. Taking the $\peis$ marginal of the asymptotic normal distribution, we arrive at 
-    $$
-        \sqrt{N} \left( \hpeis - \peis \right) \to \mathcal N \left( 0, BMB \right)
-    $$
-    with $B = \cov_{\P}(T)$ and $M = \cov_{G} \left( w \left( \log p - \peis^{T}T - \lambda_{\eis} - \P[T] \right)T \right)$, as promised.
-    
 \end{proof}
 % endregion 
 
@@ -302,5 +259,5 @@ A discussion of the assumptions of \Cref{thm:eis-consistent,thm:eis-clt} is in o
 
 Regarding the central limit theorem \Cref{thm:eis-clt}, requiring the existence of higher order moments is natural. Unfortunately, there is no direct interpretation of these requirements as generalizations of the existence of $\rho$, as was the case for the \acrshort{cem}. 
 
-The only integrability conditions related to the proposal $\G$ are those for $wT_{i}T_{j}$ and $w \log(p)^{2}$. 
-Choosing $\left(\G_{\psi}\right)_{\psi \in \Psi}$ to consist of Gaussian distributions, the conditions on $T$ translate to the existence of certain polynomial moments of $w^{2}$ w.r.t. the proposal $\G$ (or $w$ w.r.t. $\P$). This technical condition, is not easily interpreted, as assuming existence of moments of the target distribution seem more natural than those involving the extra weighting term $w = \frac{p}{g}$, which depends on the proposal $\G$ as well. 
+The only integrability conditions related to the proposal $\G$ are those for $w(T_{i} - \P [T_{i}]) (T_{j} - \P[T_{j}])$ and $w \log(p)^{2}$. 
+Choosing $\left(\G_{\psi}\right)_{\psi \in \Psi}$ to consist of Gaussian distributions, the conditions on $T$ translate to the existence of certain polynomial moments of $w^{2}$ w.r.t. the proposal $\G$ (or $w$ w.r.t. $\P$). This technical condition is not easily interpreted, as assuming existence of moments of the target distribution seem more natural than those involving the extra weighting term $w = \frac{p}{g}$, which depends on the proposal $\G$ as well. 

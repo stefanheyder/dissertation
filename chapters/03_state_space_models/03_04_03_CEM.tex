@@ -169,7 +169,7 @@ Alternatively, the improved cross-entropy method \citep{Chan2012Improved} sugges
 Still, in high dimensions both of these approaches may be difficult to implement: the screening method may not move far from the initial proposal and \acrshort{mcmc}-methods are expensive in high dimensions.
 
 
-As stated in \citep{Chan2012Improved} there may be two reasons as to why the \acrshort{cem} fails: either the parametric family is not rich enough to give a good approximation to $\P$, i.e. $ \Dkl{\P}{\G_{\pce}}$ is still large, or the estimate $\hpce$ fails to be close to $\pce$. As our simulation studies \Cref{sec:simulation_studies} suggest, the reason for the degeneracy seems to be the latter. It will thus be beneficial to investigate the asymptotic behavior of $\hpce$. 
+As stated in \citep{Chan2012Improved} there may be two reasons as to why the \acrshort{cem} fails: either the parametric family is not rich enough to give a good approximation to $\P$, i.e. $ \Dkl{\P}{\G_{\pce}}$ is still large, or the estimate $\hpce$ fails to be close to $\pce$. As our simulation studies in \Cref{sec:simulation_studies} suggest, the reason for the degeneracy seems to be the latter. It will thus be beneficial to investigate the asymptotic behavior of $\hpce$. 
 
 In the remainder of this section, we will derive novel results on the performance of the estimator $\hpce$ of $\pce$. In particular, we will investigate under which conditions $\hpce$ is consistent and asymptotically normal. To focus on the asymptotic behavior, we will only perform a single iteration of the basic \acrshort{cem} algorithm (\Cref{alg:cem-basic}). While we restrict ourselves here to the setting of $k$-dimensional natural exponential families, these results should generalize to other classes of distributions as well. The advantage that this class of families has is that due to the structure of the densities, they provide straightforward (regularity) conditions for the asymptotic results to hold. As the target functions are concave, these conditions are rather liberal. We start with proving the consistency of $\hpce$. 
 
@@ -193,7 +193,7 @@ The proof is based on the following theorem of \citeauthor{Haberman1989Concavity
     $$
     b_{\Psi}: \Psi \to [-\infty, \infty), \psi \mapsto \P [b(\cdot,\psi)].
     $$ 
-    Let $(X^{i})_{i \in \N} \iid \P$ be a sequence of i.i.d. random variables with distribution $\P$ and let for $N \in \N$ let $$\hat \P_{N} = \frac{1}{N} \sum_{i = 1}^N \delta_{X^{i}}$$ be their empirical distribution. Let $\left(\hat\psi_{N}\right)_{N \in \N}$ be a sequence of M-estimators, i.e. a sequence of maximizers of
+    Let $(X^{i})_{i \in \N} \iid \P$ be a sequence of i.i.d. random variables with distribution $\P$ and let for $N \in \N$ $$\hat \P_{N} = \frac{1}{N} \sum_{i = 1}^N \delta_{X^{i}}$$ be their empirical distribution. Let $\left(\hat\psi_{N}\right)_{N \in \N}$ be a sequence of M-estimators, i.e. a sequence of maximizers of
     $$
     \hat b_{\Psi}: \Psi \to [-\infty, \infty), \psi \mapsto \hat \P_{N} [b(\cdot, \psi)].
     $$
@@ -219,7 +219,7 @@ To apply this theorem to our setting, let us begin by extending it to incorporat
         \tilde \P_{N} &= \frac{1}{N}\sum_{i = 1}^N w(X^{i})\delta_{X^{i}},  \\ 
         \hat \P_{N} &= \sum_{i = 1}^{N} W^{i} \delta_{X^{i}},
     \end{align*}
-    and suppose for every $N\in\N$ there exist M-estimators
+    and suppose for every $N\in\N$ there a.s. exist M-estimators
     \begin{align*}
     \tilde \psi_{N} &\in \argmax_{\psi \in \Psi} \tilde \P _{N} \left[ b(\cdot, \psi) \right],\\
     \hat \psi_{N} &\in \argmax_{\psi \in \Psi} \hat \P _{N} \left[ b(\cdot, \psi) \right].
@@ -287,7 +287,7 @@ These rather strong properties enable us to derive a central limit theorem for t
     $$
         \sqrt{N}(\hpce - \pce) \convD \Normal (0, BMB)
     $$
-    where $B = I(\pce) = \cov_{\G_{\pce}} (T)^{-1}$ and $$M = \cov_{\G} (wT) = \G \left[w^{2} (T - \P[T])(T - \P[T])^{T}\right] = \P \left[ w (T - \P [T]) (T - \P [T])^{T} \right].$$
+    where $B = I(\pce) = \cov_{\G_{\pce}} (T)^{-1}$ and $$M = \cov_{\G} (w(T - \P [T])) = \G \left[w^{2} (T - \P[T])(T - \P[T])^{T}\right] = \P \left[ w (T - \P [T]) (T - \P [T])^{T} \right].$$
 \end{theorem}
 
 To prove \Cref{thm:cem-clt}, let us start again with a general version of a central limit theorem for M-estimators based on concave objective functions. 
@@ -304,7 +304,7 @@ To prove \Cref{thm:cem-clt}, let us start again with a general version of a cent
         \begin{align*}
             \sigma^{2}(\psi, \xi) = \mathbb E \left( b'(X, \psi, \xi)  \right)^{2} < \infty && \psi \in V, \xi \in \R^{k},
         \end{align*}
-        where $b'(x, \psi, \xi) = \lim_{a \downarrow} a^{-1} \left( b(x, \psi + a\xi) - b(x, \psi)\right)$ is the directional derivative. Note that if $b$ is differentiable for all $\psi \in V$, $b'(x, \psi, \xi) = \xi^{T}\nabla_{\psi} b(x, \psi)$ and it suffices to assume $(\nabla_{\psi} b(x,\psi))_{i}(\nabla_{\psi} b(x,\psi))_{j} \in L^{1} (\P)$ for all $\psi \in N$ and $i,j = 1,\dots, k$.
+        where $b'(x, \psi, \xi) = \lim_{a \downarrow 0} a^{-1} \left( b(x, \psi + a\xi) - b(x, \psi)\right)$ is the directional derivative. Note that if $b$ is differentiable for all $\psi \in V$, $b'(x, \psi, \xi) = \xi^{T}\nabla_{\psi} b(x, \psi)$ and it suffices to assume $(\nabla_{\psi} b(x,\psi))_{i}(\nabla_{\psi} b(x,\psi))_{j} \in L^{1} (\P)$ for all $\psi \in V$ and $i,j = 1,\dots, k$.
     \end{enumerate}
     
     Let $M = \cov \left( \nabla_{\psi} b(X, \psi) \right)$ and let $B = - \left(H_{\psi} \P \left[ b(\cdot, \psi) \right]\right)^{-1}$. Then 
@@ -320,14 +320,14 @@ Similar to the consistency result above (\Cref{prop:is-consistency}), we need to
     \label{prop:is-clt}
     Assume that the conditions of \Cref{thm:haberman-clt} are fulfilled and use the same notation as in \Cref{prop:is-consistency}. Furthermore, assume that 
     \begin{enumerate}
-        \item \label{it:wbprimeL2} $w(\cdot) b'(\cdot, \psi, \xi) \in L^{2}(\G)$ in a neighborhood $N$ of $\psi^{\ast}$ for all $\xi \in \R^{k}$. %\todo{rewrite differentiable + second moment}
+        \item[(A)] \label{it:wbprimeL2} $w(\cdot) b'(\cdot, \psi, \xi) \in L^{2}(\G)$ in a neighborhood $N$ of $\psi^{\ast}$ for all $\xi \in \R^{k}$. %\todo{rewrite differentiable + second moment}
     \end{enumerate}
 
     Then 
     \begin{equation}
         \sqrt{N} \left( \tilde \psi_{N} - \psi^\ast \right) \convD \Normal (0, B M B),
     \end{equation}
-    where $M = \cov \left( w(X)\nabla_{\psi} b(X,\psi^{\ast}) \right)$ for $X\sim\G$ and $B= - \left(H_{\psi} \P \left[ b(\cdot, \psi^{\ast}) \right]\right)^{-1}$ is as in \Cref{thm:haberman-clt}. Additionally
+    where $M = \cov \left( w(X)\nabla_{\psi} b(X,\psi^{\ast}) \right)$ for $X\sim\G$ and $B= - \left(H_{\psi} \P \left[ b(\cdot, \psi^{\ast}) \right]\right)^{-1}$ as in \Cref{thm:haberman-clt}. Additionally
     \begin{equation}
         \sqrt{N}\left( \hat\psi_{N} - \psi^{\ast} \right) \convD \Normal (0, B M B).
     \end{equation}
@@ -341,7 +341,7 @@ Similar to the consistency result above (\Cref{prop:is-consistency}), we need to
     and notice that $\G \left[ \tilde b(\cdot, \psi) \right] = \P \left[ b(\cdot, \psi) \right]$. Let us verify the conditions of \Cref{thm:haberman-clt} for $\tilde b$ and the probability measure $\G$. 
 
     For condition \ref{it:C7}, as $H_{\psi} \P [b(\cdot, \psi)]$ exists and is non-singular, so does $$H_{\psi} \G [\tilde b(\cdot, \psi)] = H_{\psi} \P [b(\cdot, \psi)]$$
-    exist and is non-singular. Similarly, it is easy to see that $\tilde b'(x,\psi,\xi) = w(x) b'(x, \psi, \xi)$ and so for $X\sim\G$ 
+    exist and is non-singular. Similarly, it is obvious that $\tilde b'(x,\psi,\xi) = w(x) b'(x, \psi, \xi)$ and so for $X\sim\G$ 
     $$
         \sigma_{\tilde b}^{2}(\psi, \xi) = \mathbb E \left(\tilde b'(X, \psi, \xi)\right)^{2} = \mathbb E w^{2}(X) b'(X, \psi, \xi)^{2} < \infty
     $$
@@ -381,21 +381,24 @@ We now have all the tools at our disposal to proof \Cref{thm:cem-clt}.
 
     Finally, to show the representation of $M$, note that by \Cref{prop:is-clt} we have for $X \sim \G$
     $$
-        M = \cov \left( w(X) \left( T(X) - G_{\pce}[T]\right)\right),
+        M = \cov \left( w(X) \left( T(X) - \G_{\pce}[T]\right)\right) = \G [w^{2} (T - \P [T])(T - \P[T])^{T}],
     $$
-    and $\E w(X) \left( T(X) - \G_{\pce} [T] \right) = 0$ as $\G_{\pce} [T] = \P [T]$.
+    as $\G_{\pce} [T] = \P [T]$ by \Cref{prop:cem_exponential_families}, so $$\E w(X) \left( T(X) - \G_{\pce} [T] \right) = \G[w (T - \G_{\pce}[T])] = \P[T - \G_{\pce}[T]] =  0.$$
 \end{proof}
 
 The form of the asymptotic covariance matrix is that of the sandwich estimator \citep{White1982Maximum}, corrected for the importance sampling with $\G$. This is not surprising: the \acrshort{cem} essentially performs maximum likelihood estimation of $\psi$ where the data comes from the misspecified $\P$. Additionally, we have to correct the variance for performing importance sampling with $\G$, instead of sampling directly from $\P$.
 
 % discuss assumptions of Thm
-The assumptions of \Cref{thm:cem-clt} are minimal to facilitate the proof. The existence and positive definiteness of the Fisher information matrix are easily checked for the exponential family proposal and hold for minimal regular exponential families. Additionally, we have two moment constraints that involve the weights $w$ and the sufficient statistic $T$. That $wT \in L^{2}(\G)$ may be seen as a generalization of the existence of the second moment $\rho = \G [w^{2}]$, adapted to the exponential family setting. As such it is a natural requirement. That $T\in L^{2}(\P)$ is required for the application of \Cref{thm:haberman-clt}, and, as mentioned before, should not be problematic in practice, except for heavy-tailed distributions.
+The assumptions of \Cref{thm:cem-clt} are natural to facilitate the proof. The existence and positive definiteness of the Fisher information matrix are easily checked for the exponential family proposal and hold for minimal regular exponential families. Additionally, we have two moment constraints that involve the weights $w$ and the sufficient statistic $T$. 
+
+That $wT \in L^{2}(\G)$ is required for the application of \Cref{thm:haberman-clt} in the importance sampling setting, and can be seen as a usual regularity condition for such central limit theorems, involving now the weights $w$ as well, because of the importance sampling. In practice, this condition should not be problematic, as long as the initial proposal $\G$ is not too far from the target $\P$.
+That $T\in L^{2}(\P)$ is required for the application of \Cref{thm:haberman-clt}, and, as mentioned before, should not be problematic in practice, except for heavy-tailed distributions. It is a natural condition, as $T \in \L^{2}(\G_{\pce})$ (as long as $\pce$ lies in the interior of $\Psi$) and $\G_{\pce}$ is supposed to approximate $\P$ well.
 
 For our application, we will choose $(\G_{\psi})_{\psi \in \Psi}$ to consist of Gaussian distributions with natural parameter $\psi = \left( \Sigma^{-1}\mu, -\frac{1}{2}\Sigma^{-1}\right)$ and sufficient statistic $T(x) = \left( x, xx^{T} \right)$. Thus $T\in L^{2}(\P)$ is equivalent to $\P$ having fourth order moments, which is reasonable if the target is not heavy-tailed.
 
 % extension to non EF
-If $(\G_\psi)_{\psi \in \Psi}$ do not form an exponential family, $\hat\psi_{\text{CE}}$ will still be consistent and asymptotically normal, provided the usual regularity conditions for M-estimators apply.
+If $(\G_\psi)_{\psi \in \Psi}$ does not form an exponential family, $\hat\psi_{\text{CE}}$ will still be consistent and asymptotically normal, provided the usual regularity conditions for M-estimators apply.
 These usually include conditions to ensure the maximum is well-separated and the target is sufficiently smooth such that a Taylor expansion around the maximum is feasible.
 To extend our results to more involved settings, we refer the reader to \citep{VanderVaart2000Asymptotic} for an empirical process treatment of M- and related Z-estimators, \citep{Haberman1989Concavity} for asymptotics when the objective function is concave, but the maximum may lie on the border of the parameter space and \citep{Liang1995Inference} for a review of estimators based on estimating equations.
 
-However, these conditions will become more intricate than the ones we have provided here, as the concavity of the log densities is a rather strong property. As a result, we expect that assessing whether these conditions are satisfied in practice be more difficult. 
+However, these conditions will become more intricate than the ones we have provided here, as the concavity of the log densities is a rather strong property. As a result, we expect that assessing whether these conditions are satisfied in practice is more difficult. 
