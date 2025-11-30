@@ -106,11 +106,11 @@ However, the dimension of $\psi$ is quite high ($2p(n+1)$), so one resorts to so
 \end{align}
 which only depends on the marginal of $X_{t}$. While this only yields approximate solutions to the problem at hand, it turns out that the proposals produced by this procedure perform well (see \Cref{sec:simulation_studies}).
 
-\acrshort{eis} for \acrshort{pgssm} then proceeds as in \Cref{subsec:eis}, using importance sampling to obtain a particle approximation $\hat \P_{N}$ to $\Pps$ and solving the resulting approximate problem. As 
+\acrshort{eis} for \acrshortpl{pgssm} then proceeds as in \Cref{subsec:eis}, using importance sampling to obtain a particle approximation $\hat \P_{N}$ to $\Pps$ and solving the resulting approximate problem. As 
 $$
     \log g(z_{t}|s_{t}) = - \frac{1}{2} (z_{t} - s_{t})^{T}\Omega_{t}^{-1}(z_{t} - s_{t})- \frac{p}{2}\log (2\pi) - \frac{1}{2} \log\det \Omega_{t},
 $$
-affine in the natural parameters $\left( z \oslash \omega^{2}, -1 \oslash (2\omega^{2}) \right)$, the problem reduces to weighted linear least squares problem, which can be solved analytically. If the model at hand is an \acrshort{egssm} with linear signal\footnote{Actually, we do not require the model to be an \acrshort{egssm}, but only that the univariate marginals are conditionally independent.}, we can further exploit the independence of marginals, to solve only for the univariate marginals, i.e. minimize
+is affine in the natural parameters $\left( z \oslash \omega^{2}, -1 \oslash (2\omega^{2}) \right)$, the problem reduces to weighted linear least squares problem, which can be solved analytically. If the model at hand is an \acrshort{egssm} with linear signal\footnote{Actually, we do not require the model to be an \acrshort{egssm}, but only that the univariate marginals are conditionally independent.}, we can further exploit the independence of marginals, to solve only for the univariate marginals, i.e. minimize
 
 \begin{align}
     \label{eq:eis-marignals-target}
@@ -118,7 +118,7 @@ affine in the natural parameters $\left( z \oslash \omega^{2}, -1 \oslash (2\ome
 \end{align}
 or an importance sampling version of it.
 
-We present the resulting algorithm in \Cref{alg:eis}, restricted to the case where the model is an \acrshort{egssm} with linear signal. As starting values $\psi$ we may take those obtained by the \acrshort{la}. 
+We present the resulting algorithm in \Cref{alg:eis}, restricted to the case where the model is an \acrshort{egssm} with linear signal. As starting values $\psi^{0}$ we may take those obtained by the \acrshort{la}. 
 
 \begin{algorithm}
     \caption{\gls{eis} for \acrshortpl{egssm} with linear signal}
@@ -130,7 +130,7 @@ We present the resulting algorithm in \Cref{alg:eis}, restricted to the case whe
             \State Run the FFBS (\Cref{alg:ffbs}) to obtain samples of the signals $(S^{i})_{i = 1, \dots, N}$. 
             \For{$t = 0, \dots, n$}
                 \For{$ i = 1, \dots, p$}
-                    \State Solve \Cref{eq:eis-marignals-target} for $z^{l + 1}_{t,i}$ and $(\omega^{2})^{l + 1}_{t,i}$ \Comment{Using $\hat P_{N}$}
+                    \State Solve \Cref{eq:eis-marignals-target} for $z^{l + 1}_{t,i}$ and $(\omega^{2})^{l + 1}_{t,i}$ \Comment{Using $\hat \P_{N}$}
                 \EndFor
             \EndFor
             \State Set $\psi^{l + 1} = \left( z^{l + 1} \oslash (\omega^{2})^{l + 1}, -1 \oslash (\omega^{2})^{l + 1}\right)$.
@@ -142,9 +142,9 @@ We present the resulting algorithm in \Cref{alg:eis}, restricted to the case whe
 
 % CE: two variants 
 %% GLSSM approach fails: 
-For the \gls{cem}, using the \gls{glssm}-approach turns out to be difficult numerically. For a high-level argument of why this is true, let us ignore the Markov structure of the model for the moment. As the \gls{cem} matches moments of the target and proposal, applying it to fit model \eqref{eq:glssm-proposal} amounts to matching the moments of $\G_{\psi}$ to those of the target posterior $\mathcal L (X | Y = y)$ in the \gls{ssm}. Unfortunately, the covariance of $\G_{\psi}$ is given by $ \left( \Sigma^{-1} + B^{T}\Omega^{-1} B \right)^{-1}$, where $\Sigma$ is the covariance of all states, $B = \bdiag (B_{0}, \dots, B_{n})$ and $\Omega = \bdiag \left( \Omega_{0}, \dots, \Omega_{n} \right)$. Choosing the diagonal matrix $\Omega$ such that the covariance of $\G_{\psi}$ matches this expression is numerically expensive: we either need to invert the large (dimension $(n + 1)m \times (n + 1)m$) covariance matrix, or solve numerically for the $(n + 1)p$ parameters. The problem at hand is that we cannot decouple this into $(n + 1)$ equations of dimension $p$ (or even $(n+1)p$ equations) as we did for \gls{eis}, because all entries of $(\Sigma^{-1} + B^{T}\Omega^{-1} B)^{-1}$ depend on all entries of $\Omega$. 
+For the \gls{cem}, using the \gls{glssm}-approach turns out to be difficult numerically. For a high-level argument of why this is true, let us ignore the Markov structure of the model for the moment. As the \gls{cem} matches moments of the target and proposal, applying it to fit model \eqref{eq:glssm-proposal} amounts to matching first and second order moments of $\G_{\psi}$ to those of the target posterior $\mathcal L (X | Y = y)$ in the \gls{ssm}. Unfortunately, the covariance of $\G_{\psi}$ is given by $ \left( \Sigma^{-1} + B^{T}\Omega^{-1} B \right)^{-1}$, where $\Sigma$ is the covariance of all states, $B = \bdiag (B_{0}, \dots, B_{n})$ and $\Omega = \bdiag \left( \Omega_{0}, \dots, \Omega_{n} \right)$ (see, e.g., \citep[Section 4.13]{Durbin2012Time}). Choosing the diagonal matrix $\Omega$ such that the covariance of $\G_{\psi}$ matches this expression is numerically expensive: we either need to invert the large (dimension $(n + 1)m \times (n + 1)m$) covariance matrix, or solve numerically for the $(n + 1)p$ parameters. The problem at hand is that we cannot decouple this into $(n + 1)$ equations of dimension $p$ (or even $(n+1)p$ equations) as we did for \gls{eis}, because all entries of $(\Sigma^{-1} + B^{T}\Omega^{-1} B)^{-1}$ depend on all entries of $\Omega$. 
 
-To make matters more concrete, the \gls{cem} finds $\psi = (z, \omega^{2})$ such that model \eqref{eq:glssm-proposal} maximizes the cross entropy with the target $\P^{X|Y=y}$. For simplicity, let us assume that $m = p$, $B$ is the identity and we only observe a single $y$. Using \Cref{lem:gaussian_conditional}, we see that when $X\sim\mathcal N(\mu, \Sigma)$, the conditional distribution of $X$ given $Z=z$, $\G_{\psi}$, is a Gaussian distribution with mean $\tilde \mu =  \mu + \Sigma \left( \Sigma  + \Omega \right)^{-1} \left( z - \mu \right)$  and covariance matrix $\tilde\Sigma = \left( \Sigma ^{-1} + \Omega^{-1}\right)^{-1}$ for $\Omega = \diag \left( \omega^{2} \right)$, where $\omega^{2} > 0$. Assuming that $\Sigma$ is non-singular, we can reparameterize the objective function of the \gls{cem} by $\tilde \mu$,
+To make matters more concrete, the \gls{cem} finds $\psi = (z, \omega^{2})$ such that model \eqref{eq:glssm-proposal} maximizes the cross entropy with the target $\P^{X|Y=y}$. For simplicity, let us assume that $m = p$, $B$ is the identity and we only observe a single $y$. Using \Cref{lem:gaussian_conditional}, we see that when $X\sim\mathcal N(\mu, \Sigma)$, the conditional distribution of $X$ given $Z=z$, $\G_{\psi}$, is a Gaussian distribution with mean $\tilde \mu =  \mu + \Sigma \left( \Sigma  + \Omega \right)^{-1} \left( z - \mu \right)$  and covariance matrix $\tilde\Sigma = \left( \Sigma ^{-1} + \Omega^{-1}\right)^{-1}$ for $\Omega = \diag \left( \omega^{2} \right)$, where $\omega^{2} > 0$ entry-wise. Assuming that $\Sigma$ is non-singular, we can reparameterize the objective function of the \gls{cem} by $\tilde \mu$,
 \begin{align}
     \label{eq:cem_reparametrization}
     \begin{split}
@@ -172,13 +172,13 @@ and so we require $\Gamma_{i,i} < \Sigma_{i,i}$. While the law of total covarian
 $$
 \Sigma = \E \cov \left( X | Y \right) + \cov \left( \E \left( X | Y \right) \right),
 $$
-it does not guarantee $\Gamma \prec \Sigma$ (which would imply $\Gamma_{i,i} < \Sigma_{i,i}$), as $\cov(X|Y) = \Gamma$ may not hold in the non-Gaussian case.
+it does not guarantee $\Gamma \prec \Sigma$ (which would imply $\Gamma_{i,i} < \Sigma_{i,i}$), as $\cov(X|Y)$ may depend on $y$ in the non-Gaussian case.
 
-Second, even if there is an analytical solution $\Omega$ to \Cref{eq:gamma_post}, in the \gls{cem} we replace $\Gamma_{i,i}$ by the observed marginal variances $\hat\Gamma_{i,i}$ obtained by importance sampling. The variation introduced by simulation can then lead to situations where $\hat\Gamma_{i,i} > \Sigma_{i,i}$. As an example take $X \sim \mathcal N(0, 1)$, and $Y = X + \eta$ for $\eta \sim \mathcal N(0, \omega^{2})$. Then the conditional variance of $X$ given $Y = y$ is $\Gamma = 1 - \frac{1}{1 + \omega^{2}} < 1$. Given $N$ i.i.d. samples $X^{1}, \dots X^{N} \sim \mathcal N(0,1)$, their empirical variance $\hat \Gamma = \frac{1}{N} \sum_{i = 1}^{N} (X^{i} - \bar X)^{2} $ follows a scaled $\chi_{N - 1}^{2}$ distribution, i.e. $ \frac{N\hat\Gamma}{\Gamma} \sim \chi^{2}_{N - 1}$. Notice that we use the non-Bessel corrected version of the empirical variance here, as it is the maximum-likelihood estimate. 
+Second, even if there is an analytical solution $\Omega$ to \Cref{eq:gamma_post}, in the \gls{cem} we replace $\Gamma_{i,i}$ by the observed marginal variances $\hat\Gamma_{i,i}$ obtained by importance sampling. The variation introduced by simulation can then lead to situations where $\hat\Gamma_{i,i} > \Sigma_{i,i}$. As an example take $X \sim \mathcal N(0, 1)$, and $Y = X + \eta$ for $\eta \sim \mathcal N(0, \rho^{2})$. Then the conditional variance of $X$ given $Y = y$ is $\Gamma = 1 - \frac{1}{1 + \rho^{2}} < 1$. Given $N$ i.i.d. samples $X^{1}, \dots X^{N} \sim \mathcal N(0,1)$, their empirical variance $\hat \Gamma = \frac{1}{N} \sum_{i = 1}^{N} (X^{i} - \bar X)^{2} $ follows a scaled $\chi_{N - 1}^{2}$ distribution, i.e. $ \frac{N\hat\Gamma}{\Gamma} \sim \chi^{2}_{N - 1}$. Notice that we use the non-Bessel corrected version of the empirical variance here, as it is the maximum-likelihood estimate. 
 
-Then $$\P \left( \hat \Gamma > 1 \right) = \P \left( \frac{N \hat \Gamma}{\Gamma} > \frac{N}{\Gamma} \right) = 1 - F_{\chi^{2}_{N-1}} \left( N \left( 1 + \frac{1}{\omega^{2}} \right) \right)$$ is the probability that \Cref{eq:gamma_post} has no solution $\omega^{2} \in \R_{\geq 0}$. Here $F_{\chi^{2}_{N - 1}}$ is the cumulative distribution function of the $\chi^{2}_{N - 1}$ distribution. As $\omega^{2}$ goes to $\infty$, this probability approaches $1 - F_{\chi^{2}_{N - 1}}(N)$ which, for large $N$, is approximately $1 - F_{\chi^{2}_{N - 1}} (N - 1) \approx \frac{1}{2}$, as $\chi^{2}_{N-1} \approx \mathcal N\left(N - 1, 2 (N-1)\right)$ \citep[Section 18.5]{Johnson1994Continuous}.
+Then $$\P \left( \hat \Gamma > 1 \right) = \P \left( \frac{N \hat \Gamma}{\Gamma} > \frac{N}{\Gamma} \right) = 1 - F_{\chi^{2}_{N-1}} \left( N \left( 1 + \frac{1}{\rho^{2}} \right) \right)$$ is the probability that \Cref{eq:gamma_post} has no solution $\omega^{2} \in \R_{\geq 0}$. Here $F_{\chi^{2}_{N - 1}}$ is the cumulative distribution function of the $\chi^{2}_{N - 1}$ distribution. As $\rho^{2}$ goes to $\infty$, this probability approaches $1 - F_{\chi^{2}_{N - 1}}(N)$ which, for large $N$, is approximately $1 - F_{\chi^{2}_{N - 1}} (N - 1) \approx \frac{1}{2}$, as $\chi^{2}_{N-1} \approx \mathcal N\left(N - 1, 2 (N-1)\right)$ \citep[Section 18.5]{Johnson1994Continuous}.
 %We illustrate this in \Cref{fig:ce_prob_failure}, displaying the probability of failure in this setting for various combinations of $N$ and $\omega^{2}$. In this figure, we see that with growing $N$ the threshold for $\omega^{2}$ leading to non-negligible failure probability becomes larger, as expected. 
-Thus, even in the basic univariate Gaussian setting, for every $N$ there is an $\omega^{2}$ such that the \gls{cem} fails for \Cref{eq:glssm-proposal} with practically relevant probability. 
+Thus, even in the basic univariate Gaussian setting, for every $N$ there is an $\rho^{2}$ such that the \gls{cem} fails for \Cref{eq:glssm-proposal} with practically relevant probability. 
 
 %\begin{figure}
 %    \resizebox{\textwidth}{!}{%

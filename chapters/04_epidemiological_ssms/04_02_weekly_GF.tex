@@ -8,10 +8,23 @@ Instead of modeling the number of cases per day and with delay as we did in \Cre
 
 However, modeling cases on the regional level comes with its own challenges, as we have to take care of accounting for the spatial spread, as well as an exchange between regions, cf. \Cref{sec:dessiderata}. 
 
+Before we detail our proposed model, let us give an overview over similar approaches to modeling epidemics on a regional level in the literature. Each such approach will come with a general approach, i.e. the statistical models that are fit to epidemiological data, usually case counts, but also hospitalizations or deaths. Additionally, these models will differ in how incorporate spatial data as well as the granularity of the regions considered.
 
-% want regional level predictions / growth factors
-% Toennies outbreak
-% for small regions, have to consider exchange of cases as well
+% methods
+For the general approach, we can roughly group the literature into two groups: network-based time series models and classical time series models that account for spatial effects, although there are also hybrid approaches that combine elements from both. 
+In the former group, the network structure, represented by a (weighted) graph, is an integral part of the model, whereas in the latter group, spatial dependencies are accounted for by adding spatially correlated random effects, e.g. in spatio-temporal models, rather than an explicit transmission network between regions. 
+Our approach falls mostly into the latter category, as we will model correlated growth rates across regions, but also accounts for cross-regional infections through explicit incorporation of data on commuters between regions.
+
+%% network based methods
+For the network-based methods, \citep{Armbruster2024Networkbased} propose a generalized network autoregressive model that captures the spatial dependencies between regions through a network structure, outperforming standard ARIMA models that do not account for spatial dependencies. \citep{Fritz2022Combining} combines a graph neural network with a zero-inflated Poisson model to predict cases on the county level in Germany. \citep{Kuhn2021Assessmenta} combine an ODE-based compartmental model with a network-based approach to model cross-county infections, based on commuter data and geo-referenced Twitter data.
+
+%% spatio-temporal methods
+The spatio-temporal models account for regional dependencies by adding spatially correlated random effects. \citep{Kline2022Bayesian} construct a Bayesian spatio-temporal model to perform nowcasting for COVID-19 cases in counties in Ohio, USA. They include a spatially correlated random effect to account for dependencies between neighboring counties, similar to our approach. However, we differ from their approach by incorporating commuter data to model dependencies between all regions, not only neighboring ones. \citep{DeNicola2022Regional,Schneble2021Nowcasting} perform Bayesian nowcasting for German counties using splines for temporal and spatial effects. 
+
+Further approaches based on classical time series analysis fit models to individual regions as a pre-processing step to infer epidemiological indicators such as the reproduction number or growth rate, then use spatial models to infer about regional effects. These methods suffer from the major disadvantage that they do not account for spatial dependencies when fitting the initial models, which may lead to biased estimates as well as neglected uncertainty. 
+\citep{Ives2021Estimating} estimate the reproduction number for counties in the United States individually using a local-level state space model and use a spatial model to smooth these estimates across neighboring counties. 
+\todo{continue lit review.}
+%% classical ts models
 
 \subsection{Model}
 Similar to the last section, we start by modeling the evolution of cases in time. We now have incidences $I_{t,r}$ reported for reporting date $t$ and region $r$, where there are a total of $R$ regions. For Germany we use the $R=400$ counties as of the Gebietsreform 2021, which united the free city Eisenach with the county of Wartburgkreis \citep{FreistaatThueringen2019Thueringer}. This has several implications for the raw data published by the \acrshort{rki}:
@@ -260,7 +273,8 @@ Our model also comes with some disadvantages: the dimension of $m=401$ states is
 
 %% comparison to real time forecasting not totally valid: hindsight bias, not preregistered 
 
-% literature
-% other approaches to regional predictions
-\todo{consider Armbruster2024Networkbased, Armillotta2023Inference}
+% literature: how do we differ
+
+Our approach differs from existing literature in several key aspects. First, while many studies focus on either network-based or spatio-temporal models, we integrate elements from both paradigms. This allows us to capture the complex interplay between regional dynamics and spatial dependencies more effectively. 
+
 
