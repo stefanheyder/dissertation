@@ -3,3 +3,12 @@ repos:
   rev: 2.2.10
   hooks:
   - id: nbdev_export
+- repo: local
+  hooks:
+  - id: forbid-a-acr
+    name: "Forbid ' a \\acr' in .tex files. Use 'an \\acr' instead."
+    entry: "grep -l ' a \\acr'"
+    language: pygrep
+    types: [tex]
+    args: [--multiline]
+    verbose: true

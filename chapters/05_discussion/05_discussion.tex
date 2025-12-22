@@ -1,30 +1,34 @@
 \chapter{Discussion}
 \label{cha:discussion}
 
-Let us look back on the insights gained in this thesis and put the theoretical and applied results into a broader picture. To this end, let us give answers to the questions raised in \Cref{cha:introduction} and see how far we have come. First, let us reiterate the ambitious goal of this thesis detailed in the introduction: provide mathematically sound statistical tools that allow practitioners to design and fit models suited for the epidemiological data arising in an ongoing epidemic. To this end we have contributed results to three areas, from more applied to more abstract:
+Let us look back on the insights gained in this thesis and put the theoretical and applied results into a broader picture. To this end, let us give answers to the questions raised in \Cref{cha:introduction} and see how far we have come. First, let us reiterate the ambitious goal of this thesis detailed in the introduction: provide mathematically sound statistical tools that allow practitioners to design and fit models suited for the epidemiological data arising in an ongoing epidemic. To this end we have contributed results to three areas, from applied to theoretical:
 \begin{itemize}
     \item the results of concrete models applied to \acrshort{c19} in Germany in \Cref{cha:analysis_of_selected_models},
-    \item the general modeling strategy of \acrshortpl{pgssm} for epidemiological models in the same chapters, as well as \Cref{sec:dessiderata}, and
+    \item the general modeling strategy of \acrshortpl{pgssm} for epidemiological models in \Cref{cha:analysis_of_selected_models}, and
     \item the rigorous mathematical study of the computational methods used to fit these models, especially the comparison of \acrshort{eis} and the \acrshort{cem} in \Cref{cha:state_space_models}.
 \end{itemize} 
 
-% locality of epidemics
-\todo{reformulate locality of epidemics more generally, effects particular to question at hand}
-
 % outbreak inherently random, need stochastic / statistical modesl
-In \Cref{chap:epidemiological_considerations} we highlighted the need for explainable statistical models in infectious disease epidemiology. Throughout this thesis we use \acrshort{c19} as a driving example, which is owed to the fact that this thesis is a product of this particular epidemic. However, the core questions surrounding past, current and future development of cases and derived indicators is of essence for all epidemics outbreaks, including seasonal influenza and other respiratory diseases \todo{cite hubs, fraser influenze models}. As a solution to this challenging task, we presented \acrshortpl{ssm}, in particular \acrshortpl{pgssm}, as a flexible framework for modeling the high-dimensional time-series data we are faced with. The wide range of applications in \Cref{cha:analysis_of_selected_models} demonstrates the flexibility of \acrshortpl{ssm} as a modeling tool. 
-
+In \Cref{chap:epidemiological_considerations} we highlighted the need for explainable statistical models in infectious disease epidemiology. Throughout this thesis we use \acrshort{c19} as a driving example, which is owed to the fact that this thesis is a product of this particular epidemic. However, the core questions surrounding past, current and future development of cases and derived indicators is of essence for all epidemics outbreaks, including seasonal influenza and other respiratory diseases, and is a matter of ongoing research, e.g. in the \acrshort{ecdc}s Respiratory Diseases Forecasting Hub \citep{ECDCRespiCast}. As a solution to this challenging task, we presented \acrshortpl{ssm}, in particular \acrshortpl{pgssm}, as a flexible framework for modeling the high-dimensional time-series data we are faced with. The wide range of applications in \Cref{cha:analysis_of_selected_models} demonstrates the flexibility of \acrshortpl{ssm} as a modeling tool. 
 
 % wide-availability of data
 We have seen that the widely available data surrounding the epidemic, in particular daily reports on infections and hospitalizations, can be leveraged to fit \acrshortpl{pgssm} and the fitted models allow for straight-forward interpretation. While the fitting procedures for these models can be quite involved, the models themselves, especially the temporal dynamics, are not, an as such our analyses can be disseminated to statisticians and practitioners alike. However, the interpretability of all models presented in this thesis is hampered by the quality of data available. Indeed, large constituents of our models are purely for dealing with weekday effects, and reporting delays. 
 
 % mathematical insight into methods
-The final contribution of this thesis is a mathematically rigorous analysis of the performance of the importance sampling methods used in the applications (\Cref{cha:analysis_of_selected_models}).
-To the authors' knowledge, \Cref{thm:cem-clt,thm:eis-clt} gives the first joint analysis of the \acrshort{cem} and \acrshort{eis}, and sheds insight on the poor performance of the \acrshort{cem} in practice: we can expect its asymptotic covariance to be larger than that of \acrshort{eis}, as its meat matrix $M$ is fixed, whereas that of \acrshort{eis} can be expected to be small when the optimal proposal is close to the target. 
+The final contribution of this thesis is a mathematically rigorous analysis of the performance of the importance sampling methods used for inference in \Cref{cha:analysis_of_selected_models}.
+To the authors' knowledge, \Cref{thm:cem-clt,thm:eis-clt} gives the first joint analysis of the \acrshort{cem} and \acrshort{eis}, and sheds insight on the poor performance of the \acrshort{cem} in practice: under reasonable conditions, we can expect the asymptotic covariance matrix of the \acrshort{cem} to be larger than that of \acrshort{eis}, as its meat matrix $M$ is fixed, whereas that of \acrshort{eis} can be expected to be smaller when the optimal proposal is close to the target. 
 
 % outlooks
-% modeling and methods transfer to other epidemics
-% time series data very common
-% CE more instable than EIS -> variational methods?
+Our results open up several avenues for future research, both applied and theoretical. The modeling framework of \acrshortpl{pgssm} can be extended to other epidemics, such as seasonal influenza or other respiratory diseases, where similar data are available. The models presented in \Cref{cha:analysis_of_selected_models} can be adapted to these diseases with minor modifications, allowing for a transfer of knowledge and methods across different epidemiological contexts. Here it is crucial to adapt the models presented in this thesis to account for the specific characteristics of each disease, such as transmission dynamics and reporting practices, as we have done in \Cref{cha:analysis_of_selected_models}.
+
+% open Qs: 
+While our theoretical results on the asymptotic covariance of the \acrshort{cem} and \acrshort{eis} focus on the number of samples required for convergence, it is still unclear which of the two methods produces the best approximation of a particular target $\P$ in terms of, e.g., $\rho = \P[w]$. 
+Additionally, our case studies focus on the Gaussian exponential family due to its widespread use, compatibility with the \acrshort{pgssm} targets, and analytical tractability. Nevertheless, using Gaussian proposal may be limited, as the proposals generated are symmetric and do not allow for heavy tails. For univariate distributions, there is a wide range of exponential families to choose from
+%% what about non-gaussian EF? can we guide choice of EF?
+%% spherical distribution case!
+%% inverse problems + IS?
+%% techniques to reduce asymptotic variance by using good proposal G
+%% what is with practical "bootstrapping" multiple sampling with CRNs?
+
 % open questions for CE/EIS: if N=inf, which is better? e.g. in terms of ESS?
 % when does EIS fail? 

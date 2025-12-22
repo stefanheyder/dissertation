@@ -1,7 +1,7 @@
 \section{Partially Gaussian state space models}
 \label{sec:logconcave_gaussian_state_space_models}
 
-For the applications considered in this thesis the distribution of observations is never Gaussian --- see \Cref{sec:dessiderata} --- and  all we can hope for is that the data-generating mechanism is close enough to a Gaussian distribution that inferences made in a \acrshort{glssm} may carry over.
+For the applications considered in this thesis the distribution of observations is never Gaussian --- see \Cref{sec:dessiderata} --- and  all we can hope for is that the data-generating mechanism is close enough to a Gaussian distribution that inferences made inan \acrshort{glssm} may carry over.
 For epidemiological models, Gaussian distributions may be appropriate if incidences are high, e.g. during large outbreaks in a whole country. 
 When case numbers are small, the discrete nature of incidences is better captured by a distribution on $\mathbf N_{0}$, and standard distributions used are the Poisson and negative binomial distributions, see e.g. \citep{Lloyd-Smith2005Superspreadinga}.
 We thus want \acrshortpl{ssm} where observations are allowed to follow these non-Gaussian distributions. 
@@ -11,7 +11,7 @@ Concerning the distribution of states, we keep the linear Gaussian assumption, i
 
 \glsreset{pgssm}
 \begin{definition}[\gls{pgssm}]
-    A \acrfull{pgssm} is a joint distribution for $(X,Y)$ where states $X$ follow \Cref{eq:glssm_states}, i.e. 
+   an \acrfull{pgssm} is a joint distribution for $(X,Y)$ where states $X$ follow \Cref{eq:glssm_states}, i.e. 
     \begin{align*}
         X_{t + 1}  &= A_{t}X_{t} + u_{t} + \varepsilon_{t + 1} &  & t = 0, \dots, n - 1,
     \end{align*}
@@ -25,7 +25,7 @@ Concerning the distribution of states, we keep the linear Gaussian assumption, i
     Here $p(y_{t} | x_{t}, y_{t -1})$ are allowed to take any arbitrary density\footnote{Recall that we have not specified $\mu_{\mathcal Y}$, so it is always possible to use $p = \mathbf 1 _{\mathcal Y}$, the constant function.}.
 \end{definition}
 
-It is straightforward to check that a \acrshort{pgssm} is indeed a \acrshort{ssm}. 
+It is straightforward to check thatan \acrshort{pgssm} is indeedan \acrshort{ssm}. 
 
 \begin{remark}
     Recalling \Cref{rem:dependence_Yt-1}, if our main interest lies in the conditional distribution $X|Y = y$ for a fixed set of observations $y$, it will suffice to consider models where 
@@ -120,7 +120,7 @@ The models we study in \Cref{cha:analysis_of_selected_models} belong, for the mo
 \glsreset{egssm}
 \begin{definition}[\gls{egssm}]
     \label{def:egssm}
-    An \acrfull{egssm} is a \acrshort{pgssm} where the conditional distribution of $Y_{t}$ given $X_{t}$ forms an exponential family with respect to a base measure $\mu_{t}$, i.e.
+    An \acrfull{egssm} isan \acrshort{pgssm} where the conditional distribution of $Y_{t}$ given $X_{t}$ forms an exponential family with respect to a base measure $\mu_{t}$, i.e.
     $$
     p (y_{t}|x_{t}) = h_{t}(y_{t}) Z_{t}(x_{t}) \exp \left( \eta_{t}(x_{t})^{T} T_{t}(y_{t}) \right)
     $$

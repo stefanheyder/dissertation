@@ -7,7 +7,7 @@
 \glsunset{glssm}
 \begin{definition}[\gls{glssm}]
     \label{def:glssm}
-    A \acrfull{glssm} is a joint distribution over states and observations $(X,Y)$ where states a.s. obey the transition equation
+   an \acrfull{glssm} is a joint distribution over states and observations $(X,Y)$ where states a.s. obey the transition equation
     \begin{align}
         \label{eq:glssm_states}
         X_{t + 1} & = A_{t}X_{t} + u_{t} + \varepsilon_{t + 1} &  & t = 0, \dots, n - 1,
@@ -21,7 +21,7 @@
 \end{definition}
 
 \begin{remark}
-    From \Cref{eq:glssm_states} it is easy to see that the states $X = (X_{0}, \dots, X_{n})$ form a Gaussian Markov process and that conditional on $X_{t}$, $t \in \{0, \dots, n\}$, $Y_{t}$ is independent of $X_{s}$ and $Y_{s}$, $s < t$. Thus a \acrshort{glssm} is indeed a \acrshort{ssm}.
+    From \Cref{eq:glssm_states} it is easy to see that the states $X = (X_{0}, \dots, X_{n})$ form a Gaussian Markov process and that conditional on $X_{t}$, $t \in \{0, \dots, n\}$, $Y_{t}$ is independent of $X_{s}$ and $Y_{s}$, $s < t$. Thusan \acrshort{glssm} is indeedan \acrshort{ssm}.
 \end{remark}
 
 
@@ -186,7 +186,7 @@ For non-linear problems of moderate dimension, i.e. those where we replace the r
 % epidemiological uses 
 The Kalman smoother (\Cref{alg:kalman_smoother}) computes the marginal distributions $X_{t} | Y$ for $t = 0, \dots, n$. Upon closer inspection, the mean and covariance updates resemble that of the Kalman filter (\Cref{alg:kalman_filter}). This is no coincidence: By the assumed dependence structure (\Cref{fig:ssm_dependencies}, except for the dashed arrows), we obtain the following lemma, which will allow us to prove the recursions.
 \begin{lemma}[conditional independence from future observations]
-    Let $t \in \{0, \dots, n - 1\}$ and $s > t$. In a \acrshort{glssm}, conditional on $X_{t + 1}$, $X_{t}$ is independent of $Y_{s}$, $s > t$. 
+    Let $t \in \{0, \dots, n - 1\}$ and $s > t$. Inan \acrshort{glssm}, conditional on $X_{t + 1}$, $X_{t}$ is independent of $Y_{s}$, $s > t$. 
 \end{lemma}
 \begin{proof}
     As $s > t$, we have
@@ -261,7 +261,7 @@ The resulting algorithm (\Cref{alg:ffbs}) is called the \gls{ffbs}  and was firs
     A similar argument can be made for singular $\Xi_{t+1|t}$, where we replace $\Xi_{t+1|t}^{-1}$ by its Moore-Penrose inverse in the Kalman smoother (\Cref{alg:kalman_smoother}) and the \acrshort{ffbs} (\Cref{alg:ffbs}). 
 \end{remark}
 
-In the context of \acrshort{c19}, variants of the Kalman filter have been employed to analyse the time-varying behavior of epidemiological parameters. Usually the models start from some theoretical, e.g. compartmental, model of how the epidemic spreads. After time-discretization and possibly linearization, one ends up with a \acrshort{glssm}, to which the Kalman filter or one of its variants may be applied. 
+In the context of \acrshort{c19}, variants of the Kalman filter have been employed to analyse the time-varying behavior of epidemiological parameters. Usually the models start from some theoretical, e.g. compartmental, model of how the epidemic spreads. After time-discretization and possibly linearization, one ends up withan \acrshort{glssm}, to which the Kalman filter or one of its variants may be applied. 
 In \citep{Arroyo-Marioli2021Tracking} the authors construct a simple \acrshort{glssm} to reconstruct the time-varying reproduction number from observed growth factors, exploiting the linear relationship between the two quantities in the SIR compartmental model and using the Kalman filter and smoother to perform inference. 
 \citep{Zhu2021Extended,Song2021Maximum} directly apply the \acrshort{ekf} to time-discretized compartmental models, fitting them either to simulated \citep{Zhu2021Extended} or real \citep{Song2021Maximum} data. Similarly, \citep{Engbert2020Sequential} use the \acrshort{enkf} to fit a stochastic compartmental model to German regional data, where the \acrshort{enkf} allows to deal with the non-linear and non-Gaussian properties on these small spatial scales.
 
