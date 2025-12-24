@@ -74,18 +74,23 @@
 \usepackage{enumitem}
 \setlist[enumerate,1]{label=(\roman*),ref=(\roman*)}
 
-\newtheorem{proposition}{Proposition}[chapter]
 \newtheorem{theorem}{Theorem}[chapter]
-\newtheorem{lemma}{Lemma}[chapter]
-\newtheorem{corollary}{Corollary}[chapter]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
 
 \theoremstyle{definition}
-\newtheorem{definition}{Definition}[chapter]
-\newtheorem{example}{Example}[chapter]
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
 
 %\theoremstyle{remark}
-\newtheorem{remark}{Remark}[chapter]
-\newtheorem{notation}{Notation}[chapter]
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{notation}[theorem]{Notation}
+
+\usepackage{etoolbox}
+\AtBeginEnvironment{remark}{\pushQED{\qed}}
+\AtEndEnvironment{remark}{\popQED\renewcommand{\qedsymbol}{\(\blacksquare\)}}
+
 
 % ********************************************************************
 % General useful packages

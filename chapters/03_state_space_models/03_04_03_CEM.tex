@@ -138,6 +138,16 @@ While $\P [T]$ is usually not available, it is itself amenable to importance sam
 \end{equation}
 As $T \in L^{1}(\hat \P_{N})$, the only conditions we have to check to apply the above proposition are that this equation has a unique solution $\G$-almost surely in the interior of $\Psi$ and that $\Psi$ is convex. 
 
+\begin{remark}[overview over measures used]
+    \label{rem:measures_in_is}
+    For the sake of clarity, let us summarize the measures used throughout this subsection.\footnote{We will use the same schema for the next subsection as well.}
+
+    We start with $\P$, the \textbf{target measure}, which is intractable, but the main interest of our overall endeavor. As we do not have access to $\P$, our goal is to construct an \textbf{approximation} to it and use importance sampling to calculate the integrals of interest with respect to $\P$. To this end, we want to choose from an exponential family, $(\G_{\psi})_{\psi \in \Psi}$ the optimal proposal, as a solution to \Cref{eq:ce_argmax}\footnote{\Cref{eq:eis_optim} for \acrshort{eis}.}. Unfortunately, the objective function depends on $\P$ as well, and so is itself not tractable. We thus introduce another measure, $\G$, whose sole purpose is to approximately solve \Cref{eq:ce_argmax} using importance sampling. $\G$ may stem from the family of proposals $(\G_{\psi})_{\psi \in \Psi}$, but is not restricted to these measures. 
+
+    Thus, $\G$ and $\G_{\pce}$ serve different purposes: $\G$ is used to facilitate the search for the optimal $\pce$, while $\G_{\pce}$ is the resulting approximation of $\P$.
+\end{remark}
+
+
 To apply the \acrshort{cem} in practice, one usually iterates the sampling and estimation steps, using the previously found $\hpce$ to sample in the current iteration and starting the iteration with a proposal from the same exponential family $\G = \G_{\psi^{0}}$. To ensure numerical convergence, a popular device is that of \glspl{crn}, i.e. using the same random number seed in all iterations. A basic version of the \acrshort{cem} is presented in \Cref{alg:cem-basic}.
 
 \begin{algorithm}
@@ -201,7 +211,7 @@ The proof is based on the following theorem of \citeauthor{Haberman1989Concavity
     \begin{enumerate}[label=(C\arabic*),ref=(C\arabic*)]
         \item\label{it:C1} For some closed set $V$, $\psi^{\ast}$ is in the interior of $V$ and $\Psi \cap V$ is closed. 
         \item\label{it:C2} $\psi^{\ast}$ is the unique maximizer of $$b_{\operatorname{cl} (\Psi)}: \operatorname{cl} (\Psi) \to [-\infty, \infty), \psi \mapsto \P [b(\cdot, \psi)],$$ where $ \operatorname{cl}$ denotes the closure of $\Psi$ in $\R^{k}$.
-        \item\label{it:C3} $\Psi$ is convex and $b_{\Psi}$ is finite on a nonempty open set.
+        \item\label{it:C3} $\Psi$ is convex and $b_{\Psi}$ is finite on an open neighborhood of $\psi^{\ast}$.
     \end{enumerate}
 
     Then $$\hat \psi_{N} \stackrel{N \to \infty}\longrightarrow \psi^{\ast}$$ $\P$-almost surely, so $\hat\psi_{N}$ is strongly consistent.

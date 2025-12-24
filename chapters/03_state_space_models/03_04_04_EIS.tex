@@ -27,9 +27,9 @@ Letting $\log \tilde w_{\psi} = \log p - \psi^{T}(T - \P [T])$, we may rewrite \
     \label{eq:eis_exponential_families}
     \min_{\psi \in \Psi, \lambda \in \R} \P \left[ \log p - \psi^{T}(T - \P [T]) - \lambda \right]^{2},
 \end{align}
-a weighted linear least squares problem. The rationale for centering $T$ under $\P$ will become apparent in \Cref{thm:eis-clt}.
+a weighted linear least squares problem. The rationale for centering $T$ under $\P$ will become apparent in \Cref{prop:eis_exponential_families}.
 As we consider unnormalized weights $\tilde w$, we are additionally able to get rid of the potentially non-linear term $\log Z(\psi)$.
-We note that this is a convex objective function in $\psi$ which, similar to the \acrshort{cem}, will be very useful to derive asymptotics later on. For now, we begin with studying the existence and uniqueness of $\peis$ similar to \Cref{prop:cem_exponential_families}.
+We note that this is a convex objective function in $(\psi, \lambda)$ which, similar to the \acrshort{cem}, will be very useful to derive asymptotics later on. For now, we begin with studying the existence and uniqueness of $\peis$ similar to \Cref{prop:cem_exponential_families}. While these results have, to the best of the authors knowledge, not been published anywhere, we believe them to be folk knowledge. 
 
 \begin{lemma}[\acrshort{eis} for exponential families]
     \label{prop:eis_exponential_families}
@@ -41,33 +41,34 @@ We note that this is a convex objective function in $\psi$ which, similar to the
 
     If there is a $\peis \in \Psi$ with
     \begin{align}
-        \label{eq:peis-analytical}
-        \cov_{\P} \left( T \right)\peis = \cov_{\P} \left(T, \log p \right)
+        %\label{eq:peis-analytical}
+        \cov_{\P} \left( T \right)\peis = \cov_{\P} \left(T, \log p \right),
     \end{align}
     it is a global minimizer of \Cref{eq:eis_optim}. If $\cov_{\P} \left( T \right)$ is non-singular,
-    $$
-    \peis = \cov_{\P} (T) ^{-1} \cov _{\P} (T, \log p )
-    $$
+    \begin{align}
+        \label{eq:peis-analytical}
+        \peis = \cov_{\P} (T) ^{-1} \cov _{\P} (T, \log p )
+    \end{align}
     is the unique global minimizer.
 \end{lemma}
 
 \begin{proof}
     Under the proposed conditions, we may consider \Cref{eq:eis_exponential_families} instead, where the moment conditions on $\log p $ and $T$ ensure that the problem is well-posed, i.e. the target is finite for all $\psi \in \Psi$. 
-    Thus the optimal $ \left( \peis, \lambda_{\eis} \right)$ are given by the \gls{blup} of $\log p $ by the sufficient statistic $T$ under $\P$ for $\peis$ and $\P \left[ \log \tilde w_{\peis} \right]$ for $\lambda_{\eis}$. Standard results from multivariate regression theory imply that the \acrshort{blup} is given by any solution of
+    As $T$ is centered in \Cref{eq:eis_exponential_families}, the optimal $\peis$ is the \gls{blp} of $\log p$ given the sufficient statistics $T$ and $\lambda_{\eis}$ is $\P \left[ \log \tilde w_{\peis} \right]$.
+    Thus $\peis$ is the $L^{2}$-projection of $\log p$ onto the span of $T - \P[T]$, which is given by any solution of
     $$
         \cov_{\P} (T) \peis = \cov_{\P} (T, \log p),
     $$
     i.e. $\peis$ as stated in the lemma. Furthermore, if $\cov_{\P} (T)$ is non-singular, the solution to this equation is unique.
-    
 \end{proof}
 
 
 As the optimal $\peis$ depends on several unknown quantities, \gls{eis} proceeds like the \gls{cem} and employs importance sampling with a proposal $\G$, estimating $\peis$ by
 $$
-\left(\hat \lambda,\hat \psi_{\text{EIS}}\right) = \argmin_{\lambda,\psi} \hat\P_{N} \left[ \log \tilde w_{\psi} - \lambda \right]
+\left(\hat \lambda,\hat \psi_{\text{EIS}}\right) = \argmin_{\lambda,\psi} \P \left[ \log p - \psi^{T}(T - \P [T]) - \lambda \right]^{2},
 $$
-where $X^{1}, \dots, X^{N} \iid \G$. 
-Again, if $\G_{\psi}, \psi \in \Psi$ form an exponential family with natural parameter $\psi$, this optimization problem turns into a weighted least squares problem. As $\P[T]$ is not known, we use other unnormalised log-weights $\log\tilde w_{\psi} = \log p - \psi^{T}T$ instead.
+where $X^{1}, \dots, X^{N} \iid \G$, see also \Cref{rem:measures_in_is}. 
+Again, if $\G_{\psi}, \psi \in \Psi$ form an exponential family with natural parameter $\psi$, this optimization problem turns into a weighted least squares problem. As $\P[T]$ is not known, we use log-weights $\log\tilde w_{\psi} = \log p - \psi^{T}T$, as the constant factor $\P[T]$ does not matter in the weights, see the discussion surrounding \Cref{eq:eis_exponential_families}, instead.
 We can then estimate $\peis$ with the standard weighted least squares estimator
 $$
 \left( \hat\lambda', \hpeis \right) = \left(\mathbf X^{T}\mathbf W\mathbf X\right)^{-1}\mathbf X^{T}\mathbf W y%
@@ -105,18 +106,21 @@ An attractive feature of \gls{eis} is that if the target $\P$ is a member of the
 \end{proposition}
 
 \begin{proof}
-   As $\P$ stems from the same exponential family as $\G_{\psi}$, the pseudo-observations are $$\log p  = \psi_{\P}^T T - \log Z(\psi_{\P}).$$ Thus $\cov_{\hat \P_{N}} \left( T, \log p  \right) = \cov_{\hat \P_{N}} \left( T \right)\psi_{\P}$. 
-   If we can show that $\cov_{\hat\P_{N}} (T)$ is non-singular, \Cref{eq:hpeis-cov} implies that $\hpeis = \psi_{\P}$ a.s.. 
+    As $\P$ stems from the same exponential family as $\G_{\psi}$, the pseudo-observations are $$\log p  = \psi_{\P}^T T - \log Z(\psi_{\P}).$$ Thus, $\cov_{\hat \P_{N}} \left( T, \log p  \right) = \cov_{\hat \P_{N}} \left( T \right)\psi_{\P}$. 
+    If we can show that $\cov_{\hat\P_{N}} (T)$ is non-singular, \Cref{eq:hpeis-cov} implies that $\hpeis = \psi_{\P}$ a.s.. 
 
-   If $\cov_{\hat \P_{N}} (T)$ were singular, there would exist a $\psi \in \R^{k}$ such that
-   $$
-   \psi^{T} \cov_{\hat\P_{N}} (T) \psi = \cov_{\hat \P_{N}} \left( \psi^{T}T \right) = 0.
-   $$
-    In this case the a.s. non-zero $W^{i}(X^{i}) T(X^{i})$ would lie in the orthogonal complement $\psi^{\perp}$ for all $i = 1, \dots, N$. As the weights are a.s. positive by the assumed equivalence of $\G$ and $\P$, the same holds true for $T(X^{i}), i = 1,\dots, N$.
-   If $N$ is bigger than $k$, the probability that this happens is $0$, as $\operatorname{supp} T $ is open. Thus $\cov_{\hat \P_{N}} T$ is non-singular almost surely and the result is shown.
+    Let $W^{i}$ be the $i$-th weight, $i = 1,\dots, N$ in the particle approximation $\hat \P_{N}$.
+    By the assumed equivalence of $\G$ and $\P$, $W^{i}$ is non-zero $\G$-a.s., so $W^{i}(X^{i})T(X^{i}) \neq 0$ a.s. as well, as $T$ has open support.
+    If $\cov_{\hat \P_{N}} (T)$ were singular, there would exist a $\psi \in \R^{k}$ such that
+    $$
+    \psi^{T} \cov_{\hat\P_{N}} (T) \psi = \cov_{\hat \P_{N}} \left( \psi^{T}T \right) = 0,
+    $$
+    implying that $W^{i} T(X^{i})$ lies in the orthogonal complement $\psi^{\perp}$, a subspace of dimension $k - 1$.
+    As $W^{i} \neq 0$ a.s., $T(X^{i}) = \frac{1}{W^{i}} W^{i} T(X^{i}) \in \psi^{\perp}$.
+    Thus, all $T(X^{i})$, $i = 1, \dots N$, would have to lie in a subspace of dimension $k - 1$, which is a contradiction to $T$ having open support if $N \geq k$.
 \end{proof}
 
-Note that if in the above proposition only $\G_{\psi} \gg \P$ holds, we obtain, by a similar argument, that $$\mathbb P \left( \hpeis = \psi_{\P} \right) \stackrel{N\to\infty}\longrightarrow 1.$$
+Note that if in the above proposition only $\G \gg \P$ holds, we obtain, by a similar argument, that $$\mathbb P \left( \hpeis = \psi_{\P} \right) \stackrel{N\to\infty}\longrightarrow 1.$$
 Additionally, we then have to take care of the event $ \{ w(X) = 0 \}$, whose probability is now potentially positive.
 
 We now turn to deriving asymptotics for $\hpeis$. As for the \acrshort{cem}, we start with proving that $\hpeis$ consistently estimates $\peis$.
@@ -131,9 +135,9 @@ As \Cref{eq:eis_exponential_families} is a linear least squares problem, the obj
     $$
     for convex $\Psi \subseteq \R^{k}$. Let $\G \gg \P$ be a proposal and suppose that 
     \begin{enumerate}
-        \item $\log p, T \in L^{2}(\P)$ and
-        \item $\cov_\P (T)$ is non-singular,
-        \item $\peis \in \operatorname{int} \Psi.$ 
+        \item $\log p, T \in L^{2}(\P)$,
+        \item $\cov_\P (T)$ is non-singular, and
+        \item $\peis \in \operatorname{int} \Psi$ exists and is unique.
     \end{enumerate}
     
     Then 
@@ -156,7 +160,7 @@ As \Cref{eq:eis_exponential_families} is a linear least squares problem, the obj
         H_{\psi'} b(x, \psi') = -\begin{pmatrix}
             T(x)T(x)^{T} & T(x) \\
             T(x)^{T} &  1
-        \end{pmatrix} = -\begin{pmatrix} T(x)^{T} & 1 \end{pmatrix} \begin{pmatrix} T(x)^{T}& 1 \end{pmatrix}^{T},
+        \end{pmatrix} = -\begin{pmatrix} T(x)^{T} & 1 \end{pmatrix}^{T} \begin{pmatrix} T(x)^{T}& 1 \end{pmatrix},
     $$
     if $\psi \in \Psi$. Let $X^{1}, \dots, X^{N} \iid \P$ and let $\tilde \P _{N}$ be their empirical distribution. For $\psi \in \Psi, \lambda \in \R$ we have 
     $$
@@ -204,11 +208,11 @@ Additionally, if fourth-order moments exist, we can derive a central limit theor
     Similar to the proof of \Cref{thm:cem-clt}, we combine \Cref{thm:haberman-clt} and \Cref{prop:is-clt}. Let 
     \begin{align*}
         b : \mathcal X \times \R^{k + 1} \to [-\infty, \infty) && b(x, \psi') =  \begin{cases}
-            -\frac{1}{2} \left( \log p(x) - \psi^{\prime T}T'(x) \right) & x \in \Psi \\
+            -\frac{1}{2} \left( \log p(x) - \psi^{\prime T}T'(x) \right)^{2} & x \in \Psi \\
             -\infty & \text{else,}
         \end{cases}
     \end{align*}
-    where $\psi' = (\psi, \lambda) \in \Psi \times\R$ and $T'(x) = \begin{pmatrix} (T(x) - \P[T]) & 1 \end{pmatrix}$. For $\psi \in \Psi$ the map $(\psi, \lambda) \to \P [b(\cdot, (\psi, \lambda))]$ is differentiable with gradient 
+    where $\psi' = (\psi, \lambda) \in \Psi \times\R$ and $T'(x) = \begin{pmatrix} (T(x) - \P[T]) & 1 \end{pmatrix}$. For $\psi' \in \Psi \times \R$ the map $$\psi' \mapsto \P [b(\cdot, \psi')]$$ is differentiable with gradient 
     $$
         \nabla_{\psi'} \P [b(\cdot, \psi')] = - \P \left[\left( \log p - \psi^{\prime T}T' \right) T'\right] $$
     and Hessian 
@@ -229,7 +233,7 @@ Additionally, if fourth-order moments exist, we can derive a central limit theor
     $$
     is in $L^{1}(\P)$ by assumption \ref{it:fourthmomentsexist} and the Hölder inequality. 
 
-    To apply \Cref{prop:is-clt} we need to show that $w(\cdot)b'(\cdot, \psi',\xi') \in L^{2}(\G)$ for all $\xi'\in\R^{k + 1}$ and all $\psi'$ in a neighborhood of $\peis$, for this it suffices that we show 
+    To apply \Cref{prop:is-clt} we need to show that $w(\cdot)b'(\cdot, \psi',\xi') \in L^{2}(\G)$ for all $\xi'\in\R^{k + 1}$ and all $\psi'$ in a neighborhood of $\peis$. For this it suffices that we show 
     $$
         w^{2}(\nabla_{\psi'} b(\cdot, \psi'))_{i}(\nabla_{\psi'} b(\cdot, \psi'))_{j} = w^{2}\left( \log p - \psi^{\prime T}T' \right)^{2} T'_{i}T'_{j}
     $$
@@ -257,7 +261,7 @@ Additionally, if fourth-order moments exist, we can derive a central limit theor
 
 A discussion of the assumptions of \Cref{thm:eis-consistent,thm:eis-clt} is in order. We start with the consistency result \Cref{thm:eis-consistent}. The integrability condition, i.e that $\log p, T \in L^{2}(\P)$ is necessary to ensure existence of $\peis$ and the existence of $\cov_{\P}(T)$ as well as $\peis \in \operatorname{int} \Psi$ ensure uniqueness, see also \Cref{prop:eis_exponential_families}. 
 
-Regarding the central limit theorem \Cref{thm:eis-clt}, requiring the existence of higher order moments is natural. Unfortunately, there is no direct interpretation of these requirements as generalizations of the existence of $\rho$, as was the case for the \acrshort{cem}. 
+Regarding the central limit theorem, \Cref{thm:eis-clt}, requiring the existence of higher order moments is natural. Unfortunately, there is no direct interpretation of these requirements as generalizations of the existence of $\rho$, as was the case for the \acrshort{cem}. 
 
 The only integrability conditions related to the proposal $\G$ are those for $w(T_{i} - \P [T_{i}]) (T_{j} - \P[T_{j}])$ and $w \log(p)^{2}$. 
-Choosing $\left(\G_{\psi}\right)_{\psi \in \Psi}$ to consist of Gaussian distributions, the conditions on $T$ translate to the existence of certain polynomial moments of $w^{2}$ w.r.t. the proposal $\G$ (or $w$ w.r.t. $\P$). This technical condition is not easily interpreted, as assuming existence of moments of the target distribution seem more natural than those involving the extra weighting term $w = \frac{p}{g}$, which depends on the proposal $\G$ as well. 
+These technical conditions are not easily interpreted, as assuming existence of moments of the target distribution seem more natural than those involving the extra weighting term $w = \frac{p}{g}$, which depends on the proposal $\G$ as well. 

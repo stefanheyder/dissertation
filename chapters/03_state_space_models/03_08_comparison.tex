@@ -17,7 +17,7 @@ We now have three tools to produce Gaussian importance sampling proposals: the \
 Let us elaborate on these criteria. With a breakdown of the methods, we mean settings in which either the numerical scheme diverges, produces parameters that lead to invalid proposals, i.e. negative variances, or where the proposals fail to produce consistent importance sampling estimates. 
 
 Time and space complexity of a single iteration of each method allow us to compare the theoretical computational resources required to apply the method in practice and can be used to inform our choice, provided there is no relevant difference in performance of the achieved importance sampling proposals.
-The speed of stochastic convergence is relevant for the \acrshort{cem} and \acrshort{eis} as well: The smaller the asymptotic variance, the smaller we can choose the sample size $N$ and thus decrease computation time. 
+The speed of stochastic convergence is relevant for the \acrshort{cem} and \acrshort{eis} as well: the smaller the asymptotic variance, the smaller we can choose the sample size $N$ and thus decrease computation time. 
 Similarly, numerical convergence directly affects computation time. 
 
 Finally, if one method has vastly better performance at the optimum, we might be willing to spend more time initially to save time later when we use the proposal to perform inference. Of special interest is the performance for long (large $n$) or fat (large $m$) time series, as the models we fit in \Cref{cha:analysis_of_selected_models} usually fall into one of these categories.
@@ -285,7 +285,7 @@ In \Cref{fig:cem_eis_sigma2} we see that, except for the extreme scale mixtures,
 Finally, we compare the \acrshort{cem} and \acrshort{eis} in a situation closer to the applications in \Cref{cha:analysis_of_selected_models}. 
 \begin{example}[Growth factor \acrshort{ssm}]
     \label{ex:growth_factor_ssm_are}
-    Consider the following \acrshort{egssm}: The states are given by 
+    Consider the following \acrshort{egssm}: the states are given by 
     $$
         X_{t} = \begin{pmatrix}
             \log I_{t}\\
@@ -303,7 +303,7 @@ Finally, we compare the \acrshort{cem} and \acrshort{eis} in a situation closer 
         \end{pmatrix}, t = 0, \dots, n - 1
     $$
     where $\varepsilon_{t + 1} \sim \mathcal N (0, \sigma^{2})$ and $X_{0} \sim \mathcal N( x_{0}, \Sigma_{0})$. 
-    The observations $Y_{t}$ follow a conditional Poisson distribution $Y_{t} \sim \operatorname{Pois} \left( I_{t} \right)$. It is easy to see that this forms an \acrshort{egssm} with linear signal $\log I_{t}$.
+    The observations $Y_{t}$ follow a conditional Poisson distribution $Y_{t} \sim \operatorname{Pois} \left( I_{t} \right)$. It is easy to see that this forms  an \acrshort{egssm} with linear signal $\log I_{t}$.
     This model is a simplified version of the exponential growth factor model presented in \Cref{sec:model_reporting_delay}, and we defer the reader to this section for a detailed motivation of the model.
 
     For the initial states we set $I_{0} = 1\,000$ and $\rho_{1} = 1$, and let $\Sigma_{0} = \begin{pmatrix}

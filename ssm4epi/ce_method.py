@@ -7,7 +7,7 @@ __all__ = ['vsolve_t', 'vmm', 'transition_precision_root', 'final_precision_root
            'cholesky_components', 'simulate_backwards', 'simulate', 'marginals', 'log_prob', 'ce_log_weights',
            'joint_cov', 'forward_model_markov_process', 'ce_cholesky_precision']
 
-# %% ../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 1
+# %% ../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 2
 import jax.numpy as jnp
 import jax.scipy as jsp
 import jax.random as jrn
@@ -22,7 +22,7 @@ from isssm.importance_sampling import normalize_weights
 from isssm.util import converged
 from jax.lax import while_loop, fori_loop, scan
 
-# %% ../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 8
+# %% ../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 9
 def transition_precision_root(cov):
     def _iter(carry, input):
         ei, = input
@@ -121,7 +121,7 @@ def cholesky_components(
 
     return (full_diag, off_diag)
 
-# %% ../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 15
+# %% ../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 16
 vsolve_t = vmap(jsp.linalg.solve_triangular, (None, 0))
 vmm = vmap(jnp.matmul, (None, 0))
 
@@ -165,7 +165,7 @@ def simulate(
     return x
 
 
-# %% ../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 17
+# %% ../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 18
 def marginals(
     mu: Float[Array, "m"],  # mean
     full_diag: Float[Array, "n m m"],  # block diagonals of $L$
@@ -185,7 +185,7 @@ def marginals(
 
     return mu, vmap(jnp.diag)(Sigma)
 
-# %% ../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 20
+# %% ../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 21
 def log_prob(
     x: Float[Array, "n+1 m"], # the location at which to evaluate the likelihood
     full_diag: Float[Array, "n+1 m m"],# block diagonals of $L$
@@ -211,7 +211,7 @@ def log_prob(
 
     return -np1 * m / 2 * jnp.log(2 * jnp.pi) - 1 / 2 * logdet - 1 / 2 * l2_norm
 
-# %% ../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 24
+# %% ../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 25
 from isssm.typing import PGSSM
 def ce_log_weights(
     x: Float[Array, "n+1 m"], # the sample
@@ -226,7 +226,7 @@ def ce_log_weights(
 
     return log_p - log_g
 
-# %% ../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 26
+# %% ../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 27
 from jax.lax import cond
 from isssm.typing import GLSSM
 
@@ -276,7 +276,7 @@ def forward_model_markov_process(y, model: GLSSM, time_reverse=True):
 
     return mu, (full_diag, root_off_diag)
 
-# %% ../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 29
+# %% ../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 30
 def ce_cholesky_precision(
     y: Float[Array, "n+1 p"],  # observations
     model: PGSSM, # the model
