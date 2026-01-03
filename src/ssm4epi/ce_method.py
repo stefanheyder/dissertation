@@ -11,7 +11,8 @@ __all__ = ['vsolve_t', 'vmm', 'transition_precision_root', 'final_precision_root
 import jax.numpy as jnp
 import jax.scipy as jsp
 import jax.random as jrn
-#from isssm.typing import MarkovProcessCholeskyComponents
+
+# from isssm.typing import MarkovProcessCholeskyComponents
 from jax import vmap, jit
 from isssm.importance_sampling import ess_pct
 from isssm.pgssm import log_prob as log_prob_joint
@@ -22,10 +23,10 @@ from isssm.importance_sampling import normalize_weights
 from isssm.util import converged
 from jax.lax import while_loop, fori_loop, scan
 
-# %% ../../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 9
+# %% ../../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 8
 def transition_precision_root(cov):
     def _iter(carry, input):
-        ei, = input
+        (ei,) = input
         i, cov = carry
 
         v = jnp.linalg.solve(cov, ei)
@@ -33,11 +34,11 @@ def transition_precision_root(cov):
         # instead of submatrices with changing shapes, we replace
         # entries of cov succesively with identity matrix,
         # then, solving for ei is equvalent to soliving the i x i submatrix for e1
-        cov = cov.at[:,i].set(ei).at[i,:].set(ei)
+        cov = cov.at[:, i].set(ei).at[i, :].set(ei)
         return (i + 1, cov), v
-    
+
     l, _ = cov.shape
-    m = int(l/2)
+    m = int(l / 2)
     _, LT = scan(_iter, (0, cov), (jnp.eye(2 * m)[:m],))
     L = LT.T
 
@@ -46,16 +47,17 @@ def transition_precision_root(cov):
 
     return L
 
+
 def final_precision_root(cov):
     def _iter(carry, input):
-        ei, = input
+        (ei,) = input
         i, cov = carry
 
         v = jnp.linalg.solve(cov, ei)
         # same trick as for transition_precision_root
-        cov = cov.at[:,i].set(ei).at[i,:].set(ei)
+        cov = cov.at[:, i].set(ei).at[i, :].set(ei)
         return (i + 1, cov), v
-    
+
     m, _ = cov.shape
     _, LT = scan(_iter, (0, cov), (jnp.eye(m),))
 
@@ -74,13 +76,13 @@ def ce_cholesky_block(
     joint_x = jnp.concatenate([x, x_next], axis=1)
     weights = weights / weights.sum()
 
-    #joint_mean = jnp.sum(joint_x * weights[:, None], axis=0)
-    #cov = jnp.atleast_2d(
+    # joint_mean = jnp.sum(joint_x * weights[:, None], axis=0)
+    # cov = jnp.atleast_2d(
     #    jnp.sum(
     #        (joint_x[:, :, None] @ joint_x[:, None, :]) * weights[:, None, None], axis=0
     #    )
     #    - joint_mean[:, None] @ joint_mean[None, :]
-    #)
+    # )
     cov = jnp.atleast_2d(jnp.cov(joint_x, aweights=weights, rowvar=False))
 
     return transition_precision_root(cov)
@@ -94,12 +96,12 @@ def ce_cholesky_last(
     _, m = x.shape
     weights = weights / weights.sum()
 
-    #mean = jnp.sum(x * weights[:, None], axis=0)
+    # mean = jnp.sum(x * weights[:, None], axis=0)
 
-    #cov = jnp.atleast_2d(
+    # cov = jnp.atleast_2d(
     #    jnp.sum((x[:, :, None] @ x[:, None, :]) * weights[:, None, None])
     #    - mean @ mean.T
-    #)
+    # )
     cov = jnp.atleast_2d(jnp.cov(x, aweights=weights, rowvar=False))
 
     return final_precision_root(cov)
@@ -108,7 +110,7 @@ def ce_cholesky_last(
 def cholesky_components(
     samples: Float[Array, "N n m"],  # samples of $X_1, \ldots, X_n$
     weights: Float[Array, "N"],  # $w$, need not be normalized
-) :  # block diagonal and off-diagonal components
+):  # block diagonal and off-diagonal components
     """calculate all components of the Cholesky factor of $P$"""
     current = samples[:, :-1]
     next = samples[:, 1:]
@@ -121,9 +123,10 @@ def cholesky_components(
 
     return (full_diag, off_diag)
 
-# %% ../../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 16
+# %% ../../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 15
 vsolve_t = vmap(jsp.linalg.solve_triangular, (None, 0))
 vmm = vmap(jnp.matmul, (None, 0))
+
 
 def simulate_backwards(z_t, x_next, diag_tt, off_diag_t_tp1):
     return jsp.linalg.solve_triangular(diag_tt.T, z_t - off_diag_t_tp1 @ x_next)
@@ -138,34 +141,30 @@ def simulate(
     """Simulate from Markov process with Cholesky factor $L$."""
     n, m, _ = full_diag.shape
 
-    vsimulate_backwards = vmap(
-        simulate_backwards,
-        (0, 0, None, None)
-    )
+    vsimulate_backwards = vmap(simulate_backwards, (0, 0, None, None))
 
     def _iteration(carry, input):
-        x, = carry
+        (x,) = carry
         z, full_diag, off_diag = input
 
-        #new_x = vsolve_t(full_diag.T, z - vmm(off_diag, x))
+        # new_x = vsolve_t(full_diag.T, z - vmm(off_diag, x))
         new_x = vsimulate_backwards(z, x, full_diag, off_diag)
 
         return (new_x,), new_x
-    
+
     key, subkey = jrn.split(key)
     extended_off_diag = jnp.concatenate([off_diag, jnp.zeros((1, m, m))], axis=0)
     _, x = scan(
-        _iteration, 
-        (jnp.zeros((N,m)),), 
-        (jrn.normal(subkey, shape=(n, N, m)), full_diag[::-1], extended_off_diag[::-1])
+        _iteration,
+        (jnp.zeros((N, m)),),
+        (jrn.normal(subkey, shape=(n, N, m)), full_diag[::-1], extended_off_diag[::-1]),
     )
 
     x = x[::-1].transpose((1, 0, 2))
 
     return x
 
-
-# %% ../../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 18
+# %% ../../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 17
 def marginals(
     mu: Float[Array, "m"],  # mean
     full_diag: Float[Array, "n m m"],  # block diagonals of $L$
@@ -178,20 +177,20 @@ def marginals(
     Sigma = Sigma.at[-1].set(jnp.linalg.inv(P_n))
 
     for i in reversed(range(n - 1)):
-        A_i = - jsp.linalg.solve_triangular(full_diag[i].T, off_diag[i].T)
+        A_i = -jsp.linalg.solve_triangular(full_diag[i].T, off_diag[i].T)
         Omega_i = jnp.linalg.inv(full_diag[i].T @ full_diag[i])
 
         Sigma = Sigma.at[i].set(A_i.T @ Sigma[i + 1] @ A_i + Omega_i)
 
     return mu, vmap(jnp.diag)(Sigma)
 
-# %% ../../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 21
+# %% ../../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 20
 def log_prob(
-    x: Float[Array, "n+1 m"], # the location at which to evaluate the likelihood
-    full_diag: Float[Array, "n+1 m m"],# block diagonals of $L$
-    off_diag: Float[Array, "n m m"], # off-diagonals of $L$
-    mean: Float[Array, "n+1 m"], # mean of the process
-) -> Float: # log-likelihood
+    x: Float[Array, "n+1 m"],  # the location at which to evaluate the likelihood
+    full_diag: Float[Array, "n+1 m m"],  # block diagonals of $L$
+    off_diag: Float[Array, "n m m"],  # off-diagonals of $L$
+    mean: Float[Array, "n+1 m"],  # mean of the process
+) -> Float:  # log-likelihood
     np1, m = x.shape
 
     # append zeros to have the same shape as full_diag
@@ -204,29 +203,31 @@ def log_prob(
     # exploit sparsity of L
     extended_centered = jnp.concatenate([centered, jnp.zeros((1, m))], axis=0)
     Lt_x = (
-        full_diag.transpose((0, 2, 1)) @ extended_centered[:-1,:,None]
-        + extended_off_diag.transpose((0, 2, 1)) @ extended_centered[1:,:,None]
-    )[:,:,0]
-    l2_norm = jnp.sum(Lt_x ** 2)
+        full_diag.transpose((0, 2, 1)) @ extended_centered[:-1, :, None]
+        + extended_off_diag.transpose((0, 2, 1)) @ extended_centered[1:, :, None]
+    )[:, :, 0]
+    l2_norm = jnp.sum(Lt_x**2)
 
     return -np1 * m / 2 * jnp.log(2 * jnp.pi) - 1 / 2 * logdet - 1 / 2 * l2_norm
 
-# %% ../../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 25
+# %% ../../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 24
 from isssm.typing import PGSSM
+
+
 def ce_log_weights(
-    x: Float[Array, "n+1 m"], # the sample
-    y: Float[Array, "n+1 p"], # the observations
-    full_diag: Float[Array, "n+1 m m"],# block diagonals of $L$
-    off_diag: Float[Array, "n m m"], # off-diagonals of $L$
-    mean: Float[Array, "n+1 m"], # mean of the process
-    model: PGSSM
-) -> Float: # log-weights
+    x: Float[Array, "n+1 m"],  # the sample
+    y: Float[Array, "n+1 p"],  # the observations
+    full_diag: Float[Array, "n+1 m m"],  # block diagonals of $L$
+    off_diag: Float[Array, "n m m"],  # off-diagonals of $L$
+    mean: Float[Array, "n+1 m"],  # mean of the process
+    model: PGSSM,
+) -> Float:  # log-weights
     log_p = log_prob_joint(x, y, model)
     log_g = log_prob(x, full_diag, off_diag, mean)
 
     return log_p - log_g
 
-# %% ../../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 27
+# %% ../../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 26
 from jax.lax import cond
 from isssm.typing import GLSSM
 
@@ -242,7 +243,8 @@ def joint_cov(Xi_smooth_t, Xi_smooth_tp1, Xi_filt_t, Xi_pred_tp1, A_t):
 def forward_model_markov_process(y, model: GLSSM, time_reverse=True):
     """mean + Cholesky root components of precision matrix of smoothing distribution"""
 
-    x0, A, *_ = model
+    x0 = model.u[0]
+    A = model.A
 
     filtered = kalman(y, model)
     x_filter, Xi_filter, x_pred, Xi_pred = filtered
@@ -279,7 +281,7 @@ def forward_model_markov_process(y, model: GLSSM, time_reverse=True):
 # %% ../../nbs/3 SSMs/03_07_cross_entropy_method_utils.ipynb 30
 def ce_cholesky_precision(
     y: Float[Array, "n+1 p"],  # observations
-    model: PGSSM, # the model
+    model: PGSSM,  # the model
     initial_mean: Float[Array, "n+1 m"],  # initial mean
     initial_diag: Float[Array, "n+1 m m"],  # initial off_diag
     initial_off_diag: Float[Array, "n m m"],  # initial off_diag
@@ -299,7 +301,7 @@ def ce_cholesky_precision(
         mean_converged = converged(mean, old_mean, eps)
 
         all_converged = jnp.logical_and(
-                diag_converged, jnp.logical_and(off_diag_converged, mean_converged)
+            diag_converged, jnp.logical_and(off_diag_converged, mean_converged)
         )
 
         is_first_iteration = i == 0
@@ -310,9 +312,8 @@ def ce_cholesky_precision(
             jnp.logical_or(
                 all_converged,
                 iteration_limit_reached,
-            )
+            ),
         )
-    
 
     def _iteration(val):
         i, diag, off_diag, mean, _, _, _ = val
@@ -330,7 +331,15 @@ def ce_cholesky_precision(
         return i + 1, new_diag, new_off_diag, new_mean, diag, off_diag, mean
 
     init = _iteration(
-        (0, initial_diag, initial_off_diag, initial_mean, initial_diag, initial_off_diag, initial_mean)
+        (
+            0,
+            initial_diag,
+            initial_off_diag,
+            initial_mean,
+            initial_diag,
+            initial_off_diag,
+            initial_mean,
+        )
     )
 
     _keep_going = lambda x: jnp.logical_not(_break(x))
