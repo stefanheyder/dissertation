@@ -1,14 +1,17 @@
+[build-system]
+requires = ["uv_build>=0.9.18,<0.10.0"]
+build-backend = "uv_build"
+
 [project]
 name="ssm4epi"
 version = "0.1.0"
 description = "Code for the ssm4epi thesis"
 readme = "README.md"
-requires-python=">=3.7"
+requires-python=">=3.10"
 dependencies = [
     "fastcore>=1.8.2",
     "ipykernel>=6.29.5",
     "ipympl>=0.9.7",
-    "isssm",
     "jax>=0.6.1",
     "jaxtyping>=0.3.2",
     "jinja2>=3.1.6",
@@ -20,6 +23,8 @@ dependencies = [
     "tensorflow-probability>=0.25.0",
     "tqdm>=4.67.1",
     "ward>=0.68.0b0",
+    "isssm==0.1.0",
+    "sympy>=1.14.0",
 ]
 
 [dependency-groups]
@@ -28,5 +33,6 @@ dev = [
     "nbdev>=2.4.2",
 ]
 
-[tool.uv.sources]
-isssm = { path = "../../packages/isssm", editable = true }
+[tool.uv.build-backend]
+module-name = "ssm4epi"  
+module-root = "src"    
