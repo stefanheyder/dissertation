@@ -11,7 +11,7 @@ thesis. The code heavily relies on my package
 non-standard use-cases.
 
 You can find the most recent version of my thesis
-[here](https://stefanheyder.github.io/dissertation/thesis.pdf).
+[here](https://github.com/stefanheyder/dissertation/blob/main/thesis.pdf).
 
 The code is developed in Jupyter notebooks and organized by the chapters
 and sections of the thesis. Simulations and analyses are run with
