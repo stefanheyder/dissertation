@@ -1,13 +1,13 @@
 \section{Partially Gaussian state space models}
 \label{sec:logconcave_gaussian_state_space_models}
 
-For the applications considered in this thesis the distribution of observations is never Gaussian --- see \Cref{sec:dessiderata} --- and  all we can hope for is that the data-generating mechanism is close enough to a Gaussian distribution that inferences made in an \acrshort{glssm} may carry over.
+For the applications considered in this thesis the distribution of observations is never Gaussian --- see \Cref{sec:dessiderata} --- and  all we can hope for is that the data-generating mechanism is close enough to a Gaussian distribution that inferences made in an \gls{glssm} may carry over.
 For epidemiological models, Gaussian distributions may be appropriate if incidences are high, e.g. during large outbreaks in a whole country. 
 When case numbers are small, the discrete nature of incidences is better captured by a distribution on $\mathbf N_{0}$, and standard distributions used are the Poisson and negative binomial distributions, see e.g. \citep{Lloyd-Smith2005Superspreadinga}.
-We thus want \acrshortpl{ssm} where observations are allowed to follow these non-Gaussian distributions. 
+We thus want \glspl{ssm} where observations are allowed to follow these non-Gaussian distributions. 
 
 % argue for keeping states linear and Gaussian
-Concerning the distribution of states, we keep the linear Gaussian assumption, i.e. \eqref{eq:glssm_states}. As demonstrated in \Cref{cha:analysis_of_selected_models}, using Gaussian states and transitions allows for flexible modeling of many epidemiological desiderata. Furthermore, keeping the states Gaussian will enable us to use \acrfull{eis} effectively, by constructing approximations via \acrshort{glssm} which possess the same state dynamics. Alternatively, t-distributed innovations or more general transition kernels could be employed and we refer the interested reader to \citep[Part II]{Durbin2012Time} for a selection of these models. The following definition is that of \citep{Koopman2019Modified}, which itself is an extension of earlier work of \citep{Shephard1994Partial}. \citet{Shephard1994Partial} considered only \acrshortpl{ssm} where, conditional on another Markov process $Z = (Z_{t})_{t = 0, \dots, n}$, the model is a full \acrshort{glssm}, which allows for efficient inference if the conditional distribution $Z| (X, Y)$ is tractable. As their definition involves a conditional \acrshort{glssm}, the observations still take values in $\R^{p}$, not $\N^{p}$ as is necessary for our endeavors. Thus we opt for the definition presented in \citep{Koopman2019Modified}, where we replace the Gaussian observations (\eqref{eq:glssm_observations}) with arbitrary distributions.
+Concerning the distribution of states, we keep the linear Gaussian assumption, i.e. \eqref{eq:glssm_states}. As demonstrated in \Cref{cha:analysis_of_selected_models}, using Gaussian states and transitions allows for flexible modeling of many epidemiological desiderata. Furthermore, keeping the states Gaussian will enable us to use \acrfull{eis} effectively, by constructing approximations via \gls{glssm} which possess the same state dynamics. Alternatively, t-distributed innovations or more general transition kernels could be employed and we refer the interested reader to \citep[Part II]{Durbin2012Time} for a selection of these models. The following definition is that of \citep{Koopman2019Modified}, which itself is an extension of earlier work of \citep{Shephard1994Partial}. \citet{Shephard1994Partial} considered only \glspl{ssm} where, conditional on another Markov process $Z = (Z_{t})_{t = 0, \dots, n}$, the model is a full \gls{glssm}, which allows for efficient inference if the conditional distribution $Z| (X, Y)$ is tractable. As their definition involves a conditional \gls{glssm}, the observations still take values in $\R^{p}$, not $\N^{p}$ as is necessary for our endeavors. Thus we opt for the definition presented in \citep{Koopman2019Modified}, where we replace the Gaussian observations (\eqref{eq:glssm_observations}) with arbitrary distributions.
 
 \glsreset{pgssm}
 \begin{definition}[\gls{pgssm}]
@@ -28,10 +28,10 @@ Concerning the distribution of states, we keep the linear Gaussian assumption, i
     $$
         p(y_{t}|x_{t}) = p(y_{t}|s_{t}) = \prod_{i = 1}^p p(y_{t}^i|s_{t}^i),
     $$
-    we say the \acrshort{pgssm} has a \textbf{linear signal}, similar to the treatment in \citep[Part II]{Durbin2012Time}.
+    we say the \gls{pgssm} has a \textbf{linear signal}, similar to the treatment in \citep[Part II]{Durbin2012Time}.
 \end{definition}
 
-It is straightforward to check that an \acrshort{pgssm} is indeed an \acrshort{ssm}. 
+It is straightforward to check that an \gls{pgssm} is indeed an \gls{ssm}. 
 
 \begin{remark}
     Recalling \Cref{rem:dependence_Yt-1}, if our main interest lies in the conditional distribution $X|Y = y$ for a fixed set of observations $y$, it will suffice to consider models where 
@@ -122,21 +122,21 @@ Additionally, the moment generating function $\psi \mapsto Z(\psi)$ is smooth on
 \end{example}
 
 
-The models we study in \Cref{cha:analysis_of_selected_models} belong, for the most part, to the following subclass of \acrshort{pgssm} models.
+The models we study in \Cref{cha:analysis_of_selected_models} belong, for the most part, to the following subclass of \gls{pgssm} models.
 \glsreset{egssm}
 \begin{definition}[\gls{egssm}]
     \label{def:egssm}
-    A \acrfull{egssm} is a \acrshort{pgssm} where the conditional distribution of $Y_{t}$ given $X_{t}$ forms an exponential family with respect to a base measure $\mu_{t}$, i.e.
+    A \acrfull{egssm} is a \gls{pgssm} where the conditional distribution of $Y_{t}$ given $X_{t}$ forms an exponential family with respect to a base measure $\mu_{t}$, i.e.
     $$
     p (y_{t}|x_{t}) = h_{t}(y_{t}) Z_{t}(x_{t}) \exp \left( \eta_{t}(x_{t})^{T} T_{t}(y_{t}) \right)
     $$
-    for suitable functions $h_{t}, Z_{t}, \eta_{t}, T_{t}$. If $Y_{t}$ in the \acrshort{pgssm} is allowed to depend on the previous $Y_{t - 1}$, the functions $h_{t}, Z_{t}, \eta_{t}$ and $T_{t}$ may depend on $y_{t - 1}$. 
+    for suitable functions $h_{t}, Z_{t}, \eta_{t}, T_{t}$. If $Y_{t}$ in the \gls{pgssm} is allowed to depend on the previous $Y_{t - 1}$, the functions $h_{t}, Z_{t}, \eta_{t}$ and $T_{t}$ may depend on $y_{t - 1}$. 
 
     If, additionally, matrices $B_{t} \in \R^{p \times m}$ exist, such that for the signal $S_{t} = B_{t}X_{t} \in \R^{p}$, $Y_{t}$ only depends on $X_{t}$ through $S_{t}$, i.e. 
     $$
     p(y_{t}|x_{t}) = \prod_{i = 1}^p h^{i}_{t}(y^{i}_{t})\, Z^{i}_{t} (s^{i}_{t})\, \exp \left( \eta^{i}_{t} (s^{i}_{t})\,T(y^{i}_{t}) \right),
     $$
-    for functions $h_{t}^{i}: \R \to \R, Z^{i}_{t}: \R \to \R, \eta^{i}_{t}: \R\to\R, T: \R\to\R$, $i = 1, \dots p$, we say the \gls{egssm} has a \textbf{linear signal}, similar to the treatment in \citep[Part II]{Durbin2012Time}. Notice that for \acrshortpl{egssm} with linear signal, we also require that the conditional marginals stem from the same exponential family.
+    for functions $h_{t}^{i}: \R \to \R, Z^{i}_{t}: \R \to \R, \eta^{i}_{t}: \R\to\R, T: \R\to\R$, $i = 1, \dots p$, we say the \gls{egssm} has a \textbf{linear signal}, similar to the treatment in \citep[Part II]{Durbin2012Time}. Notice that for \glspl{egssm} with linear signal, we also require that the conditional marginals stem from the same exponential family.
 \end{definition}
 
 \begin{remark}
@@ -145,7 +145,7 @@ The models we study in \Cref{cha:analysis_of_selected_models} belong, for the mo
 
 From \Cref{lem:log-concavity}, we immediately obtain the following results \citep[Section 10.6.4]{Durbin2012Time}
 \begin{lemma}[log-concavity of the smoothing distribution]
-    Consider  an \acrshort{egssm}, where $\eta_{t} = \id$ for all $t$.  Then $x \mapsto \log p(x|y)$ is concave for $\mu_{\mathcal Y}$-a.e. $y$. 
+    Consider  an \gls{egssm}, where $\eta_{t} = \id$ for all $t$.  Then $x \mapsto \log p(x|y)$ is concave for $\mu_{\mathcal Y}$-a.e. $y$. 
 \end{lemma}
 \begin{proof}
     We may write

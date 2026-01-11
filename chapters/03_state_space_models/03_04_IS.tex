@@ -8,13 +8,13 @@ Recall from the introduction to this chapter that this inference concerns three 
 % MCMC intro
 \gls{mcmc} \citep{Brooks2011Handbook} is a simulation technique that allows simulation of samples from a target distribution by constructing an ergodic Markov chain that has as its invariant distribution the desired distribution. 
 If one is able to simulate from such a Markov chain, one can generate samples whose marginal distributions are close to the target distribution.
-Thus, these samples can be used in \acrshort{mcint} to estimate expectations of interest, though one has to be mindful of autocorrelation of these samples.
-For standard variants of \acrshort{mcmc}, such as Metropolis-Hastings \gls{mcmc} or Hamiltonian Monte Carlo, one needs access to the density of the sought after distribution up to a constant to simulate a step in the Markov chain. While these methods are very general, in high dimensions, these are affected by the curse of dimensionality. 
+Thus, these samples can be used in \gls{mcint} to estimate expectations of interest, though one has to be mindful of autocorrelation of these samples.
+For standard variants of \gls{mcmc}, such as Metropolis-Hastings \gls{mcmc} or Hamiltonian Monte Carlo, one needs access to the density of the sought after distribution up to a constant to simulate a step in the Markov chain. While these methods are very general, in high dimensions, these are affected by the curse of dimensionality. 
 
 % MCMC vs IS
-Let us argue for our choice of using \acrshort{is} over \acrshort{mcmc} for estimating conditional expectations of the form $\E \left( f(X)|Y \right)$ for \acrshortpl{pgssm}. For the models we consider in this thesis, the dimension of $X$ ($(n+1)m$) can become quite large, so \acrshort{mcmc} suffers from the aforementioned curse of dimensionality. \acrshort{is} can also suffer from this curse, especially if the proposal is far from the target. If, however, the proposal is close to the target, \acrshort{is} can perform surprisingly well, see e.g. \citep{Chopin2017Leave} where it is used as the gold standard method against which other methods are benchmarked. 
+Let us argue for our choice of using \gls{is} over \gls{mcmc} for estimating conditional expectations of the form $\E \left( f(X)|Y \right)$ for \glspl{pgssm}. For the models we consider in this thesis, the dimension of $X$ ($(n+1)m$) can become quite large, so \gls{mcmc} suffers from the aforementioned curse of dimensionality. \gls{is} can also suffer from this curse, especially if the proposal is far from the target. If, however, the proposal is close to the target, \gls{is} can perform surprisingly well, see e.g. \citep{Chopin2017Leave} where it is used as the gold standard method against which other methods are benchmarked. 
 
-As \acrshort{is} is based on independent samples, it can be parallelized easily, whereas parallelizing \acrshort{mcmc} is more involved, using e.g. \citep{Neiswanger2014Asymptotically}. Additionally, analysis of convergence is much simpler than that of \acrshort{mcmc}, which requires consideration of burn-in samples, autocorrelation of samples and investigating trace plots for the chain getting stuck. 
+As \gls{is} is based on independent samples, it can be parallelized easily, whereas parallelizing \gls{mcmc} is more involved, using e.g. \citep{Neiswanger2014Asymptotically}. Additionally, analysis of convergence is much simpler than that of \gls{mcmc}, which requires consideration of burn-in samples, autocorrelation of samples and investigating trace plots for the chain getting stuck. 
 
 % SMC intro
 \gls{smc} \citep{Chopin2020Introduction} or particle filters, use sequential importance sampling to provide a particle approximation to the filtering distributions $X_{t} | Y_{:t}$, essentially decomposing the problem into a $n$ importance sampling steps. 
@@ -68,7 +68,7 @@ as a particle approximation of $\P$, in the sense that for sufficiently well beh
 $$
 We will return to the question of which functions $f$ to consider further below and assume in the following discussion $fw \in L^{2}(\G)$.
 
-To perform importance sampling one must be able to evaluate $w$. In the context of \acrshortpl{pgssm} this is usually not possible: if $\P$ is the intractable conditional distribution of $X|Y$, then the integration constant of its density $p(y)$ is not analytically available.
+To perform importance sampling one must be able to evaluate $w$. In the context of \glspl{pgssm} this is usually not possible: if $\P$ is the intractable conditional distribution of $X|Y$, then the integration constant of its density $p(y)$ is not analytically available.
 Still, we can usually evaluate the weights up to a constant, i.e. $$\tilde w(x) \propto \frac{\d \P}{\d \G}(x)$$ is available. The missing constant is then $\G [\tilde w]$, which is itself amenable to importance sampling: we may estimate it by $\frac{1}{N}\sum_{i = 1}^N \tilde w(X^{i})$.
 This leads to the so-called self-normalized importance sampling weights 
 $$W_i = \frac{w(X^i)}{\sum_{i = 1}^N w(X^i)},$$
@@ -96,19 +96,19 @@ and \acrfull{mse}
     \label{eq:agapiou_mse}
 \mathbb E \left( (\hat \P_{N} - \P) [f] \right)^{2}
 \end{align}
-of importance sampling are both, for bounded $f$, of order $\mathcal O \left(\frac{\rho}{N}\right)$. Here the expectation $\mathbb E$ is with respect to the random particles $X^{1}, \dots, X^{N}$. Consequently, for bounded functions, keeping $ \frac{\rho}{N}$ small produces importance sampling estimates with small bias and \acrshort{mse}. This can be achieved in two ways: either we choose $\G$ \glqq{}close enough\grqq{} to $\P$ to ensure small $\rho$, or we choose $N$ large enough to compensate for a large $\rho$.
+of importance sampling are both, for bounded $f$, of order $\mathcal O \left(\frac{\rho}{N}\right)$. Here the expectation $\mathbb E$ is with respect to the random particles $X^{1}, \dots, X^{N}$. Consequently, for bounded functions, keeping $ \frac{\rho}{N}$ small produces importance sampling estimates with small bias and \gls{mse}. This can be achieved in two ways: either we choose $\G$ \glqq{}close enough\grqq{} to $\P$ to ensure small $\rho$, or we choose $N$ large enough to compensate for a large $\rho$.
 
 Applying Jensen's inequality, we see that
 $$
 \Dkl{\P}{\G} = \P [\log w] \leq \log \P[w] = \log\rho,
 $$
-so small $\rho$ implies a small \acrshort{kld} between $\P$ and $\G$ as well. Conversely, the following theorem of \citeauthor{Chatterjee2018Sample} implies that a small \acrshort{kld} is both sufficient and necessary for importance sampling to perform well.
+so small $\rho$ implies a small \gls{kld} between $\P$ and $\G$ as well. Conversely, the following theorem of \citeauthor{Chatterjee2018Sample} implies that a small \gls{kld} is both sufficient and necessary for importance sampling to perform well.
 \begin{theorem}[{\cite[Theorem 1.1]{Chatterjee2018Sample}}]
     \label{thm:chatterje2018Thm1}
      Let $\P$ and $\G$ be probability measures on a measurable space $(\mathcal X, \mathcal B)$ such that $\P \ll \G$ and let $f \in \mathbf L^2(\P)$ be a function and denote by $\lVert f \rVert_{L^{2}(\P)} = \left( \P [f^{2}] \right)^{1 / 2} < 
      \infty$ its $L^{2}(\P)$-norm. Let $Z$ be an $\mathcal X$ valued random variable with law $\P$. 
      
-     Let $L = \Dkl{\P}{\G} = \mathbb E \log w(Z)$ be the \acrshort{kld} between $\P$ and $\G$, and let $$\hat \P_N = \sum_{i = 1}^N w(X^i) \delta_{X^i}$$ be the particle approximation of $\P$  based on samples $X^1, \dots, X^N\iid \G$, $N \in \N$. 
+     Let $L = \Dkl{\P}{\G} = \mathbb E \log w(Z)$ be the \gls{kld} between $\P$ and $\G$, and let $$\hat \P_N = \sum_{i = 1}^N w(X^i) \delta_{X^i}$$ be the particle approximation of $\P$  based on samples $X^1, \dots, X^N\iid \G$, $N \in \N$. 
      
      If the sample size $N$ is given by $N = \exp\left( L + t \right)$ where $t \geq 0$,
      \begin{align} 
@@ -175,7 +175,7 @@ $$
 \mathbb P \left( \log w (Z) > L + \frac{t}{2} \right) \leq \frac{4\operatorname{Var} (\log w(Z))}{t^{2}} = \frac{4\operatorname{Var} (\log w(Z))}{\left( \log N - L \right)^2}.
 $$
 
-In both upper bounds provided by the concentration inequalities, all else being equal, a smaller \acrshort{kld} will yield a tighter bound. However, in Chebyshev's inequality, the variance of log weights also plays a role, and will surely be different for different proposals.
+In both upper bounds provided by the concentration inequalities, all else being equal, a smaller \gls{kld} will yield a tighter bound. However, in Chebyshev's inequality, the variance of log weights also plays a role, and will surely be different for different proposals.
 Assuming $\G \ll \P$, we have $ \frac{\d \G}{\d\P} = \frac{1}{w}$ and so 
 $$\mathbb E \exp (- \log w(Z) ) = \mathbb E \frac{1}{w(Z)} = \P \left[\frac{\d \G}{\d\P}\right] = 1,$$
 If the log-weights are bounded from above and below, the following lemma shows that as the variance of $U = -\log w(Z)$ goes to $0$, their mean,
@@ -216,14 +216,14 @@ goes to $0$ as well.
 
 \begin{corollary}
     \label{cor:dkl_bounded}
-    Let $\P$ and $\G$ be equivalent probability measures with bounded Radon-Nikodym derivative $w = \frac{\d\P}{\d\G} \in [a,b]$, $a, b \in \R$ and \acrshort{kld} $\Dkl{\P}{\G} =\P [\log w]$.
+    Let $\P$ and $\G$ be equivalent probability measures with bounded Radon-Nikodym derivative $w = \frac{\d\P}{\d\G} \in [a,b]$, $a, b \in \R$ and \gls{kld} $\Dkl{\P}{\G} =\P [\log w]$.
     
     If $\log w \in L^{2}(\P)$ with variance $\sigma^{2} = \P [(\log w - L)^2]$, and $\sigma^{2} < \frac{2}{\exp(b)}$, then 
     $$
     \Dkl{\P}{\G} \leq - \log \left(1 - \exp(b) \frac{\sigma^{2}}{2} \right).
     $$
 \end{corollary}
-Under the assumptions of this corollary, we see that a small variance of the log-weights implies a small \acrshort{kld}, which in turn implies good importance sampling performance.
+Under the assumptions of this corollary, we see that a small variance of the log-weights implies a small \gls{kld}, which in turn implies good importance sampling performance.
 
 Let us now discuss the implications of \eqref{eq:chatterje-lower-bound}. We see that for large $s$, i.e. $N \ll \exp(L)$, the right-hand side is small, and so the probability that importance sampling fails for the constant function is practically relevant. Observe that here 
 $$
@@ -232,7 +232,7 @@ $$
 is the mean of weights, which does not have to sum to $1$. 
 As a result, \citeauthor{Chatterjee2018Sample} recommend to choose $N = \mathcal O( \exp \left( \Dkl{\P}{\G} \right))$. 
 
-Based on this discussion, we see that choosing $\G$ such that either the \acrshort{kld} or the variance of the log-weights is small is sensible. Making the variance small has the additional advantage that it, at least for bounded log-weights, also implies an upper bound for the \acrshort{kld}. We will return to this train of thought when we discuss optimal ways of performing importance sampling, such as the \acem (minimizing the \acrshort{kld}) and \aeis (minimizing the variance of log-weights) in the following sub-chapters.
+Based on this discussion, we see that choosing $\G$ such that either the \gls{kld} or the variance of the log-weights is small is sensible. Making the variance small has the additional advantage that it, at least for bounded log-weights, also implies an upper bound for the \gls{kld}. We will return to this train of thought when we discuss optimal ways of performing importance sampling, such as the \acem (minimizing the \gls{kld}) and \aeis (minimizing the variance of log-weights) in the following sub-chapters.
 
 In practice, we will want to judge whether for an actual sample $X^{1}, \dots, X^{N} \iid \G$ importance sampling has converged, and there are several criteria available in the literature. The classic \gls{ess}\citep{Kong1994Sequential} 
 $$
@@ -258,22 +258,22 @@ as an effective sample size, in the sense that $N$ times the relative efficiency
 $$
 \text{ESS} = \frac{N}{1 + N^{2}\left(\frac{1}{N} \sum_{i = 1}^N W_{i}^2 - \frac{1}{N^{2}}\right)} = \frac{1}{\sum_{i = 1}^{N} W_{i}^{2}}.
 $$
-Notice that as the self-normalized weights sum to $1$, the \acrshort{ess} is at least $1$, as $0 \leq W_{i} \leq 1$ and at most $N$ by the Cauchy-Schwarz inequality. 
+Notice that as the self-normalized weights sum to $1$, the \gls{ess} is at least $1$, as $0 \leq W_{i} \leq 1$ and at most $N$ by the Cauchy-Schwarz inequality. 
 
-If we write the \acrshort{ess} in terms of the unnormalized weights $\tilde w$ we see that the \gls{ef} $\text{EF} = \frac{\text{ESS}}{N}$ fulfills, as $N\to\infty$,
+If we write the \gls{ess} in terms of the unnormalized weights $\tilde w$ we see that the \gls{ef} $\text{EF} = \frac{\text{ESS}}{N}$ fulfills, as $N\to\infty$,
 \begin{align}
 \label{eq:efficency_factor}
 \text{EF} = \frac{\text{ESS}}{N} = \frac{\left(\frac{1}{N}\sum_{i = 1}^{N} \tilde w_{i}\right)^{2}}{\frac{1}{N}\sum_{i = 1} \tilde w_{i}^2} \stackrel{a.s}{\to} \frac{(\G [\tilde w])^{2}}{\G [\tilde w^{2}]} = \rho^{-1},
 \end{align}
-if $\tilde w \in L^{2}(\G)$ \citep[Section 2.3.2]{Agapiou2017Importance}. Thus, asymptotically, a large \acrshort{ess} leads to small bias and \acrshort{mse} for bounded functions $f$. Additionally, the above derivations allow us to interpret the second moment
+if $\tilde w \in L^{2}(\G)$ \citep[Section 2.3.2]{Agapiou2017Importance}. Thus, asymptotically, a large \gls{ess} leads to small bias and \gls{mse} for bounded functions $f$. Additionally, the above derivations allow us to interpret the second moment
 $$
 \rho = \G [(NW_1)^2] = \left(\G [NW_1]\right)^{2} + \var \left( NW_1 \right) = 1 + \var \left(NW_1\right) \approx \frac{\var \left(\hat\zeta_{\text{IS}}\right)}{\var \left(\hat\zeta_{\text{MC}}\right)}
 $$
-as the asymptotic relative efficiency of the two estimators, as long as this approximation is valid. In practice, a small \acrshort{ess} can be an indicator that importance sampling with $\G$ may be inadequate. Note that relying solely on the empirical \acrshort{ess} may lead to problems, see the following example. To prepare, we prove a lemma regarding $\rho$ for Gaussian targets and proposals.
+as the asymptotic relative efficiency of the two estimators, as long as this approximation is valid. In practice, a small \gls{ess} can be an indicator that importance sampling with $\G$ may be inadequate. Note that relying solely on the empirical \gls{ess} may lead to problems, see the following example. To prepare, we prove a lemma regarding $\rho$ for Gaussian targets and proposals.
 
 \begin{lemma}
     \label{lem:gaussian_proposal_factor_2}
-    Let $\P = \mathcal N(\mu, \Sigma)$ and $\G = \mathcal N(\nu, \Omega)$ be two $p$-dimensional Gaussian distributions with means $\mu,\nu \in \R^{p}$ and \acrshort{spd} covariance matrices $\Sigma,\Omega \in \R^{p\times p}$. 
+    Let $\P = \mathcal N(\mu, \Sigma)$ and $\G = \mathcal N(\nu, \Omega)$ be two $p$-dimensional Gaussian distributions with means $\mu,\nu \in \R^{p}$ and \gls{spd} covariance matrices $\Sigma,\Omega \in \R^{p\times p}$. 
     Then $\rho$ is finite if, and only if, $\Omega \succ \frac{1}{2} \Sigma$. 
 \end{lemma}
 
@@ -286,7 +286,7 @@ as the asymptotic relative efficiency of the two estimators, as long as this app
     The exponent is a quadratic form in $x$, and so the integral is finite if, and only if, the matrix of coefficients, $-\Sigma^{-1} + \frac{1}{2}\Omega^{-1}$ is negative definite. Rearranging terms, we see that this is equivalent to $\Omega \succ \frac{1}{2}\Sigma$.
 \end{proof}
 
-\begin{example}[failure of the \acrshort{ess}]
+\begin{example}[failure of the \gls{ess}]
     \label{ex:ess_failure}
     Consider the Gaussian scale mixture
     $$
@@ -299,11 +299,11 @@ as the asymptotic relative efficiency of the two estimators, as long as this app
     $$
     \rho = \int w^{2}(x) \frac{1}{\sqrt{2\pi}} \exp \left( -\frac{x^{2}}{2} \right) \d x
     $$
-    is finite if, and only if, $\varepsilon^{2} > \frac{1}{2}$, by the preceding lemma. Thus, for $\varepsilon^{2} \leq \frac{1}{2}$ interpreting the \acrshort{ess} or \acrshort{ef} is not sensible. Nevertheless, given samples $X^{1}, \dots, X^{N} \iid \G$, we may calculate the \acrshort{ess} in the usual way. If $N$ is only moderately large, there is a high probability that most samples do not lie in a region where weights are small, i.e. in the tails of the second component. Thus, unless $N$ is large, the empirical \acrshort{ess} will be large, deceiving us to think that importance sampling with $\G$ is feasible.
+    is finite if, and only if, $\varepsilon^{2} > \frac{1}{2}$, by the preceding lemma. Thus, for $\varepsilon^{2} \leq \frac{1}{2}$ interpreting the \gls{ess} or \gls{ef} is not sensible. Nevertheless, given samples $X^{1}, \dots, X^{N} \iid \G$, we may calculate the \gls{ess} in the usual way. If $N$ is only moderately large, there is a high probability that most samples do not lie in a region where weights are small, i.e. in the tails of the second component. Thus, unless $N$ is large, the empirical \gls{ess} will be large, deceiving us to think that importance sampling with $\G$ is feasible.
 
-    We illustrate this by a simulation study, where we calculate the \acrshort{ef} $M=100$ times for different values of $N$ and $\varepsilon$. We used $N = 100, 1\,000, 10\,000$ and $\varepsilon^{2} = 0.01, 0.1, 0.5$; the results may be found in \Cref{fig:ess_failure}. Notice that for all values of $\varepsilon$ considered, we have $\rho = \infty$. We see that even for $N = 1\,000$ and $\varepsilon = \frac{1}{2}$ the upper quartile of \acrshortpl{ef} is $71\%$, which seems reasonable to declare importance sampling to perform well. 
+    We illustrate this by a simulation study, where we calculate the \gls{ef} $M=100$ times for different values of $N$ and $\varepsilon$. We used $N = 100, 1\,000, 10\,000$ and $\varepsilon^{2} = 0.01, 0.1, 0.5$; the results may be found in \Cref{fig:ess_failure}. Notice that for all values of $\varepsilon$ considered, we have $\rho = \infty$. We see that even for $N = 1\,000$ and $\varepsilon = \frac{1}{2}$ the upper quartile of \glspl{ef} is $71\%$, which seems reasonable to declare importance sampling to perform well. 
 
-    Let us note that having access to the normalized weights $w$ here allows us to spot this deficiency of the \acrshort{ess} by recognizing that while \acrshort{ess} is high, the weights $w$ are not close to $1$, but rather $\frac{1}{2}$.
+    Let us note that having access to the normalized weights $w$ here allows us to spot this deficiency of the \gls{ess} by recognizing that while \gls{ess} is high, the weights $w$ are not close to $1$, but rather $\frac{1}{2}$.
 
     \begin{figure}
         \centering
@@ -311,7 +311,7 @@ as the asymptotic relative efficiency of the two estimators, as long as this app
         \resizebox{\textwidth}{!}{%
             \input{tikz/ess_failure.tex}%
         }
-        \caption{Empirical \acrshort{ef} for the setup of \Cref{ex:ess_failure} for varying sample sizes $N$ and $\varepsilon^{2}$ and $M=100$ replications. Here $\G = \mathcal N(0,1)$ and $\P = \frac{1}{2} \left( \mathcal N (0,1) + \mathcal N(0, \varepsilon^{-2}) \right)$. In all scenarios the second moment $\rho$ is infinite, thus high \acrshortpl{ef} are misleading us to believe that importance sampling performs well when it does not.}
+        \caption{Empirical \gls{ef} for the setup of \Cref{ex:ess_failure} for varying sample sizes $N$ and $\varepsilon^{2}$ and $M=100$ replications. Here $\G = \mathcal N(0,1)$ and $\P = \frac{1}{2} \left( \mathcal N (0,1) + \mathcal N(0, \varepsilon^{-2}) \right)$. In all scenarios the second moment $\rho$ is infinite, thus high \glspl{ef} are misleading us to believe that importance sampling performs well when it does not.}
         \label{fig:ess_failure}
     \end{figure}
 
@@ -359,7 +359,7 @@ This judges whether importance sampling has collapsed to just a few particles an
 As this requires multiple runs of importance sampling, it may, however, be prohibitively expensive in practice.
 
 In the following sections, we will predominantly take the position that we are interested in finding a good particle approximation $\hat\P_{N}$ of the form \eqref{eq:is-particle-approximation} over finding the optimal proposal $\G^{\ast}$ from \Cref{prop:minimum_MSE_IS} and assume that the importance sampling weights can only be evaluated up to a constant. 
-This has several reasons: First of all, for most problems considered in this thesis $\P$ is usually a conditional distribution, e.g. $\P = \mathbb P^{X|Y=y}$ for states $X$ and observations $Y$ in the \acrshort{ssm} context. Should the appropriate densities exist, evaluating the weights amounts to calculating 
+This has several reasons: First of all, for most problems considered in this thesis $\P$ is usually a conditional distribution, e.g. $\P = \mathbb P^{X|Y=y}$ for states $X$ and observations $Y$ in the \gls{ssm} context. Should the appropriate densities exist, evaluating the weights amounts to calculating 
 $$
 \rnd{\mathbb P^{X| Y= y}}{\G}(x) = \frac{p(x|y)}{g(x)} = \frac{p(y|x)p(x)}{g(x)p(y)} \propto \frac{p(y|x)p(x)}{g(x)}.
 $$
@@ -385,7 +385,7 @@ where $H$ is the Hessian of $\log p$ evaluated at $\hat x$. As $\log p (\hat x)$
 % degenerate case when $H$ is not PSD
 If $\hat x$ is the unique global mode of $p$ and $H$ is negative definite, the \gls{la} yields an actual Gaussian distribution. 
 % numerics
-To obtain the \acrshort{la} in practice, a Newton-Raphson scheme may be used, which conveniently tracks $H$ as well. Furthermore, if $\P$ includes more structure, e.g. it is the smoothing density in the \acrshort{ssm} context, we may be able to exploit this structure to design efficient Newton-Raphson schemes, see \Cref{subsec:glssm-approach}.
+To obtain the \gls{la} in practice, a Newton-Raphson scheme may be used, which conveniently tracks $H$ as well. Furthermore, if $\P$ includes more structure, e.g. it is the smoothing density in the \gls{ssm} context, we may be able to exploit this structure to design efficient Newton-Raphson schemes, see \Cref{subsec:glssm-approach}.
 
 % advantages / disadvantages
 The main advantage of the \gls{la} is that it is usually fast to obtain and, for sufficiently well-behaved distributions on a moderate dimensional space, provides reasonably high \gls{ess}. Additionally, the Newton-Raphson iterations to find the mode and Hessian are robust and require no simulation, unlike the other methods discussed further below.

@@ -5,7 +5,7 @@ As a leading example, we will use the following vector-autoregressive state spac
 \begin{example}[Negative Binomial $\operatorname{VAR}(1)$ \gls{ssm}]
     \label{ex:negbinom-ar1}
     % setup 
-    In this example, we consider a \gls{ssm} where states $X_{t}$ follow a stationary Gaussian $\operatorname{VAR}(1)$ process, initialized in its stationary distribution $\mathcal N(0,\Sigma)$ for \acrshort{spd} $\Sigma$. For simplicity let the transition matrices be given by a multiple of the identity, i.e. $A_{t} = \alpha I_{m}$ for all $t$ where $\alpha \in (-1, 1)$
+    In this example, we consider a \gls{ssm} where states $X_{t}$ follow a stationary Gaussian $\operatorname{VAR}(1)$ process, initialized in its stationary distribution $\mathcal N(0,\Sigma)$ for \gls{spd} $\Sigma$. For simplicity let the transition matrices be given by a multiple of the identity, i.e. $A_{t} = \alpha I_{m}$ for all $t$ where $\alpha \in (-1, 1)$
     In total, the states are governed by
     \begin{align*}
     X_{0} &\sim \mathcal N(0,\Sigma) \\
@@ -68,6 +68,6 @@ These values are depicted in \Cref{fig:mse_bias_var_decomposition}.
 \end{figure}
 
 % fig:mse_bias_var_decomposition
-In \Cref{fig:mse_bias_var_decomposition} we see that the average MSE is much smaller for \acrshort{eis} compared to the 
+In \Cref{fig:mse_bias_var_decomposition} we see that the average MSE is much smaller for \gls{eis} compared to the 
 \todo{interpretation of \Cref{fig:mse_bias_var_decomposition}, equal contribution of bias and var, not much to gain from bias correction}
 \todo{is bias of CEM really of this order? would expect bias usually to be of order 1/n, bias squared of order 1/n squared, so negligible compared to 1/n mse?}

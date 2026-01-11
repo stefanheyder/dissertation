@@ -1,10 +1,10 @@
 \glsresetall
-\newcommand{\acem}{\acrshort{cem}\xspace}
+\newcommand{\acem}{\gls{cem}\xspace}
 \newcommand{\ce}{{\ensuremath{\text{CE}}}}
 \newcommand{\pce}{{\ensuremath{\psi_{\text{CE}}}}}
 \newcommand{\hpce}{{\ensuremath{\hat\psi_{\text{CE}}}}}
 
-\newcommand{\aeis}{\acrshort{eis}\xspace}
+\newcommand{\aeis}{\gls{eis}\xspace}
 \newcommand{\eis}{{\ensuremath{\text{EIS}}}}
 \newcommand{\peis}{{\ensuremath{\psi_{\text{EIS}}}}}
 \newcommand{\hpeis}{{\ensuremath{\hat\psi_{\text{EIS}}}}}
@@ -38,7 +38,7 @@
         \item We prove \Cref{lem:bounded-log-variance} and \Cref{cor:dkl_bounded}.
         \item Discussion surrounding \Cref{thm:chatterje2018Thm1}, especially \Cref{ex:ess_failure}.
         \item The analysis of asymptotics of importance sampling methods, i.e. \Cref{prop:is-consistency,prop:is-clt}.
-        \item The consistency and CLT results for the \acrshort{cem} (\Cref{thm:cem-consistent,thm:cem-clt}) and \acrshort{eis} (\Cref{thm:eis-consistent,thm:eis-clt}).
+        \item The consistency and CLT results for the \gls{cem} (\Cref{thm:cem-consistent,thm:cem-clt}) and \gls{eis} (\Cref{thm:eis-consistent,thm:eis-clt}).
         \item The discussion of assumptions required in the CLTs for practical applications.
     \end{itemize}
 
@@ -46,22 +46,22 @@
     The whole section is newly contributed.
 
     \paragraph{\nameref{sec:gaussian_importance_sampling_for_state_space_models}}
-    While application of \acrshort{eis} to importance sampling in \acrshortpl{ssm} is well known, using the \acrshort{cem} for the same task is not. Thus, the following are the new contributions of this section:
+    While application of \gls{eis} to importance sampling in \glspl{ssm} is well known, using the \gls{cem} for the same task is not. Thus, the following are the new contributions of this section:
     \begin{itemize}
-        \item The discussion surrounding the difficulties the \acrshort{cem} faces when applied to the \acrshort{glssm} proposal.
-        \item The derivation of the \acrshort{cem} for Markov-proposals (\Cref{prop:cem-for-markov-proposal}), resulting in \Cref{alg:cem-markov-proposal} and the optimized \Cref{alg:cem-markov-proposal-fast}.
+        \item The discussion surrounding the difficulties the \gls{cem} faces when applied to the \gls{glssm} proposal.
+        \item The derivation of the \gls{cem} for Markov-proposals (\Cref{prop:cem-for-markov-proposal}), resulting in \Cref{alg:cem-markov-proposal} and the optimized \Cref{alg:cem-markov-proposal-fast}.
     \end{itemize}
 
     \paragraph{\nameref{sec:maximum_likelihood_estimation}}
     This section is for the largest part based on literature, however the following points are new:
     \begin{itemize}
-        \item The discussion of calculating the gradient, \eqref{eq:gradient_infeasible}, for the \acrshort{la} / \acrshort{eis}.
+        \item The discussion of calculating the gradient, \eqref{eq:gradient_infeasible}, for the \gls{la} / \gls{eis}.
         \item We make the antithetic variable construction of \citep{Durbin1997Monte} rigorous. 
         \item \Cref{subsec:inference} is a rigorous reformulation of \citep[Section 11.5]{Durbin2012Time}.
     \end{itemize}
 
     \paragraph{\nameref{sec:simulation_studies}} 
-    This whole section is a new contribution, extensively comparing the \acrshort{cem} with \acrshort{eis}.
+    This whole section is a new contribution, extensively comparing the \gls{cem} with \gls{eis}.
 \end{tcolorbox}
 \newpage
 
@@ -69,11 +69,11 @@ In the last chapter, we have detailed the need for models capable of modeling co
 \Glspl{ssm} form a versatile class of statistical models that allow modeling of non-stationary time series data while providing a straightforward, mechanistic interpretation of the time series' dynamics.
 The main idea of these models is to introduce unobserved \textbf{latent states} whose joint distribution is governed by a Markov process, and to model the observed time series conditional on these states.
 By exploiting this structure, inference in \glspl{ssm} becomes computationally efficient, as the complexity of algorithms is linear in the number $n$ of time points considered. 
-In this chapter, we provide a mathematical introduction to the theory of \acrshortpl{ssm} and the main tool we will use for inference: importance sampling. 
-%Additionally, we will highlight how to use \acrshortpl{ssm} to model the desiderata identified in \Cref{sec:dessiderata}. 
-The foundations of \acrshortpl{ssm} presented in this chapter are, if not mentioned otherwise, based on \citep{Durbin2012Time,Chopin2020Introduction}.
+In this chapter, we provide a mathematical introduction to the theory of \glspl{ssm} and the main tool we will use for inference: importance sampling. 
+%Additionally, we will highlight how to use \glspl{ssm} to model the desiderata identified in \Cref{sec:dessiderata}. 
+The foundations of \glspl{ssm} presented in this chapter are, if not mentioned otherwise, based on \citep{Durbin2012Time,Chopin2020Introduction}.
 
-Let us start from a very general definition of an \acrshort{ssm}.
+Let us start from a very general definition of an \gls{ssm}.
 
 \begin{definition}[State Space Model]
     \label{def:ssm}
@@ -132,16 +132,16 @@ The models that we consider in this thesis will usually assume that densities fo
     p(x|y) \propto p(x,y) =p (x_0)\prod_{t = 1}^{n} p(x_{t}|x_{t - 1}) \prod_{t = 0}^{n} p(y_t | x_t, y_{t - 1}).
     $$
     Thus, the dependence of $Y_{t}$ on $Y_{t - 1}$ only affects our inferences through $p(y_{t} | x_{t}, y_{t - 1})$, where, as $Y_{t - 1}$ is observed, the argument $y_{t - 1}$ is fixed. By a similar argument, we could allow $Y_{t}$ to depend on all previous observations $Y_{0}, \dots, Y_{t - 1}$ without changing any of our inferences. However, the models presented in \Cref{cha:analysis_of_selected_models} will not make use of this further generalization.
-    Consequently, all results we present in this chapter for \acrshortpl{ssm} where $Y_{t}$ depends only on $X_{t}$ that concern only the conditional distribution $X|Y=y$ carry over to those given by \Cref{def:ssm}. We will reiterate this argument at appropriate points in this thesis.
+    Consequently, all results we present in this chapter for \glspl{ssm} where $Y_{t}$ depends only on $X_{t}$ that concern only the conditional distribution $X|Y=y$ carry over to those given by \Cref{def:ssm}. We will reiterate this argument at appropriate points in this thesis.
 
-    In most \acrshortpl{ssm} we consider in this thesis we use $\mathcal X = \R^m$ and $\mathcal Y = \R^p$ or $\mathcal Y = \Z^p$ so that $\mathcal X$ is $m$ dimensional and $\mathcal Y$ is $p$ dimensional and equip these spaces with the usual $\sigma$-Algebras. Unless noted otherwise, we use for $\mu_{\mathcal X}$ the $m$-dimensional Lebesgue measure and for $\mu_{\mathcal Y}$ either the $p$-dimensional Lebesgue measure ($\mathcal Y = \R^{p}$) or the $p$-dimensional counting measure ($\mathcal Y = \Z^{p}$).
+    In most \glspl{ssm} we consider in this thesis we use $\mathcal X = \R^m$ and $\mathcal Y = \R^p$ or $\mathcal Y = \Z^p$ so that $\mathcal X$ is $m$ dimensional and $\mathcal Y$ is $p$ dimensional and equip these spaces with the usual $\sigma$-Algebras. Unless noted otherwise, we use for $\mu_{\mathcal X}$ the $m$-dimensional Lebesgue measure and for $\mu_{\mathcal Y}$ either the $p$-dimensional Lebesgue measure ($\mathcal Y = \R^{p}$) or the $p$-dimensional counting measure ($\mathcal Y = \Z^{p}$).
     
 \end{remark}
 
 \begin{figure}
     \centering
     \input{tikz/manual/ssm_dependencies.tex}%
-    \caption{Dependency structure in an \acrshort{ssm} as given by \Cref{def:ssm}. The dependencies between observations $Y_{t-1}$ (indicated by dotted arrows) are usually not part of the standard definition of an \acrshort{ssm}, but can be incorporated in a straightforward manner.}
+    \caption{Dependency structure in an \gls{ssm} as given by \Cref{def:ssm}. The dependencies between observations $Y_{t-1}$ (indicated by dotted arrows) are usually not part of the standard definition of an \gls{ssm}, but can be incorporated in a straightforward manner.}
     \label{fig:ssm_dependencies}
 \end{figure}
 
@@ -174,21 +174,21 @@ Direct numerical evaluation of \eqref{eq:likelihood} is hopeless due to the high
 Instead, we will resort to simulation-based inference by importance sampling (see \Cref{sec:importance_sampling}), a Monte-Carlo method that approximates $p(y)$ by constructing a global tractable approximation to the integrand in \eqref{eq:likelihood}. Alternatively, \gls{smc} methods, i.e. particle filters, that perform importance sampling sequentially across the $n + 1$ time steps can be used. We will not follow this approach for reasons described later, but refer the reader to the excellent reference \citep{Chopin2020Introduction} for an introduction to these methods.
 
 The performance of such simulation-based estimates depends crucially on our ability to construct distributions that are close to the posterior $p(x|y)$ but are easy to sample from. To this end, we construct either \acrfullpl{glssm} (\Cref{subsec:glssm-approach}) in which sampling from the posterior is analytically possible, or Gaussian Markov processes (\Cref{subsec:markov-approach}) which are directly amenable to simulation.
-These two approaches are motivated by what we term ``{}optimal importance sampling''{}, where we use a proposal distribution that solves an optimization problem. Two popular approaches for choosing such a proposal are \acrlong{eis} and the \acrlong{cem}, which minimize an $L^{2}$ or \acrshort{kld} loss, respectively. Empirically, it has been shown that \acrshort{eis} outperforms the \acrshort{cem}, to which we add theoretical insight in the form of two central limit theorems (\Cref{sec:importance_sampling}): as both methods rely on importance sampling to determine an optimal proposal, the asymptotic variance of this procedure is of practical relevance, and we argue that this asymptotic variance is typically smaller for \acrshort{eis}.
+These two approaches are motivated by what we term ``{}optimal importance sampling''{}, where we use a proposal distribution that solves an optimization problem. Two popular approaches for choosing such a proposal are \acrlong{eis} and the \acrlong{cem}, which minimize an $L^{2}$ or \gls{kld} loss, respectively. Empirically, it has been shown that \gls{eis} outperforms the \gls{cem}, to which we add theoretical insight in the form of two central limit theorems (\Cref{sec:importance_sampling}): as both methods rely on importance sampling to determine an optimal proposal, the asymptotic variance of this procedure is of practical relevance, and we argue that this asymptotic variance is typically smaller for \gls{eis}.
 To this end, we provide extensive simulation studies investigating the asymptotic variance of the two methods in \Cref{sec:simulation_studies}. 
 To the best of the authors' knowledge, this is the first rigorous investigation comparing these two methods. 
 %This will be a good strategy if the target posterior $p(x|y)$ can be well approximated by a Gaussian distribution --- otherwise, we may want to account for multiple modes by considering mixtures of Gaussian state space models or account for heavy tails with t-distributed errors (\Cref{sec:accouting_for_multimodality_and_heavy_tails}) \todo{keep this here?}.
 
-Finally, \cref{it:smoothing_problem} concerns the actual inference of the latent states $X$ given observations $Y=y$, a classical problem in Bayesian inference. Except for the \acrshort{glssm} (\Cref{sec:linear_gaussian_state_space_models}), the posterior distribution $X|Y=y$ is usually not analytically tractable, and we have to resort to simulation-based methods. We favor importance sampling over \gls{mcmc} methods due to the ease of implementation and the possibility to parallelize the simulations.
+Finally, \cref{it:smoothing_problem} concerns the actual inference of the latent states $X$ given observations $Y=y$, a classical problem in Bayesian inference. Except for the \gls{glssm} (\Cref{sec:linear_gaussian_state_space_models}), the posterior distribution $X|Y=y$ is usually not analytically tractable, and we have to resort to simulation-based methods. We favor importance sampling over \gls{mcmc} methods due to the ease of implementation and the possibility to parallelize the simulations.
 
-As an alternative to the above, \acrshort{mle}-based approach, a fully Bayesian approach would regard $\theta$ as random and administer a prior distribution, say with density $p(\theta)$. In this setting, the main interest still lies in determining the posterior distribution of $X|Y=y$, but due to the prior put on $\theta$, its density, should it exist, is now given by
+As an alternative to the above, \gls{mle}-based approach, a fully Bayesian approach would regard $\theta$ as random and administer a prior distribution, say with density $p(\theta)$. In this setting, the main interest still lies in determining the posterior distribution of $X|Y=y$, but due to the prior put on $\theta$, its density, should it exist, is now given by
 $$
 p(x|y) = \int p(x,\theta|y) \d \theta,
 $$
-where $p(x,\theta|y)$ is the joint posterior of states and hyperparameters, conditional on observations $y$. To tackle this problem, one may again use importance sampling methods, see e.g. \citep[Chapter 13.1]{Durbin2012Time}, or use \acrshort{mcmc}-methods tailored to \acrshortpl{ssm}, e.g. Particle-\acrshort{mcmc} \citep[Chapter 16]{Chopin2020Introduction} --- however this approach is outside the scope of this thesis.
+where $p(x,\theta|y)$ is the joint posterior of states and hyperparameters, conditional on observations $y$. To tackle this problem, one may again use importance sampling methods, see e.g. \citep[Chapter 13.1]{Durbin2012Time}, or use \gls{mcmc}-methods tailored to \glspl{ssm}, e.g. Particle-\gls{mcmc} \citep[Chapter 16]{Chopin2020Introduction} --- however this approach is outside the scope of this thesis.
 
 
-To perform the above tasks, the setting defined in \Cref{def:ssm} is too general to have numerically tractable solutions. Thus we restrict our studies to more structured \acrshortpl{ssm}. We begin with assuming a joint Gaussian distribution for states and observations. Subsequently, we will relax this assumption to allow the observations $Y$ to have more general distributions. 
+To perform the above tasks, the setting defined in \Cref{def:ssm} is too general to have numerically tractable solutions. Thus we restrict our studies to more structured \glspl{ssm}. We begin with assuming a joint Gaussian distribution for states and observations. Subsequently, we will relax this assumption to allow the observations $Y$ to have more general distributions. 
 %\input{chapters/03_state_space_models/03_01_Modelling.tex}
 \input{chapters/03_state_space_models/03_02_LGSSM.tex}
 \input{chapters/03_state_space_models/03_03_LCSSM.tex}

@@ -26,7 +26,7 @@ As we have assumed that $R_{c}$ is finite, we may write $\beta_{\tau} = R_{c}w_{
     \label{eq:renewal-eq}
 \E \left(I_{t}| I_{t - 1}, I_{t - 2}, \dots \right) = R_{c} \sum_{\tau = 1}^\infty I_{t - \tau} w_{\tau},
 \end{align}
-the so-called renewal equation. Here we have implicitly assumed that $\gls{sym:w}_{0} = 0$, i.e. infected individuals need at least one day to become infectious themselves. For \acrshort{c19} this is a reasonable assumption \citep{Lauer2020Incubation}. If case numbers are small, e.g. if the assumptions we demand hold, the conditional distribution of $I_{t}$ given past cases is, by the law of small numbers, well approximated by a Poisson distribution and combined with the renewal equation we obtain the renewal equation model \citep{Fraser2007Estimating}
+the so-called renewal equation. Here we have implicitly assumed that $\gls{sym:w}_{0} = 0$, i.e. infected individuals need at least one day to become infectious themselves. For \gls{c19} this is a reasonable assumption \citep{Lauer2020Incubation}. If case numbers are small, e.g. if the assumptions we demand hold, the conditional distribution of $I_{t}$ given past cases is, by the law of small numbers, well approximated by a Poisson distribution and combined with the renewal equation we obtain the renewal equation model \citep{Fraser2007Estimating}
 \begin{align}
     \label{eq:renewal-model}
     I_{t} | I_{t - 1}, I_{t - 2}, \dots \sim \gls{sym:Pois} \left( \gls{sym:Rt} \sum _{\tau = 1}^\infty I_{t - \tau} w_{\tau} \right),
@@ -44,7 +44,7 @@ Given incidence data $I_{t}, I_{t - 1}, \dots $ we can perform frequentist infer
 which is a moment- and maximum-likelihood estimator \citep{Hotz2020Monitoring}. Additionally \citep{Cori2021EpiEstim} provides a Bayesian framework, using conjugate gamma priors for $R_{t}$. If one is interested in the case reproduction number $R_{c}$, one can recover it from estimates of $R_{t}$ as $\hat R_{c} = \sum_{\tau = 1}^\infty w_{\tau} \hat R_{t + \tau}$ or using the Wallinga-Teunis estimator \citep{Wallinga2004Different}.
 
 The reproduction numbers $R_{c}$ and $R_{t}$ have a mechanistic interpretation: $R_{c}$ is the number of secondary cases an infectious individual can expect to infect over the time of their disease, and so is $R_{t}$ with the additional assumption that the behavior of the infection process stays the same for the whole duration of infection. 
-Assuming that contacts lead to infection independently and with the same probability, this means that the reproduction numbers are proportional to the total number of contacts a person has, and as such, they are an excellent measure of the efficacy of \acrshortpl{npi} \citep{Brauner2021Inferring,Khazaei2023Using,Flaxman2020Estimating}. 
+Assuming that contacts lead to infection independently and with the same probability, this means that the reproduction numbers are proportional to the total number of contacts a person has, and as such, they are an excellent measure of the efficacy of \glspl{npi} \citep{Brauner2021Inferring,Khazaei2023Using,Flaxman2020Estimating}. 
 An additional advantage is that the model \eqref{eq:renewal-model} can be interpreted mechanistically, i.e. $R_{t}$ gives a mechanical model of why the number of cases increases. In contrast, the  model of exponential growth that we will address next is more phenomenological in nature, based on the observation that the number of cases tend to increase or decrease exponentially. 
 
 \subsection{Growth Factor}
@@ -77,7 +77,7 @@ Focusing on the growth factor over the reproduction number has the advantage tha
 
 \subsection{Other indicators}
 \label{subsec:other_indicat}
-Instead of concentrating on the daily evolution of the epidemic, it may be beneficial to consider the weekly behavior. Under the assumption of constant exponential growth, the weekly growth factor is simply $\rho^{7}$. However, for the reproduction number a weekly time scale is too coarse to be sensible, at least for \acrshort{c19}, with infections occurring on the daily, rather than weekly, scale.
+Instead of concentrating on the daily evolution of the epidemic, it may be beneficial to consider the weekly behavior. Under the assumption of constant exponential growth, the weekly growth factor is simply $\rho^{7}$. However, for the reproduction number a weekly time scale is too coarse to be sensible, at least for \gls{c19}, with infections occurring on the daily, rather than weekly, scale.
 
 As we will see in \Cref{sec:data}, the incidence data available in Germany is strongly affected by weekday effects, with fewer cases reported on weekends and more during the week. To avoid explicitly modeling these effects, we will, in \Cref{sec:regional_growth_factor_model}, group the case data by weeks. In this case one could estimate the weekly growth factor $\rho^{7}$, e.g., by
 \begin{align}
@@ -89,8 +89,8 @@ $$
     R_{c} = \frac{1}{\E \rho^{-W}} \approx \rho^{7}.
 $$
 Let us hasten to add that there is no reason for the error in this approximation to be small. 
-However, at $R_{c} = 1$, the threshold for growth or decline, we have $\rho = \rho^{7} = 1 = R_{c}$, which suggests that the error around $R_{c} = 1$ should be small. Indeed, for the generation time distribution presented in \Cref{fig:generation_time} (with $\E W = 5.6$), the maximum difference between $R_{c}$ and $\rho^{\E W}$ is $0.001$, while the maximum difference between $R_{c}$ and $\rho^{7}$ is $0.06$ for $R_{c} \in [0.8, 1.2]$, the relevant epidemiological range for reproduction numbers for \acrshort{c19} (see, e.g. \Cref{fig:rho_and_R_naive}).
-Thus, if we accept slight numerical errors, for \acrshort{c19} we may think of $\rho^{7}$ as, approximately, the case reproduction number. 
+However, at $R_{c} = 1$, the threshold for growth or decline, we have $\rho = \rho^{7} = 1 = R_{c}$, which suggests that the error around $R_{c} = 1$ should be small. Indeed, for the generation time distribution presented in \Cref{fig:generation_time} (with $\E W = 5.6$), the maximum difference between $R_{c}$ and $\rho^{\E W}$ is $0.001$, while the maximum difference between $R_{c}$ and $\rho^{7}$ is $0.06$ for $R_{c} \in [0.8, 1.2]$, the relevant epidemiological range for reproduction numbers for \gls{c19} (see, e.g. \Cref{fig:rho_and_R_naive}).
+Thus, if we accept slight numerical errors, for \gls{c19} we may think of $\rho^{7}$ as, approximately, the case reproduction number. 
 
 The exponential growth rate $r$ and doubling time $d$ are closely related to the growth factor, and are given by 
 \begin{align*}

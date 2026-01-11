@@ -5,9 +5,9 @@
 \acrfullpl{glssm} are the working horses of most methods used in this thesis because many of the interesting quantities, e.g. the smoothing distribution, are analytically tractable and can be obtained computationally efficient. Indeed, for fixed dimension of states $m$ and observations $p$ the runtime of algorithms that we consider in this thesis is $\mathcal O(n)$, i.e. linear in the number of time points observed. 
 
 \glsunset{glssm}
-\begin{definition}[\gls{glssm}]
+\begin{definition}[\acrfull{glssm}]
     \label{def:glssm}
-    an \acrfull{glssm} is a joint distribution over states and observations $(X,Y)$ where states a.s. obey the transition equation
+    A \acrfull{glssm} is a joint distribution over states and observations $(X,Y)$ where states a.s. obey the transition equation
     \begin{align}
         \label{eq:glssm_states}
         X_{t + 1} & = A_{t}X_{t} + u_{t} + \varepsilon_{t + 1} &  & t = 0, \dots, n - 1,
@@ -21,7 +21,7 @@
 \end{definition}
 
 \begin{remark}
-    From \eqref{eq:glssm_states} it is easy to see that the states $X = (X_{0}, \dots, X_{n})$ form a Gaussian Markov process and that conditional on $X_{t}$, $t \in \{0, \dots, n\}$, $Y_{t}$ is independent of $X_{s}$ and $Y_{s}$, $s < t$. Thus an \acrshort{glssm} is indeed an \acrshort{ssm}.
+    From \eqref{eq:glssm_states} it is easy to see that the states $X = (X_{0}, \dots, X_{n})$ form a Gaussian Markov process and that conditional on $X_{t}$, $t \in \{0, \dots, n\}$, $Y_{t}$ is independent of $X_{s}$ and $Y_{s}$, $s < t$. Thus an \gls{glssm} is indeed an \gls{ssm}.
 \end{remark}
 
 
@@ -125,7 +125,7 @@ As the joint distribution of $(X, Y)$ is Gaussian, so are conditional distributi
     \end{align*}
 \end{proof}
 
-After having observed $Y = y$, our main interest lies in the conditional distribution of states $X$ given $Y= y$, which we could obtain by applying \Cref{lem:gaussian_conditional} to the block-diagonal matrices $B = \bdiag (B_{0}, \dots, B_{n})$ and $\Omega = \bdiag \left( \Omega_{0}, \dots, \Omega_{n} \right)$. However, this would require inversion of the $(n+1)p\times(n+1)p$ matrix $\left( B\Sigma B + \Omega \right)$ which becomes numerical infeasible quickly. Instead, we can exploit the sequential structure of the \acrshort{glssm}, which will allow us to perform conditioning on only a single observation at a time. 
+After having observed $Y = y$, our main interest lies in the conditional distribution of states $X$ given $Y= y$, which we could obtain by applying \Cref{lem:gaussian_conditional} to the block-diagonal matrices $B = \bdiag (B_{0}, \dots, B_{n})$ and $\Omega = \bdiag \left( \Omega_{0}, \dots, \Omega_{n} \right)$. However, this would require inversion of the $(n+1)p\times(n+1)p$ matrix $\left( B\Sigma B + \Omega \right)$ which becomes numerical infeasible quickly. Instead, we can exploit the sequential structure of the \gls{glssm}, which will allow us to perform conditioning on only a single observation at a time. 
 
 To this end, let us denote by $\hat X_{t | s} = \E \left( X_{t} | Y_{:s} = y_{:s}\right)$ the conditional expectation of $X_{t}$ given a set of observations $y_{:s}$ and by $\Xi_{t | s} = \cov \left( X_{t} | Y_{:s} = y_{:s} \right)$ the conditional covariance matrix of $X_{t}$ given $Y_{:s} = y_{:s}$. Then $$X_{t} | Y_{:s} = y_{:s} \sim \mathcal N \left( \hat X_{t|s}, \Xi_{t|s} \right).$$ For a given $t$, three values of $s$ are of particular interest: if $s = t - 1$ determining this conditional distribution is called a \textbf{prediction problem}, if $s = t$ this is a \textbf{filtering problem} and if $s = n$ a \textbf{smoothing problem}, and we call the distributions we seek the \textbf{predictive, filtering} or \textbf{smoothing distribution} respectively. 
 Similarly we define $\hat Y_{t|s} = \E \left( Y_{t} \middle| Y_{:s} = y_{:s} \right)$ to be the conditional expectation of $Y_{t}$ given $Y_{:s}=y_{:s}$, note that $\hat Y_{t|s} = Y_{t}$ if $s \geq t$. Finally, let $\Psi_{t|s} = \cov \left( Y_{t} | Y_{:s} = y_{:s} \right)$ be the conditional covariance matrix of $Y_{t}$ given $Y_{:s} = y_{:s}$. Again $\Psi_{t|s} = 0$ if $s \geq t$. 
@@ -161,11 +161,11 @@ The Kalman filter is very efficient: each loop iteration requires inversion of t
 
 Notice that the Kalman filter iteratively calculates the negative log-likelihood $\ell_{t}$
 $$\ell_{t} = - \log p(y_{:t}) = - \log \sum_{s = 0}^t \log p(y_{s} | y_{:(s - 1)})$$ 
-while filtering. This is possible because of the dependency structure of the \acrshort{glssm}, which makes the increments in $\ell_{t}$ tractable, as
+while filtering. This is possible because of the dependency structure of the \gls{glssm}, which makes the increments in $\ell_{t}$ tractable, as
 $$
 Y_{s} | Y_{:(s -1)} \sim \mathcal N \left( \hat Y_{s|s-1}, \Psi_{s|s - 1} \right),
 $$
-for $s = 0, \dots, n$, which is shown in the derivation of the Kalman filter. Thus, the Kalman filter enables us to perform \acrshort{mle} by giving us access to $\ell_{n}$.
+for $s = 0, \dots, n$, which is shown in the derivation of the Kalman filter. Thus, the Kalman filter enables us to perform \gls{mle} by giving us access to $\ell_{n}$.
 
 From this discussion we can see how we may alter the Kalman filter to accommodate a similar dependency structure as proposed in \Cref{def:ssm} (depicted in \Cref{fig:ssm_dependencies}): if we allow to have 
 \begin{align*}
@@ -173,20 +173,20 @@ From this discussion we can see how we may alter the Kalman filter to accommodat
 \end{align*}
 we would still be able to perform the filtering step of \Cref{alg:kalman_filter} by determining the conditional distribution of $Y_{t}$ given $Y_{:(t-1)}$ using \Cref{lem:gaussian_conditional}.
 
-Depending on the situation at hand, one of the many variants of the basic algorithm presented in \Cref{alg:kalman_filter} may be used. If the inversion of $\Psi_{t|t-1}$ is numerically unstable, the filtered covariance matrices $\Xi_{t|t}$ may become numerically non-positive definite. In this case, the square root filter and smoother \citep{Morf1975Squareroot} may be used. It is based on Cholesky roots of the involved covariance matrices, ensuring them to be \acrshort{psd}.
+Depending on the situation at hand, one of the many variants of the basic algorithm presented in \Cref{alg:kalman_filter} may be used. If the inversion of $\Psi_{t|t-1}$ is numerically unstable, the filtered covariance matrices $\Xi_{t|t}$ may become numerically non-positive definite. In this case, the square root filter and smoother \citep{Morf1975Squareroot} may be used. It is based on Cholesky roots of the involved covariance matrices, ensuring them to be \gls{psd}.
 
 When the dimension of observations is much larger than that of the states, $p \gg m$, the information filter \citep{Fraser1969Optimum} can be used. Instead of performing operations on the covariance matrices, i.e. $\Xi_{t|t-1}$ and $\Psi_{t|t-1}$, the information filter operates on their inverses, the precision matrices $\Xi_{t|t - 1}^{-1}$ and $\Psi_{t|t-1}^{-1}$ as well as rescaled states $\Xi_{t | t - 1}^{-1}
 \hat X_{t | t - 1}$ and observation $\Psi_{t | t-1}^{-1}\hat Y_{t|t -1}$ estimates. This makes the filtering step more efficient, as the most expensive step is the calculation of $\Psi_{t | t- 1}^{-1}$. However, the price one pays is that the prediction step now requires inversion of an $m\times m$ matrix, and as such the computational gains only manifest when $p$ is sufficiently large compared to $m$ \citep{Assimakis2012Information}.
 
-If the dimensions of the model are so large that calculating the $m\times m$ and $p\times p$ covariance matrices becomes an issue, the simulation based \acrfull{enkf} \citep{Evensen1994Sequential} can be used. Instead of calculating the covariance matrices analytically, the \acrshort{enkf} stores a particle approximation to the Gaussian filtering distribution and iteratively performs a prediction and update step with a particle approximation, similar to the analytical update the Kalman filter performs. Despite being based on linear Gaussian dynamics, the \acrshort{enkf} is successfully employed in many high-dimensional non-linear non Gaussian problems \citep{Katzfuss2016Understanding}. 
+If the dimensions of the model are so large that calculating the $m\times m$ and $p\times p$ covariance matrices becomes an issue, the simulation based \acrfull{enkf} \citep{Evensen1994Sequential} can be used. Instead of calculating the covariance matrices analytically, the \gls{enkf} stores a particle approximation to the Gaussian filtering distribution and iteratively performs a prediction and update step with a particle approximation, similar to the analytical update the Kalman filter performs. Despite being based on linear Gaussian dynamics, the \gls{enkf} is successfully employed in many high-dimensional non-linear non Gaussian problems \citep{Katzfuss2016Understanding}. 
 
-For non-linear problems of moderate dimension, i.e. those where we replace the right-hand side of both state (\eqref{eq:glssm_states}) and observation (\eqref{eq:glssm_observations}) equations by non-linear functions, other variants such as the \acrfull{ekf} \citep{Jazwinski1970Stochastic} and the \acrfull{ukf} \citep{Julier1997New} may be used. The \acrshort{ekf} applies the Kalman filter to a linearization of the non-linear system around the current conditional means $\hat X_{t| t-1}$ and $\hat X_{t|t}$. If the systems dynamics are highly non-linear, this approximation can fail. Alternatively, the \acrshort{ukf}, which is based on the unscented transform, directly approximates the predicted means and covariance matrix, by constructing a set of deterministic points that are propagated through the systems dynamics.
+For non-linear problems of moderate dimension, i.e. those where we replace the right-hand side of both state (\eqref{eq:glssm_states}) and observation (\eqref{eq:glssm_observations}) equations by non-linear functions, other variants such as the \acrfull{ekf} \citep{Jazwinski1970Stochastic} and the \acrfull{ukf} \citep{Julier1997New} may be used. The \gls{ekf} applies the Kalman filter to a linearization of the non-linear system around the current conditional means $\hat X_{t| t-1}$ and $\hat X_{t|t}$. If the systems dynamics are highly non-linear, this approximation can fail. Alternatively, the \gls{ukf}, which is based on the unscented transform, directly approximates the predicted means and covariance matrix, by constructing a set of deterministic points that are propagated through the systems dynamics.
 
 % history: moon
 % epidemiological uses 
 The Kalman smoother (\Cref{alg:kalman_smoother}) computes the marginal distributions $X_{t} | Y$ for $t = 0, \dots, n$. Upon closer inspection, the mean and covariance updates resemble that of the Kalman filter (\Cref{alg:kalman_filter}). This is no coincidence: by the assumed dependence structure (\Cref{fig:ssm_dependencies}, except for the dashed arrows), we obtain the following lemma, which will allow us to prove the recursions.
 \begin{lemma}[conditional independence from future observations]
-    Let $t \in \{0, \dots, n - 1\}$ and $s > t$. In an \acrshort{glssm}, conditional on $X_{t + 1}$, $X_{t}$ is independent of $Y_{s}$, $s > t$. 
+    Let $t \in \{0, \dots, n - 1\}$ and $s > t$. In an \gls{glssm}, conditional on $X_{t + 1}$, $X_{t}$ is independent of $Y_{s}$, $s > t$. 
 \end{lemma}
 \begin{proof}
     As $s > t$, we have
@@ -199,7 +199,7 @@ The Kalman smoother (\Cref{alg:kalman_smoother}) computes the marginal distribut
     \caption{Kalman smoother. Note that the Kalman filter already outputs the smoothed last state $\hat X_{n|n}$ and covariance $\Xi_{n|n}$.}
     \label{alg:kalman_smoother}
     \begin{algorithmic}[1]
-        \Require \acrshort{glssm} (\Cref{def:glssm}), outputs from Kalman filter (\Cref{alg:kalman_filter})
+        \Require \gls{glssm} (\Cref{def:glssm}), outputs from Kalman filter (\Cref{alg:kalman_filter})
         \For{$t \gets n - 1, \dots, 0$}
             \State $G_{t} = \Xi_{t|t} A_{t}\Xi_{t+1|t}^{-1}$
             \State $\hat X_{t | n} = \hat X_{t|t} + G_{t} \left( \hat X_{t + 1|n} - \hat X_{t + 1|t} \right)$
@@ -234,11 +234,11 @@ This recurrence may be used to sample from the joint smoothing distribution, whi
 $$
 p(x|y) = p(x_{n}|y) \prod_{t = n - 1}^0 p(x_{t}|x_{t+1}, y_{:t}).
 $$
-The resulting algorithm (\Cref{alg:ffbs}) is called the \gls{ffbs}  and was first described in \citep{Fruhwirth-Schnatter1994Data} in the context of a data augmentation algorithm for Bayesian analysis of \acrshort{glssm}. 
+The resulting algorithm (\Cref{alg:ffbs}) is called the \gls{ffbs}  and was first described in \citep{Fruhwirth-Schnatter1994Data} in the context of a data augmentation algorithm for Bayesian analysis of \gls{glssm}. 
 
 \begin{algorithm}
     \begin{algorithmic}[1]
-        \Require \acrshort{glssm} (\Cref{def:glssm}), outputs from Kalman filter (\Cref{alg:kalman_filter})
+        \Require \gls{glssm} (\Cref{def:glssm}), outputs from Kalman filter (\Cref{alg:kalman_filter})
         \State Simulate $\check X_{n|n} \sim \mathcal N(\hat X_{n|n}, \Xi_{n|n})$
         \For{$t \gets n-1, \dots, 0$}
             \State $G_{t} = \Xi_{t|t}A_{t}\Xi^{-1}_{t + 1 | t}$
@@ -252,13 +252,13 @@ The resulting algorithm (\Cref{alg:ffbs}) is called the \gls{ffbs}  and was firs
 % comment on regularity assumptions
 \begin{remark}[regularity of $\Sigma_{t}$ and $\Omega_{t}$]
     \label{rem:regular_covs}
-    Throughout this section, we have assumed, either explicitly or implicitly, that the innovation and observation covariance matrices $\Sigma_{t}$ and $\Omega_{t}$ are non-singular, i.e. \acrshort{spd}.
+    Throughout this section, we have assumed, either explicitly or implicitly, that the innovation and observation covariance matrices $\Sigma_{t}$ and $\Omega_{t}$ are non-singular, i.e. \gls{spd}.
 
     % filtering
     For the Kalman filter we require that for every $t$, $\Psi_{t|t-1}$ is non-singular, i.e. that we can apply \Cref{lem:gaussian_conditional} \ref{it:cond_gaussian}. This is fulfilled as soon as $\Omega_{t}$ is non-singular, which is a reasonable assumption in most models. Following the remark after \Cref{lem:gaussian_conditional}, we could also replace $\Psi_{t|t-1}^{-1}$ in \Cref{alg:kalman_filter} by its Moore-Penrose inverse. 
 
     % smoothing
-    A similar argument can be made for singular $\Xi_{t+1|t}$, where we replace $\Xi_{t+1|t}^{-1}$ by its Moore-Penrose inverse in the Kalman smoother (\Cref{alg:kalman_smoother}) and the \acrshort{ffbs} (\Cref{alg:ffbs}). 
+    A similar argument can be made for singular $\Xi_{t+1|t}$, where we replace $\Xi_{t+1|t}^{-1}$ by its Moore-Penrose inverse in the Kalman smoother (\Cref{alg:kalman_smoother}) and the \gls{ffbs} (\Cref{alg:ffbs}). 
 \end{remark}
 
 The attractive feature of \glspl{glssm} is that a large part of inference is analytically feasible: we can calculate the likelihood, smoothing distribution and sample from it. 

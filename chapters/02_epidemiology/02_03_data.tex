@@ -1,7 +1,7 @@
 \section{Available data and its quality}
 \label{sec:data}
 
-Early during the \acrshort{c19} epidemic, a surprising amount of publicly accessible data on the severity became available quickly. This data was provided by national health authorities such as the \acrfull{rki} in Germany, and was also made available through aggregate data repositories, e.g. by the \acrfull{jhu} \citep{Dong2020Interactive}. These data contain information about the number of cases and deaths reported each day and, depending on the data source, further information, e.g., the age, sex, or location of the case may be included.
+Early during the \gls{c19} epidemic, a surprising amount of publicly accessible data on the severity became available quickly. This data was provided by national health authorities such as the \acrfull{rki} in Germany, and was also made available through aggregate data repositories, e.g. by the \acrfull{jhu} \citep{Dong2020Interactive}. These data contain information about the number of cases and deaths reported each day and, depending on the data source, further information, e.g., the age, sex, or location of the case may be included.
 %data is a collective noun: 
 %    Collective nouns, like team, family, class, group, and host, take a singular verb when the entity acts together and a plural verb when the individuals composing the entity act individually.
 
@@ -22,7 +22,7 @@ To estimate reproduction numbers by \eqref{eq:hatR} we need to assume a generati
 
 \subsection{Incidence and death data}
 \label{subsec:incidence_and_death_data}
-In this thesis, we focus on the data available for Germany, provided by the \acrshort{rki} available on Zenodo \citep{RobertKoch-Institut2024SARSCoV2} or GitHub \citep{RobertKoch-Institut2024SARSCoV2a}. In these repositories, the \acrshort{rki} publishes daily data on the number of cases in the aforementioned strata. On some days, data has not been published to Zenodo or GitHub, e.g. for May 31st, 2020. In this case, we use the data provided by the ard-data RKI-archive on GitHub \citep{MichaelKreil2022RKICoronaDatenArchiv}. 
+In this thesis, we focus on the data available for Germany, provided by the \gls{rki} available on Zenodo \citep{RobertKoch-Institut2024SARSCoV2} or GitHub \citep{RobertKoch-Institut2024SARSCoV2a}. In these repositories, the \gls{rki} publishes daily data on the number of cases in the aforementioned strata. On some days, data has not been published to Zenodo or GitHub, e.g. for May 31st, 2020. In this case, we use the data provided by the ard-data RKI-archive on GitHub \citep{MichaelKreil2022RKICoronaDatenArchiv}. 
 
 This data contains the following information for each case and death:
 \begin{itemize}
@@ -32,19 +32,19 @@ This data contains the following information for each case and death:
     \item meta-information on whether the case was already present in the past dataset.
 \end{itemize}
 
-The dates of reporting and symptom onset are of particular importance: the date of reporting is the date that the local health authorities became aware of the case, which may be several days after the symptom onset or infection date, but also several days before the \acrshort{rki} is aware of the case. Thus, there are several dates of interest, ordered roughly by occurrence: 
+The dates of reporting and symptom onset are of particular importance: the date of reporting is the date that the local health authorities became aware of the case, which may be several days after the symptom onset or infection date, but also several days before the \gls{rki} is aware of the case. Thus, there are several dates of interest, ordered roughly by occurrence: 
 \begin{itemize}
     \item the date of infection, 
     \item the date of symptom onset (if the case is symptomatic), 
     \item the date of reporting to the local health authorities,
-    \item the date of publication by the \acrshort{rki} and potentially,
+    \item the date of publication by the \gls{rki} and potentially,
     \item the date of death.
 \end{itemize}
 Exceptions to this order include the possibility that the date of death could occur before any, of the two reporting dates and symptom onset could begin after the first date of reporting, i.e. because testing is due to contact tracing.
 
 The date of infection is generally unknown. While the date of symptom onset is close to the date of infection, unfortunately, it is only known for roughly $25\%$ of the reported cases. Therefore, we restrict our analyses to the date of reporting. \citet{AnDerHeiden2020Schatzung} use multiple imputation to address this problem; however, this method assumes that the symptom onset dates are missing completely at random, which is questionable as asymptomatic infections will produce no date of symptom onset. There can be considerable delay between the two reporting dates, as we will explore later, see, e.g., \Cref{fig:reporting_delays_cases,fig:survival_function_rep_tri_incidences}.
 
-We restrict ourselves to data available from April 1st, 2020. This dataset already includes cases with earlier reporting date. Additionally, we consider only data reported up to and including May 5th 2023, the date when the WHO declared \acrshort{c19} no longer a global health emergency. \Cref{fig:cases_germany} shows the number of daily reported cases (\textbf{A}) and deaths (\textbf{B}) with a centered weekly running mean. Apparent from this figure is the considerable day-to-day variation, the so-called weekday effect. As the reporting date is tied to the working hours of the local health authorities, fewer cases are processed, and thus reported, on weekends and more during the week. The weekday effect is less pronounced for the symptom onset date, if it is known (figure not shown). 
+We restrict ourselves to data available from April 1st, 2020. This dataset already includes cases with earlier reporting date. Additionally, we consider only data reported up to and including May 5th 2023, the date when the WHO declared \gls{c19} no longer a global health emergency. \Cref{fig:cases_germany} shows the number of daily reported cases (\textbf{A}) and deaths (\textbf{B}) with a centered weekly running mean. Apparent from this figure is the considerable day-to-day variation, the so-called weekday effect. As the reporting date is tied to the working hours of the local health authorities, fewer cases are processed, and thus reported, on weekends and more during the week. The weekday effect is less pronounced for the symptom onset date, if it is known (figure not shown). 
 
 We want to highlight two periods of irregularities during the early stage of the epidemic, magnified in \Cref{fig:cases_germany} \textbf{A}. The first concerns a local outbreak in a German meat processing plant \citep{Gunther2020SARSCoV2}. Over two weeks in early June 2020, $1\,413$ positive cases were reported for Gütersloh county. Due to the low number of reported cases everywhere else, this locally confined outbreak is visible even when aggregating over all counties in Germany. 
 The second period concerns the Christmas holiday break, where we observe a sudden decline in reported cases, compensated by a large increase in cases in the second week of January. Due to the holiday leave, we'd expect this drop in cases to be related to fewer staff working at the local health authorities, rather than a true decrease in cases. Similar patterns are visible for Easter 2021 and Christmas 2021. 
@@ -60,7 +60,7 @@ The second period concerns the Christmas holiday break, where we observe a sudde
 
 
 % focus on Meldedatum over Infektionsdatum due to consistency issues
-Due to late reporting and other reporting artifacts, the number of reported cases for any day $s$ will, usually, increase over time. The \acrshort{rki} does not report incidences on the same day and so on any day $t > s$ we obtain incidences $I_{s,t}$ for day $s$. We say these cases are reported with delay $\tau = t -s > 0$. This results in the so-called reporting triangle, depicted for April 2020 in \Cref{fig:reporting_delays_cases} \textbf{A}. 
+Due to late reporting and other reporting artifacts, the number of reported cases for any day $s$ will, usually, increase over time. The \gls{rki} does not report incidences on the same day and so on any day $t > s$ we obtain incidences $I_{s,t}$ for day $s$. We say these cases are reported with delay $\tau = t -s > 0$. This results in the so-called reporting triangle, depicted for April 2020 in \Cref{fig:reporting_delays_cases} \textbf{A}. 
 
 \begin{figure}
     \resizebox{\textwidth}{!}{%
@@ -107,22 +107,22 @@ Furthermore, we see that the amount of next-day ($\tau = 1$) reporting slightly 
     \resizebox{\textwidth}{!}{%
         \input{tikz/survival_function_rep_tri_incidences.tex}%
     }
-    \caption{\textbf{A}: Box plots for the empirical survival function $\hat S_{s}(\tau)$ for all days $s$ in the dataset, after $4$ ($10$) days, the upper quartile of $\hat S_{s}$ is close to $5\%$ ($1\%$).\textbf{B}: Empirical survival function $\hat S(\tau)$ for every quarter present in the \acrshort{c19} dataset. In most quarters $95\%$ ($99\%$) of the cases have been reported after $4$ ($8$) days of delay.}
+    \caption{\textbf{A}: Box plots for the empirical survival function $\hat S_{s}(\tau)$ for all days $s$ in the dataset, after $4$ ($10$) days, the upper quartile of $\hat S_{s}$ is close to $5\%$ ($1\%$).\textbf{B}: Empirical survival function $\hat S(\tau)$ for every quarter present in the \gls{c19} dataset. In most quarters $95\%$ ($99\%$) of the cases have been reported after $4$ ($8$) days of delay.}
     \label{fig:survival_function_rep_tri_incidences}
 \end{figure}
 
-Reporting delays and artifacts are not the only obstacles we have to overcome when analyzing these data. By definition, the number of reported cases consists of cases with a positive PCR test. To compare reported incidences between two points in time, one has to assume that the so-called dark figure, i.e. the ratio of undetected to detected cases, is the same. However, there is are some objections to this assumption: the capacity and total number of PCR tests per week, as well as the ratio of positive tests, has been changing throughout the whole epidemic, see e.g. \citep{Willrich2021Update}. Additionally, the wide-spread availability of rapidtests, and the 2G (access to workplace and social gatherings only for vaccinated and recovered individuals) and 3G (like 2G, but also access with a negative test) \acrshortpl{npi} introduced in fall 2021 likely changed the characteristics of those still getting PCR tests. Nevertheless, for short durations without such events we may still assume a 
+Reporting delays and artifacts are not the only obstacles we have to overcome when analyzing these data. By definition, the number of reported cases consists of cases with a positive PCR test. To compare reported incidences between two points in time, one has to assume that the so-called dark figure, i.e. the ratio of undetected to detected cases, is the same. However, there is are some objections to this assumption: the capacity and total number of PCR tests per week, as well as the ratio of positive tests, has been changing throughout the whole epidemic, see e.g. \citep{Willrich2021Update}. Additionally, the wide-spread availability of rapidtests, and the 2G (access to workplace and social gatherings only for vaccinated and recovered individuals) and 3G (like 2G, but also access with a negative test) \glspl{npi} introduced in fall 2021 likely changed the characteristics of those still getting PCR tests. Nevertheless, for short durations without such events we may still assume a 
 
 In summary, we see that handling case data turns out to be quite involved: we have to account for reporting artifacts, delays and keep in mind that the reported number of cases is not the same as the actual number of cases. 
 
 \subsection{Hospitalization data}
 \label{subsec:hospitalization_data}
-In addition to reported cases and deaths, starting  April 2021 the \acrshort{rki} published the number of hospitalizations of reported \acrshort{c19} cases each day on Zenodo \citep{RobertKoch-Institut2024COVID19Hospitalisierungen} and GitHub \citep{RobertKoch-Institut2024COVID19Hospitalisierungena}. 
+In addition to reported cases and deaths, starting  April 2021 the \gls{rki} published the number of hospitalizations of reported \gls{c19} cases each day on Zenodo \citep{RobertKoch-Institut2024COVID19Hospitalisierungen} and GitHub \citep{RobertKoch-Institut2024COVID19Hospitalisierungena}. 
 Similar to incident cases, weekly hospitalizations are reported by federal state and age group (00-04, 05-14, 15-34, 35-59, 60-79, 80+, and unknown; same as for cases). However, hospitalizations are not reported on the county level, and are only available as weekly rolling sums.
 
 In these data, the number of hospitalizations is linked to the date of reporting of the associated case, so the ``true'' value of the indicator for today, which will only be observed after a long delay, i.e. after the last hospitalization associated with today is reported. While this association requires a careful interpretation of the indicator (see \Cref{sec:nowcasting_hospitalizations}) it was, besides case incidences and ICU occupancy, one of the main official indicators in Germany informing countermeasures in 2021.
 
-The extent of delays is visible in the reporting triangle \Cref{fig:reporting_delays_cases} \textbf{B}: the reported number of hospitalizations on December 1st 2021 roughly doubled over the course of one month. By the aforementioned reporting scheme of hospitalizations, there are two reporting dates for a single hospitalized case: the reporting date of the case --- the date when local health authorities were made aware of the positive test --- and the reporting date of the hospitalization --- the date when the hospitalization was reported to the \acrshort{rki}. This induces a double weekday effect in the reporting delays which we make visible in \Cref{fig:double_weekday_effect_hosp}. 
+The extent of delays is visible in the reporting triangle \Cref{fig:reporting_delays_cases} \textbf{B}: the reported number of hospitalizations on December 1st 2021 roughly doubled over the course of one month. By the aforementioned reporting scheme of hospitalizations, there are two reporting dates for a single hospitalized case: the reporting date of the case --- the date when local health authorities were made aware of the positive test --- and the reporting date of the hospitalization --- the date when the hospitalization was reported to the \gls{rki}. This induces a double weekday effect in the reporting delays which we make visible in \Cref{fig:double_weekday_effect_hosp}. 
 In this figure, we can observe that the increment $h_{s,\tau}$ --- defined similarly to $i_{s,\tau}$ --- exhibits a weekday effect for both fixed delay $\tau$ and fixed date of hospitalization
 $s + \tau$. 
 
@@ -136,6 +136,6 @@ $s + \tau$.
 
 Hospitalizations are associated with the \emph{reporting date of the corresponding case} and no information is available on the actual date of hospitalization. In addition, hospitalizations are published only as weekly sums over the past seven days. This means that the number of hospitalizations reported for today consists of all hospitalizations that correspond to cases with a \emph{case reporting date} in the past seven days. In particular, if the case reporting date of a hospitalized case is today, the case will \emph{not} count towards today's hospitalization count. The reporting date of hospitalization is not available in the dataset but can be inferred by comparing datasets from consecutive days.
 
-We show the empirical survival function of hospitalizations for a fixed date in \Cref{fig:double_weekday_effect_hosp} \textbf{C}, split by age groups. We observe that delays have long tails, with most cases reported after 12 weeks (84 days). After such a long delay between infection and hospitalization, it is unlikely that hospitalization is due to the original infection with \acrshort{c19}, and will disregard all longer delays in our analyses accordingly. 
+We show the empirical survival function of hospitalizations for a fixed date in \Cref{fig:double_weekday_effect_hosp} \textbf{C}, split by age groups. We observe that delays have long tails, with most cases reported after 12 weeks (84 days). After such a long delay between infection and hospitalization, it is unlikely that hospitalization is due to the original infection with \gls{c19}, and will disregard all longer delays in our analyses accordingly. 
 
 As is apparent from these data quality issues, the models we construct will have to account for, e.g. the weekday effect and reporting delays, to make sensible inferences about the true state of the epidemic. 

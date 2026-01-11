@@ -1,7 +1,7 @@
 \section{Desiderata for epidemiological models}
 \label{sec:dessiderata}
 
-In what follows, we provide give a non-exhaustive list of requirements we have identified as important when modeling the \acrshort{c19} epidemic. To begin, we present a na\"{i}ve analysis of reproduction numbers and weekly growth factors for the  German data to illustrate where this simple approach breaks down. This will be our starting point to motivate which effects to include in our modeling considerations.
+In what follows, we provide give a non-exhaustive list of requirements we have identified as important when modeling the \gls{c19} epidemic. To begin, we present a na\"{i}ve analysis of reproduction numbers and weekly growth factors for the  German data to illustrate where this simple approach breaks down. This will be our starting point to motivate which effects to include in our modeling considerations.
 
 For the reproduction number, we first estimate $\hat R$ by the moment estimator \eqref{eq:hatR} using the raw incidences $I_{t}$ for the whole of Germany and the generation time distribution from \Cref{fig:generation_time}. As these estimates are affected by the weekday effect present in the raw incidences, we repeat the estimation, now based on the seven-day averages $\frac{1}{7}\sum_{\tau = -3}^3I_{t - \tau}$, producing smoother estimates. 
 Similarly, we estimate the weekly growth factor once by the raw incidences, $ \hat \rho^{7} = \frac{I_{t}}{I_{t - 7}}$ and the smoothed estimate \eqref{eq:rho7_smooth}.
@@ -25,7 +25,7 @@ Given these difficulties, we cannot expect precise inferences using such simple 
 
 \paragraph{regularization in time}
 % why 
-We would generally expect the day-to-day variation in contact, and thus infection, behavior to be small. Even if new \acrshortpl{npi} are introduced, a mix of early and late adoption in different regions should lead to only small changes in $R$ and $\rho$ each day on the country level. 
+We would generally expect the day-to-day variation in contact, and thus infection, behavior to be small. Even if new \glspl{npi} are introduced, a mix of early and late adoption in different regions should lead to only small changes in $R$ and $\rho$ each day on the country level. 
 
 % how to do it
 To achieve this smoothing, we may model the absolute or relative change in the indicators to be locally linear or constant. 
@@ -57,7 +57,7 @@ To deal with this unsatisfactory behavior, we can mark the number of cases in th
 %The following three aspects are related to modeling the epidemic on a smaller scale. 
 
 \paragraph{regional variation}
-The outbreak in Gütersloh county, June 2020, shows what can go wrong if we neglect regional variation of the spread of \acrshort{c19}. Similar to the effect of reporting artifacts, reproduction number and growth factor estimates are  not representative during and shortly after the outbreak. Additionally, we would expect the spread of \acrshort{c19} to be heterogeneous due to other factors as well: different regions possess different levels of immunity, be it by infection or vaccination, implement different \acrshortpl{npi} and, arguably, exhibit different contact behavior: inhabitants of rural counties will probably commute to work by car, while inhabitants of larger cities use public transportation, exposing them to many more infectors. Furthermore, inhabitants can travel between different regions, so our models should include an exchange of infections as well. 
+The outbreak in Gütersloh county, June 2020, shows what can go wrong if we neglect regional variation of the spread of \gls{c19}. Similar to the effect of reporting artifacts, reproduction number and growth factor estimates are  not representative during and shortly after the outbreak. Additionally, we would expect the spread of \gls{c19} to be heterogeneous due to other factors as well: different regions possess different levels of immunity, be it by infection or vaccination, implement different \glspl{npi} and, arguably, exhibit different contact behavior: inhabitants of rural counties will probably commute to work by car, while inhabitants of larger cities use public transportation, exposing them to many more infectors. Furthermore, inhabitants can travel between different regions, so our models should include an exchange of infections as well. 
 
 % how to do it
 Deterministically modeling different reproduction numbers / growth factors for each of the 400 counties in Germany will be a difficult task, as the number of cases within each region can be quite low, especially between waves, so uncertainty in estimates will be high. Instead, we will implement an idea from small-area estimation, modeling for each day the indicator in a region as random with common marginals. Similar to mixed effects models, this allows regions with few incidences to ``borrow statistical strength'' from regions with large incidences. For fixed time-points, we have already implemented such a model in \citep{Burgard2021Regional}. Actually, restricting ourselves to the same marginals is not necessary, as we will see in \Cref{sec:regional_growth_factor_model}. 
@@ -77,6 +77,6 @@ As infected individuals travel from their home region to another region --- e.g.
 
 \paragraph{count data}
 By definition, the number of infected or reported cases are count data. When case numbers are high, an appropriate central limit theorem suggests modeling these discrete data with a Gaussian distribution. However, when case numbers are low, no such central limit theorem is applicable, and we have to resort to discrete distributions, such as the Poisson distribution (motivated by the law of small numbers) or the Negative Binomial distribution (a Poisson-Gamma mixture). This is the case whenever we are interested in time periods with overall low incidence, or data on the regional level.
-In such models, analytical solutions are usually not available, and we have to resort to numerical methods, e.g. \acrshort{mcint}, to derive quantities of interest.
+In such models, analytical solutions are usually not available, and we have to resort to numerical methods, e.g. \gls{mcint}, to derive quantities of interest.
 
 In this chapter, we have set the stage for the remainder of this thesis: now that we have defined precisely what data we have at our hands and what epidemiological application requires, we turn our attention to the models that will allow us to meet many of the requirements.

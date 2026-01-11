@@ -1,12 +1,12 @@
 \section{Inference in PGSSMs}
 \label{sec:maximum_likelihood_estimation}
 
-Once we have chosen a suitable \acrshort{pgssm} to model the observations $\left( y_{t} \right)_{t = 0, \dots, n}$, we are interested in statistical inferences. This is a two-part procedure: first we must estimate the unknown hyperparameters $\theta$, which we will do by maximum likelihood estimation. Then we have to obtain a description of the conditional distributions of interest, e.g. the conditional distribution of states given observations or the conditional distribution of future, yet unavailable, observations. 
+Once we have chosen a suitable \gls{pgssm} to model the observations $\left( y_{t} \right)_{t = 0, \dots, n}$, we are interested in statistical inferences. This is a two-part procedure: first we must estimate the unknown hyperparameters $\theta$, which we will do by maximum likelihood estimation. Then we have to obtain a description of the conditional distributions of interest, e.g. the conditional distribution of states given observations or the conditional distribution of future, yet unavailable, observations. 
 
 \subsection{Maximum likelihood estimation}
 % region introduction
 %% need for MLE: hyperparameters
-Until now, we have assumed that the \acrshort{ssm} under consideration is completely known, i.e. we have access to the true transition and observation kernels. For the models considered in this thesis (\Cref{cha:analysis_of_selected_models}), this is unrealistic, as they are not based on concrete physical processes but are rather statistical approximations of the true underlying dynamics. The transition densities of, e.g., \eqref{eq:glssm_states} will depend on the covariance matrix of innovations, of which we have no a priori knowledge and for negative binomially distributed observations the overdispersion parameter $r$ will be unknown. Let us denote by $\theta\in\R^{l}$ the vector of these hyperparameters. 
+Until now, we have assumed that the \gls{ssm} under consideration is completely known, i.e. we have access to the true transition and observation kernels. For the models considered in this thesis (\Cref{cha:analysis_of_selected_models}), this is unrealistic, as they are not based on concrete physical processes but are rather statistical approximations of the true underlying dynamics. The transition densities of, e.g., \eqref{eq:glssm_states} will depend on the covariance matrix of innovations, of which we have no a priori knowledge and for negative binomially distributed observations the overdispersion parameter $r$ will be unknown. Let us denote by $\theta\in\R^{l}$ the vector of these hyperparameters. 
 To make this dependence explicit, we will introduce subscripts $\theta$ where appropriate, i.e. $\P_{\theta}$ is a target distribution that additionally depends on $\theta$, $p_{\theta}$ its density et cetera. This section is loosely based on \citep[Chapter 7 \& 11]{Durbin2012Time} and \citep[Chapter 14]{Chopin2020Introduction}.
 
 To determine a suitable value of $\theta$, multiple options are available. Here, we opt for a frequentist approach, using maximum likelihood estimation to determine an optimal $\hat \theta$. Therefore, given observations $y\in\R^{(n+1)\times p}$, $\hat\theta$ maximizes the likelihood $p_{\theta}(y)$ and can be obtained as the global maximum of the following optimization problem: 
@@ -23,7 +23,7 @@ Here $\Theta \subseteq \R^{l}$ is the parameter space. To solve this optimizatio
 %% GLSSM analytically available, still need to use gradient descent algs. 
 %% analytically impossible
 %% high dimensional integral -> importance sampling
-While the Kalman-filter (\Cref{alg:kalman_filter}) allows analytical computation of this likelihood \acrshortpl{glssm}, in general \acrshortpl{ssm} it is numerically intractable. The reason for this is that
+While the Kalman-filter (\Cref{alg:kalman_filter}) allows analytical computation of this likelihood \glspl{glssm}, in general \glspl{ssm} it is numerically intractable. The reason for this is that
 $$
     p_{\theta}(y) = \int p_{\theta}(x,y) \mathrm d \mu(x)
 $$
@@ -56,14 +56,14 @@ Note that, by Jensen's inequality, these estimates are biased.
 
 
 %% optimizatino using CRNs, advantage over particle filters
-To solve the optimization problem \eqref{eq:max-log-p} we will again employ \acrshortpl{crn}. If the densities involved are twice differentiable, this device ensures that the random objective function $\theta \mapsto \sum_{i = 1}^N \tilde w_{\theta}(X^{i})$ is twice differentiable, and so we can indeed apply gradient ascent to find a local maximum. This is an advantage of performing global importance sampling over \acrshort{smc}, i.e. particle filter, methods. To avoid collapse to a single particle, \acrshort{smc} methods perform intermediate resampling steps, which make the objective function discontinuous. While particle smoothing methods can mitigate this problem, they are more expensive than standard \acrshort{smc} and, as the importance sampling estimates of the log-likelihood and its gradient are biased, the usual requirements for stochastic approximation methods are not fulfilled. 
-For a more thorough discussion of the challenges maximum likelihood estimation with \acrshort{smc} methods faces, we recommend \citep[Chapter 14]{Chopin2020Introduction}.
+To solve the optimization problem \eqref{eq:max-log-p} we will again employ \glspl{crn}. If the densities involved are twice differentiable, this device ensures that the random objective function $\theta \mapsto \sum_{i = 1}^N \tilde w_{\theta}(X^{i})$ is twice differentiable, and so we can indeed apply gradient ascent to find a local maximum. This is an advantage of performing global importance sampling over \gls{smc}, i.e. particle filter, methods. To avoid collapse to a single particle, \gls{smc} methods perform intermediate resampling steps, which make the objective function discontinuous. While particle smoothing methods can mitigate this problem, they are more expensive than standard \gls{smc} and, as the importance sampling estimates of the log-likelihood and its gradient are biased, the usual requirements for stochastic approximation methods are not fulfilled. 
+For a more thorough discussion of the challenges maximum likelihood estimation with \gls{smc} methods faces, we recommend \citep[Chapter 14]{Chopin2020Introduction}.
 
 %% discuss not really frequentist setting
-While \acrshortpl{mle} have a strong frequentist foundation, let us stress that, for the models that we investigate in \Cref{cha:analysis_of_selected_models}, the frequentist properties of the estimates are not of interest. The reason for this is that a frequentist interpretation requires us to imagine, at least hypothetically, an infinite repetition of the data-generating process. For the data at hand, such repetition is nonsensical: the pandemic is a ``{}one-off''{} event that will not be replicated under even approximately similar circumstances. Therefore, we will choose to view the estimation procedure more as a hyper-parameter tuning step, rather than true frequentist inference. While we can compute asymptotic confidence intervals for $\hat\theta$, see, e.g., \citep[Chapter 11.6]{Durbin2012Time}, \citep[Chapter 14.8]{Chopin2020Introduction}, these are not of practical interest for similar reasons. 
+While \glspl{mle} have a strong frequentist foundation, let us stress that, for the models that we investigate in \Cref{cha:analysis_of_selected_models}, the frequentist properties of the estimates are not of interest. The reason for this is that a frequentist interpretation requires us to imagine, at least hypothetically, an infinite repetition of the data-generating process. For the data at hand, such repetition is nonsensical: the pandemic is a ``{}one-off''{} event that will not be replicated under even approximately similar circumstances. Therefore, we will choose to view the estimation procedure more as a hyper-parameter tuning step, rather than true frequentist inference. While we can compute asymptotic confidence intervals for $\hat\theta$, see, e.g., \citep[Chapter 11.6]{Durbin2012Time}, \citep[Chapter 14.8]{Chopin2020Introduction}, these are not of practical interest for similar reasons. 
 
 %% alternative: fully Bayesian
-As an alternative to modeling $\theta$ as fixed, but unknown, and performing maximum-likelihood estimation to obtain $\hat \theta$, one might also model $\theta$ as random with prior density $p(\theta)$, such that the full model becomes $p(x,y,\theta) = p(x,y|\theta)p(\theta)$. In this setup, sometimes called the Bayesian treatment of \acrshortpl{ssm} \citep[Section 13.1]{Durbin2012Time}, the main interest still lies in the posterior density $p(x,\theta|y)$, which, depending on the model at hand, can drastically increase the difficulty of the problem: even if $p(x,y|\theta)$ is an analytically tractable model such as an \acrshort{glssm}, unless the prior is chosen to be conjugate, one has to resort to, e.g., \acrshort{mcmc}-methods. 
+As an alternative to modeling $\theta$ as fixed, but unknown, and performing maximum-likelihood estimation to obtain $\hat \theta$, one might also model $\theta$ as random with prior density $p(\theta)$, such that the full model becomes $p(x,y,\theta) = p(x,y|\theta)p(\theta)$. In this setup, sometimes called the Bayesian treatment of \glspl{ssm} \citep[Section 13.1]{Durbin2012Time}, the main interest still lies in the posterior density $p(x,\theta|y)$, which, depending on the model at hand, can drastically increase the difficulty of the problem: even if $p(x,y|\theta)$ is an analytically tractable model such as an \gls{glssm}, unless the prior is chosen to be conjugate, one has to resort to, e.g., \gls{mcmc}-methods. 
 
 % endregion
 
@@ -77,9 +77,9 @@ By the structure of the model, \eqref{eq:joint_density}, the log density and its
 \end{align*}
 respectively. 
 
-Similarly, when proposing with an \acrshort{glssm} or Markov-proposal for an \acrshort{pgssm}, the weights have similar structure, see \eqref{eq:weights_markov,eq:weights_only_on_signal}, which makes calculation of $\tilde w$ efficient. 
+Similarly, when proposing with an \gls{glssm} or Markov-proposal for an \gls{pgssm}, the weights have similar structure, see \eqref{eq:weights_markov,eq:weights_only_on_signal}, which makes calculation of $\tilde w$ efficient. 
 
-For the remainder of this section, let us consider the \acrshort{glssm}-proposal obtained by the \acrshort{la} or \acrshort{eis} for an \acrshort{pgssm} with linear signal, as this is the main setting of \Cref{cha:analysis_of_selected_models}. For this we obtain 
+For the remainder of this section, let us consider the \gls{glssm}-proposal obtained by the \gls{la} or \gls{eis} for an \gls{pgssm} with linear signal, as this is the main setting of \Cref{cha:analysis_of_selected_models}. For this we obtain 
 $$
     \tilde w_{\theta}(x) = \tilde w_{\theta}(s) g(z)\frac{p_{\theta}(y|s)}{g(z|s)} = g(z) \prod_{t = 0}^n \frac{p_{\theta}(y_{t}|s_{t})}{g(z_{t}|s_{t})},
 $$
@@ -93,13 +93,13 @@ and can be estimated by
     \label{eq:loglik-hat-linearsignal}
     \verywidehat{\log p_{\theta}(y)} = \log g_{\theta}(z) + \log \left(\frac{1}{N}\sum_{i=1}^{N}\prod_{t = 0}^{n} \frac{p_{\theta}(y_{t}|S^{i}_{t})}{ g(z_{t}|S^{i}_{t})}\right).
 \end{align}
-Notice that $\log g_{\theta}(z)$ is the likelihood in an \acrshort{glssm}, which can be computed efficiently by the standard Kalman filter (\Cref{alg:kalman_filter}). As in the \acrshort{glssm}-approach we propose with  an \acrshort{glssm} whose state density $g(x)$ and observation matrices $B_{t}$, $t = 0, \dots, n$ are equal to those of the target, the log-likelihood $\log g_{\theta}(z)$ also depends on $\theta$. The estimated gradient of the log-likelihood is 
+Notice that $\log g_{\theta}(z)$ is the likelihood in an \gls{glssm}, which can be computed efficiently by the standard Kalman filter (\Cref{alg:kalman_filter}). As in the \gls{glssm}-approach we propose with  an \gls{glssm} whose state density $g(x)$ and observation matrices $B_{t}$, $t = 0, \dots, n$ are equal to those of the target, the log-likelihood $\log g_{\theta}(z)$ also depends on $\theta$. The estimated gradient of the log-likelihood is 
 $$
     \verywidehat{\nabla_{\theta} \log p_{\theta}(y)} = \nabla_{\theta} \log g_{\theta}(z) + \sum_{i=1}^N W^{i}_\theta \sum_{t = 0}^n \nabla_{\theta} \log p_{\theta}(y_{t}|S_{t}^{i}).
 $$
-The gradient of the \acrshort{glssm} log-likelihood can be obtained either numerically or analytically by employing the Kalman filter and smoother \citep{Koopman1992Exact}, however, numerical evaluation may be faster if the dimension of $\theta$ is small compared to the length of the time series, as evaluating the likelihood only requires a single application of the Kalman filter. 
+The gradient of the \gls{glssm} log-likelihood can be obtained either numerically or analytically by employing the Kalman filter and smoother \citep{Koopman1992Exact}, however, numerical evaluation may be faster if the dimension of $\theta$ is small compared to the length of the time series, as evaluating the likelihood only requires a single application of the Kalman filter. 
 
-As the observation densities $g(z_{t}|s_{t})$ do not depend on $\theta$, their derivatives do not appear in the above estimate. However, when using \acrshort{eis} to determine an optimal proposal, the parameter $\psi = (z, \omega)$ implicitly depends on $\theta$. Accounting for this yields the gradient 
+As the observation densities $g(z_{t}|s_{t})$ do not depend on $\theta$, their derivatives do not appear in the above estimate. However, when using \gls{eis} to determine an optimal proposal, the parameter $\psi = (z, \omega)$ implicitly depends on $\theta$. Accounting for this yields the gradient 
 \begin{align}
     \label{eq:gradient_infeasible}
     \verywidehat{\nabla_{\theta} \log p_{\theta}(y)} = \nabla_{\theta} \log g_{\theta}(z) + \sum_{i=1}^N W^{i}_\theta \left(\sum_{t = 0}^n \nabla_{\theta} \log p_{\theta}(y_{t}|S_{t}^{i}) - \nabla_{\theta} \log g_{\theta}(z_{t}|S^{i}_{t})\right),
@@ -108,7 +108,7 @@ as $\nabla_{\theta} \frac{1}{g_{\theta}(z|s)} = - \frac{1}{g_{\theta}(z|s)} \nab
 
 As an alternative one may try keeping proposal $\G$ fixed, which would avoid calculation of the involved derivatives in the previous equation. However, this makes the calculation of weights more involved, as then $p_{\theta}(x) \neq g(x)$. Additionally, we would expect the target $p_{\theta}(x|y)$ to be quite sensitive to small changes in $\theta$, as $\theta$ will likely contain parameters related to the covariance structure of model, leading to fast degeneration of weights. Nevertheless, a combination of analytical and numerical gradient descent steps may improve the performance of the optimization procedure, but is beyond the scope of this thesis.
 
-As a single evaluation of the log-likelihood can become very expensive we want our procedure to be as efficient as possible. To this end, \citep{Durbin1997Monte} provides several improvements to the basic algorithm if the model is an \acrshort{pgssm} with a linear signal. Their contributions consist of a bias correction for the log-likelihood, the use of antithetic and control variables to reduce Monte-Carlo error for importance sampling and a deterministic initialization procedure.
+As a single evaluation of the log-likelihood can become very expensive we want our procedure to be as efficient as possible. To this end, \citep{Durbin1997Monte} provides several improvements to the basic algorithm if the model is an \gls{pgssm} with a linear signal. Their contributions consist of a bias correction for the log-likelihood, the use of antithetic and control variables to reduce Monte-Carlo error for importance sampling and a deterministic initialization procedure.
 Let us briefly summarize these ideas, adapted to our notation. As the computational gains for control variates in the presence of antithetic variables seem to be limited, we do not give the same level of detail here, for an in-depth analysis, we refer the reader to the source. 
 
 % bias reduction
@@ -124,7 +124,7 @@ provided $\tilde w \in L^{3}(\G)$. Thus, estimating the second order term by $- 
 \end{align}
 
 % antithetics
-The second improvement of \citep{Durbin1997Monte} is the use of antithetic variables and control variates, a device to reduce Monte-Carlo variance. The main idea of an antithetic variable is to construct for each sample $X^{i}$, $i = 1,\dots, N$, another sample $\tilde X^{i}$ that has the same distribution as $X^{i}$, but is negatively correlated with $X^{i}$. This has two effects: first of all, we increase the number of samples used for importance sampling and second, as the new samples are negatively correlated with the old samples, the Monte-Carlo variance is reduced. The computation of these samples is usually much faster than creating new samples, which requires the use of the expensive \acrshort{ffbs} or simulation smoother algorithms. 
+The second improvement of \citep{Durbin1997Monte} is the use of antithetic variables and control variates, a device to reduce Monte-Carlo variance. The main idea of an antithetic variable is to construct for each sample $X^{i}$, $i = 1,\dots, N$, another sample $\tilde X^{i}$ that has the same distribution as $X^{i}$, but is negatively correlated with $X^{i}$. This has two effects: first of all, we increase the number of samples used for importance sampling and second, as the new samples are negatively correlated with the old samples, the Monte-Carlo variance is reduced. The computation of these samples is usually much faster than creating new samples, which requires the use of the expensive \gls{ffbs} or simulation smoother algorithms. 
 \begin{definition}[antithetic variable]
     Let $X, \tilde X\in\R^{k}$ be two random variables with the same distribution, $\mathcal L (X) = \mathcal L(\tilde X)$ and $f: \R^{k} \to \R$. Then $\tilde X$ is called an antithetic variable of $X$ for $f$, if $\cov \left( f(\tilde X), f(X) \right) < 0$. If $k = 1$ and $f$ is the identity, we just say that $\tilde X$ is an antithetic variable of $X$.
 \end{definition}
@@ -185,7 +185,7 @@ $$
 $$
 has the same distribution as $X$, as $\tilde c \sim \mathcal L( \lVert u \rVert^{2})$ and is independent of $ \frac{X - \mu}{\sqrt{c}}$. 
 
-Given an \acrshort{glssm}-proposal and samples $X^{1}, \dots, X^{N}$ from it, we can calculate these antithetic variables efficiently: for the location balanced antithetic we can calculate the mean using the Kalman-smoother and for the scale balanced antithetic we can calculate $c$ and $c'$ using the inverse CDF of the $\chi^{2}_{k}$ distribution and the standard normal samples used to sample $X^{i}$ in the first place, for which fast implementations are readily available. Incidental, we obtain a third antithetic, 
+Given an \gls{glssm}-proposal and samples $X^{1}, \dots, X^{N}$ from it, we can calculate these antithetic variables efficiently: for the location balanced antithetic we can calculate the mean using the Kalman-smoother and for the scale balanced antithetic we can calculate $c$ and $c'$ using the inverse CDF of the $\chi^{2}_{k}$ distribution and the standard normal samples used to sample $X^{i}$ in the first place, for which fast implementations are readily available. Incidental, we obtain a third antithetic, 
 \begin{align}
     \label{eq:antithetic-scale-location}
     \breve{X} = \mu - \sqrt{ \frac{c'}{c}} (X - \mu)
@@ -204,7 +204,7 @@ As the procedure to evaluate the likelihood by importance sampling becomes expen
     \label{eq:loglik-initial-approx-mode}
     \log p_{\theta}(y) \approx \log g_{\theta}(z) + \log w_{\theta}(s^{\ast}),
 \end{align}
-which can be evaluated without simulation by the \acrshort{la}. A better approximation can be obtained by performing a fourth-order Taylor expansion of $s\mapsto w_{\theta}(s)$ around the mode $s^\ast$, which yields 
+which can be evaluated without simulation by the \gls{la}. A better approximation can be obtained by performing a fourth-order Taylor expansion of $s\mapsto w_{\theta}(s)$ around the mode $s^\ast$, which yields 
 \begin{align}
     \label{eq:loglik-initial-tayolor-approx-mode}
     \log p_{\theta}(y) \approx \log g_{\theta}(z) + \log w_{\theta}(s^{\ast}) + \log \left( 1 + \frac{1}{8} \sum_{t = 1}^n\sum_{j = 1}^m l^{(4)}_{t,j}(s^{\ast}) v_{t,j}^2 \right),
@@ -215,20 +215,20 @@ where $l^{(4)}$ is the fourth derivative of the log-weights $s\mapsto \log w_{\t
 \begin{algorithm}
     \label{alg:mle}
     \begin{algorithmic}[1]
-        \Require parameterized \acrshort{pgssm} with linear signal, initial $\theta^{0} \in \Theta$, observations $y \in \R^{(n+1)p}$, number of samples $N$
+        \Require parameterized \gls{pgssm} with linear signal, initial $\theta^{0} \in \Theta$, observations $y \in \R^{(n+1)p}$, number of samples $N$
         % initialization
         \Function{approx\_loglik}{$\theta$}
-            \State obtain \acrshort{la} of the \acrshort{pgssm} for $\theta$ \Comment{\Cref{alg:la}}
-            \State obtain mode $s^{\ast}$ and conditional variances $v_{t,j}$ from the \acrshort{la} \Comment{\Cref{alg:kalman_filter,alg:kalman_smoother}}
+            \State obtain \gls{la} of the \gls{pgssm} for $\theta$ \Comment{\Cref{alg:la}}
+            \State obtain mode $s^{\ast}$ and conditional variances $v_{t,j}$ from the \gls{la} \Comment{\Cref{alg:kalman_filter,alg:kalman_smoother}}
             \State \textbf{return} approximate log-likelihood \Comment{\eqref{eq:loglik-initial-approx-mode} or \eqref{eq:loglik-initial-tayolor-approx-mode}}
         \EndFunction 
         \Statex
 
         \Function{estimate\_loglik}{$\theta$}
-            \State obtain \acrshort{la} of the \acrshort{pgssm} for $\theta$ \Comment{\Cref{alg:la}}
-            \State obtain \acrshort{eis} proposal $\G_{(z,\Omega)}$ \Comment{\Cref{alg:eis}, \acrshort{la} as initial values}
-            \State sample $N$ signals $S^{i}$ from $S|Z = z$ in \acrshort{eis} \Comment{\Cref{alg:ffbs} or signal smoother}
-            \State obtain mode $s^{\ast}$ in \acrshort{eis} proposal \Comment{\Cref{alg:kalman_smoother} or signal smoother}
+            \State obtain \gls{la} of the \gls{pgssm} for $\theta$ \Comment{\Cref{alg:la}}
+            \State obtain \gls{eis} proposal $\G_{(z,\Omega)}$ \Comment{\Cref{alg:eis}, \gls{la} as initial values}
+            \State sample $N$ signals $S^{i}$ from $S|Z = z$ in \gls{eis} \Comment{\Cref{alg:ffbs} or signal smoother}
+            \State obtain mode $s^{\ast}$ in \gls{eis} proposal \Comment{\Cref{alg:kalman_smoother} or signal smoother}
             \State calculate antithetic variables $\tilde{S^{i}},\check{S^{i}}, \breve{{S^{i}}}$ \Comment{\eqref{eq:antithetic-location,eq:antithetic-scale,eq:antithetic-scale-location}}
             \State set $\tilde w_{\theta}^i = \frac{1}{4} \left( \tilde w_{\theta} (X^{i}) + \tilde w_{\theta}(\tilde{X^{i}}) + \tilde w_{\theta}(\check{X^{i}}) + \tilde w_{\theta}(\breve{{X^{i}}}) \right)$ \eqref{eq:antithetic-weights}
             \State set $\tilde w_{\cdot} = \frac{1}{N}\sum_{i = 1}^N \tilde w^{i}_{\theta}$
@@ -240,17 +240,17 @@ where $l^{(4)}$ is the fourth derivative of the log-weights $s\mapsto \log w_{\t
 
         \State maximize \textrm{APPROX\_LOGLIK} with initial value $\theta^{0}$  \Comment{numerically}
         \State set $\theta^{0} $ to optimal value
-        \State maximize \textrm{ESTIMATE\_LOGLIK} with initial value $\theta^{0}$ and \acrshortpl{crn}  \Comment{numerically}
+        \State maximize \textrm{ESTIMATE\_LOGLIK} with initial value $\theta^{0}$ and \glspl{crn}  \Comment{numerically}
         \State set $\hat \theta$ to optimal value
         \State \textbf{return} $\hat \theta $
     \end{algorithmic}
-    \caption{Maximum likelihood estimation in an \acrshort{pgssm} with linear signal using \acrshort{eis}.}
+    \caption{Maximum likelihood estimation in an \gls{pgssm} with linear signal using \gls{eis}.}
 \end{algorithm}
 
-The resulting procedure to find the MLE $\hat \theta$ in an \acrshort{pgssm} with linear signal is summarized in \Cref{alg:mle}. Notice that we use \acrshortpl{crn} to ensure numerical convergence. The numerical optimization can be performed using any standard solver such as the BFGS algorithm \citep[Chapter 6.1]{Nocedal2006Numerical}. We cannot give guarantees that this procedure produces the true \acrshort{mle}, i.e. finds the global maximizer. However, as we have discussed earlier, we are not interested in frequentist properties of $\hat \theta$ but see the estimation procedure as a hyperparameter tuning step. Thus, a local maximum may well be sufficient. Nevertheless, checking different starting points and random number seeds should be used to get as close as possible to the global maximum.
+The resulting procedure to find the MLE $\hat \theta$ in an \gls{pgssm} with linear signal is summarized in \Cref{alg:mle}. Notice that we use \glspl{crn} to ensure numerical convergence. The numerical optimization can be performed using any standard solver such as the BFGS algorithm \citep[Chapter 6.1]{Nocedal2006Numerical}. We cannot give guarantees that this procedure produces the true \gls{mle}, i.e. finds the global maximizer. However, as we have discussed earlier, we are not interested in frequentist properties of $\hat \theta$ but see the estimation procedure as a hyperparameter tuning step. Thus, a local maximum may well be sufficient. Nevertheless, checking different starting points and random number seeds should be used to get as close as possible to the global maximum.
 
 % region outlook
-Notice that our discussion implies that we cannot reuse an \acrshort{glssm} proposal used for $\theta$ at another $\theta'$, as $p_{\theta'}(x) \neq g_{\theta}(x)$. While we can still calculate the weights using the general \eqref{eq:loglik-hat-standard}, we presume that the old proposal is not a good choice for the new target. The reason for this is that $\theta$ will usually contain parameters related to the covariance structure of the innovations and observations, and these parameters usually affect many, if not all states or observations. For example, it is common to model states that perform a random walk with common innovation variance $\sigma^{2}$ as an element of $\theta$. As the distributions lie in a high-dimensional space, slight misspecification of the covariance structure will drastically deteriorate the performance of importance sampling. 
+Notice that our discussion implies that we cannot reuse an \gls{glssm} proposal used for $\theta$ at another $\theta'$, as $p_{\theta'}(x) \neq g_{\theta}(x)$. While we can still calculate the weights using the general \eqref{eq:loglik-hat-standard}, we presume that the old proposal is not a good choice for the new target. The reason for this is that $\theta$ will usually contain parameters related to the covariance structure of the innovations and observations, and these parameters usually affect many, if not all states or observations. For example, it is common to model states that perform a random walk with common innovation variance $\sigma^{2}$ as an element of $\theta$. As the distributions lie in a high-dimensional space, slight misspecification of the covariance structure will drastically deteriorate the performance of importance sampling. 
 
 If computations are so involved that we want to avoid running the optimal importance sampling scheme as much as possible, one could try, if the model under investigation allows for it, to split $\theta$ into $(\theta_{x}, \theta_y)$ where $\theta_{x}$ only affects the state transitions and $\theta_{y}$ only affects the observation densities. Then a coordinate ascent scheme could be employed, where the update step for $\theta_{y}$ can reuse the proposal, provided that $\theta_{y}$ does not change too much and the observation density $p_{\theta}(y|x)$ is not too sensitive to changes in $\theta_{y}$, which should imply that the proposal is still close enough to give good importance sampling performance. Then numerical differentiation is only required to update $\theta_{x}$. 
 
@@ -258,11 +258,11 @@ If computations are so involved that we want to avoid running the optimal import
 
 \subsection{Posterior inference}
 \label{subsec:inference}
-Once we have chosen $\theta$ (by maximum likelihood estimation), and thus a concrete \acrshort{pgssm} with which to perform statistical inference, we are interested in, e.g., the conditional distribution of states $X$ given observations $Y$, or functionals thereof. 
-Here we will assume, for computational reasons, that the \acrshort{pgssm} has a linear signal, otherwise the same arguments can be applied to the states directly as well, at the expense of higher computation cost.
+Once we have chosen $\theta$ (by maximum likelihood estimation), and thus a concrete \gls{pgssm} with which to perform statistical inference, we are interested in, e.g., the conditional distribution of states $X$ given observations $Y$, or functionals thereof. 
+Here we will assume, for computational reasons, that the \gls{pgssm} has a linear signal, otherwise the same arguments can be applied to the states directly as well, at the expense of higher computation cost.
 
-At our disposal we will have, after obtaining an \acrshort{glssm} proposal using the \acrshort{eis} method, signal samples $S^{i}\in \R^{(n+1)\times p}$, $i = 1, \dots, N$ and associated auto-normalized weights $W^{i}$. 
-Let $\mathfrak X \in \R$ be a univariate random variable which is conditionally independent of the observations $Y$ given the signal $S$, i.e. $\mathfrak X \perp Y | S$, whose conditional expectation and variance given $Y$ exist, as well as a regular version of this conditional distribution. $\mathfrak X$ can be a marginal of $X$, a scalar function of $X$, a future or missing observation, or function thereof. We will assume that we can sample from $\mathfrak X | S$. This is reasonable for all scenarios we are interested in: states and signals are jointly Gaussian, so samples can be obtained using the \acrshort{ffbs} (\Cref{alg:ffbs}), and the distribution of missing or future observations, conditional on states, is tractable in the models we consider. The following paragraphs are based on \citep[Section 11.5]{Durbin2012Time}, but stated in more general terms using $\mathfrak X$. 
+At our disposal we will have, after obtaining an \gls{glssm} proposal using the \gls{eis} method, signal samples $S^{i}\in \R^{(n+1)\times p}$, $i = 1, \dots, N$ and associated auto-normalized weights $W^{i}$. 
+Let $\mathfrak X \in \R$ be a univariate random variable which is conditionally independent of the observations $Y$ given the signal $S$, i.e. $\mathfrak X \perp Y | S$, whose conditional expectation and variance given $Y$ exist, as well as a regular version of this conditional distribution. $\mathfrak X$ can be a marginal of $X$, a scalar function of $X$, a future or missing observation, or function thereof. We will assume that we can sample from $\mathfrak X | S$. This is reasonable for all scenarios we are interested in: states and signals are jointly Gaussian, so samples can be obtained using the \gls{ffbs} (\Cref{alg:ffbs}), and the distribution of missing or future observations, conditional on states, is tractable in the models we consider. The following paragraphs are based on \citep[Section 11.5]{Durbin2012Time}, but stated in more general terms using $\mathfrak X$. 
 
 We are then interested in estimating several quantities: the conditional expectation $\mathbf E \left( \mathfrak X | Y \right)$, the conditional variance $\var \left( \mathfrak X | Y \right)$ or $\alpha$-quantiles of the conditional distribution $\mathfrak X | Y$. By the assumed conditional independence, we have
 $$
@@ -282,5 +282,5 @@ $$
 $$
 While this produces estimates with slightly larger variance (due to the additional simulation), we can control the simulation error by choosing the sample size large enough.
 
-Similarly, by considering $\mathfrak X^{2}$, we can estimate the conditional variance, and by considering $\mathbf 1 _{\mathfrak X \leq x}$, we may estimate the conditional \acrlong{cdf} of $\mathfrak X$ given $Y$ at $x$, which is just the empirical \acrshort{cdf} of samples $\mathfrak X^{i}$ with associated weights $W^{i}$, $i = 1,\dots, N$.
-Consequently, we can estimate the $\alpha$-quantile of $\mathfrak X | Y$ by the $\alpha$-quantile of this empirical \acrshort{cdf}, where we use the standard convention for empirical quantiles of linear interpolation between samples to make quantiles unique, see also \citep[Section 11.5.3]{Durbin2012Time}.
+Similarly, by considering $\mathfrak X^{2}$, we can estimate the conditional variance, and by considering $\mathbf 1 _{\mathfrak X \leq x}$, we may estimate the conditional \acrlong{cdf} of $\mathfrak X$ given $Y$ at $x$, which is just the empirical \gls{cdf} of samples $\mathfrak X^{i}$ with associated weights $W^{i}$, $i = 1,\dots, N$.
+Consequently, we can estimate the $\alpha$-quantile of $\mathfrak X | Y$ by the $\alpha$-quantile of this empirical \gls{cdf}, where we use the standard convention for empirical quantiles of linear interpolation between samples to make quantiles unique, see also \citep[Section 11.5.3]{Durbin2012Time}.
