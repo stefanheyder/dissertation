@@ -1,0 +1,2714 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Figures for the hospitalization model – ssm4epi</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-000f0825b9c55ed21d14970d810c14a9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Figures for the hospitalization model – ssm4epi">
+<meta property="og:description" content="PhD thesis">
+<meta property="og:image" content="https://stefanheyder.github.io/dissertation/4 Models/4.3 Nowcasting hospitalizations/40_figures_files/figure-html/cell-3-output-3.png">
+<meta property="og:site_name" content="ssm4epi">
+<meta property="og:image:height" content="840">
+<meta property="og:image:width" content="1920">
+<meta name="twitter:title" content="Figures for the hospitalization model – ssm4epi">
+<meta name="twitter:description" content="PhD thesis">
+<meta name="twitter:image" content="https://stefanheyder.github.io/dissertation/4 Models/4.3 Nowcasting hospitalizations/40_figures_files/figure-html/cell-3-output-3.png">
+<meta name="twitter:image-height" content="840">
+<meta name="twitter:image-width" content="1920">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">ssm4epi</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../4 Models/utilities.html">4 Models</a></li><li class="breadcrumb-item"><a href="../../4 Models/4.3 Nowcasting hospitalizations/data.html">4.3 Nowcasting hospitalizations</a></li><li class="breadcrumb-item"><a href="../../4 Models/4.3 Nowcasting hospitalizations/figures.html">Figures for the hospitalization model</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thesis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">2 Epidemiology</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../2 Epidemiology/03_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.3 Available data and its quality</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../2 Epidemiology/04_desiderata.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.4 Desiderata for epidemiological models</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">3 SSMs</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../3 SSMs/04_is_figures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.4 Importance sampling: Figures</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../3 SSMs/05_gaussian_is.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.5 Gaussian Importance Sampling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../3 SSMs/07_cross_entropy_method_utils.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cross-Entropy method</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../3 SSMs/08_comparison.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sympy preamble</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../3 SSMs/08_comparison_figures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.8 Comparison of Importance Sampling Methods - Figures</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../3 SSMs/08_ssm_comparison.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Comparison of EIS and the CEM for SSMs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../3 SSMs/08_ssm_comparison_figures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">08_ssm_comparison_figures.html</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">4 Models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/utilities.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Utilities for the models of this thesis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/patch_full_dependencies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Monkey patching</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">4.1 Removing reporting delays and weekday effects</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.1 Removing reporting delays and weekday effects/data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.1 Removing reporting delays and weekday effects/model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model for removing weekday effects and reporting delays</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.1 Removing reporting delays and weekday effects/showcase_model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Application 1: Showcase</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.1 Removing reporting delays and weekday effects/christmas_model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Application 2: Christmas model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.1 Removing reporting delays and weekday effects/prediction_model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Application 3: Predictions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.1 Removing reporting delays and weekday effects/figures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Figures</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+ <span class="menu-text">4.2 Regional growth factor model</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.2 Regional growth factor model/data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.2 Regional growth factor model/data_python.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Forecasts from the ECDC FCH</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.2 Regional growth factor model/model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.2 Regional growth factor model/showcase.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Application 1: Showcase</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.2 Regional growth factor model/forecasting_ecdc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">forecasting_ecdc.html</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.2 Regional growth factor model/figures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Showcase</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">4.3 Nowcasting hospitalizations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.3 Nowcasting hospitalizations/data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.3 Nowcasting hospitalizations/data_in_r.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data for Section 4.3: Hospitalization Nowcasting</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.3 Nowcasting hospitalizations/model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.3 Nowcasting hospitalizations/showcase.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Application 1: Showcase</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.3 Nowcasting hospitalizations/nowcasting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Application 2: Nowcasting hospitalizations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.3 Nowcasting hospitalizations/nowcasting_new.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">A second try at nowcasting model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.3 Nowcasting hospitalizations/figures.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Figures for the hospitalization model</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#model" id="toc-model" class="nav-link active" data-scroll-target="#model">Model</a></li>
+  <li><a href="#application-1-showcase" id="toc-application-1-showcase" class="nav-link" data-scroll-target="#application-1-showcase">Application 1: Showcase</a></li>
+  <li><a href="#application-2-same-day-nowcasts" id="toc-application-2-same-day-nowcasts" class="nav-link" data-scroll-target="#application-2-same-day-nowcasts">Application 2: Same-day nowcasts</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/stefanheyder/dissertation/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../4 Models/utilities.html">4 Models</a></li><li class="breadcrumb-item"><a href="../../4 Models/4.3 Nowcasting hospitalizations/data.html">4.3 Nowcasting hospitalizations</a></li><li class="breadcrumb-item"><a href="../../4 Models/4.3 Nowcasting hospitalizations/figures.html">Figures for the hospitalization model</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Figures for the hospitalization model</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<div id="4f558cfc" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="fu">here</span>(<span class="st">"setup.R"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>here() starts at /Users/stefan/workspace/work/phd/thesis
+</code></pre>
+</div>
+</div>
+<section id="model" class="level2">
+<h2 class="anchored" data-anchor-id="model">Model</h2>
+<div id="595014e9" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>plt_probs <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/processed/seven_day_H_I_by_age.csv"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">p_sk =</span> h <span class="sc">/</span> I <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(k <span class="sc">&lt;=</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(s <span class="sc">&gt;=</span> <span class="fu">ymd</span>(<span class="st">'2021-11-22'</span>), s <span class="sc">&lt;=</span> <span class="fu">ymd</span>(<span class="st">'2022-04-29'</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(s, p_sk, <span class="at">color =</span> <span class="fu">factor</span>(k))) <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> <span class="fu">fct_relevel</span>(a, age_order_4cols), <span class="at">ncol =</span> <span class="dv">4</span>, <span class="at">labeller =</span> age_group_labeller, <span class="at">scales =</span> <span class="st">"free_y"</span>) <span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">"$</span><span class="sc">\\</span><span class="st">hat p_{t,k}$ [</span><span class="sc">\\</span><span class="st">%]"</span>) <span class="sc">+</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_discrete</span>(<span class="at">name =</span> <span class="st">"k"</span>) <span class="sc">+</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>)) <span class="sc">+</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_log10</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_comma</span>()) <span class="sc">+</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_date</span>(<span class="at">date_labels =</span> <span class="st">"%b %y"</span>, <span class="at">date_breaks =</span> <span class="st">"4 months"</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>plt_probs</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave_tikz</span>(<span class="fu">here</span>(<span class="st">"tikz/delay_hospitalization_probabilities.tex"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<div class="ansi-escaped-output">
+<pre>Warning message in scale_y_log10(labels = scales::label_comma()):
+
+“<span class="ansi-green-fg">log-10</span> transformation introduced infinite values.”
+
+Warning message in scale_y_log10(labels = scales::label_comma()):
+
+“<span class="ansi-green-fg">log-10</span> transformation introduced infinite values.”
+</pre>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<strong>pdf:</strong> 2
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="40_figures_files/figure-html/cell-3-output-3.png" width="960" height="420" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="application-1-showcase" class="level2">
+<h2 class="anchored" data-anchor-id="application-1-showcase">Application 1: Showcase</h2>
+<div id="b6060b4a" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>np <span class="ot">&lt;-</span> <span class="fu">import</span>(<span class="st">"numpy"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> np<span class="sc">$</span><span class="fu">load</span>(<span class="st">"/Users/stefan/workspace/work/phd/thesis/data/results/4_hospitalizations/showcase/predictions_age_00-04.npy"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(predictions)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>dates <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="fu">ymd</span>(<span class="st">"2021-11-22"</span>), <span class="at">to =</span> <span class="fu">ymd</span>(<span class="st">"2022-04-28"</span>), <span class="at">by =</span> <span class="st">"1 day"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(dates)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>n_delay <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>variables <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"prob_hosp"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste0</span>(<span class="st">"p_delay_smooth"</span>, <span class="fu">seq</span>(n_delay)),</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste0</span>(<span class="st">"p_delay"</span>, <span class="fu">seq</span>(n_delay)),</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"weekday_0"</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"weekday_1"</span>,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"avg_delay"</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(variables)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning message in poetry_config(required_module):
+“This project appears to use Poetry for Python dependency management.
+However, the 'poetry' command line tool is not available.
+reticulate will be unable to activate this project.
+Please ensure that 'poetry' is available on the PATH.”</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>25</li><li>158</li><li>14</li></ol>
+</div>
+<div class="cell-output cell-output-display">
+158
+</div>
+<div class="cell-output cell-output-display">
+14
+</div>
+</div>
+<div id="3c9f1174" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df_files <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">fname =</span> <span class="fu">list.files</span>(<span class="fu">here</span>(<span class="st">"data/results/4_hospitalizations/showcase"</span>), <span class="at">full.names =</span> T)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="fu">str_detect</span>(fname, <span class="st">".npy$"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># mutate(age_group = paste0("A", str_extract(fname, "\\d\\d-\\d\\d"))) %&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">c</span>(<span class="st">"A00-04"</span>, <span class="st">"A00+"</span>, <span class="st">"A05-14"</span>, <span class="st">"A15-34"</span>, <span class="st">"A35-59"</span>, <span class="st">"A60-79"</span>, <span class="st">"A80+"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">n_delay =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">8</span>))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>read_age_predictions <span class="ot">&lt;-</span> <span class="cf">function</span>(fname, n_delay) {</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    dates <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="fu">ymd</span>(<span class="st">"2021-11-22"</span>), <span class="at">to =</span> <span class="fu">ymd</span>(<span class="st">"2022-04-28"</span>), <span class="at">by =</span> <span class="st">"1 day"</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    variables <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"prob_hosp"</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">paste0</span>(<span class="st">"p_delay_smooth"</span>, <span class="fu">seq</span>(n_delay)),</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">paste0</span>(<span class="st">"p_delay"</span>, <span class="fu">seq</span>(n_delay)),</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">"weekday_0"</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        <span class="st">"weekday_1"</span>,</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">"avg_delay"</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(fname)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">read_predictions</span>(fname, dates, variables)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>df_predictions <span class="ot">&lt;-</span> df_files <span class="sc">%&gt;%</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">data =</span> <span class="fu">map2</span>(fname, n_delay, read_age_predictions)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>fname, <span class="sc">-</span>n_delay) <span class="sc">%&gt;%</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unnest</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">ordered_age_group</span>(age_group))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "/Users/stefan/workspace/work/phd/thesis/data/results/4_hospitalizations/showcase/predictions_age_00-04.npy"
+[1] "/Users/stefan/workspace/work/phd/thesis/data/results/4_hospitalizations/showcase/predictions_age_00+.npy"
+[1] "/Users/stefan/workspace/work/phd/thesis/data/results/4_hospitalizations/showcase/predictions_age_05-14.npy"
+[1] "/Users/stefan/workspace/work/phd/thesis/data/results/4_hospitalizations/showcase/predictions_age_15-34.npy"
+[1] "/Users/stefan/workspace/work/phd/thesis/data/results/4_hospitalizations/showcase/predictions_age_35-59.npy"
+[1] "/Users/stefan/workspace/work/phd/thesis/data/results/4_hospitalizations/showcase/predictions_age_60-79.npy"
+[1] "/Users/stefan/workspace/work/phd/thesis/data/results/4_hospitalizations/showcase/predictions_age_80+.npy"</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<div class="ansi-escaped-output">
+<pre>Warning message:
+
+"`cols` is now required when using `unnest()`.
+
+<span class="ansi-cyan-fg">i</span> Please use `cols = c(data)`."
+</pre>
+</div>
+</div>
+</div>
+<div id="d903d74c" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df_predictions <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">distinct</span>(variable) <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>prob_hosp</li><li>p_delay_smooth1</li><li>p_delay_smooth2</li><li>p_delay_smooth3</li><li>p_delay_smooth4</li><li>p_delay_smooth5</li><li>p_delay1</li><li>p_delay2</li><li>p_delay3</li><li>p_delay4</li><li>p_delay5</li><li>weekday_0</li><li>weekday_1</li><li>avg_delay</li><li>p_delay_smooth6</li><li>p_delay_smooth7</li><li>p_delay_smooth8</li><li>p_delay6</li><li>p_delay7</li><li>p_delay8</li></ol>
+
+<details>
+    <summary style="display:list-item;cursor:pointer">
+        <strong>Levels</strong>:
+    </summary>
+    <style>
+    .list-inline {list-style: none; margin:0; padding: 0}
+    .list-inline>li {display: inline-block}
+    .list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+    </style>
+    <ol class="list-inline"><li>'prob_hosp'</li><li>'p_delay_smooth1'</li><li>'p_delay_smooth2'</li><li>'p_delay_smooth3'</li><li>'p_delay_smooth4'</li><li>'p_delay_smooth5'</li><li>'p_delay1'</li><li>'p_delay2'</li><li>'p_delay3'</li><li>'p_delay4'</li><li>'p_delay5'</li><li>'weekday_0'</li><li>'weekday_1'</li><li>'avg_delay'</li><li>'p_delay_smooth6'</li><li>'p_delay_smooth7'</li><li>'p_delay_smooth8'</li><li>'p_delay6'</li><li>'p_delay7'</li><li>'p_delay8'</li></ol>
+</details>
+</div>
+</div>
+<div id="934e89ef" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>p_smoothed_delays <span class="ot">&lt;-</span> df_predictions <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(age_group, date, variable, mean, <span class="st">`</span><span class="at">0.025</span><span class="st">`</span>, <span class="st">`</span><span class="at">0.5</span><span class="st">`</span>, <span class="st">`</span><span class="at">0.975</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="fu">str_detect</span>(variable, <span class="st">"p_delay_smooth"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">variable =</span> <span class="fu">str_replace</span>(variable, <span class="st">"p_delay_smooth"</span>, <span class="st">""</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">k =</span> variable) <span class="sc">%&gt;%</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">k =</span> <span class="fu">as.numeric</span>(k) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(k <span class="sc">&lt;=</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> mean <span class="sc">*</span> <span class="dv">100</span>, <span class="at">color =</span> age_group, <span class="at">group =</span> age_group, <span class="at">linetype =</span> age_group)) <span class="sc">+</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># geom_ribbon(aes(ymin = `0.025` * 100, ymax = `0.975` * 100, fill = age_group), alpha = 0.2) +</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">title =</span> <span class="st">""</span>,</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> <span class="st">""</span>,</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> <span class="st">"$q_{t, k}$ [</span><span class="sc">\\</span><span class="st">%]"</span>,</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="st">""</span>,</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">linetype =</span> <span class="st">""</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_four_weekly</span>() <span class="sc">+</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>k, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">labeller =</span> <span class="fu">labeller</span>(<span class="at">k =</span> <span class="cf">function</span>(x) <span class="fu">str_glue</span>(<span class="st">"$ k = {x} $"</span>)))</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>p_smoothed_delays</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="40_figures_files/figure-html/cell-7-output-1.png" width="960" height="420" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cffa2a23" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="28">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df_predictions <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(age_group, date, variable, mean, <span class="st">`</span><span class="at">0.025</span><span class="st">`</span>, <span class="st">`</span><span class="at">0.5</span><span class="st">`</span>, <span class="st">`</span><span class="at">0.975</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="fu">str_detect</span>(variable, <span class="st">"p_delay_smooth"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">variable =</span> <span class="fu">str_replace</span>(variable, <span class="st">"p_delay_smooth"</span>, <span class="st">""</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">k =</span> variable) <span class="sc">%&gt;%</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">k =</span> <span class="fu">as.numeric</span>(k) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(k <span class="sc">&lt;=</span> <span class="dv">8</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">k =</span> <span class="fu">factor</span>(k)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(age_group, date, k, mean) <span class="sc">%&gt;%</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">complete</span>(age_group, date, k, <span class="at">fill =</span> <span class="fu">list</span>(<span class="at">mean =</span> <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(date, mean, <span class="at">fill =</span> k)) <span class="sc">+</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_area</span>(<span class="at">position =</span> <span class="fu">position_stack</span>(<span class="at">reverse =</span> T)) <span class="sc">+</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>age_group, <span class="at">nrow =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"RdYlGn"</span>) <span class="sc">+</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="40_figures_files/figure-html/cell-8-output-1.png" width="2400" height="1050" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="28b1809e" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>p_hospitalizations <span class="ot">&lt;-</span> df_predictions <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(age_group, date, variable, mean, <span class="st">`</span><span class="at">0.025</span><span class="st">`</span>, <span class="st">`</span><span class="at">0.5</span><span class="st">`</span>, <span class="st">`</span><span class="at">0.975</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(variable <span class="sc">==</span> <span class="st">"prob_hosp"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> mean <span class="sc">*</span> <span class="dv">100</span>, <span class="at">color =</span> age_group, <span class="at">group =</span> age_group, <span class="at">linetype =</span> age_group)) <span class="sc">+</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> <span class="st">`</span><span class="at">0.025</span><span class="st">`</span> <span class="sc">*</span> <span class="dv">100</span>, <span class="at">ymax =</span> <span class="st">`</span><span class="at">0.975</span><span class="st">`</span> <span class="sc">*</span> <span class="dv">100</span>, <span class="at">fill =</span> age_group), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">title =</span> <span class="st">""</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> <span class="st">""</span>,</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> <span class="st">" $p_{t}$ [</span><span class="sc">\\</span><span class="st">%]"</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_four_weekly</span>() <span class="sc">+</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>p_hospitalizations</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="40_figures_files/figure-html/cell-9-output-1.png" width="960" height="420" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="a9923561" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>df_predictions <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(age_group, date, variable, mean, <span class="st">`</span><span class="at">0.025</span><span class="st">`</span>, <span class="st">`</span><span class="at">0.5</span><span class="st">`</span>, <span class="st">`</span><span class="at">0.975</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="fu">str_detect</span>(variable, <span class="st">"weekday"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">wday</span>(date, <span class="at">label =</span> T, <span class="at">week_start =</span> <span class="dv">1</span>), mean, <span class="at">color =</span> variable, <span class="at">group =</span> variable)) <span class="sc">+</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">"line"</span>) <span class="sc">+</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>age_group, <span class="at">nrow =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"$W_</span><span class="sc">\\</span><span class="st">cdot$"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="40_figures_files/figure-html/cell-10-output-1.png" width="960" height="420" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="b60d5d57" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>p_weekday <span class="ot">&lt;-</span> df_predictions <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(age_group, date, variable, mean, <span class="st">`</span><span class="at">0.025</span><span class="st">`</span>, <span class="st">`</span><span class="at">0.5</span><span class="st">`</span>, <span class="st">`</span><span class="at">0.975</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="fu">str_detect</span>(variable, <span class="st">"weekday"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> mean, <span class="at">color =</span> age_group, <span class="at">group =</span> age_group, <span class="at">linetype =</span> age_group)) <span class="sc">+</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># geom_ribbon(aes(ymin = `0.025` * 100, ymax = `0.975` * 100, fill = age_group), alpha = 0.2) +</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">title =</span> <span class="st">""</span>,</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> <span class="st">""</span>,</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> <span class="st">""</span>,</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">linetype =</span> <span class="st">""</span>,</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="st">""</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_four_weekly</span>() <span class="sc">+</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>variable, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">labeller =</span> <span class="fu">as_labeller</span>(<span class="fu">c</span>(<span class="st">"weekday_0"</span> <span class="ot">=</span> <span class="st">"$W_{t,0}$"</span>, <span class="st">"weekday_1"</span> <span class="ot">=</span> <span class="st">"$W_{t,1}$"</span>)))</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>p_weekday</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="40_figures_files/figure-html/cell-11-output-1.png" width="960" height="420" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="fa7e5b10" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>p_avg_delays <span class="ot">&lt;-</span> df_predictions <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(variable <span class="sc">==</span> <span class="st">"avg_delay"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> mean, <span class="at">color =</span> age_group, <span class="at">group =</span> age_group, <span class="at">linetype=</span>age_group)) <span class="sc">+</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_four_weekly</span>() <span class="sc">+</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">"$</span><span class="sc">\\</span><span class="st">bar{</span><span class="sc">\\</span><span class="st">tau}_{t}$ [weeks]"</span>, <span class="at">color =</span> <span class="st">""</span>, <span class="at">linetype=</span><span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="7cf5d1b7" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>h <span class="ot">&lt;-</span> <span class="dv">15</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">repr.plot.width =</span> w,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">repr.plot.height =</span> h,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">repr.plot.res =</span> <span class="dv">300</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>((p_hospitalizations <span class="sc">/</span> p_weekday <span class="sc">/</span> p_avg_delays) <span class="sc">|</span> p_smoothed_delays) <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">"collect"</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave_tikz</span>(<span class="fu">here</span>(<span class="st">"tikz/hospitalization_showcase_results.tex"</span>), <span class="at">width =</span> w, <span class="at">height =</span> h)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<strong>pdf:</strong> 2
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="40_figures_files/figure-html/cell-13-output-2.png" width="1500" height="2250" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="application-2-same-day-nowcasts" class="level2">
+<h2 class="anchored" data-anchor-id="application-2-same-day-nowcasts">Application 2: Same-day nowcasts</h2>
+<div id="7f4d1b2d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="fu">here</span>(<span class="st">"setup.R"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="2a4be49c" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df_nowcast <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/results/4_hospitalizations/nowcast/nowcast.csv"</span>)) </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>start_date <span class="ot">&lt;-</span> <span class="fu">min</span>(df_nowcast<span class="sc">$</span>date)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>end_date <span class="ot">&lt;-</span> <span class="fu">ymd</span>(<span class="st">"2022-04-29"</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>df_nowcast <span class="ot">&lt;-</span> df_nowcast <span class="sc">%&gt;%</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(date <span class="sc">&gt;=</span> start_date <span class="sc">&amp;</span> date <span class="sc">&lt;=</span> end_date)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="c26b3a56" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>add_all_age_groups_to_truth <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    all_ages <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">group_by</span>(case_date) <span class="sc">%&gt;%</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">summarise</span>(<span class="at">value =</span> <span class="fu">sum</span>(value), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="st">"00+"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">select</span>(age_group, case_date, value)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rbind</span>(df, all_ages) <span class="sc">%&gt;%</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">arrange</span>(case_date, age_group)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="d0ecc0bf" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>delay_6_weeks_truth <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/raw/all_hosp_age.csv"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(hosp_date <span class="sc">-</span> case_date <span class="sc">==</span> <span class="dv">6</span> <span class="sc">*</span> <span class="dv">7</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(case_date <span class="sc">&gt;=</span> start_date, case_date <span class="sc">&lt;=</span> end_date) <span class="sc">%&gt;%</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(age_group, case_date, value) <span class="sc">%&gt;%</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_all_age_groups_to_truth</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(age_group <span class="sc">==</span> <span class="st">"00+"</span>)  <span class="sc">%&gt;%</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="at">date =</span> case_date, value)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="370375f7" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>df_ilm_prop42 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/results/4_hospitalizations/nowcast/ilm_prop42.csv"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">ymd</span>(date)) <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(date <span class="sc">&gt;=</span> start_date, date <span class="sc">&lt;=</span> end_date)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>df_nch_ensemble <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/results/4_hospitalizations/nowcast/nch_ensemble.csv"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">ymd</span>(date)) <span class="sc">%&gt;%</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(date <span class="sc">&gt;=</span> start_date, date <span class="sc">&lt;=</span> end_date)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="170195e7" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>all_df <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    df_ilm_prop42 <span class="sc">%&gt;%</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">model =</span> <span class="st">"ILM-prop42"</span>),</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    df_nch_ensemble <span class="sc">%&gt;%</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">model =</span> <span class="st">"MeanEnsemble"</span>),</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    df_nowcast <span class="sc">%&gt;%</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">model =</span> <span class="st">"SSM"</span>)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="64a29c76" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(all_df, <span class="fu">aes</span>(date)) <span class="sc">+</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>mean, <span class="at">color=</span>model)) <span class="sc">+</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> value, <span class="at">linetype =</span> <span class="st">"truth"</span>), <span class="at">data =</span> delay_6_weeks_truth) <span class="sc">+</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">"7-day hospitalization incidence"</span>, <span class="at">linetype =</span> <span class="cn">NULL</span>, <span class="at">fill =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_date</span>(<span class="at">breaks =</span> <span class="st">"1 months"</span>, <span class="at">date_labels =</span> <span class="st">"%b %y"</span>, <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.01</span>))) <span class="sc">+</span> </span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>model, <span class="at">ncol =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="40_figures_files/figure-html/cell-20-output-1.png" width="2400" height="1050" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="f9116709" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>plt_nowcast <span class="ot">=</span> all_df <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(date)) <span class="sc">+</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>mean, <span class="at">color=</span>model)) <span class="sc">+</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> <span class="st">`</span><span class="at">2.5 %</span><span class="st">`</span>, <span class="at">ymax =</span> <span class="st">`</span><span class="at">97.5 %</span><span class="st">`</span>, <span class="at">fill =</span> model), <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> date, <span class="at">y =</span> value, <span class="at">linetype =</span> <span class="st">"truth"</span>), <span class="at">data =</span> delay_6_weeks_truth) <span class="sc">+</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">"7-day hospitalization incidence"</span>, <span class="at">linetype =</span> <span class="cn">NULL</span>, <span class="at">fill =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_date</span>(<span class="at">breaks =</span> <span class="st">"1 months"</span>, <span class="at">date_labels =</span> <span class="st">"%b %y"</span>, <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.01</span>))) <span class="sc">+</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>model, <span class="at">ncol =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># have legend only for the truth line</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">"none"</span>, <span class="at">color =</span> <span class="st">"none"</span>, <span class="at">linetype=</span><span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>plt_nowcast</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave_tikz</span>(<span class="fu">here</span>(<span class="st">"tikz/hospitalization_nowcasts_all_models.tikz"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<strong>pdf:</strong> 2
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="40_figures_files/figure-html/cell-21-output-2.png" width="2400" height="1050" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="7f719616" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>quantiles <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.100</span>, <span class="fl">0.250</span>, <span class="fl">0.500</span>, <span class="fl">0.750</span>, <span class="fl">0.900</span>, <span class="fl">0.975</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co"># interval score</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>IS <span class="ot">&lt;-</span> <span class="cf">function</span>(prob, lower, upper, y) {</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    (upper <span class="sc">-</span> lower) <span class="sc">+</span> (y <span class="sc">&lt;</span> lower) <span class="sc">*</span> <span class="dv">2</span> <span class="sc">/</span> prob <span class="sc">*</span> (lower <span class="sc">-</span> y) <span class="sc">+</span> (y <span class="sc">&gt;</span> upper) <span class="sc">*</span> <span class="dv">2</span> <span class="sc">/</span> prob <span class="sc">*</span> (y <span class="sc">-</span> upper)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co"># weighted interval score</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>WIS <span class="ot">&lt;-</span> <span class="cf">function</span>(prob, quant, actual) {</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    K <span class="ot">&lt;-</span> <span class="fu">length</span>(prob)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># count median twice</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    prob <span class="ot">&lt;-</span> <span class="fu">c</span>(prob[<span class="fu">seq</span>((K <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">/</span> <span class="dv">2</span>)], prob[<span class="fu">seq</span>((K <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">/</span> <span class="dv">2</span>, K)])</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    wk <span class="ot">&lt;-</span> prob <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    lower_quant <span class="ot">&lt;-</span> quant[<span class="fu">seq</span>((K <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">/</span> <span class="dv">2</span>)]</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>    upper_quant <span class="ot">&lt;-</span> quant[<span class="fu">seq</span>(K, (K <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">/</span> <span class="dv">2</span>, <span class="at">by =</span> <span class="sc">-</span><span class="dv">1</span>)]</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span> <span class="sc">/</span> (K <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">*</span> <span class="fu">sum</span>(wk <span class="sc">*</span> <span class="fu">IS</span>(prob, lower_quant, upper_quant, actual))</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Use WIS from Wolffram et. al 2023</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="40_figures_files/figure-html/4aef2b3f-1-image.png" class="img-fluid figure-img"></p>
+<figcaption>image.png</figcaption>
+</figure>
+</div>
+<div id="9e76d43d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>WIS_decompose <span class="ot">&lt;-</span> <span class="cf">function</span>(prob, quant, actual) {</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Identify the median forecast</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  median_idx <span class="ot">&lt;-</span> <span class="fu">which</span>(prob <span class="sc">==</span> <span class="fl">0.5</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  median_forecast <span class="ot">&lt;-</span> quant[median_idx]</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  mean_error <span class="ot">&lt;-</span> <span class="fu">abs</span>(actual <span class="sc">-</span> median_forecast)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove median for interval processing</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  interval_idx <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(<span class="fu">seq_along</span>(prob), median_idx)</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  prob_intervals <span class="ot">&lt;-</span> prob[interval_idx]</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  quant_intervals <span class="ot">&lt;-</span> quant[interval_idx]</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  K <span class="ot">&lt;-</span> <span class="fu">length</span>(prob_intervals) <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>  total_weight <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">+</span> K  <span class="co"># 0.5 for median, alpha/2 per interval</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>  sharpness <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>  overprediction <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>  underprediction <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(K)) {</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>    lower_idx <span class="ot">&lt;-</span> i</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>    upper_idx <span class="ot">&lt;-</span> <span class="fu">length</span>(prob_intervals) <span class="sc">-</span> i <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>    alpha <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> prob_intervals[lower_idx]</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>    lower <span class="ot">&lt;-</span> quant_intervals[lower_idx]</span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>    upper <span class="ot">&lt;-</span> quant_intervals[upper_idx]</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>    weight <span class="ot">&lt;-</span> alpha <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Interval score components</span></span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>    sharpness <span class="ot">&lt;-</span> sharpness <span class="sc">+</span> weight <span class="sc">*</span> (upper <span class="sc">-</span> lower)</span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>    underprediction <span class="ot">&lt;-</span> underprediction <span class="sc">+</span> weight <span class="sc">*</span> <span class="fu">ifelse</span>(actual <span class="sc">&gt;</span> upper, (<span class="dv">2</span><span class="sc">/</span>alpha)<span class="sc">*</span>(actual <span class="sc">-</span> upper), <span class="dv">0</span>)</span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>    overprediction <span class="ot">&lt;-</span> overprediction <span class="sc">+</span> weight <span class="sc">*</span> <span class="fu">ifelse</span>(actual <span class="sc">&lt;</span> lower, (<span class="dv">2</span><span class="sc">/</span>alpha)<span class="sc">*</span>(lower <span class="sc">-</span> actual), <span class="dv">0</span>)</span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>  normalized_sharpness <span class="ot">&lt;-</span> sharpness <span class="sc">/</span> total_weight</span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>  normalized_underprediction <span class="ot">&lt;-</span> underprediction <span class="sc">/</span> total_weight</span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>  normalized_overprediction <span class="ot">&lt;-</span> overprediction <span class="sc">/</span> total_weight</span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>  normalized_mean_error <span class="ot">&lt;-</span> (<span class="fl">0.5</span> <span class="sc">*</span> mean_error) <span class="sc">/</span> total_weight</span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>  wis <span class="ot">&lt;-</span> normalized_sharpness <span class="sc">+</span> normalized_overprediction <span class="sc">+</span> normalized_underprediction <span class="sc">+</span> normalized_mean_error</span>
+<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(</span>
+<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">wis =</span> wis,</span>
+<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">sharpness =</span> normalized_sharpness,</span>
+<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">underprediction =</span> normalized_underprediction,</span>
+<span id="cb25-44"><a href="#cb25-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">overprediction =</span> normalized_overprediction,</span>
+<span id="cb25-45"><a href="#cb25-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_error =</span> normalized_mean_error</span>
+<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb25-47"><a href="#cb25-47" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="8a0ba98b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>delay_6_weeks_truth <span class="sc">%&gt;%</span> </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">inner_join</span>(all_df, <span class="at">by=</span><span class="st">"date"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">truth=</span>value) <span class="sc">%&gt;%</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">WIS_decompose =</span> <span class="fu">list</span>(<span class="fu">WIS_decompose</span>(</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">prob=</span>quantiles,</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">quant=</span><span class="fu">c</span>(<span class="st">`</span><span class="at">2.5 %</span><span class="st">`</span>, <span class="st">`</span><span class="at">10.0 %</span><span class="st">`</span>, <span class="st">`</span><span class="at">25.0 %</span><span class="st">`</span>, <span class="st">`</span><span class="at">50.0 %</span><span class="st">`</span>, <span class="st">`</span><span class="at">75.0 %</span><span class="st">`</span>, <span class="st">`</span><span class="at">90.0 %</span><span class="st">`</span>, <span class="st">`</span><span class="at">97.5 %</span><span class="st">`</span>),</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">actual=</span> truth</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>           ))</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unnest_wider</span>(WIS_decompose)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A tibble: 474 × 17</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">date</th>
+<th data-quarto-table-cell-role="th" scope="col">truth</th>
+<th data-quarto-table-cell-role="th" scope="col">mean</th>
+<th data-quarto-table-cell-role="th" scope="col">sd</th>
+<th data-quarto-table-cell-role="th" scope="col">2.5 %</th>
+<th data-quarto-table-cell-role="th" scope="col">10.0 %</th>
+<th data-quarto-table-cell-role="th" scope="col">25.0 %</th>
+<th data-quarto-table-cell-role="th" scope="col">50.0 %</th>
+<th data-quarto-table-cell-role="th" scope="col">75.0 %</th>
+<th data-quarto-table-cell-role="th" scope="col">90.0 %</th>
+<th data-quarto-table-cell-role="th" scope="col">97.5 %</th>
+<th data-quarto-table-cell-role="th" scope="col">model</th>
+<th data-quarto-table-cell-role="th" scope="col">wis</th>
+<th data-quarto-table-cell-role="th" scope="col">sharpness</th>
+<th data-quarto-table-cell-role="th" scope="col">underprediction</th>
+<th data-quarto-table-cell-role="th" scope="col">overprediction</th>
+<th data-quarto-table-cell-role="th" scope="col">mean_error</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="col">&lt;date&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2021-11-23</td>
+<td>10228</td>
+<td>10245.000</td>
+<td>NA</td>
+<td>9274.000</td>
+<td>9582</td>
+<td>9874.000</td>
+<td>10220</td>
+<td>10588</td>
+<td>10940.00</td>
+<td>11358.00</td>
+<td>ILM-prop42</td>
+<td>105.82857</td>
+<td>104.68571</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>1.142857</td>
+</tr>
+<tr class="even">
+<td>2021-11-23</td>
+<td>10228</td>
+<td>9516.000</td>
+<td>NA</td>
+<td>8543.000</td>
+<td>8766</td>
+<td>9100.000</td>
+<td>9459</td>
+<td>9864</td>
+<td>10293.00</td>
+<td>10867.00</td>
+<td>MeanEnsemble</td>
+<td>328.65714</td>
+<td>114.80000</td>
+<td>104.00000</td>
+<td>0.00000</td>
+<td>109.857143</td>
+</tr>
+<tr class="odd">
+<td>2021-11-23</td>
+<td>10228</td>
+<td>9924.819</td>
+<td>217.76895</td>
+<td>9400.000</td>
+<td>9646</td>
+<td>9783.000</td>
+<td>9962</td>
+<td>10133</td>
+<td>10184.00</td>
+<td>10206.00</td>
+<td>SSM</td>
+<td>130.12857</td>
+<td>46.12857</td>
+<td>46.00000</td>
+<td>0.00000</td>
+<td>38.000000</td>
+</tr>
+<tr class="even">
+<td>2021-11-24</td>
+<td>10328</td>
+<td>10477.000</td>
+<td>NA</td>
+<td>9484.000</td>
+<td>9799</td>
+<td>10099.000</td>
+<td>10452</td>
+<td>10828</td>
+<td>11188.00</td>
+<td>11615.00</td>
+<td>ILM-prop42</td>
+<td>124.69286</td>
+<td>106.97857</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>17.714286</td>
+</tr>
+<tr class="odd">
+<td>2021-11-24</td>
+<td>10328</td>
+<td>9366.000</td>
+<td>NA</td>
+<td>8369.000</td>
+<td>8734</td>
+<td>8961.000</td>
+<td>9316</td>
+<td>9720</td>
+<td>10129.00</td>
+<td>10659.00</td>
+<td>MeanEnsemble</td>
+<td>485.57143</td>
+<td>110.42857</td>
+<td>230.57143</td>
+<td>0.00000</td>
+<td>144.571429</td>
+</tr>
+<tr class="even">
+<td>2021-11-24</td>
+<td>10328</td>
+<td>10380.229</td>
+<td>452.01200</td>
+<td>9449.000</td>
+<td>10002</td>
+<td>10236.000</td>
+<td>10357</td>
+<td>10377</td>
+<td>11270.00</td>
+<td>11454.00</td>
+<td>SSM</td>
+<td>64.76429</td>
+<td>60.62143</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>4.142857</td>
+</tr>
+<tr class="odd">
+<td>2021-11-25</td>
+<td>10479</td>
+<td>10751.000</td>
+<td>NA</td>
+<td>9728.000</td>
+<td>10053</td>
+<td>10361.000</td>
+<td>10725</td>
+<td>11112</td>
+<td>11482.00</td>
+<td>11922.00</td>
+<td>ILM-prop42</td>
+<td>145.28571</td>
+<td>110.14286</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>35.142857</td>
+</tr>
+<tr class="even">
+<td>2021-11-25</td>
+<td>10479</td>
+<td>9183.000</td>
+<td>NA</td>
+<td>8232.000</td>
+<td>8592</td>
+<td>8781.000</td>
+<td>9138</td>
+<td>9528</td>
+<td>9926.00</td>
+<td>10394.00</td>
+<td>MeanEnsemble</td>
+<td>752.48571</td>
+<td>106.91429</td>
+<td>454.00000</td>
+<td>0.00000</td>
+<td>191.571429</td>
+</tr>
+<tr class="odd">
+<td>2021-11-25</td>
+<td>10479</td>
+<td>9938.246</td>
+<td>565.99399</td>
+<td>9622.000</td>
+<td>9622</td>
+<td>9622.000</td>
+<td>9741</td>
+<td>9741</td>
+<td>10975.00</td>
+<td>11307.00</td>
+<td>SSM</td>
+<td>375.47857</td>
+<td>59.19286</td>
+<td>210.85714</td>
+<td>0.00000</td>
+<td>105.428571</td>
+</tr>
+<tr class="even">
+<td>2021-11-26</td>
+<td>10542</td>
+<td>11640.000</td>
+<td>NA</td>
+<td>10481.000</td>
+<td>10849</td>
+<td>11198.000</td>
+<td>11611</td>
+<td>12050</td>
+<td>12470.00</td>
+<td>12969.00</td>
+<td>ILM-prop42</td>
+<td>552.80000</td>
+<td>124.94286</td>
+<td>0.00000</td>
+<td>275.14286</td>
+<td>152.714286</td>
+</tr>
+<tr class="odd">
+<td>2021-11-26</td>
+<td>10542</td>
+<td>9736.000</td>
+<td>NA</td>
+<td>8631.000</td>
+<td>8920</td>
+<td>9260.000</td>
+<td>9674</td>
+<td>10132</td>
+<td>10616.00</td>
+<td>11213.00</td>
+<td>MeanEnsemble</td>
+<td>370.32857</td>
+<td>129.18571</td>
+<td>117.14286</td>
+<td>0.00000</td>
+<td>124.000000</td>
+</tr>
+<tr class="even">
+<td>2021-11-26</td>
+<td>10542</td>
+<td>10287.936</td>
+<td>663.93321</td>
+<td>9421.000</td>
+<td>9611</td>
+<td>9664.186</td>
+<td>10134</td>
+<td>10688</td>
+<td>11236.00</td>
+<td>11804.00</td>
+<td>SSM</td>
+<td>194.86529</td>
+<td>136.57957</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>58.285714</td>
+</tr>
+<tr class="odd">
+<td>2021-11-27</td>
+<td>10549</td>
+<td>11549.000</td>
+<td>NA</td>
+<td>10390.000</td>
+<td>10757</td>
+<td>11106.000</td>
+<td>11519</td>
+<td>11959</td>
+<td>12380.00</td>
+<td>12881.00</td>
+<td>ILM-prop42</td>
+<td>482.23571</td>
+<td>125.09286</td>
+<td>0.00000</td>
+<td>218.57143</td>
+<td>138.571429</td>
+</tr>
+<tr class="even">
+<td>2021-11-27</td>
+<td>10549</td>
+<td>9845.000</td>
+<td>NA</td>
+<td>8761.000</td>
+<td>9002</td>
+<td>9363.000</td>
+<td>9779</td>
+<td>10242</td>
+<td>10733.00</td>
+<td>11343.00</td>
+<td>MeanEnsemble</td>
+<td>328.40000</td>
+<td>130.68571</td>
+<td>87.71429</td>
+<td>0.00000</td>
+<td>110.000000</td>
+</tr>
+<tr class="odd">
+<td>2021-11-27</td>
+<td>10549</td>
+<td>9941.979</td>
+<td>789.97866</td>
+<td>8891.373</td>
+<td>8953</td>
+<td>9307.000</td>
+<td>9836</td>
+<td>10455</td>
+<td>11315.00</td>
+<td>11376.00</td>
+<td>SSM</td>
+<td>295.94733</td>
+<td>167.23305</td>
+<td>26.85714</td>
+<td>0.00000</td>
+<td>101.857143</td>
+</tr>
+<tr class="even">
+<td>2021-11-28</td>
+<td>10631</td>
+<td>11427.000</td>
+<td>NA</td>
+<td>10235.000</td>
+<td>10612</td>
+<td>10971.000</td>
+<td>11395</td>
+<td>11849</td>
+<td>12284.00</td>
+<td>12802.00</td>
+<td>ILM-prop42</td>
+<td>335.10714</td>
+<td>128.82143</td>
+<td>0.00000</td>
+<td>97.14286</td>
+<td>109.142857</td>
+</tr>
+<tr class="odd">
+<td>2021-11-28</td>
+<td>10631</td>
+<td>9390.000</td>
+<td>NA</td>
+<td>8399.000</td>
+<td>8553</td>
+<td>8957.000</td>
+<td>9333</td>
+<td>9753</td>
+<td>10181.00</td>
+<td>10722.00</td>
+<td>MeanEnsemble</td>
+<td>684.82143</td>
+<td>119.96429</td>
+<td>379.42857</td>
+<td>0.00000</td>
+<td>185.428571</td>
+</tr>
+<tr class="even">
+<td>2021-11-28</td>
+<td>10631</td>
+<td>10120.425</td>
+<td>801.76490</td>
+<td>9049.000</td>
+<td>9169</td>
+<td>9524.000</td>
+<td>10043</td>
+<td>10720</td>
+<td>11155.00</td>
+<td>11935.73</td>
+<td>SSM</td>
+<td>246.79092</td>
+<td>162.79092</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>84.000000</td>
+</tr>
+<tr class="odd">
+<td>2021-11-29</td>
+<td>10532</td>
+<td>11273.000</td>
+<td>NA</td>
+<td>10049.000</td>
+<td>10435</td>
+<td>10803.000</td>
+<td>11239</td>
+<td>11705</td>
+<td>12153.00</td>
+<td>12686.00</td>
+<td>ILM-prop42</td>
+<td>310.77857</td>
+<td>132.35000</td>
+<td>0.00000</td>
+<td>77.42857</td>
+<td>101.000000</td>
+</tr>
+<tr class="even">
+<td>2021-11-29</td>
+<td>10532</td>
+<td>9156.000</td>
+<td>NA</td>
+<td>8164.000</td>
+<td>8347</td>
+<td>8723.000</td>
+<td>9094</td>
+<td>9509</td>
+<td>9952.00</td>
+<td>10519.00</td>
+<td>MeanEnsemble</td>
+<td>785.96429</td>
+<td>118.82143</td>
+<td>461.71429</td>
+<td>0.00000</td>
+<td>205.428571</td>
+</tr>
+<tr class="odd">
+<td>2021-11-29</td>
+<td>10532</td>
+<td>10596.912</td>
+<td>947.50385</td>
+<td>9342.000</td>
+<td>9522</td>
+<td>9882.000</td>
+<td>10308</td>
+<td>11305</td>
+<td>11849.00</td>
+<td>12236.00</td>
+<td>SSM</td>
+<td>220.80000</td>
+<td>188.80000</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>32.000000</td>
+</tr>
+<tr class="even">
+<td>2021-11-30</td>
+<td>10428</td>
+<td>11230.000</td>
+<td>NA</td>
+<td>10035.000</td>
+<td>10412</td>
+<td>10771.000</td>
+<td>11197</td>
+<td>11653</td>
+<td>12091.00</td>
+<td>12613.00</td>
+<td>ILM-prop42</td>
+<td>337.24286</td>
+<td>129.38571</td>
+<td>0.00000</td>
+<td>98.00000</td>
+<td>109.857143</td>
+</tr>
+<tr class="odd">
+<td>2021-11-30</td>
+<td>10428</td>
+<td>10179.000</td>
+<td>NA</td>
+<td>8925.000</td>
+<td>9228</td>
+<td>9604.000</td>
+<td>10071</td>
+<td>10635</td>
+<td>11236.00</td>
+<td>12030.00</td>
+<td>MeanEnsemble</td>
+<td>204.19286</td>
+<td>153.19286</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>51.000000</td>
+</tr>
+<tr class="even">
+<td>2021-11-30</td>
+<td>10428</td>
+<td>10272.902</td>
+<td>671.13866</td>
+<td>9169.000</td>
+<td>9682</td>
+<td>9830.000</td>
+<td>10109</td>
+<td>10468</td>
+<td>11178.52</td>
+<td>11642.00</td>
+<td>SSM</td>
+<td>151.56485</td>
+<td>105.99342</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>45.571429</td>
+</tr>
+<tr class="odd">
+<td>2021-12-01</td>
+<td>10207</td>
+<td>10958.000</td>
+<td>NA</td>
+<td>9721.000</td>
+<td>10108</td>
+<td>10479.000</td>
+<td>10921</td>
+<td>11396</td>
+<td>11855.00</td>
+<td>12404.00</td>
+<td>ILM-prop42</td>
+<td>314.29286</td>
+<td>134.57857</td>
+<td>0.00000</td>
+<td>77.71429</td>
+<td>102.000000</td>
+</tr>
+<tr class="even">
+<td>2021-12-01</td>
+<td>10207</td>
+<td>9507.000</td>
+<td>NA</td>
+<td>8465.000</td>
+<td>8804</td>
+<td>9041.000</td>
+<td>9444</td>
+<td>9892</td>
+<td>10365.00</td>
+<td>10888.00</td>
+<td>MeanEnsemble</td>
+<td>321.69286</td>
+<td>122.69286</td>
+<td>90.00000</td>
+<td>0.00000</td>
+<td>109.000000</td>
+</tr>
+<tr class="odd">
+<td>2021-12-01</td>
+<td>10207</td>
+<td>9621.779</td>
+<td>691.52404</td>
+<td>8415.000</td>
+<td>8565</td>
+<td>9323.000</td>
+<td>9619</td>
+<td>9967</td>
+<td>10242.00</td>
+<td>11382.03</td>
+<td>SSM</td>
+<td>267.67879</td>
+<td>115.10736</td>
+<td>68.57143</td>
+<td>0.00000</td>
+<td>84.000000</td>
+</tr>
+<tr class="even">
+<td>2021-12-02</td>
+<td>10216</td>
+<td>10515.000</td>
+<td>NA</td>
+<td>9258.000</td>
+<td>9648</td>
+<td>10024.000</td>
+<td>10474</td>
+<td>10961</td>
+<td>11434.00</td>
+<td>12002.00</td>
+<td>ILM-prop42</td>
+<td>174.41429</td>
+<td>137.55714</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>36.857143</td>
+</tr>
+<tr class="odd">
+<td>2021-12-02</td>
+<td>10216</td>
+<td>9066.000</td>
+<td>NA</td>
+<td>8084.000</td>
+<td>8458</td>
+<td>8641.000</td>
+<td>9016</td>
+<td>9431</td>
+<td>9836.00</td>
+<td>10297.00</td>
+<td>MeanEnsemble</td>
+<td>615.89286</td>
+<td>111.60714</td>
+<td>332.85714</td>
+<td>0.00000</td>
+<td>171.428571</td>
+</tr>
+<tr class="even">
+<td>2021-12-02</td>
+<td>10216</td>
+<td>9819.809</td>
+<td>51.88439</td>
+<td>9769.000</td>
+<td>9769</td>
+<td>9769.000</td>
+<td>9769</td>
+<td>9872</td>
+<td>9872.00</td>
+<td>9872.00</td>
+<td>SSM</td>
+<td>369.75000</td>
+<td>11.03571</td>
+<td>294.85714</td>
+<td>0.00000</td>
+<td>63.857143</td>
+</tr>
+<tr class="odd">
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+</tr>
+<tr class="even">
+<td>2022-04-20</td>
+<td>6497</td>
+<td>5002.000</td>
+<td>NA</td>
+<td>4805.000</td>
+<td>4870</td>
+<td>4930</td>
+<td>4999</td>
+<td>5070</td>
+<td>5137.000</td>
+<td>5214</td>
+<td>ILM-prop42</td>
+<td>1397.40714</td>
+<td>20.5500000</td>
+<td>1162.85714</td>
+<td>0.00000</td>
+<td>214.000000</td>
+</tr>
+<tr class="odd">
+<td>2022-04-20</td>
+<td>6497</td>
+<td>5769.000</td>
+<td>NA</td>
+<td>4926.000</td>
+<td>5125</td>
+<td>5354</td>
+<td>5673</td>
+<td>6083</td>
+<td>6536.000</td>
+<td>7159</td>
+<td>MeanEnsemble</td>
+<td>344.33571</td>
+<td>108.3357143</td>
+<td>118.28571</td>
+<td>0.00000</td>
+<td>117.714286</td>
+</tr>
+<tr class="even">
+<td>2022-04-20</td>
+<td>6497</td>
+<td>5205.512</td>
+<td>236.72890</td>
+<td>4884.000</td>
+<td>4982</td>
+<td>4990</td>
+<td>5088</td>
+<td>5553</td>
+<td>5553.000</td>
+<td>5558</td>
+<td>SSM</td>
+<td>1070.34286</td>
+<td>61.3428571</td>
+<td>807.71429</td>
+<td>0.00000</td>
+<td>201.285714</td>
+</tr>
+<tr class="odd">
+<td>2022-04-21</td>
+<td>6678</td>
+<td>5421.000</td>
+<td>NA</td>
+<td>5226.000</td>
+<td>5291</td>
+<td>5350</td>
+<td>5419</td>
+<td>5489</td>
+<td>5556.000</td>
+<td>5632</td>
+<td>ILM-prop42</td>
+<td>1159.40000</td>
+<td>20.4000000</td>
+<td>959.14286</td>
+<td>0.00000</td>
+<td>179.857143</td>
+</tr>
+<tr class="even">
+<td>2022-04-21</td>
+<td>6678</td>
+<td>7412.000</td>
+<td>NA</td>
+<td>5941.000</td>
+<td>6262</td>
+<td>6640</td>
+<td>7196</td>
+<td>7929</td>
+<td>8805.000</td>
+<td>10162</td>
+<td>MeanEnsemble</td>
+<td>268.87857</td>
+<td>194.8785714</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>74.000000</td>
+</tr>
+<tr class="odd">
+<td>2022-04-21</td>
+<td>6678</td>
+<td>5848.341</td>
+<td>102.31164</td>
+<td>5823.000</td>
+<td>5823</td>
+<td>5823</td>
+<td>5823</td>
+<td>5828</td>
+<td>5828.000</td>
+<td>6101</td>
+<td>SSM</td>
+<td>775.20000</td>
+<td>2.4857143</td>
+<td>650.57143</td>
+<td>0.00000</td>
+<td>122.142857</td>
+</tr>
+<tr class="even">
+<td>2022-04-22</td>
+<td>6639</td>
+<td>5475.000</td>
+<td>NA</td>
+<td>5300.000</td>
+<td>5358</td>
+<td>5411</td>
+<td>5473</td>
+<td>5537</td>
+<td>5596.000</td>
+<td>5665</td>
+<td>ILM-prop42</td>
+<td>1076.12143</td>
+<td>18.4071429</td>
+<td>891.14286</td>
+<td>0.00000</td>
+<td>166.571429</td>
+</tr>
+<tr class="odd">
+<td>2022-04-22</td>
+<td>6639</td>
+<td>7060.000</td>
+<td>NA</td>
+<td>6016.000</td>
+<td>6246</td>
+<td>6533</td>
+<td>6932</td>
+<td>7436</td>
+<td>8020.000</td>
+<td>8912</td>
+<td>MeanEnsemble</td>
+<td>177.72857</td>
+<td>135.8714286</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>41.857143</td>
+</tr>
+<tr class="even">
+<td>2022-04-22</td>
+<td>6639</td>
+<td>6311.532</td>
+<td>304.94940</td>
+<td>6101.000</td>
+<td>6101</td>
+<td>6195</td>
+<td>6204</td>
+<td>6375</td>
+<td>6561.000</td>
+<td>7432</td>
+<td>SSM</td>
+<td>195.36429</td>
+<td>35.5071429</td>
+<td>97.71429</td>
+<td>0.00000</td>
+<td>62.142857</td>
+</tr>
+<tr class="odd">
+<td>2022-04-23</td>
+<td>7282</td>
+<td>6949.000</td>
+<td>NA</td>
+<td>6691.000</td>
+<td>6776</td>
+<td>6855</td>
+<td>6945</td>
+<td>7039</td>
+<td>7127.000</td>
+<td>7228</td>
+<td>ILM-prop42</td>
+<td>204.29286</td>
+<td>27.0071429</td>
+<td>129.14286</td>
+<td>0.00000</td>
+<td>48.142857</td>
+</tr>
+<tr class="even">
+<td>2022-04-23</td>
+<td>7282</td>
+<td>8025.000</td>
+<td>NA</td>
+<td>6921.000</td>
+<td>7191</td>
+<td>7489</td>
+<td>7919</td>
+<td>8429</td>
+<td>8992.000</td>
+<td>9804</td>
+<td>MeanEnsemble</td>
+<td>289.33571</td>
+<td>139.1928571</td>
+<td>0.00000</td>
+<td>59.14286</td>
+<td>91.000000</td>
+</tr>
+<tr class="odd">
+<td>2022-04-23</td>
+<td>7282</td>
+<td>7304.925</td>
+<td>316.34075</td>
+<td>6826.145</td>
+<td>6974</td>
+<td>7050</td>
+<td>7222</td>
+<td>7470</td>
+<td>7699.000</td>
+<td>8175</td>
+<td>SSM</td>
+<td>68.92039</td>
+<td>60.3489628</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>8.571429</td>
+</tr>
+<tr class="even">
+<td>2022-04-24</td>
+<td>7264</td>
+<td>7002.000</td>
+<td>NA</td>
+<td>6722.000</td>
+<td>6814</td>
+<td>6900</td>
+<td>6998</td>
+<td>7101</td>
+<td>7196.000</td>
+<td>7307</td>
+<td>ILM-prop42</td>
+<td>133.45000</td>
+<td>29.4500000</td>
+<td>66.00000</td>
+<td>0.00000</td>
+<td>38.000000</td>
+</tr>
+<tr class="odd">
+<td>2022-04-24</td>
+<td>7264</td>
+<td>7346.000</td>
+<td>NA</td>
+<td>6560.000</td>
+<td>6750</td>
+<td>6973</td>
+<td>7285</td>
+<td>7638</td>
+<td>8016.000</td>
+<td>8549</td>
+<td>MeanEnsemble</td>
+<td>100.87857</td>
+<td>97.8785714</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>3.000000</td>
+</tr>
+<tr class="even">
+<td>2022-04-24</td>
+<td>7264</td>
+<td>8677.240</td>
+<td>597.39840</td>
+<td>7555.000</td>
+<td>8232</td>
+<td>8439</td>
+<td>8470</td>
+<td>8953</td>
+<td>9447.551</td>
+<td>10375</td>
+<td>SSM</td>
+<td>959.30147</td>
+<td>91.5871794</td>
+<td>0.00000</td>
+<td>695.42857</td>
+<td>172.285714</td>
+</tr>
+<tr class="odd">
+<td>2022-04-25</td>
+<td>7284</td>
+<td>7068.000</td>
+<td>NA</td>
+<td>6759.000</td>
+<td>6861</td>
+<td>6955</td>
+<td>7063</td>
+<td>7176</td>
+<td>7281.000</td>
+<td>7403</td>
+<td>ILM-prop42</td>
+<td>95.67143</td>
+<td>32.3857143</td>
+<td>31.71429</td>
+<td>0.00000</td>
+<td>31.571429</td>
+</tr>
+<tr class="even">
+<td>2022-04-25</td>
+<td>7284</td>
+<td>7201.000</td>
+<td>NA</td>
+<td>6431.000</td>
+<td>6627</td>
+<td>6851</td>
+<td>7141</td>
+<td>7476</td>
+<td>7842.000</td>
+<td>8354</td>
+<td>MeanEnsemble</td>
+<td>113.52143</td>
+<td>93.0928571</td>
+<td>0.00000</td>
+<td>0.00000</td>
+<td>20.428571</td>
+</tr>
+<tr class="odd">
+<td>2022-04-25</td>
+<td>7284</td>
+<td>8636.296</td>
+<td>65.90022</td>
+<td>8625.000</td>
+<td>8625</td>
+<td>8635</td>
+<td>8635</td>
+<td>8635</td>
+<td>8635.000</td>
+<td>8635</td>
+<td>SSM</td>
+<td>1345.64286</td>
+<td>0.3571429</td>
+<td>0.00000</td>
+<td>1152.28571</td>
+<td>193.000000</td>
+</tr>
+<tr class="even">
+<td>2022-04-26</td>
+<td>8245</td>
+<td>9536.000</td>
+<td>NA</td>
+<td>9059.000</td>
+<td>9216</td>
+<td>9361</td>
+<td>9529</td>
+<td>9703</td>
+<td>9866.000</td>
+<td>10054</td>
+<td>ILM-prop42</td>
+<td>1062.39286</td>
+<td>50.1071429</td>
+<td>0.00000</td>
+<td>828.85714</td>
+<td>183.428571</td>
+</tr>
+<tr class="odd">
+<td>2022-04-26</td>
+<td>8245</td>
+<td>9095.000</td>
+<td>NA</td>
+<td>8059.000</td>
+<td>8346</td>
+<td>8642</td>
+<td>9018</td>
+<td>9463</td>
+<td>9951.000</td>
+<td>10556</td>
+<td>MeanEnsemble</td>
+<td>375.05000</td>
+<td>122.3357143</td>
+<td>0.00000</td>
+<td>142.28571</td>
+<td>110.428571</td>
+</tr>
+<tr class="even">
+<td>2022-04-26</td>
+<td>8245</td>
+<td>10300.299</td>
+<td>722.85582</td>
+<td>9064.000</td>
+<td>9800</td>
+<td>9854</td>
+<td>10133</td>
+<td>10645</td>
+<td>11637.000</td>
+<td>11971</td>
+<td>SSM</td>
+<td>1537.46429</td>
+<td>129.7500000</td>
+<td>0.00000</td>
+<td>1138.00000</td>
+<td>269.714286</td>
+</tr>
+<tr class="odd">
+<td>2022-04-27</td>
+<td>7450</td>
+<td>9038.000</td>
+<td>NA</td>
+<td>8555.000</td>
+<td>8714</td>
+<td>8861</td>
+<td>9030</td>
+<td>9207</td>
+<td>9371.000</td>
+<td>9562</td>
+<td>ILM-prop42</td>
+<td>1356.39286</td>
+<td>50.6785714</td>
+<td>0.00000</td>
+<td>1080.00000</td>
+<td>225.714286</td>
+</tr>
+<tr class="even">
+<td>2022-04-27</td>
+<td>7450</td>
+<td>8341.000</td>
+<td>NA</td>
+<td>7432.000</td>
+<td>7683</td>
+<td>7947</td>
+<td>8283</td>
+<td>8674</td>
+<td>9077.000</td>
+<td>9591</td>
+<td>MeanEnsemble</td>
+<td>434.75000</td>
+<td>107.1785714</td>
+<td>0.00000</td>
+<td>208.57143</td>
+<td>119.000000</td>
+</tr>
+<tr class="odd">
+<td>2022-04-27</td>
+<td>7450</td>
+<td>9007.016</td>
+<td>439.31929</td>
+<td>8327.000</td>
+<td>8374</td>
+<td>8769</td>
+<td>9036</td>
+<td>9123</td>
+<td>9683.000</td>
+<td>9860</td>
+<td>SSM</td>
+<td>1191.63571</td>
+<td>73.6357143</td>
+<td>0.00000</td>
+<td>891.42857</td>
+<td>226.571429</td>
+</tr>
+<tr class="even">
+<td>2022-04-28</td>
+<td>6939</td>
+<td>8157.000</td>
+<td>NA</td>
+<td>7724.000</td>
+<td>7866</td>
+<td>7998</td>
+<td>8150</td>
+<td>8308</td>
+<td>8457.000</td>
+<td>8629</td>
+<td>ILM-prop42</td>
+<td>1010.20714</td>
+<td>45.4928571</td>
+<td>0.00000</td>
+<td>791.71429</td>
+<td>173.000000</td>
+</tr>
+<tr class="odd">
+<td>2022-04-28</td>
+<td>6939</td>
+<td>7955.000</td>
+<td>NA</td>
+<td>7084.000</td>
+<td>7315</td>
+<td>7570</td>
+<td>7899</td>
+<td>8270</td>
+<td>8668.000</td>
+<td>9169</td>
+<td>MeanEnsemble</td>
+<td>569.83571</td>
+<td>103.5500000</td>
+<td>0.00000</td>
+<td>329.14286</td>
+<td>137.142857</td>
+</tr>
+<tr class="even">
+<td>2022-04-28</td>
+<td>6939</td>
+<td>7523.301</td>
+<td>114.58949</td>
+<td>7500.000</td>
+<td>7500</td>
+<td>7500</td>
+<td>7524</td>
+<td>7524</td>
+<td>7524.000</td>
+<td>7524</td>
+<td>SSM</td>
+<td>567.00000</td>
+<td>2.5714286</td>
+<td>0.00000</td>
+<td>480.85714</td>
+<td>83.571429</td>
+</tr>
+<tr class="odd">
+<td>2022-04-29</td>
+<td>6562</td>
+<td>7371.000</td>
+<td>NA</td>
+<td>6991.000</td>
+<td>7115</td>
+<td>7231</td>
+<td>7364</td>
+<td>7504</td>
+<td>7635.000</td>
+<td>7787</td>
+<td>ILM-prop42</td>
+<td>626.32857</td>
+<td>40.0428571</td>
+<td>0.00000</td>
+<td>471.71429</td>
+<td>114.571429</td>
+</tr>
+<tr class="even">
+<td>2022-04-29</td>
+<td>6562</td>
+<td>7307.000</td>
+<td>NA</td>
+<td>6538.000</td>
+<td>6747</td>
+<td>6973</td>
+<td>7258</td>
+<td>7585</td>
+<td>7927.000</td>
+<td>8360</td>
+<td>MeanEnsemble</td>
+<td>360.15714</td>
+<td>90.4428571</td>
+<td>0.00000</td>
+<td>170.28571</td>
+<td>99.428571</td>
+</tr>
+<tr class="odd">
+<td>2022-04-29</td>
+<td>6562</td>
+<td>7442.582</td>
+<td>113.15790</td>
+<td>7351.000</td>
+<td>7351</td>
+<td>7436</td>
+<td>7436</td>
+<td>7436</td>
+<td>7476.000</td>
+<td>7784</td>
+<td>SSM</td>
+<td>832.09286</td>
+<td>6.6642857</td>
+<td>0.00000</td>
+<td>700.57143</td>
+<td>124.857143</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="7794053f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> delay_6_weeks_truth <span class="sc">%&gt;%</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">inner_join</span>(all_df, <span class="at">by=</span><span class="st">"date"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">truth=</span>value) <span class="sc">%&gt;%</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">WIS_decompose =</span> <span class="fu">list</span>(<span class="fu">WIS_decompose</span>(</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">prob=</span>quantiles,</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">quant=</span><span class="fu">c</span>(<span class="st">`</span><span class="at">2.5 %</span><span class="st">`</span>, <span class="st">`</span><span class="at">10.0 %</span><span class="st">`</span>, <span class="st">`</span><span class="at">25.0 %</span><span class="st">`</span>, <span class="st">`</span><span class="at">50.0 %</span><span class="st">`</span>, <span class="st">`</span><span class="at">75.0 %</span><span class="st">`</span>, <span class="st">`</span><span class="at">90.0 %</span><span class="st">`</span>, <span class="st">`</span><span class="at">97.5 %</span><span class="st">`</span>),</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">actual=</span> truth</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>           ))</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unnest_wider</span>(WIS_decompose) <span class="sc">%&gt;%</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(model) <span class="sc">%&gt;%</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">mae =</span> <span class="fu">mean</span>(<span class="fu">abs</span>(mean <span class="sc">-</span> truth), <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">coverage_95 =</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">2.5 %</span><span class="st">`</span> <span class="sc">&lt;=</span> truth <span class="sc">&amp;</span> truth <span class="sc">&lt;=</span> <span class="st">`</span><span class="at">97.5 %</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">coverage_50 =</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">25.0 %</span><span class="st">`</span> <span class="sc">&lt;=</span> truth <span class="sc">&amp;</span> truth <span class="sc">&lt;=</span> <span class="st">`</span><span class="at">75.0 %</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">WIS =</span> <span class="fu">mean</span>(wis),</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">sharpness =</span> <span class="fu">mean</span>(sharpness),</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">underprediction =</span> <span class="fu">mean</span>(underprediction),</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">overprediction =</span> <span class="fu">mean</span>(overprediction),</span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">mean_error =</span> <span class="fu">mean</span>(mean_error),</span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">length_95 =</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">97.5 %</span><span class="st">`</span> <span class="sc">-</span> <span class="st">`</span><span class="at">2.5 %</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">length_50 =</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">75.0 %</span><span class="st">`</span> <span class="sc">-</span> <span class="st">`</span><span class="at">25.0 %</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>    ) </span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>df_table_performance <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>model) <span class="sc">%&gt;%</span>  <span class="co"># Remove model column temporarily</span></span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">coverage_50 =</span> coverage_50 <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">coverage_95 =</span> coverage_95 <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Mean Absolute Error</span><span class="st">`</span> <span class="ot">=</span> mae,</span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Coverage 50% PI [%]</span><span class="st">`</span> <span class="ot">=</span> coverage_50,</span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Coverage 95% PI [%]</span><span class="st">`</span> <span class="ot">=</span> coverage_95,</span>
+<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">WIS</span><span class="st">`</span> <span class="ot">=</span> WIS,</span>
+<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Sharpness</span><span class="st">`</span> <span class="ot">=</span> sharpness,</span>
+<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Underprediction</span><span class="st">`</span> <span class="ot">=</span> underprediction,</span>
+<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Overprediction</span><span class="st">`</span> <span class="ot">=</span> overprediction,</span>
+<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>length_95, <span class="sc">-</span>length_50, <span class="sc">-</span>mean_error) <span class="sc">%&gt;%</span></span>
+<span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>() <span class="sc">%&gt;%</span>  <span class="co"># Transpose</span></span>
+<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span>  <span class="co"># Convert to data frame</span></span>
+<span id="cb27-43"><a href="#cb27-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">"name"</span>) <span class="sc">%&gt;%</span>  <span class="co"># Move row names to a column</span></span>
+<span id="cb27-44"><a href="#cb27-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setNames</span>(<span class="fu">c</span>(<span class="st">"metric"</span>, <span class="st">"ILM-prop42"</span>, <span class="st">"MeanEnsemble"</span>, <span class="st">"SSM"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="b8142d57" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="25">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>df_table_performance</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small">
+<caption>A data.frame: 7 × 4</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">metric</th>
+<th data-quarto-table-cell-role="th" scope="col">ILM-prop42</th>
+<th data-quarto-table-cell-role="th" scope="col">MeanEnsemble</th>
+<th data-quarto-table-cell-role="th" scope="col">SSM</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Mean Absolute Error</td>
+<td>589.32278</td>
+<td>502.91139</td>
+<td>526.39546</td>
+</tr>
+<tr class="even">
+<td>Coverage 95% PI [%]</td>
+<td>68.98734</td>
+<td>86.70886</td>
+<td>67.72152</td>
+</tr>
+<tr class="odd">
+<td>Coverage 50% PI [%]</td>
+<td>42.40506</td>
+<td>46.20253</td>
+<td>29.11392</td>
+</tr>
+<tr class="even">
+<td>WIS</td>
+<td>377.58133</td>
+<td>282.67052</td>
+<td>352.07059</td>
+</tr>
+<tr class="odd">
+<td>Sharpness</td>
+<td>101.37156</td>
+<td>110.21302</td>
+<td>75.30180</td>
+</tr>
+<tr class="even">
+<td>Underprediction</td>
+<td>33.91139</td>
+<td>40.52803</td>
+<td>100.46889</td>
+</tr>
+<tr class="odd">
+<td>Overprediction</td>
+<td>162.52984</td>
+<td>61.63472</td>
+<td>97.02961</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="925364b0" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="26">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>txt_performance <span class="ot">&lt;-</span> df_table_performance <span class="sc">%&gt;%</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="sc">~</span> <span class="fu">round</span>(.x, <span class="dv">1</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">setNames</span>(<span class="fu">c</span>(<span class="st">""</span>, <span class="st">"ILM-prop42"</span>, <span class="st">"MeanEnsemble"</span>, <span class="st">"SSM"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kbl</span>(<span class="at">format=</span><span class="st">'latex'</span>, <span class="at">booktabs =</span> T) <span class="sc">%&gt;%</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pack_rows</span>(<span class="st">"WIS components"</span>, <span class="dv">5</span>, <span class="dv">7</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">column_spec</span>(<span class="dv">2</span>, <span class="at">bold =</span><span class="fu">c</span>(F,F,F,F,F,T,F)) <span class="sc">%&gt;%</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">column_spec</span>(<span class="dv">3</span>, <span class="at">bold =</span><span class="fu">c</span>(T,T,T,T,F,F,T)) <span class="sc">%&gt;%</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">column_spec</span>(<span class="dv">4</span>, <span class="at">bold =</span><span class="fu">c</span>(F,F,F,F,T,F,F)) </span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="co"># write txt_performance to file</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>txt_performance <span class="sc">%&gt;%</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write_lines</span>(<span class="fu">here</span>(<span class="st">"tables/df_table_performance.tex"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="d92eef99" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="27">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode R code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>txt_performance</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+\begin{tabular}[t]{l&gt;{}r&gt;{}r&gt;{}r}
+\toprule
+ &amp; ILM-prop42 &amp; MeanEnsemble &amp; SSM\\
+\midrule
+Mean Absolute Error &amp; 589.3 &amp; \textbf{502.9} &amp; 526.4\\
+Coverage 95\% PI [\%] &amp; 69.0 &amp; \textbf{86.7} &amp; 67.7\\
+Coverage 50\% PI [\%] &amp; 42.4 &amp; \textbf{46.2} &amp; 29.1\\
+WIS &amp; 377.6 &amp; \textbf{282.7} &amp; 352.1\\
+\addlinespace[0.3em]
+\multicolumn{4}{l}{\textbf{WIS components}}\\
+\hspace{1em}Sharpness &amp; 101.4 &amp; 110.2 &amp; \textbf{75.3}\\
+\hspace{1em}Underprediction &amp; \textbf{33.9} &amp; 40.5 &amp; 100.5\\
+\hspace{1em}Overprediction &amp; 162.5 &amp; \textbf{61.6} &amp; 97.0\\
+\bottomrule
+\end{tabular}</code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/stefanheyder\.github\.io\/dissertation");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/stefanheyder/dissertation/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

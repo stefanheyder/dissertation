@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Model – ssm4epi</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-000f0825b9c55ed21d14970d810c14a9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Model – ssm4epi">
+<meta property="og:description" content="PhD thesis">
+<meta property="og:image" content="https://stefanheyder.github.io/dissertation/4 Models/4.2 Regional growth factor model/10_model_files/figure-html/cell-11-output-1.png">
+<meta property="og:site_name" content="ssm4epi">
+<meta property="og:image:height" content="510">
+<meta property="og:image:width" content="646">
+<meta name="twitter:title" content="Model – ssm4epi">
+<meta name="twitter:description" content="PhD thesis">
+<meta name="twitter:image" content="https://stefanheyder.github.io/dissertation/4 Models/4.2 Regional growth factor model/10_model_files/figure-html/cell-11-output-1.png">
+<meta name="twitter:image-height" content="510">
+<meta name="twitter:image-width" content="646">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">ssm4epi</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../4 Models/utilities.html">4 Models</a></li><li class="breadcrumb-item"><a href="../../4 Models/4.2 Regional growth factor model/data.html">4.2 Regional growth factor model</a></li><li class="breadcrumb-item"><a href="../../4 Models/4.2 Regional growth factor model/model.html">Model</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Thesis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">2 Epidemiology</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../2 Epidemiology/03_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.3 Available data and its quality</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../2 Epidemiology/04_desiderata.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.4 Desiderata for epidemiological models</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">3 SSMs</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../3 SSMs/04_is_figures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.4 Importance sampling: Figures</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../3 SSMs/05_gaussian_is.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.5 Gaussian Importance Sampling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../3 SSMs/07_cross_entropy_method_utils.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cross-Entropy method</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../3 SSMs/08_comparison.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sympy preamble</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../3 SSMs/08_comparison_figures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.8 Comparison of Importance Sampling Methods - Figures</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../3 SSMs/08_ssm_comparison.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Comparison of EIS and the CEM for SSMs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../3 SSMs/08_ssm_comparison_figures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">08_ssm_comparison_figures.html</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">4 Models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/utilities.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Utilities for the models of this thesis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/patch_full_dependencies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Monkey patching</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">4.1 Removing reporting delays and weekday effects</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.1 Removing reporting delays and weekday effects/data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.1 Removing reporting delays and weekday effects/model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model for removing weekday effects and reporting delays</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.1 Removing reporting delays and weekday effects/showcase_model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Application 1: Showcase</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.1 Removing reporting delays and weekday effects/christmas_model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Application 2: Christmas model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.1 Removing reporting delays and weekday effects/prediction_model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Application 3: Predictions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.1 Removing reporting delays and weekday effects/figures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Figures</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">4.2 Regional growth factor model</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.2 Regional growth factor model/data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.2 Regional growth factor model/data_python.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Forecasts from the ECDC FCH</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.2 Regional growth factor model/model.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.2 Regional growth factor model/showcase.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Application 1: Showcase</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.2 Regional growth factor model/forecasting_ecdc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">forecasting_ecdc.html</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.2 Regional growth factor model/figures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Showcase</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">4.3 Nowcasting hospitalizations</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.3 Nowcasting hospitalizations/data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.3 Nowcasting hospitalizations/data_in_r.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data for Section 4.3: Hospitalization Nowcasting</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.3 Nowcasting hospitalizations/model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.3 Nowcasting hospitalizations/showcase.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Application 1: Showcase</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.3 Nowcasting hospitalizations/nowcasting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Application 2: Nowcasting hospitalizations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.3 Nowcasting hospitalizations/nowcasting_new.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">A second try at nowcasting model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../4 Models/4.3 Nowcasting hospitalizations/figures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Figures for the hospitalization model</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#monkey-patches-account-for-missing-observations" id="toc-monkey-patches-account-for-missing-observations" class="nav-link active" data-scroll-target="#monkey-patches-account-for-missing-observations">Monkey patches (account for missing observations)</a>
+  <ul class="collapse">
+  <li><a href="#nbinom-sampler-is-slow-httpsgithub.comtensorflowprobabilityissues1843" id="toc-nbinom-sampler-is-slow-httpsgithub.comtensorflowprobabilityissues1843" class="nav-link" data-scroll-target="#nbinom-sampler-is-slow-httpsgithub.comtensorflowprobabilityissues1843">NBinom sampler is slow (https://github.com/tensorflow/probability/issues/1843)</a></li>
+  <li><a href="#nans" id="toc-nans" class="nav-link" data-scroll-target="#nans">Nans</a></li>
+  </ul></li>
+  <li><a href="#hyperparameters" id="toc-hyperparameters" class="nav-link" data-scroll-target="#hyperparameters">Hyperparameters</a></li>
+  <li><a href="#states" id="toc-states" class="nav-link" data-scroll-target="#states">States</a></li>
+  <li><a href="#observations" id="toc-observations" class="nav-link" data-scroll-target="#observations">Observations</a></li>
+  <li><a href="#spatial-correlations" id="toc-spatial-correlations" class="nav-link" data-scroll-target="#spatial-correlations">Spatial Correlations</a></li>
+  <li><a href="#parameters" id="toc-parameters" class="nav-link" data-scroll-target="#parameters">Parameters</a></li>
+  <li><a href="#final-model" id="toc-final-model" class="nav-link" data-scroll-target="#final-model">Final Model</a></li>
+  <li><a href="#la" id="toc-la" class="nav-link" data-scroll-target="#la">LA</a></li>
+  <li><a href="#meis" id="toc-meis" class="nav-link" data-scroll-target="#meis">MEIS</a></li>
+  <li><a href="#predictions" id="toc-predictions" class="nav-link" data-scroll-target="#predictions">Predictions</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/stefanheyder/dissertation/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../4 Models/utilities.html">4 Models</a></li><li class="breadcrumb-item"><a href="../../4 Models/4.2 Regional growth factor model/data.html">4.2 Regional growth factor model</a></li><li class="breadcrumb-item"><a href="../../4 Models/4.2 Regional growth factor model/model.html">Model</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Model</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<section id="monkey-patches-account-for-missing-observations" class="level2">
+<h2 class="anchored" data-anchor-id="monkey-patches-account-for-missing-observations">Monkey patches (account for missing observations)</h2>
+<section id="nbinom-sampler-is-slow-httpsgithub.comtensorflowprobabilityissues1843" class="level3">
+<h3 class="anchored" data-anchor-id="nbinom-sampler-is-slow-httpsgithub.comtensorflowprobabilityissues1843">NBinom sampler is slow (https://github.com/tensorflow/probability/issues/1843)</h3>
+</section>
+<section id="nans" class="level3">
+<h3 class="anchored" data-anchor-id="nans">Nans</h3>
+</section>
+</section>
+<section id="hyperparameters" class="level2">
+<h2 class="anchored" data-anchor-id="hyperparameters">Hyperparameters</h2>
+<div id="b8643bc8" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>mpl.rcParams[<span class="st">"figure.figsize"</span>] <span class="op">=</span> (<span class="dv">20</span>, <span class="dv">6</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="states" class="level2">
+<h2 class="anchored" data-anchor-id="states">States</h2>
+<p>Let <span class="math inline">\(\bar r_t = \log \bar \rho_t\)</span> be the average growth factor (on the log scale) across all counties and <span class="math inline">\(u_t^c\)</span> be the deviation of county <span class="math inline">\(c\)</span>’s log-growth factor for <span class="math inline">\(\bar r_t\)</span>. We model <span class="math inline">\(\bar r_t\)</span> following a random walk and <span class="math inline">\(u^\cdot_t\)</span> following an <span class="math inline">\(\text{VAR}(1)\)</span> process with transition matrix <span class="math inline">\(\alpha I\)</span> and spatial correlation <span class="math inline">\(\Omega\)</span>.</p>
+<p>Thus we have <span class="math display">\[
+\begin{align*}
+\bar r_{t + 1} &amp;= \bar r_{t} + \varepsilon_{t + 1}^\rho \\
+u^c_{t + 1} &amp;= \alpha u^c_t + \varepsilon_{t + 1}^c
+\end{align*}
+\]</span></p>
+<p>with <span class="math inline">\(\text{Var}(\varepsilon_{t + 1}^\rho) = \sigma^2_\rho\)</span> and <span class="math inline">\(\text{Cov}(\varepsilon_{t + 1}) = \Omega\)</span>. The covariance matrix of the stationary distribution is <span class="math inline">\(\Sigma = \frac {1} {1 - \alpha^2} \Omega\)</span>.</p>
+</section>
+<section id="observations" class="level2">
+<h2 class="anchored" data-anchor-id="observations">Observations</h2>
+<p>The log growth factor in a region at time <span class="math inline">\(t\)</span>, <span class="math inline">\(r^c_t\)</span>, is given by the mean log growth factor <span class="math inline">\(\bar r_t\)</span> and the per-region deviation <span class="math inline">\(u^c_t\)</span>. Conditional on the log growth factors and past cases, cases are Negative Binomially distributed with shared overdispersion parameter <span class="math inline">\(r\)</span> <span class="math display">\[
+\begin{align*}
+r^c_t &amp;= \bar r_t + u^c_{t} \\
+\lambda_t^c &amp;= \exp(r^c_t) \sum_{d}p_{c,d} I_t^d \\
+I^c_{t + 1} | I^c_{t}, \rho_t, u^c_t &amp;\sim \text{NegBinom}(\underbrace{\lambda_t^c}_{\text{mean}}, \underbrace{r}_{\text{overdispersion}})
+\end{align*}
+\]</span></p>
+<p>where the variance of the negative binomial distribution is <span class="math inline">\(\mu + \frac{\mu^2}{r}\)</span></p>
+</section>
+<section id="spatial-correlations" class="level2">
+<h2 class="anchored" data-anchor-id="spatial-correlations">Spatial Correlations</h2>
+<p>Suppose we have in county <span class="math inline">\(c\)</span> <span class="math inline">\(S^c\)</span> many new infections generated, which may be attributed to the same county or another one, <span class="math inline">\(c'\)</span> say. Let <span class="math inline">\(p_{c,c'}\)</span> be the fraction of cases generated in county <span class="math inline">\(c'\)</span> (instead of in county <span class="math inline">\(c\)</span>) and <span class="math inline">\(p_{c,c} = 1 - \sum_{c' \neq c} p_{c,c'}\)</span>.</p>
+<p>Let <span class="math inline">\(P = \left(p_{c,c'}\right)_{c = 1, \dots, K, c' = 1,\dots, K}\)</span>.</p>
+<p>Let <span class="math inline">\(\tilde S^c = \sum p_{c,d} S^d\)</span> be the number of cases generated in county <span class="math inline">\(c\)</span>.</p>
+<p>Then we are interested in</p>
+<p><span class="math display">\[
+\begin{align*}
+    \text{Cov}(\tilde S^c, \tilde S^{c'}) = \underbrace{\sigma^2}_{\text{Var}(S^c)} (\sum_{d} p_{c,d} p_{c',d}) = \sigma^2_{\text{spat}} (P P^T)_{c, c'}
+\end{align*}
+\]</span></p>
+<p>To obtain <span class="math inline">\(p_{c,c'}\)</span> we use data on commuters <span class="math inline">\(q_{c,c'}\)</span> the fraction of socially insured employees that have their center of life in county <span class="math inline">\(c\)</span> but are registered to work in county <span class="math inline">\(c'\)</span>.</p>
+<p>To account for non-working inhabitants (elderly, kids, …) we introduce a constant <span class="math inline">\(C \geq 1\)</span> s.t. <span class="math display">\[
+p_{c,c'} = \bar q + (1 - \bar q)\frac{\mathbf 1 _{c \neq c'} q_{c,c'}}{ \sum_{d \neq c} q_{c,d} + C q_{c,c}},
+\]</span> i.e.&nbsp;we blow up the proportion of “stay at home” by a constant <span class="math inline">\(C\)</span> (that is the same for all counties) and add a constant “socket” of travel <span class="math inline">\(\bar q\)</span> between the counties.</p>
+<p>Finally we choose</p>
+<p><span class="math display">\[
+\Omega = \sigma^2_{\text{spat}}PP^T %+ \sigma^2_{\text{nugget}} I
+\]</span></p>
+</section>
+<section id="parameters" class="level2">
+<h2 class="anchored" data-anchor-id="parameters">Parameters</h2>
+<p><span class="math display">\[
+\theta = \left( \text{logit}(\alpha), \log \sigma^2_r, \log \sigma^2_{\text{spat}}, C, \log \mu \right)%\log \sigma^2_{\text{nugget}}, \log \mu \right)
+\]</span></p>
+</section>
+<section id="final-model" class="level2">
+<h2 class="anchored" data-anchor-id="final-model">Final Model</h2>
+<div id="5a3fa04f" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>n_pop.<span class="bu">sum</span>() <span class="op">/</span> n_tot.<span class="bu">sum</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>Array(2.48634886, dtype=float64)</code></pre>
+</div>
+</div>
+<div id="732761d7" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>plt.imshow(jnp.log(n_ij))</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>plt.colorbar()</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="10_model_files/figure-html/cell-11-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="57c2eaff" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>P <span class="op">=</span> _P(<span class="fl">1.0</span>, <span class="fl">0.5</span>, n_ij, n_tot)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>plt.imshow(P)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plt.colorbar()</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="10_model_files/figure-html/cell-12-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="b8688b3e" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>par_manual <span class="op">=</span> jnp.array(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    [</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        <span class="fl">0.5</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        <span class="fl">0.01</span><span class="op">**</span><span class="dv">2</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="fl">0.01</span><span class="op">**</span><span class="dv">2</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="fl">0.5</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        <span class="dv">2</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        <span class="fl">100.0</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>theta_manual <span class="op">=</span> par_to_theta(par_manual)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>np1 <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co"># aux = (cases_full[: np1 + 1], n_ij, n_tot)</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>dates <span class="op">=</span> dates_full[<span class="dv">14</span> <span class="op">+</span> <span class="dv">1</span> : <span class="dv">14</span> <span class="op">+</span> np1 <span class="op">+</span> <span class="dv">1</span>]</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>aux <span class="op">=</span> make_aux(dates[<span class="dv">0</span>], cases_full, n_ij, n_tot, np1)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> aux[<span class="dv">0</span>][<span class="dv">1</span>:]</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>y_nan <span class="op">=</span> y.at[<span class="op">-</span><span class="dv">1</span>].<span class="bu">set</span>(jnp.nan)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>missing_inds <span class="op">=</span> jnp.isnan(y_nan)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>_, y_miss <span class="op">=</span> account_for_nans(</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    growth_factor_model(theta_manual, aux), y_nan, missing_inds</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>_model_miss <span class="op">=</span> <span class="kw">lambda</span> theta, aux: account_for_nans(</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    growth_factor_model(theta, aux), y_nan, missing_inds</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>)[<span class="dv">0</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="d2f0a5fd" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plt.plot(dates, y_nan.<span class="bu">sum</span>(axis<span class="op">=-</span><span class="dv">1</span>))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="10_model_files/figure-html/cell-17-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="fe6bf8f4" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ssm4epi.models.util <span class="im">import</span> visualize_pgssm</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="fb57b088" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>theta_manual <span class="op">=</span> jnp.array([<span class="fl">0.0</span>, <span class="op">-</span><span class="fl">2.063e00</span>, <span class="op">-</span><span class="fl">5.355e00</span>, <span class="op">-</span><span class="fl">4.511e-01</span>, <span class="op">-</span><span class="fl">5.711e-01</span>, <span class="fl">7.932e-01</span>])</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> growth_factor_model(theta_manual, aux)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>visualize_pgssm(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="10_model_files/figure-html/cell-19-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="10_model_files/figure-html/cell-19-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="8fcbc613" class="cell" data-execution_count="25">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> isssm.estimation <span class="im">import</span> initial_theta</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> jax</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="506434a3" class="cell" data-execution_count="26">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>theta0_result <span class="op">=</span> initial_theta(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    y_miss,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    _model_miss,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    theta_manual,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    aux,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    n_iterations,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    options<span class="op">=</span>{<span class="st">"maxiter"</span>: <span class="dv">10</span>},</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>theta0 <span class="op">=</span> theta0_result.x</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>theta0_result</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>WARNING:2025-09-10 16:53:41,762:jax._src.dispatch:195: Finished tracing + transforming less for pjit in 0.000406027 sec
+WARNING:2025-09-10 16:53:41,764:jax._src.dispatch:195: Finished tracing + transforming add for pjit in 0.000602722 sec
+WARNING:2025-09-10 16:53:41,766:jax._src.dispatch:195: Finished tracing + transforming true_divide for pjit in 0.000133038 sec
+WARNING:2025-09-10 16:53:41,767:jax._src.dispatch:195: Finished tracing + transforming log for pjit in 0.000097990 sec
+WARNING:2025-09-10 16:53:41,768:jax._src.dispatch:195: Finished tracing + transforming nan_to_num for pjit in 0.000541925 sec
+WARNING:2025-09-10 16:53:41,769:jax._src.dispatch:195: Finished tracing + transforming absolute for pjit in 0.000072241 sec
+WARNING:2025-09-10 16:53:41,769:jax._src.dispatch:195: Finished tracing + transforming abs for pjit in 0.000423908 sec
+WARNING:2025-09-10 16:53:41,769:jax._src.dispatch:195: Finished tracing + transforming less for pjit in 0.000145197 sec
+WARNING:2025-09-10 16:53:41,770:jax._src.dispatch:195: Finished tracing + transforming subtract for pjit in 0.000174999 sec
+WARNING:2025-09-10 16:53:41,771:jax._src.dispatch:195: Finished tracing + transforming _broadcast_arrays for pjit in 0.000046968 sec
+WARNING:2025-09-10 16:53:41,772:jax._src.dispatch:195: Finished tracing + transforming _where for pjit in 0.000665188 sec
+WARNING:2025-09-10 16:53:41,773:jax._src.dispatch:195: Finished tracing + transforming _reduce_max for pjit in 0.000240326 sec
+WARNING:2025-09-10 16:53:41,773:jax._src.dispatch:195: Finished tracing + transforming less for pjit in 0.000130177 sec
+WARNING:2025-09-10 16:53:41,774:jax._src.dispatch:195: Finished tracing + transforming _reduce_sum for pjit in 0.000226974 sec
+WARNING:2025-09-10 16:53:41,775:jax._src.dispatch:195: Finished tracing + transforming greater for pjit in 0.000157356 sec
+WARNING:2025-09-10 16:53:41,775:jax._src.dispatch:195: Finished tracing + transforming logical_or for pjit in 0.000170231 sec
+WARNING:2025-09-10 16:53:41,776:jax._src.dispatch:195: Finished tracing + transforming greater for pjit in 0.000109911 sec
+WARNING:2025-09-10 16:53:41,776:jax._src.dispatch:195: Finished tracing + transforming logical_and for pjit in 0.000152111 sec
+WARNING:2025-09-10 16:53:41,777:jax._src.dispatch:195: Finished tracing + transforming absolute for pjit in 0.000088930 sec
+WARNING:2025-09-10 16:53:41,777:jax._src.dispatch:195: Finished tracing + transforming abs for pjit in 0.000423908 sec
+WARNING:2025-09-10 16:53:41,777:jax._src.dispatch:195: Finished tracing + transforming less for pjit in 0.000179052 sec
+WARNING:2025-09-10 16:53:41,778:jax._src.dispatch:195: Finished tracing + transforming subtract for pjit in 0.000145912 sec
+WARNING:2025-09-10 16:53:41,778:jax._src.dispatch:195: Finished tracing + transforming true_divide for pjit in 0.000113964 sec
+WARNING:2025-09-10 16:53:41,779:jax._src.dispatch:195: Finished tracing + transforming _broadcast_arrays for pjit in 0.000091791 sec
+WARNING:2025-09-10 16:53:41,780:jax._src.dispatch:195: Finished tracing + transforming _where for pjit in 0.001399040 sec
+WARNING:2025-09-10 16:53:41,781:jax._src.dispatch:195: Finished tracing + transforming _reduce_max for pjit in 0.000164986 sec
+WARNING:2025-09-10 16:53:41,782:jax._src.dispatch:195: Finished tracing + transforming isnan for pjit in 0.000300884 sec
+WARNING:2025-09-10 16:53:41,783:jax._src.dispatch:195: Finished tracing + transforming _reduce_sum for pjit in 0.000313044 sec
+WARNING:2025-09-10 16:53:41,784:jax._src.dispatch:195: Finished tracing + transforming logical_and for pjit in 0.000113964 sec
+WARNING:2025-09-10 16:53:41,785:jax._src.dispatch:195: Finished tracing + transforming greater_equal for pjit in 0.000187874 sec
+WARNING:2025-09-10 16:53:41,785:jax._src.dispatch:195: Finished tracing + transforming logical_or for pjit in 0.000150919 sec
+WARNING:2025-09-10 16:53:41,786:jax._src.dispatch:195: Finished tracing + transforming logical_not for pjit in 0.000149012 sec
+WARNING:2025-09-10 16:53:41,788:jax._src.dispatch:195: Finished tracing + transforming _moveaxis for pjit in 0.000045061 sec
+WARNING:2025-09-10 16:53:41,791:jax._src.dispatch:195: Finished tracing + transforming add for pjit in 0.000182152 sec
+WARNING:2025-09-10 16:53:41,792:jax._src.dispatch:195: Finished tracing + transforming subtract for pjit in 0.000098944 sec
+WARNING:2025-09-10 16:53:41,794:jax._src.dispatch:195: Finished tracing + transforming negative for pjit in 0.000076056 sec
+WARNING:2025-09-10 16:53:41,796:jax._src.dispatch:195: Finished tracing + transforming logaddexp for pjit in 0.000512838 sec
+WARNING:2025-09-10 16:53:41,796:jax._src.dispatch:195: Finished tracing + transforming softplus for pjit in 0.000856161 sec
+WARNING:2025-09-10 16:53:41,804:jax._src.dispatch:195: Finished tracing + transforming multiply for pjit in 0.000097036 sec
+WARNING:2025-09-10 16:53:41,806:jax._src.dispatch:195: Finished tracing + transforming equal for pjit in 0.000121117 sec
+WARNING:2025-09-10 16:53:41,809:jax._src.dispatch:195: Finished tracing + transforming _broadcast_arrays for pjit in 0.000042200 sec
+WARNING:2025-09-10 16:53:41,809:jax._src.dispatch:195: Finished tracing + transforming _where for pjit in 0.000612974 sec
+WARNING:2025-09-10 16:53:41,812:jax._src.dispatch:195: Finished tracing + transforming add for pjit in 0.000124931 sec
+WARNING:2025-09-10 16:53:41,815:jax._src.dispatch:195: Finished tracing + transforming minimum for pjit in 0.000147104 sec
+WARNING:2025-09-10 16:53:41,818:jax._src.dispatch:195: Finished tracing + transforming maximum for pjit in 0.000100851 sec
+WARNING:2025-09-10 16:53:41,821:jax._src.dispatch:195: Finished tracing + transforming reciprocal for pjit in 0.000078201 sec
+WARNING:2025-09-10 16:53:41,832:jax._src.dispatch:195: Finished tracing + transforming true_divide for pjit in 0.000099897 sec
+WARNING:2025-09-10 16:53:41,834:jax._src.dispatch:195: Finished tracing + transforming log1p for pjit in 0.000094175 sec
+WARNING:2025-09-10 16:53:41,844:jax._src.dispatch:195: Finished tracing + transforming greater_equal for pjit in 0.000143051 sec
+WARNING:2025-09-10 16:53:41,848:jax._src.dispatch:195: Finished tracing + transforming _reduce_sum for pjit in 0.000167847 sec
+WARNING:2025-09-10 16:53:41,849:jax._src.dispatch:195: Finished tracing + transforming nansum for pjit in 0.000777006 sec
+WARNING:2025-09-10 16:53:41,852:jax._src.dispatch:195: Finished tracing + transforming default_log_lik for pjit in 0.066179037 sec
+WARNING:2025-09-10 16:53:41,973:jax._src.dispatch:195: Finished tracing + transforming default_log_lik for pjit in 0.119926691 sec
+WARNING:2025-09-10 16:53:41,973:jax._src.dispatch:195: Finished tracing + transforming negative for pjit in 0.000135899 sec
+WARNING:2025-09-10 16:53:41,974:jax._src.dispatch:195: Finished tracing + transforming true_divide for pjit in 0.000199080 sec
+WARNING:2025-09-10 16:53:41,975:jax._src.dispatch:195: Finished tracing + transforming nan_to_num for pjit in 0.000527143 sec
+WARNING:2025-09-10 16:53:41,976:jax._src.dispatch:195: Finished tracing + transforming diag for pjit in 0.001023054 sec
+WARNING:2025-09-10 16:53:41,977:jax._src.dispatch:195: Finished tracing + transforming multiply for pjit in 0.000167847 sec
+WARNING:2025-09-10 16:53:41,977:jax._src.dispatch:195: Finished tracing + transforming add for pjit in 0.000102758 sec
+WARNING:2025-09-10 16:53:41,979:jax._src.dispatch:195: Finished tracing + transforming matmul for pjit in 0.000211000 sec
+WARNING:2025-09-10 16:53:41,980:jax._src.dispatch:195: Finished tracing + transforming add for pjit in 0.000136852 sec
+WARNING:2025-09-10 16:53:41,981:jax._src.dispatch:195: Finished tracing + transforming matmul for pjit in 0.000247955 sec
+WARNING:2025-09-10 16:53:41,982:jax._src.dispatch:195: Finished tracing + transforming add for pjit in 0.000103951 sec
+WARNING:2025-09-10 16:53:41,982:jax._src.dispatch:195: Finished tracing + transforming matmul for pjit in 0.000202894 sec
+WARNING:2025-09-10 16:53:41,983:jax._src.dispatch:195: Finished tracing + transforming add for pjit in 0.000097990 sec
+WARNING:2025-09-10 16:53:41,983:jax._src.dispatch:195: Finished tracing + transforming matmul for pjit in 0.000147104 sec
+WARNING:2025-09-10 16:53:41,984:jax._src.dispatch:195: Finished tracing + transforming matmul for pjit in 0.000157833 sec
+WARNING:2025-09-10 16:53:41,984:jax._src.dispatch:195: Finished tracing + transforming matmul for pjit in 0.000148058 sec
+WARNING:2025-09-10 16:53:41,985:jax._src.dispatch:195: Finished tracing + transforming conjugate for pjit in 0.000041962 sec
+WARNING:2025-09-10 16:53:41,986:jax._src.dispatch:195: Finished tracing + transforming multiply for pjit in 0.000121832 sec
+WARNING:2025-09-10 16:53:41,986:jax._src.dispatch:195: Finished tracing + transforming true_divide for pjit in 0.000140190 sec
+WARNING:2025-09-10 16:53:41,987:jax._src.dispatch:195: Finished tracing + transforming less for pjit in 0.000146866 sec
+WARNING:2025-09-10 16:53:41,988:jax._src.dispatch:195: Finished tracing + transforming take_along_axis for pjit in 0.000781059 sec
+WARNING:2025-09-10 16:53:41,988:jax._src.dispatch:195: Finished tracing + transforming multiply for pjit in 0.000093937 sec
+WARNING:2025-09-10 16:53:41,989:jax._src.dispatch:195: Finished tracing + transforming svd for pjit in 0.002874136 sec
+WARNING:2025-09-10 16:53:41,989:jax._src.dispatch:195: Finished tracing + transforming multiply for pjit in 0.000097752 sec
+WARNING:2025-09-10 16:53:41,990:jax._src.dispatch:195: Finished tracing + transforming greater for pjit in 0.000099182 sec
+WARNING:2025-09-10 16:53:41,990:jax._src.dispatch:195: Finished tracing + transforming _broadcast_arrays for pjit in 0.000102043 sec
+WARNING:2025-09-10 16:53:41,991:jax._src.dispatch:195: Finished tracing + transforming _where for pjit in 0.000591040 sec
+WARNING:2025-09-10 16:53:41,991:jax._src.dispatch:195: Finished tracing + transforming matmul for pjit in 0.000144958 sec
+WARNING:2025-09-10 16:53:41,992:jax._src.dispatch:195: Finished tracing + transforming _pinv for pjit in 0.006607056 sec
+WARNING:2025-09-10 16:53:41,992:jax._src.dispatch:195: Finished tracing + transforming matmul for pjit in 0.000155687 sec
+WARNING:2025-09-10 16:53:41,993:jax._src.dispatch:195: Finished tracing + transforming subtract for pjit in 0.000098944 sec
+WARNING:2025-09-10 16:53:41,993:jax._src.dispatch:195: Finished tracing + transforming matmul for pjit in 0.000132084 sec
+WARNING:2025-09-10 16:53:41,994:jax._src.dispatch:195: Finished tracing + transforming matmul for pjit in 0.000136137 sec
+WARNING:2025-09-10 16:53:41,994:jax._src.dispatch:195: Finished tracing + transforming subtract for pjit in 0.000111818 sec
+WARNING:2025-09-10 16:53:41,996:jax._src.dispatch:195: Finished tracing + transforming matmul for pjit in 0.000130892 sec
+WARNING:2025-09-10 16:53:41,996:jax._src.dispatch:195: Finished tracing + transforming matmul for pjit in 0.000154734 sec
+WARNING:2025-09-10 16:53:41,997:jax._src.dispatch:195: Finished tracing + transforming add for pjit in 0.000122786 sec
+WARNING:2025-09-10 16:53:41,997:jax._src.dispatch:195: Finished tracing + transforming conjugate for pjit in 0.000037193 sec
+WARNING:2025-09-10 16:53:41,998:jax._src.dispatch:195: Finished tracing + transforming true_divide for pjit in 0.000208855 sec
+WARNING:2025-09-10 16:53:41,999:jax._src.dispatch:195: Finished tracing + transforming less for pjit in 0.000131130 sec
+WARNING:2025-09-10 16:53:42,000:jax._src.dispatch:195: Finished tracing + transforming take_along_axis for pjit in 0.000813007 sec
+WARNING:2025-09-10 16:53:42,000:jax._src.dispatch:195: Finished tracing + transforming multiply for pjit in 0.000101089 sec
+WARNING:2025-09-10 16:53:42,000:jax._src.dispatch:195: Finished tracing + transforming svd for pjit in 0.002799749 sec
+WARNING:2025-09-10 16:53:42,001:jax._src.dispatch:195: Finished tracing + transforming multiply for pjit in 0.000154018 sec
+WARNING:2025-09-10 16:53:42,001:jax._src.dispatch:195: Finished tracing + transforming greater for pjit in 0.000124931 sec
+WARNING:2025-09-10 16:53:42,002:jax._src.dispatch:195: Finished tracing + transforming _broadcast_arrays for pjit in 0.000104189 sec
+WARNING:2025-09-10 16:53:42,002:jax._src.dispatch:195: Finished tracing + transforming _where for pjit in 0.000529289 sec
+WARNING:2025-09-10 16:53:42,003:jax._src.dispatch:195: Finished tracing + transforming true_divide for pjit in 0.000099897 sec
+WARNING:2025-09-10 16:53:42,003:jax._src.dispatch:195: Finished tracing + transforming matmul for pjit in 0.000154972 sec
+WARNING:2025-09-10 16:53:42,004:jax._src.dispatch:195: Finished tracing + transforming _pinv for pjit in 0.006548166 sec
+WARNING:2025-09-10 16:53:42,004:jax._src.dispatch:195: Finished tracing + transforming matmul for pjit in 0.000156879 sec
+WARNING:2025-09-10 16:53:42,005:jax._src.dispatch:195: Finished tracing + transforming matmul for pjit in 0.000136852 sec
+WARNING:2025-09-10 16:53:42,006:jax._src.dispatch:195: Finished tracing + transforming matmul for pjit in 0.000227928 sec
+WARNING:2025-09-10 16:53:42,006:jax._src.dispatch:195: Finished tracing + transforming matmul for pjit in 0.000137091 sec
+WARNING:2025-09-10 16:53:42,007:jax._src.dispatch:195: Finished tracing + transforming matmul for pjit in 0.000130177 sec
+WARNING:2025-09-10 16:53:42,008:jax._src.dispatch:195: Finished tracing + transforming subtract for pjit in 0.000123739 sec
+WARNING:2025-09-10 16:53:42,008:jax._src.dispatch:195: Finished tracing + transforming matmul for pjit in 0.000163078 sec
+WARNING:2025-09-10 16:53:42,009:jax._src.dispatch:195: Finished tracing + transforming add for pjit in 0.000091791 sec
+WARNING:2025-09-10 16:53:42,012:jax._src.dispatch:195: Finished tracing + transforming _reduce_max for pjit in 0.000144243 sec
+WARNING:2025-09-10 16:53:42,022:jax._src.dispatch:195: Finished tracing + transforming eigh for pjit in 0.000345230 sec
+WARNING:2025-09-10 16:53:42,023:jax._src.dispatch:195: Finished tracing + transforming sqrt for pjit in 0.000092268 sec
+WARNING:2025-09-10 16:53:42,024:jax._src.dispatch:195: Finished tracing + transforming _einsum for pjit in 0.000160933 sec
+WARNING:2025-09-10 16:53:42,024:jax._src.dispatch:195: Finished tracing + transforming qr for pjit in 0.000129938 sec
+WARNING:2025-09-10 16:53:42,025:jax._src.dispatch:195: Finished tracing + transforming _einsum for pjit in 0.000421047 sec
+WARNING:2025-09-10 16:53:42,025:jax._src.dispatch:195: Finished tracing + transforming sign for pjit in 0.000069857 sec
+WARNING:2025-09-10 16:53:42,026:jax._src.dispatch:195: Finished tracing + transforming multiply for pjit in 0.000101089 sec
+WARNING:2025-09-10 16:53:42,026:jax._src.dispatch:195: Finished tracing + transforming swapaxes for pjit in 0.000089169 sec
+WARNING:2025-09-10 16:53:42,030:jax._src.dispatch:195: Finished tracing + transforming tril for pjit in 0.000482798 sec
+WARNING:2025-09-10 16:53:42,030:jax._src.dispatch:195: Finished tracing + transforming _solve_triangular for pjit in 0.000128984 sec
+WARNING:2025-09-10 16:53:42,030:jax._src.dispatch:195: Finished tracing + transforming _squeeze for pjit in 0.000077009 sec
+WARNING:2025-09-10 16:53:42,033:jax._src.dispatch:195: Finished tracing + transforming true_divide for pjit in 0.000101089 sec
+WARNING:2025-09-10 16:53:42,034:jax._src.dispatch:195: Finished tracing + transforming true_divide for pjit in 0.000149965 sec
+WARNING:2025-09-10 16:53:42,034:jax._src.dispatch:195: Finished tracing + transforming subtract for pjit in 0.000209808 sec
+WARNING:2025-09-10 16:53:42,034:jax._src.dispatch:195: Finished tracing + transforming square for pjit in 0.000081062 sec
+WARNING:2025-09-10 16:53:42,035:jax._src.dispatch:195: Finished tracing + transforming multiply for pjit in 0.000244856 sec
+WARNING:2025-09-10 16:53:42,035:jax._src.dispatch:195: Finished tracing + transforming subtract for pjit in 0.000092030 sec
+WARNING:2025-09-10 16:53:42,036:jax._src.dispatch:195: Finished tracing + transforming _reduce_sum for pjit in 0.000147820 sec
+WARNING:2025-09-10 16:53:42,037:jax._src.dispatch:195: Finished tracing + transforming _moveaxis for pjit in 0.000101805 sec
+WARNING:2025-09-10 16:53:42,039:jax._src.dispatch:195: Finished tracing + transforming diagonal for pjit in 0.001276016 sec
+WARNING:2025-09-10 16:53:42,039:jax._src.dispatch:195: Finished tracing + transforming _reduce_sum for pjit in 0.000138998 sec
+WARNING:2025-09-10 16:53:42,039:jax._src.dispatch:195: Finished tracing + transforming negative for pjit in 0.000081301 sec
+WARNING:2025-09-10 16:53:42,040:jax._src.dispatch:195: Finished tracing + transforming multiply for pjit in 0.000100136 sec
+WARNING:2025-09-10 16:53:42,041:jax._src.dispatch:195: Finished tracing + transforming _reduce_sum for pjit in 0.000157833 sec
+WARNING:2025-09-10 16:53:42,041:jax._src.dispatch:195: Finished tracing + transforming add for pjit in 0.000097990 sec
+WARNING:2025-09-10 16:53:42,042:jax._src.dispatch:195: Finished tracing + transforming multiply for pjit in 0.000091076 sec
+WARNING:2025-09-10 16:53:42,043:jax._src.dispatch:195: Finished tracing + transforming _reduce_sum for pjit in 0.000148058 sec
+WARNING:2025-09-10 16:53:42,043:jax._src.dispatch:195: Finished tracing + transforming add for pjit in 0.000092983 sec
+WARNING:2025-09-10 16:53:42,043:jax._src.dispatch:195: Finished tracing + transforming subtract for pjit in 0.000096083 sec
+WARNING:2025-09-10 16:53:42,044:jax._src.dispatch:195: Finished tracing + transforming isnan for pjit in 0.000069141 sec
+WARNING:2025-09-10 16:53:42,044:jax._src.dispatch:195: Finished tracing + transforming _broadcast_arrays for pjit in 0.000259161 sec
+WARNING:2025-09-10 16:53:42,045:jax._src.dispatch:195: Finished tracing + transforming _where for pjit in 0.000915766 sec
+WARNING:2025-09-10 16:53:42,046:jax._src.dispatch:195: Finished tracing + transforming nan_to_num for pjit in 0.001902103 sec
+WARNING:2025-09-10 16:53:42,046:jax._src.dispatch:195: Finished tracing + transforming _reduce_sum for pjit in 0.000159025 sec
+WARNING:2025-09-10 16:53:42,047:jax._src.dispatch:195: Finished tracing + transforming _moveaxis for pjit in 0.000089169 sec
+WARNING:2025-09-10 16:53:42,048:jax._src.dispatch:195: Finished tracing + transforming logaddexp for pjit in 0.000466824 sec
+WARNING:2025-09-10 16:53:42,048:jax._src.dispatch:195: Finished tracing + transforming softplus for pjit in 0.000766039 sec
+WARNING:2025-09-10 16:53:42,049:jax._src.dispatch:195: Finished tracing + transforming equal for pjit in 0.000120878 sec
+WARNING:2025-09-10 16:53:42,050:jax._src.dispatch:195: Finished tracing + transforming add for pjit in 0.000137091 sec
+WARNING:2025-09-10 16:53:42,051:jax._src.dispatch:195: Finished tracing + transforming _broadcast_arrays for pjit in 0.000042200 sec
+WARNING:2025-09-10 16:53:42,051:jax._src.dispatch:195: Finished tracing + transforming minimum for pjit in 0.000103951 sec
+WARNING:2025-09-10 16:53:42,052:jax._src.dispatch:195: Finished tracing + transforming maximum for pjit in 0.000098705 sec
+WARNING:2025-09-10 16:53:42,053:jax._src.dispatch:195: Finished tracing + transforming multiply for pjit in 0.000668049 sec
+WARNING:2025-09-10 16:53:42,053:jax._src.dispatch:195: Finished tracing + transforming subtract for pjit in 0.000106096 sec
+WARNING:2025-09-10 16:53:42,054:jax._src.dispatch:195: Finished tracing + transforming reciprocal for pjit in 0.000078917 sec
+WARNING:2025-09-10 16:53:42,055:jax._src.dispatch:195: Finished tracing + transforming add for pjit in 0.000091314 sec
+WARNING:2025-09-10 16:53:42,059:jax._src.dispatch:195: Finished tracing + transforming subtract for pjit in 0.000088930 sec
+WARNING:2025-09-10 16:53:42,060:jax._src.dispatch:195: Finished tracing + transforming log1p for pjit in 0.000082254 sec
+WARNING:2025-09-10 16:53:42,065:jax._src.dispatch:195: Finished tracing + transforming greater_equal for pjit in 0.000133038 sec
+WARNING:2025-09-10 16:53:42,066:jax._src.dispatch:195: Finished tracing + transforming _reduce_sum for pjit in 0.000161171 sec
+WARNING:2025-09-10 16:53:42,074:jax._src.dispatch:195: Finished tracing + transforming f for pjit in 0.323371172 sec
+WARNING:2025-09-10 16:53:42,079:jax._src.interpreters.pxla:1921: Compiling f with global shapes and types [ShapedArray(float64[6])]. Argument mapping: (UnspecifiedValue,).
+WARNING:2025-09-10 16:53:42,116:jax._src.dispatch:195: Finished tracing + transforming less for pjit in 0.000124931 sec
+WARNING:2025-09-10 16:53:42,119:jax._src.dispatch:195: Finished tracing + transforming add for pjit in 0.000101805 sec
+WARNING:2025-09-10 16:53:42,130:jax._src.dispatch:195: Finished tracing + transforming subtract for pjit in 0.000093937 sec
+WARNING:2025-09-10 16:53:42,165:jax._src.dispatch:195: Finished jaxpr to MLIR module conversion jit(f) in 0.085249901 sec
+WARNING:2025-09-10 16:53:42,628:jax._src.dispatch:195: Finished XLA compilation of jit(f) in 0.462757111 sec</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<pre><code>  message: Maximum number of iterations has been exceeded.
+  success: False
+   status: 1
+      fun: 2.589380286941821
+        x: [ 2.364e-02 -2.084e+00 -5.317e+00 -2.621e+00 -3.461e-01
+             5.767e-01]
+      nit: 10
+      jac: [-5.002e-04  6.095e-04 -1.310e-03 -2.502e-04 -2.525e-03
+             5.648e-04]
+ hess_inv: [[ 1.024e+00 -3.056e-02 ...  8.890e-02 -8.847e-02]
+            [-3.056e-02  1.039e+00 ... -1.092e-01  8.973e-02]
+            ...
+            [ 8.890e-02 -1.092e-01 ...  1.389e+00 -4.194e-01]
+            [-8.847e-02  8.973e-02 ... -4.194e-01  4.642e+00]]
+     nfev: 143
+     njev: 11</code></pre>
+</div>
+</div>
+<div id="174592d6" class="cell" data-execution_count="27">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>theta_to_par(theta0)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<pre><code>Array([0.50590952, 0.12444421, 0.00490983, 0.0677932 , 1.70743162,
+       1.78020985], dtype=float64)</code></pre>
+</div>
+</div>
+<div id="2e3421a0" class="cell" data-execution_count="28">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>fitted_model <span class="op">=</span> _model_miss(theta0, aux)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="la" class="level2">
+<h2 class="anchored" data-anchor-id="la">LA</h2>
+<div id="80d43c46" class="cell" data-execution_count="29">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> isssm.laplace_approximation <span class="im">import</span> laplace_approximation <span class="im">as</span> LA</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="8bbed46f" class="cell" data-execution_count="30">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>proposal_la, info_la <span class="op">=</span> LA(y_miss, fitted_model, n_iterations)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>info_la</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<pre><code>ConvergenceInformation(converged=Array(True, dtype=bool), n_iter=Array(6, dtype=int64, weak_type=True), delta=Array(2.09558415e-09, dtype=float64))</code></pre>
+</div>
+</div>
+<div id="d5576121" class="cell" data-execution_count="31">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> isssm.importance_sampling <span class="im">import</span> pgssm_importance_sampling, ess_pct</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="42e956d5" class="cell" data-execution_count="32">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>key, subkey <span class="op">=</span> jrn.split(key)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>samples, lw <span class="op">=</span> pgssm_importance_sampling(</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    y_miss,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    fitted_model,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    proposal_la.z,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    proposal_la.Omega,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    N_mle,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    subkey,</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>ess_pct(lw)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="32">
+<pre><code>Array(98.84955688, dtype=float64)</code></pre>
+</div>
+</div>
+<div id="0203f229" class="cell" data-execution_count="49">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> isssm.laplace_approximation <span class="im">import</span> posterior_mode</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>plt.plot(jnp.exp(posterior_mode(proposal_la)))</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="10_model_files/figure-html/cell-28-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="meis" class="level2">
+<h2 class="anchored" data-anchor-id="meis">MEIS</h2>
+<div id="c91dea0d" class="cell" data-execution_count="33">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> isssm.modified_efficient_importance_sampling <span class="im">import</span> (</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    modified_efficient_importance_sampling <span class="im">as</span> MEIS,</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="4f8306b5" class="cell" data-execution_count="34">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>key, subkey <span class="op">=</span> jrn.split(key)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>proposal_meis, info_meis <span class="op">=</span> MEIS(</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    y_miss, fitted_model, proposal_la.z, proposal_la.Omega, <span class="dv">10</span>, <span class="bu">int</span>(<span class="fl">1e3</span>), subkey</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>info_meis</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="34">
+<pre><code>ConvergenceInformation(converged=Array(True, dtype=bool), n_iter=Array(3, dtype=int64, weak_type=True), delta=Array(nan, dtype=float64))</code></pre>
+</div>
+</div>
+<div id="5cf1efc2" class="cell" data-execution_count="35">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> isssm.importance_sampling <span class="im">import</span> pgssm_importance_sampling, ess_pct</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="86df95f1" class="cell" data-execution_count="36">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>key, subkey <span class="op">=</span> jrn.split(key)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>samples, lw <span class="op">=</span> pgssm_importance_sampling(</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    y_miss,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    fitted_model,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    proposal_meis.z,</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>    proposal_meis.Omega,</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>    N_mle,</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>    subkey,</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>ess_pct(lw)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="36">
+<pre><code>Array(nan, dtype=float64)</code></pre>
+</div>
+</div>
+</section>
+<section id="predictions" class="level2">
+<h2 class="anchored" data-anchor-id="predictions">Predictions</h2>
+<div id="23dc7027" class="cell" data-execution_count="37">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> isssm.importance_sampling <span class="im">import</span> mc_integration, prediction</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="4bbf5a24" class="cell" data-execution_count="38">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>key, subkey <span class="op">=</span> jrn.split(key)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> predict_total(x, s, y):</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    y_county <span class="op">=</span> y[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    y_tot <span class="op">=</span> jnp.minimum(y_county, n_tot).<span class="bu">sum</span>()[<span class="va">None</span>]</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> jnp.concatenate([y_tot, y_county], axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>preds <span class="op">=</span> prediction(</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">lambda</span> x, s, y: predict_total(x, s, y),</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>    y_miss,</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>    proposal_la,</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>    fitted_model,</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1000</span>,</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>    subkey,</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>    percentiles_of_interest,</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>    growth_factor_model(theta0, aux),</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="27aa4892" class="cell" data-execution_count="50">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>theta0</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="50">
+<pre><code>array([ 0.0236392 , -2.0838978 , -5.31651543, -2.62109273, -0.3461143 ,
+        0.57673125])</code></pre>
+</div>
+</div>
+<div id="c27669c3" class="cell" data-execution_count="54">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>plt.plot(dates[: np1 <span class="op">+</span> <span class="dv">1</span>], y_nan.<span class="bu">sum</span>(axis<span class="op">=-</span><span class="dv">1</span>))</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>plt.scatter(dates[<span class="op">-</span><span class="dv">1</span>], preds[<span class="dv">0</span>][<span class="dv">0</span>], color<span class="op">=</span><span class="st">"red"</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(dates[<span class="op">-</span><span class="dv">1</span>], preds[<span class="dv">2</span>][<span class="dv">1</span>, <span class="dv">0</span>], color<span class="op">=</span><span class="st">"grey"</span>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>plt.scatter(dates[<span class="op">-</span><span class="dv">1</span>], preds[<span class="dv">2</span>][<span class="op">-</span><span class="dv">2</span>, <span class="dv">0</span>], color<span class="op">=</span><span class="st">"grey"</span>)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>plt.scatter(dates[<span class="op">-</span><span class="dv">1</span>], y[<span class="op">-</span><span class="dv">1</span>].<span class="bu">sum</span>(), color<span class="op">=</span><span class="st">"green"</span>, marker<span class="op">=</span><span class="st">"x"</span>)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="10_model_files/figure-html/cell-36-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="c361eeb4" class="cell" data-execution_count="40">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find index of Gütersloh / neighboring Warendorf</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>jnp.where(ags_full <span class="op">==</span> <span class="dv">5754</span>), jnp.where(ags_full <span class="op">==</span> <span class="dv">5570</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="40">
+<pre><code>((Array([98], dtype=int64),), (Array([96], dtype=int64),))</code></pre>
+</div>
+</div>
+<div id="b9eb07b2" class="cell" data-execution_count="43">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>key, subkey <span class="op">=</span> jrn.split(key)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>county_index <span class="op">=</span> jrn.randint(subkey, (<span class="dv">1</span>,), <span class="dv">0</span>, <span class="dv">400</span>)[<span class="dv">0</span>]</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Gütersloh</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>county_index <span class="op">=</span> <span class="dv">98</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f"ags = </span><span class="sc">{</span>ags_full[county_index]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>plt.plot(dates_full[<span class="dv">1</span> : np1 <span class="op">+</span> <span class="dv">1</span>], y_nan[:, county_index])</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>plt.scatter(dates_full[np1], preds[<span class="dv">0</span>][county_index <span class="op">+</span> <span class="dv">1</span>], color<span class="op">=</span><span class="st">"red"</span>)</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>plt.scatter(dates_full[np1], preds[<span class="dv">2</span>][<span class="dv">1</span>, county_index <span class="op">+</span> <span class="dv">1</span>], color<span class="op">=</span><span class="st">"grey"</span>)</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>plt.scatter(dates_full[np1], preds[<span class="dv">2</span>][<span class="op">-</span><span class="dv">2</span>, county_index <span class="op">+</span> <span class="dv">1</span>], color<span class="op">=</span><span class="st">"grey"</span>)</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>plt.scatter(dates_full[np1], y[<span class="op">-</span><span class="dv">1</span>, county_index], color<span class="op">=</span><span class="st">"green"</span>, marker<span class="op">=</span><span class="st">"x"</span>)</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="10_model_files/figure-html/cell-38-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/stefanheyder\.github\.io\/dissertation");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/stefanheyder/dissertation/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
