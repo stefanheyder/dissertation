@@ -29,7 +29,7 @@ that is accessible to a broader, applied audience, will be a worthwhile effort, 
 Regarding the methodological results, our application of the \acrshort{cem} exploits the dependency structure present in the target distribution. This approach can also be applied to targets with sparse precision matrices that occur, e.g., in spatial statistics or after performing a Veccia approximation \citep{Katzfuss2021General}, which imposes a sparse dependency structure. 
 
 % open Qs: 
-While our theoretical results on the asymptotic covariance of the \acrshort{cem} and \acrshort{eis} focus on the number of samples required for convergence, it is still unclear which of the two methods produces better approximations under which circumstances. For example, it is unclear whether $\G_{\peis}$ 
+While our theoretical results on the asymptotic covariance of the \acrshort{cem} and \acrshort{eis} focus on the number of samples required for convergence, it is still unclear which of the two methods produces better approximations for any given target, e.g. in terms of bias \eqref{eq:agapiou_bias} or \acrshort{mse} \eqref{eq:agapiou_mse} for a specific $f$. 
 
 Additionally, our case studies focus on the Gaussian exponential family due to its widespread use, compatibility with the \acrshort{pgssm} targets, and analytical tractability. Nevertheless, using Gaussian proposal may be limited, as the proposals generated are symmetric and do not allow for heavy tails. For univariate distributions, there is a wide range of exponential families to choose from, which are used for importance sampling in other fields of application. For example, the \acrshort{cem} is used regularly in rare-event estimation together with the exponential distribution.
 

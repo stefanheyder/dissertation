@@ -21,7 +21,7 @@
 \end{definition}
 
 \begin{remark}
-    From \Cref{eq:glssm_states} it is easy to see that the states $X = (X_{0}, \dots, X_{n})$ form a Gaussian Markov process and that conditional on $X_{t}$, $t \in \{0, \dots, n\}$, $Y_{t}$ is independent of $X_{s}$ and $Y_{s}$, $s < t$. Thus an \acrshort{glssm} is indeed an \acrshort{ssm}.
+    From \eqref{eq:glssm_states} it is easy to see that the states $X = (X_{0}, \dots, X_{n})$ form a Gaussian Markov process and that conditional on $X_{t}$, $t \in \{0, \dots, n\}$, $Y_{t}$ is independent of $X_{s}$ and $Y_{s}$, $s < t$. Thus an \acrshort{glssm} is indeed an \acrshort{ssm}.
 \end{remark}
 
 
@@ -180,7 +180,7 @@ When the dimension of observations is much larger than that of the states, $p \g
 
 If the dimensions of the model are so large that calculating the $m\times m$ and $p\times p$ covariance matrices becomes an issue, the simulation based \acrfull{enkf} \citep{Evensen1994Sequential} can be used. Instead of calculating the covariance matrices analytically, the \acrshort{enkf} stores a particle approximation to the Gaussian filtering distribution and iteratively performs a prediction and update step with a particle approximation, similar to the analytical update the Kalman filter performs. Despite being based on linear Gaussian dynamics, the \acrshort{enkf} is successfully employed in many high-dimensional non-linear non Gaussian problems \citep{Katzfuss2016Understanding}. 
 
-For non-linear problems of moderate dimension, i.e. those where we replace the right-hand side of both state (\Cref{eq:glssm_states}) and observation (\Cref{eq:glssm_observations}) equations by non-linear functions, other variants such as the \acrfull{ekf} \citep{Jazwinski1970Stochastic} and the \acrfull{ukf} \citep{Julier1997New} may be used. The \acrshort{ekf} applies the Kalman filter to a linearization of the non-linear system around the current conditional means $\hat X_{t| t-1}$ and $\hat X_{t|t}$. If the systems dynamics are highly non-linear, this approximation can fail. Alternatively, the \acrshort{ukf}, which is based on the unscented transform, directly approximates the predicted means and covariance matrix, by constructing a set of deterministic points that are propagated through the systems dynamics.
+For non-linear problems of moderate dimension, i.e. those where we replace the right-hand side of both state (\eqref{eq:glssm_states}) and observation (\eqref{eq:glssm_observations}) equations by non-linear functions, other variants such as the \acrfull{ekf} \citep{Jazwinski1970Stochastic} and the \acrfull{ukf} \citep{Julier1997New} may be used. The \acrshort{ekf} applies the Kalman filter to a linearization of the non-linear system around the current conditional means $\hat X_{t| t-1}$ and $\hat X_{t|t}$. If the systems dynamics are highly non-linear, this approximation can fail. Alternatively, the \acrshort{ukf}, which is based on the unscented transform, directly approximates the predicted means and covariance matrix, by constructing a set of deterministic points that are propagated through the systems dynamics.
 
 % history: moon
 % epidemiological uses 

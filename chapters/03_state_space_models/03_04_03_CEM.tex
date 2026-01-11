@@ -97,7 +97,7 @@ An additional attractive property of the \gls{cem} for exponential families with
     $$
     \P[T] = \G_{\pce} [T],
     $$
-    then $\pce$ is a maximizer of \Cref{eq:ce_argmax}. Furthermore, if $\cov_{\G_{\pce}} T$ is positive definite the maximizer is unique.
+    then $\pce$ is a maximizer of \eqref{eq:ce_argmax}. Furthermore, if $\cov_{\G_{\pce}} T$ is positive definite the maximizer is unique.
 \end{proposition}
 
 \begin{proof}
@@ -142,7 +142,7 @@ As $T \in L^{1}(\hat \P_{N})$, the only conditions we have to check to apply the
     \label{rem:measures_in_is}
     For the sake of clarity, let us summarize the measures used throughout this subsection.\footnote{We will use the same schema for the next subsection as well.}
 
-    We start with $\P$, the \textbf{target measure}, which is intractable, but the main interest of our overall endeavor. As we do not have access to $\P$, our goal is to construct an \textbf{approximation} to it and use importance sampling to calculate the integrals of interest with respect to $\P$. To this end, we want to choose from an exponential family, $(\G_{\psi})_{\psi \in \Psi}$ the optimal proposal, as a solution to \Cref{eq:ce_argmax}\footnote{\Cref{eq:eis_optim} for \acrshort{eis}.}. Unfortunately, the objective function depends on $\P$ as well, and so is itself not tractable. We thus introduce another measure, $\G$, whose sole purpose is to approximately solve \Cref{eq:ce_argmax} using importance sampling. $\G$ may stem from the family of proposals $(\G_{\psi})_{\psi \in \Psi}$, but is not restricted to these measures. 
+    We start with $\P$, the \textbf{target measure}, which is intractable, but the main interest of our overall endeavor. As we do not have access to $\P$, our goal is to construct an \textbf{approximation} to it and use importance sampling to calculate the integrals of interest with respect to $\P$. To this end, we want to choose from an exponential family, $(\G_{\psi})_{\psi \in \Psi}$ the optimal proposal, as a solution to \eqref{eq:ce_argmax}\footnote{\eqref{eq:eis_optim} for \acrshort{eis}.}. Unfortunately, the objective function depends on $\P$ as well, and so is itself not tractable. We thus introduce another measure, $\G$, whose sole purpose is to approximately solve \eqref{eq:ce_argmax} using importance sampling. $\G$ may stem from the family of proposals $(\G_{\psi})_{\psi \in \Psi}$, but is not restricted to these measures. 
 
     Thus, $\G$ and $\G_{\pce}$ serve different purposes: $\G$ is used to facilitate the search for the optimal $\pce$, while $\G_{\pce}$ is the resulting approximation of $\P$.
 \end{remark}
@@ -161,7 +161,7 @@ To apply the \acrshort{cem} in practice, one usually iterates the sampling and e
             \State restore random number seed
             \State sample $X^{1}, \dots, X^{N} \sim \G_{\psi^{l}}$
             \State calculate self-normalized weights $W^{i}$ for $i = 1, \dots, N$ 
-            \State estimate $\hpce$ \Comment{\Cref{eq:ee_hpce}}
+            \State estimate $\hpce$ \Comment{\eqref{eq:ee_hpce}}
             \State set $\psi^{l + 1} = \hpce$
             \State set $l = l + 1$
         \Until{$\hat\psi^{l}$ converged}
@@ -175,7 +175,7 @@ The \gls{cem} is routinely used for estimating failure probabilities for rare ev
 Importance sampling is well known to exhibit the \gls{cod} \citep{Bengtsson2008Curseofdimensionality}, i.e. the phenomenon that in many problems, unless $N$ grows exponentially with the dimension of $\mathcal X$, the weights collapse to a single particle, i.e. $W^{(N)} \to 1$ as the dimension of $\mathcal X$ goes to $\infty$. As the \acrshort{cem} employs importance sampling to obtain $\hpce$, it too is affected by this phenomenon, see also \Cref{sec:simulation_studies}. 
 %% screening method
 The screening method \citep{Rubinstein2009How} deals with the \acrshort{cod} by keeping components of $\psi^{l}$ that vary too much from iteration to iteration fixed, in essence reducing the dimension of $\Psi$. 
-Alternatively, the improved cross-entropy method \citep{Chan2012Improved} suggests generating approximately independent samples from $\P$ by, e.g., \acrshort{mcmc}-methods, and replacing the importance sampling version of $\hat\P_{N}$  in \Cref{eq:ee_hpce} by the actual empirical distribution.
+Alternatively, the improved cross-entropy method \citep{Chan2012Improved} suggests generating approximately independent samples from $\P$ by, e.g., \acrshort{mcmc}-methods, and replacing the importance sampling version of $\hat\P_{N}$  in \eqref{eq:ee_hpce} by the actual empirical distribution.
 Still, in high dimensions both of these approaches may be difficult to implement: the screening method may not move far from the initial proposal and \acrshort{mcmc}-methods are expensive in high dimensions.
 
 
@@ -188,7 +188,7 @@ In the remainder of this section, we will derive novel results on the performanc
     Adopt the same assumptions as in \Cref{prop:cem_exponential_families}. Furthermore, let $\G \gg \P$ be a proposal distribution and assume that
     
     \begin{enumerate}
-        \item $\pce$ is the unique maximizer of \Cref{eq:ce_argmax},
+        \item $\pce$ is the unique maximizer of \eqref{eq:ce_argmax},
         \item $\pce$ is in the interior of the convex parameter space $\Psi$.
     \end{enumerate}
     
@@ -197,7 +197,7 @@ In the remainder of this section, we will derive novel results on the performanc
 
 The proof is based on the following theorem of \citeauthor{Haberman1989Concavity}.
 
-\begin{theorem}[{\citep[Theorem 5.1]{Haberman1989Concavity}}\footnote{Note that while the actual theorem assumes conditions 1,2,5 and 6 in the paper, C3 as stated here implies conditions 5 and 6, see also the discussion in Sections 2.3 and 2.4 in \citep{Haberman1989Concavity}.}]
+\begin{theorem}[{\citep[Theorem 5.1]{Haberman1989Concavity}}]
     \label{thm:haberman-consistent}
     Let $\Psi \subseteq \R^{k}$, $\mathcal X$ a separable, complete metric space and $b_{\mathcal X}: \mathcal X \times \R^{k} \to [- \infty, \infty )$ such that for every $x \in \mathcal X$ the function $$b(x, \cdot): \R^{k} \to [-\infty, \infty), \psi \mapsto b(x, \psi)$$ is concave. Let $\P$ be a probability measure on $\mathcal X$ such that $\P [b(\cdot, \psi)] < \infty$  for all $\psi \in \R^{k}$. Assume that $\psi^{\ast} \in \Psi$ is the unique maximizer of 
     $$
@@ -207,7 +207,7 @@ The proof is based on the following theorem of \citeauthor{Haberman1989Concavity
     $$
     \hat b_{\Psi}: \Psi \to [-\infty, \infty), \psi \mapsto \hat \P_{N} [b(\cdot, \psi)].
     $$
-    Assume that the following conditions hold:
+    Assume that the following conditions hold:\footnote{Note that while the actual theorem assumes conditions 1,2,5 and 6 in the paper, C3 as stated here implies conditions 5 and 6, see also the discussion in Sections 2.3 and 2.4 in \citep{Haberman1989Concavity}.}
     \begin{enumerate}[label=(C\arabic*),ref=(C\arabic*)]
         \item\label{it:C1} For some closed set $V$, $\psi^{\ast}$ is in the interior of $V$ and $\Psi \cap V$ is closed. 
         \item\label{it:C2} $\psi^{\ast}$ is the unique maximizer of $$b_{\operatorname{cl} (\Psi)}: \operatorname{cl} (\Psi) \to [-\infty, \infty), \psi \mapsto \P [b(\cdot, \psi)],$$ where $ \operatorname{cl}$ denotes the closure of $\Psi$ in $\R^{k}$.
@@ -287,7 +287,7 @@ These rather strong properties enable us to derive a central limit theorem for t
     \label{thm:cem-clt}
     Adopt the same assumptions as in \Cref{prop:cem_exponential_families}. Furthermore, let $\G \gg \P$ be a proposal distribution with weights $w = \rnd{\P}{\G}$ and assume that
     \begin{enumerate}
-        \item\label{it:pceinterior} $\pce \in \Psi$ is the unique maximizer of \Cref{eq:ce_argmax} which lies in the interior of the convex parameter space $\Psi$, 
+        \item\label{it:pceinterior} $\pce \in \Psi$ is the unique maximizer of \eqref{eq:ce_argmax} which lies in the interior of the convex parameter space $\Psi$, 
         \item\label{it:FIMspd} the Fisher information matrix $I(\pce)$ exists and is positive definite,
         \item\label{it:wTinL2G} $w,wT \in L^{2}(\G)$, and 
         \item\label{it:TinL2P} $T\in L^{2}(\P)$.
@@ -301,11 +301,11 @@ These rather strong properties enable us to derive a central limit theorem for t
 \end{theorem}
 
 To prove \Cref{thm:cem-clt}, let us start again with a general version of a central limit theorem for M-estimators based on concave objective functions. 
-\begin{theorem}[{\citep[Theorem 6.1]{Haberman1989Concavity}}\footnote{Note, again, that the original theorem is based on conditions 7,8,9 in the paper. However, under \ref{it:C7}, condition \ref{it:C10} implies conditions 8 and 9 in the paper. See the discussion in Section 3.1 in \citep{Haberman1989Concavity}.}]
+\begin{theorem}[{\citep[Theorem 6.1]{Haberman1989Concavity}}]
     \label{thm:haberman-clt}
     Consider the same setting as in \Cref{thm:haberman-consistent}. 
 
-    Assume further that $\psi^{\ast}$ lies in the interior of $\Psi$ and that the following conditions hold: 
+    Assume further that $\psi^{\ast}$ lies in the interior of $\Psi$ and that the following conditions hold\footnote{Note, again, that the original theorem is based on conditions 7,8,9 in the paper. However, under \ref{it:C7}, condition \ref{it:C10} implies conditions 8 and 9 in the paper. See the discussion in Section 3.1 in \citep{Haberman1989Concavity}.}: 
     \begin{enumerate}[label=(C\arabic*),ref=(C\arabic*)]
         \setcounter{enumi}{6}
         \item\label{it:C7} The Hessian $H_{\psi} \P \left[ b(\cdot, \psi^{\ast}) \right]$ exists and is non-singular.

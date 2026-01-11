@@ -81,7 +81,7 @@ Let us begin with a discussion of the computational complexity associated with d
 As the \gls{la} is based on the Kalman-smoother, the time complexity of a single iteration is $\mathcal O(n(m^{2} + p^{3}))$. The \gls{cem} and \gls{eis} need to generate $N$ samples from the current proposal. For the \gls{cem} this amounts to $\mathcal O(Nn m^{2})$ operations (see \Cref{subsec:markov-approach}). For \gls{eis}, using the simulation smoother \citep{Durbin2002Simple} requires $\mathcal O (n(m^{2} + p^{3} + Np^2))$ operations: we need to run the Kalman filter once, while preparing the matrices required for the simulation smoother. Then, assuming Cholesky roots of the innovation covariance matrices $\Sigma_{t}$ are already available, only matrix-vector multiplications are necessary for the simulation smoother. Obtaining the \gls{eis} model parameters is efficient, requiring only $\mathcal O(n(Np^2 + p^{3}))$ operations for constructing the $n$ $p\times p$ design matrices and estimating the optimal parameters. 
 
 % of simulation 
-Another concern is the time required to generate $N$ samples from the fitted model. For both the \gls{la} and \gls{eis}, this procedure requires using either the simulation smoother or the FFBS algorithm. This necessitates inverting $p\times p$ matrices in the Kalman filter and $m \times m$ matrices when simulating the states. Notably, these computational steps can be performed offline, after which the simulation of a single sample requires only $\mathcal O(n)$ matrix-vector multiplications. The \gls{cem} simulation is based on applying \Cref{eq:markov-proposal}, which requires $\mathcal O(nm^{2})$ time per sample. 
+Another concern is the time required to generate $N$ samples from the fitted model. For both the \gls{la} and \gls{eis}, this procedure requires using either the simulation smoother or the FFBS algorithm. This necessitates inverting $p\times p$ matrices in the Kalman filter and $m \times m$ matrices when simulating the states. Notably, these computational steps can be performed offline, after which the simulation of a single sample requires only $\mathcal O(n)$ matrix-vector multiplications. The \gls{cem} simulation is based on applying \eqref{eq:markov-proposal}, which requires $\mathcal O(nm^{2})$ time per sample. 
 
 % of space
 With respect to space complexity, the \gls{la} implementation has to run the Kalman filter which requires $\mathcal O(n (p^{2} + m^{2}))$ space and storage of $\mathcal O(n p)$ parameters. 
@@ -395,7 +395,7 @@ Let us also return to the \acrshort{ssm} from \Cref{ex:growth_factor_ssm_are}. W
     \item Obtain $\G_{\text{LA}}$ by the \acrshort{la}.
     \item Obtain $\G_{\text{CEM}}$ by the \acrshort{cem}, using the \acrshort{la} as a starting point.
     \item Obtain $\G_{\text{EIS}}$ by \acrshort{eis} (\Cref{alg:eis}), using the \acrshort{la} as a starting point. 
-    \item Draw $N = 10\,000$ samples from each proposal and estimate the efficiency factor by  \Cref{eq:efficency_factor}.
+    \item Draw $N = 10\,000$ samples from each proposal and estimate the efficiency factor by  \eqref{eq:efficency_factor}.
 \end{enumerate}
 
 \begin{figure}

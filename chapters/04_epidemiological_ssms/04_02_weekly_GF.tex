@@ -61,7 +61,7 @@ $$
     \cov \left( \tilde S\right) = \cov \left( P^{T}S, P^{T}S \right) = \sigma^{2}_SP^{T}P.
 $$
 
-However, modeling the correlation of newly reported cases turns out to be difficult: the cases will surely be modeled by a Poisson or Negative Binomial distribution, so we would have to decide on a copula to introduce this dependency structure. While this is feasible in principle, we opt for an easier way. Instead of modeling correlated incidences $I_{t + 1, r}$, we model correlated growth rates $\log \rho_{t + 1, r}$, by taking $\cov \left( u_{t} \right)$ to be $\sigma^{2}_SP^{T}P$. By \Cref{eq:log-growth-regional-model}, conditional on $I_{t,r}$, this also captures regional correlation, without having to specify an involved joint distribution for the incidences. Note however, that this is just a convenient modeling choice whose aim is to replicate the covariance structure of the --- somewhat artificial --- case of having i.i.d. number of secondary cases across all regions.
+However, modeling the correlation of newly reported cases turns out to be difficult: the cases will surely be modeled by a Poisson or Negative Binomial distribution, so we would have to decide on a copula to introduce this dependency structure. While this is feasible in principle, we opt for an easier way. Instead of modeling correlated incidences $I_{t + 1, r}$, we model correlated growth rates $\log \rho_{t + 1, r}$, by taking $\cov \left( u_{t} \right)$ to be $\sigma^{2}_SP^{T}P$. By \eqref{eq:log-growth-regional-model}, conditional on $I_{t,r}$, this also captures regional correlation, without having to specify an involved joint distribution for the incidences. Note however, that this is just a convenient modeling choice whose aim is to replicate the covariance structure of the --- somewhat artificial --- case of having i.i.d. number of secondary cases across all regions.
 
 As elaborated in \Cref{sec:dessiderata}, we want the regional effects $u_{t,r}$ to be both flexible, but also, in some sense, stable over time. Thus, it makes sense to model $u_{t}$ as a stationary process in time. The simplest, non-trivial, stationary process is a vector-autoregressive process 
 $$
@@ -197,7 +197,7 @@ From 10 October 2020, the \gls{gfch} gathered weekly real-time forecasts for cas
 \begin{itemize}
     \item The \texttt{baseline} model takes the number of reported cases for this week as next weeks median, and adds uncertainty based on the past behavior of the epidemic.
     \item The \texttt{ensemble} model produces forecasts by averaging all submission to the \acrlong{gfch}, i.e. for each predictive quantile of one-week ahead cases, its predictive quantile is the average of all submissions for the same day, target and quantile, see \citep{Sherratt2023Predictive} for details.
-    \item The \texttt{itww} model makes predictions based on a county-level reproduction number model, with forecasts based on repeated simulations from the renewal equation \Cref{eq:renewal-model}. See \citep{Heyder2022Regional} for details.
+    \item The \texttt{itww} model makes predictions based on a county-level reproduction number model, with forecasts based on repeated simulations from the renewal equation \eqref{eq:renewal-model}. See \citep{Heyder2022Regional} for details.
 \end{itemize}
 
 We chose to focus on models submitted to the \acrshort{gfch} instead of the \acrshort{efch} for two reasons. 

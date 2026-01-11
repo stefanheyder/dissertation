@@ -10,7 +10,7 @@ Thus, \acrshort{eis} finds $\peis$ which is a feasible solution to the following
 \end{align}
 where, as in the last section, $\log w_{\psi} = \log p - \log g_{\psi}$.
 
-It is easy to see that we can replace the normalized weights in \Cref{eq:eis_optim} by unnormalized weights $\tilde w_{\psi} = \frac{p}{g_{\psi}}$, as the normalization constant cancels out, so no access to the normalized weights is required.
+It is easy to see that we can replace the normalized weights in \eqref{eq:eis_optim} by unnormalized weights $\tilde w_{\psi} = \frac{p}{g_{\psi}}$, as the normalization constant cancels out, so no access to the normalized weights is required.
 However, $\P [\log w_{\psi}] = \Dkl{\P}{\G_{\psi}}$ is usually intractable. This can be dealt with by introducing the nuisance parameter $\lambda = \P \left[ \log \tilde w_{\psi} \right]$, utilizing the fact that the mean is the minimizer of the squared distance functional with the minimum value equal to the variance, should it exist. Indeed,
 $$
     \log w_{\psi} - \P [\log w_{\psi}] = \log \tilde w_{\psi} - \log \G_{\psi} [\tilde w_{\psi}] - \P \left[ \log \tilde w_{\psi} \right] + \log \G_{\psi}[\tilde w_{\psi}] = \log \tilde w_{\psi} - \P \left[ \log \tilde w_{\psi} \right],
@@ -22,7 +22,7 @@ $$
 where $\psi\in \Psi$ is a minimizer of the left-hand side if, and only if, $(\psi, \lambda) \in \Psi \times \R$ with $\lambda = \P \left[ \log \tilde w_{\psi} \right]$ is a minimizer of the right-hand side. 
 
 Similar to the \gls{cem} we restrict our in-depth analysis to natural exponential family proposals where $$\log g_{\psi}(x) = \psi^{T}T(x) - \log Z(\psi).$$ 
-Letting $\log \tilde w_{\psi} = \log p - \psi^{T}(T - \P [T])$, we may rewrite \Cref{eq:eis_optim} as
+Letting $\log \tilde w_{\psi} = \log p - \psi^{T}(T - \P [T])$, we may rewrite \eqref{eq:eis_optim} as
 \begin{align}
     \label{eq:eis_exponential_families}
     \min_{\psi \in \Psi, \lambda \in \R} \P \left[ \log p - \psi^{T}(T - \P [T]) - \lambda \right]^{2},
@@ -44,7 +44,7 @@ We note that this is a convex objective function in $(\psi, \lambda)$ which, sim
         %\label{eq:peis-analytical}
         \cov_{\P} \left( T \right)\peis = \cov_{\P} \left(T, \log p \right),
     \end{align}
-    it is a global minimizer of \Cref{eq:eis_optim}. If $\cov_{\P} \left( T \right)$ is non-singular,
+    it is a global minimizer of \eqref{eq:eis_optim}. If $\cov_{\P} \left( T \right)$ is non-singular,
     \begin{align}
         \label{eq:peis-analytical}
         \peis = \cov_{\P} (T) ^{-1} \cov _{\P} (T, \log p )
@@ -53,8 +53,8 @@ We note that this is a convex objective function in $(\psi, \lambda)$ which, sim
 \end{lemma}
 
 \begin{proof}
-    Under the proposed conditions, we may consider \Cref{eq:eis_exponential_families} instead, where the moment conditions on $\log p $ and $T$ ensure that the problem is well-posed, i.e. the target is finite for all $\psi \in \Psi$. 
-    As $T$ is centered in \Cref{eq:eis_exponential_families}, the optimal $\peis$ is the \gls{blp} of $\log p$ given the sufficient statistics $T$ and $\lambda_{\eis}$ is $\P \left[ \log \tilde w_{\peis} \right]$.
+    Under the proposed conditions, we may consider \eqref{eq:eis_exponential_families} instead, where the moment conditions on $\log p $ and $T$ ensure that the problem is well-posed, i.e. the target is finite for all $\psi \in \Psi$. 
+    As $T$ is centered in \eqref{eq:eis_exponential_families}, the optimal $\peis$ is the \gls{blp} of $\log p$ given the sufficient statistics $T$ and $\lambda_{\eis}$ is $\P \left[ \log \tilde w_{\peis} \right]$.
     Thus $\peis$ is the $L^{2}$-projection of $\log p$ onto the span of $T - \P[T]$, which is given by any solution of
     $$
         \cov_{\P} (T) \peis = \cov_{\P} (T, \log p),
@@ -68,7 +68,7 @@ $$
 \left(\hat \lambda,\hat \psi_{\text{EIS}}\right) = \argmin_{\lambda,\psi} \P \left[ \log p - \psi^{T}(T - \P [T]) - \lambda \right]^{2},
 $$
 where $X^{1}, \dots, X^{N} \iid \G$, see also \Cref{rem:measures_in_is}. 
-Again, if $\G_{\psi}, \psi \in \Psi$ form an exponential family with natural parameter $\psi$, this optimization problem turns into a weighted least squares problem. As $\P[T]$ is not known, we use log-weights $\log\tilde w_{\psi} = \log p - \psi^{T}T$, as the constant factor $\P[T]$ does not matter in the weights, see the discussion surrounding \Cref{eq:eis_exponential_families}, instead.
+Again, if $\G_{\psi}, \psi \in \Psi$ form an exponential family with natural parameter $\psi$, this optimization problem turns into a weighted least squares problem. As $\P[T]$ is not known, we use log-weights $\log\tilde w_{\psi} = \log p - \psi^{T}T$, as the constant factor $\P[T]$ does not matter in the weights, see the discussion surrounding \eqref{eq:eis_exponential_families}, instead.
 We can then estimate $\peis$ with the standard weighted least squares estimator
 $$
 \left( \hat\lambda', \hpeis \right) = \left(\mathbf X^{T}\mathbf W\mathbf X\right)^{-1}\mathbf X^{T}\mathbf W y%
@@ -88,7 +88,7 @@ and the observations are
 y = \left( \log p(X^{1}), \dots, \log p(X^{N}) \right)^{T} \in \R^{N}.
 \end{align*}
 
-Alternatively, replacing $\P$ by $\hat\P_{N}$ in \Cref{eq:peis-analytical}, we obtain the equivalent formulation
+Alternatively, replacing $\P$ by $\hat\P_{N}$ in \eqref{eq:peis-analytical}, we obtain the equivalent formulation
 \begin{align}
     \label{eq:hpeis-cov}
     \hpeis = \cov_{\hat\P_{N}} (T)^{-1} \cov_{\hat \P_{N}} \left( T, \log p \right),
@@ -107,7 +107,7 @@ An attractive feature of \gls{eis} is that if the target $\P$ is a member of the
 
 \begin{proof}
     As $\P$ stems from the same exponential family as $\G_{\psi}$, the pseudo-observations are $$\log p  = \psi_{\P}^T T - \log Z(\psi_{\P}).$$ Thus, $\cov_{\hat \P_{N}} \left( T, \log p  \right) = \cov_{\hat \P_{N}} \left( T \right)\psi_{\P}$. 
-    If we can show that $\cov_{\hat\P_{N}} (T)$ is non-singular, \Cref{eq:hpeis-cov} implies that $\hpeis = \psi_{\P}$ a.s.. 
+    If we can show that $\cov_{\hat\P_{N}} (T)$ is non-singular, \eqref{eq:hpeis-cov} implies that $\hpeis = \psi_{\P}$ a.s.. 
 
     Let $W^{i}$ be the $i$-th weight, $i = 1,\dots, N$ in the particle approximation $\hat \P_{N}$.
     By the assumed equivalence of $\G$ and $\P$, $W^{i}$ is non-zero $\G$-a.s., so $W^{i}(X^{i})T(X^{i}) \neq 0$ a.s. as well, as $T$ has open support.
@@ -124,8 +124,8 @@ Note that if in the above proposition only $\G \gg \P$ holds, we obtain, by a si
 Additionally, we then have to take care of the event $ \{ w(X) = 0 \}$, whose probability is now potentially positive.
 
 We now turn to deriving asymptotics for $\hpeis$. As for the \acrshort{cem}, we start with proving that $\hpeis$ consistently estimates $\peis$.
-For this we need to ensure that $\peis$ is the unique solution to \Cref{eq:eis_optim}, as otherwise, consistent estimators of $\peis$ cannot exist. 
-As \Cref{eq:eis_exponential_families} is a linear least squares problem, the objective function is convex, and so we can apply \Cref{thm:haberman-consistent} and \Cref{prop:is-consistency}.
+For this we need to ensure that $\peis$ is the unique solution to \eqref{eq:eis_optim}, as otherwise, consistent estimators of $\peis$ cannot exist. 
+As \eqref{eq:eis_exponential_families} is a linear least squares problem, the objective function is convex, and so we can apply \Cref{thm:haberman-consistent} and \Cref{prop:is-consistency}.
 
 \begin{theorem}[consistency of $\hpeis$]
     \label{thm:eis-consistent}
@@ -171,10 +171,10 @@ As \Cref{eq:eis_exponential_families} is a linear least squares problem, the obj
     \ref{it:C1} is fulfilled, as we assumed $\peis \in \operatorname{int} \Psi$. \ref{it:C2} holds, as $\peis$ is the unique global maximizer by \Cref{prop:eis_exponential_families}, as $\cov (T)$ is non-singular.
     \ref{it:C3} obviously holds. 
 
-    Thus $\hpeis$ is strongly consistent if $\G = \P$. If $\G$ is different from $\P$, we can apply \Cref{prop:is-consistency}, where the existence of M-estimators is ensured by \Cref{eq:hpeis-cov}, using the Moore-Penrose inverse if $\cov_{\hat\P_{N}}(T)$ is singular. 
+    Thus $\hpeis$ is strongly consistent if $\G = \P$. If $\G$ is different from $\P$, we can apply \Cref{prop:is-consistency}, where the existence of M-estimators is ensured by \eqref{eq:hpeis-cov}, using the Moore-Penrose inverse if $\cov_{\hat\P_{N}}(T)$ is singular. 
 \end{proof}
 
-As \Cref{eq:hpeis-cov} expresses $\hpeis$ in terms of empirical covariances, we could alternatively prove consistency by ensuring that the empirical covariances are consistent as well, for which we would need to ensure that fourth-order moments of $\log p$ and $T$ w.r.t. $\P$ exist. This strategy may be fruitful if $\peis$ does not lie in the interior of $\Psi$, although the more sophisticated treatment of \citep{Haberman1989Concavity} may also be applicable under these circumstances.
+As \eqref{eq:hpeis-cov} expresses $\hpeis$ in terms of empirical covariances, we could alternatively prove consistency by ensuring that the empirical covariances are consistent as well, for which we would need to ensure that fourth-order moments of $\log p$ and $T$ w.r.t. $\P$ exist. This strategy may be fruitful if $\peis$ does not lie in the interior of $\Psi$, although the more sophisticated treatment of \citep{Haberman1989Concavity} may also be applicable under these circumstances.
 
 Additionally, if fourth-order moments exist, we can derive a central limit theorem, similar to \Cref{thm:cem-clt}, for \acrshort{eis}.
 

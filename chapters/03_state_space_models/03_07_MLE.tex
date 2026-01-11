@@ -6,7 +6,7 @@ Once we have chosen a suitable \acrshort{pgssm} to model the observations $\left
 \subsection{Maximum likelihood estimation}
 % region introduction
 %% need for MLE: hyperparameters
-Until now, we have assumed that the \acrshort{ssm} under consideration is completely known, i.e. we have access to the true transition and observation kernels. For the models considered in this thesis (\Cref{cha:analysis_of_selected_models}), this is unrealistic, as they are not based on concrete physical processes but are rather statistical approximations of the true underlying dynamics. The transition densities of, e.g., \Cref{eq:glssm_states} will depend on the covariance matrix of innovations, of which we have no a priori knowledge and for negative binomially distributed observations the overdispersion parameter $r$ will be unknown. Let us denote by $\theta\in\R^{l}$ the vector of these hyperparameters. 
+Until now, we have assumed that the \acrshort{ssm} under consideration is completely known, i.e. we have access to the true transition and observation kernels. For the models considered in this thesis (\Cref{cha:analysis_of_selected_models}), this is unrealistic, as they are not based on concrete physical processes but are rather statistical approximations of the true underlying dynamics. The transition densities of, e.g., \eqref{eq:glssm_states} will depend on the covariance matrix of innovations, of which we have no a priori knowledge and for negative binomially distributed observations the overdispersion parameter $r$ will be unknown. Let us denote by $\theta\in\R^{l}$ the vector of these hyperparameters. 
 To make this dependence explicit, we will introduce subscripts $\theta$ where appropriate, i.e. $\P_{\theta}$ is a target distribution that additionally depends on $\theta$, $p_{\theta}$ its density et cetera. This section is loosely based on \citep[Chapter 7 \& 11]{Durbin2012Time} and \citep[Chapter 14]{Chopin2020Introduction}.
 
 To determine a suitable value of $\theta$, multiple options are available. Here, we opt for a frequentist approach, using maximum likelihood estimation to determine an optimal $\hat \theta$. Therefore, given observations $y\in\R^{(n+1)\times p}$, $\hat\theta$ maximizes the likelihood $p_{\theta}(y)$ and can be obtained as the global maximum of the following optimization problem: 
@@ -70,14 +70,14 @@ As an alternative to modeling $\theta$ as fixed, but unknown, and performing max
 % region GLSSM proposal
 
 %% joint density easy to calculate
-By the structure of the model, \Cref{eq:joint_density}, the log density and its gradient can be computed efficiently by
+By the structure of the model, \eqref{eq:joint_density}, the log density and its gradient can be computed efficiently by
 \begin{align*}
     \log p_{\theta}(x,y) &= \log p_{\theta}(x_{0}) + \sum_{t = 1}^{n} \log p_{\theta}(x_{t}|x_{t-1}) + \log p_{\theta} (y_{t}|x_{t},y_{t - 1})\\
     \nabla_{\theta}\log p_{\theta}(x,y) &= \nabla_{\theta}\log p_{\theta}(x_{0}) + \sum_{t = 1}^{n} \nabla_{\theta}\log p_{\theta}(x_{t}|x_{t-1}) + \nabla_{\theta}\log p_{\theta} (y_{t}|x_{t},y_{t - 1}),
 \end{align*}
 respectively. 
 
-Similarly, when proposing with an \acrshort{glssm} or Markov-proposal for an \acrshort{pgssm}, the weights have similar structure, see \Cref{eq:weights_markov,eq:weights_only_on_signal}, which makes calculation of $\tilde w$ efficient. 
+Similarly, when proposing with an \acrshort{glssm} or Markov-proposal for an \acrshort{pgssm}, the weights have similar structure, see \eqref{eq:weights_markov,eq:weights_only_on_signal}, which makes calculation of $\tilde w$ efficient. 
 
 For the remainder of this section, let us consider the \acrshort{glssm}-proposal obtained by the \acrshort{la} or \acrshort{eis} for an \acrshort{pgssm} with linear signal, as this is the main setting of \Cref{cha:analysis_of_selected_models}. For this we obtain 
 $$
@@ -190,7 +190,7 @@ Given an \acrshort{glssm}-proposal and samples $X^{1}, \dots, X^{N}$ from it, we
     \label{eq:antithetic-scale-location}
     \breve{X} = \mu - \sqrt{ \frac{c'}{c}} (X - \mu)
 \end{align}
-for free. We can then estimate the log-likelihood in \Cref{eq:loglik-hat-bias-reduction} by replacing each occurrence of $\tilde w_{\theta}(X^{i})$ by 
+for free. We can then estimate the log-likelihood in \eqref{eq:loglik-hat-bias-reduction} by replacing each occurrence of $\tilde w_{\theta}(X^{i})$ by 
 \begin{align}
     \label{eq:antithetic-weights}
     \frac{1}{4} \left( \tilde w_{\theta} (X^{i}) + \tilde w_{\theta}(\tilde{X^{i}}) + \tilde w_{\theta}(\check{X^{i}}) + \tilde w_{\theta}(\breve{{X^{i}}}) \right).
@@ -199,7 +199,7 @@ for free. We can then estimate the log-likelihood in \Cref{eq:loglik-hat-bias-re
 
 
 % intialization
-As the procedure to evaluate the likelihood by importance sampling becomes expensive as the dimension of the model increases, \citep{Durbin1997Monte} recommend finding an initial value $\hat \theta_{0}$ by maximizing a deterministic version of \Cref{eq:loglik-hat-standard}. For this, denote by $s^{\ast}$ the mode of the linear signal, conditional on the pseudo-observations $z$. As $S$ follows a multivariate Gaussian, $s^{\ast}$ is also the mean which can be computed efficiently by the Kalman or signal-smoother. Approximating the conditional expectation in \Cref{eq:loglik-pgssm-exact} by $w_{\theta}(s^{\ast})$ then yields 
+As the procedure to evaluate the likelihood by importance sampling becomes expensive as the dimension of the model increases, \citep{Durbin1997Monte} recommend finding an initial value $\hat \theta_{0}$ by maximizing a deterministic version of \eqref{eq:loglik-hat-standard}. For this, denote by $s^{\ast}$ the mode of the linear signal, conditional on the pseudo-observations $z$. As $S$ follows a multivariate Gaussian, $s^{\ast}$ is also the mean which can be computed efficiently by the Kalman or signal-smoother. Approximating the conditional expectation in \eqref{eq:loglik-pgssm-exact} by $w_{\theta}(s^{\ast})$ then yields 
 \begin{align}
     \label{eq:loglik-initial-approx-mode}
     \log p_{\theta}(y) \approx \log g_{\theta}(z) + \log w_{\theta}(s^{\ast}),
@@ -220,7 +220,7 @@ where $l^{(4)}$ is the fourth derivative of the log-weights $s\mapsto \log w_{\t
         \Function{approx\_loglik}{$\theta$}
             \State obtain \acrshort{la} of the \acrshort{pgssm} for $\theta$ \Comment{\Cref{alg:la}}
             \State obtain mode $s^{\ast}$ and conditional variances $v_{t,j}$ from the \acrshort{la} \Comment{\Cref{alg:kalman_filter,alg:kalman_smoother}}
-            \State \textbf{return} approximate log-likelihood \Comment{\Cref{eq:loglik-initial-approx-mode} or \Cref{eq:loglik-initial-tayolor-approx-mode}}
+            \State \textbf{return} approximate log-likelihood \Comment{\eqref{eq:loglik-initial-approx-mode} or \eqref{eq:loglik-initial-tayolor-approx-mode}}
         \EndFunction 
         \Statex
 
@@ -229,12 +229,12 @@ where $l^{(4)}$ is the fourth derivative of the log-weights $s\mapsto \log w_{\t
             \State obtain \acrshort{eis} proposal $\G_{(z,\Omega)}$ \Comment{\Cref{alg:eis}, \acrshort{la} as initial values}
             \State sample $N$ signals $S^{i}$ from $S|Z = z$ in \acrshort{eis} \Comment{\Cref{alg:ffbs} or signal smoother}
             \State obtain mode $s^{\ast}$ in \acrshort{eis} proposal \Comment{\Cref{alg:kalman_smoother} or signal smoother}
-            \State calculate antithetic variables $\tilde{S^{i}},\check{S^{i}}, \breve{{S^{i}}}$ \Comment{\Cref{eq:antithetic-location,eq:antithetic-scale,eq:antithetic-scale-location}}
-            \State set $\tilde w_{\theta}^i = \frac{1}{4} \left( \tilde w_{\theta} (X^{i}) + \tilde w_{\theta}(\tilde{X^{i}}) + \tilde w_{\theta}(\check{X^{i}}) + \tilde w_{\theta}(\breve{{X^{i}}}) \right)$ \Cref{eq:antithetic-weights}
+            \State calculate antithetic variables $\tilde{S^{i}},\check{S^{i}}, \breve{{S^{i}}}$ \Comment{\eqref{eq:antithetic-location,eq:antithetic-scale,eq:antithetic-scale-location}}
+            \State set $\tilde w_{\theta}^i = \frac{1}{4} \left( \tilde w_{\theta} (X^{i}) + \tilde w_{\theta}(\tilde{X^{i}}) + \tilde w_{\theta}(\check{X^{i}}) + \tilde w_{\theta}(\breve{{X^{i}}}) \right)$ \eqref{eq:antithetic-weights}
             \State set $\tilde w_{\cdot} = \frac{1}{N}\sum_{i = 1}^N \tilde w^{i}_{\theta}$
             \State set $\hat \sigma^{2} = \frac{1}{N - 1} \sum_{i = 1}^N \left( \tilde w_{\theta}^{i} - \tilde w_{\cdot}\right)^{2}$
             \State calculate $\log g_{\theta}(z)$ \Comment{\Cref{alg:kalman_filter}}
-            \State \textbf{return} $\verywidehat{\log p_{\theta}(y)}$ \Comment{\Cref{eq:loglik-hat-bias-reduction}}
+            \State \textbf{return} $\verywidehat{\log p_{\theta}(y)}$ \Comment{\eqref{eq:loglik-hat-bias-reduction}}
         \EndFunction
         \Statex
 
@@ -250,7 +250,7 @@ where $l^{(4)}$ is the fourth derivative of the log-weights $s\mapsto \log w_{\t
 The resulting procedure to find the MLE $\hat \theta$ in an \acrshort{pgssm} with linear signal is summarized in \Cref{alg:mle}. Notice that we use \acrshortpl{crn} to ensure numerical convergence. The numerical optimization can be performed using any standard solver such as the BFGS algorithm \citep[Chapter 6.1]{Nocedal2006Numerical}. We cannot give guarantees that this procedure produces the true \acrshort{mle}, i.e. finds the global maximizer. However, as we have discussed earlier, we are not interested in frequentist properties of $\hat \theta$ but see the estimation procedure as a hyperparameter tuning step. Thus, a local maximum may well be sufficient. Nevertheless, checking different starting points and random number seeds should be used to get as close as possible to the global maximum.
 
 % region outlook
-Notice that our discussion implies that we cannot reuse an \acrshort{glssm} proposal used for $\theta$ at another $\theta'$, as $p_{\theta'}(x) \neq g_{\theta}(x)$. While we can still calculate the weights using the general \Cref{eq:loglik-hat-standard}, we presume that the old proposal is not a good choice for the new target. The reason for this is that $\theta$ will usually contain parameters related to the covariance structure of the innovations and observations, and these parameters usually affect many, if not all states or observations. For example, it is common to model states that perform a random walk with common innovation variance $\sigma^{2}$ as an element of $\theta$. As the distributions lie in a high-dimensional space, slight misspecification of the covariance structure will drastically deteriorate the performance of importance sampling. 
+Notice that our discussion implies that we cannot reuse an \acrshort{glssm} proposal used for $\theta$ at another $\theta'$, as $p_{\theta'}(x) \neq g_{\theta}(x)$. While we can still calculate the weights using the general \eqref{eq:loglik-hat-standard}, we presume that the old proposal is not a good choice for the new target. The reason for this is that $\theta$ will usually contain parameters related to the covariance structure of the innovations and observations, and these parameters usually affect many, if not all states or observations. For example, it is common to model states that perform a random walk with common innovation variance $\sigma^{2}$ as an element of $\theta$. As the distributions lie in a high-dimensional space, slight misspecification of the covariance structure will drastically deteriorate the performance of importance sampling. 
 
 If computations are so involved that we want to avoid running the optimal importance sampling scheme as much as possible, one could try, if the model under investigation allows for it, to split $\theta$ into $(\theta_{x}, \theta_y)$ where $\theta_{x}$ only affects the state transitions and $\theta_{y}$ only affects the observation densities. Then a coordinate ascent scheme could be employed, where the update step for $\theta_{y}$ can reuse the proposal, provided that $\theta_{y}$ does not change too much and the observation density $p_{\theta}(y|x)$ is not too sensitive to changes in $\theta_{y}$, which should imply that the proposal is still close enough to give good importance sampling performance. Then numerical differentiation is only required to update $\theta_{x}$. 
 

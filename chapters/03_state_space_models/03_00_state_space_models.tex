@@ -46,6 +46,7 @@
     The whole section is newly contributed.
 
     \paragraph{\nameref{sec:gaussian_importance_sampling_for_state_space_models}}
+    While application of \acrshort{eis} to importance sampling in \acrshortpl{ssm} is well known, using the \acrshort{cem} for the same task is not. Thus, the following are the new contributions of this section:
     \begin{itemize}
         \item The discussion surrounding the difficulties the \acrshort{cem} faces when applied to the \acrshort{glssm} proposal.
         \item The derivation of the \acrshort{cem} for Markov-proposals (\Cref{prop:cem-for-markov-proposal}), resulting in \Cref{alg:cem-markov-proposal} and the optimized \Cref{alg:cem-markov-proposal-fast}.
@@ -54,7 +55,7 @@
     \paragraph{\nameref{sec:maximum_likelihood_estimation}}
     This section is for the largest part based on literature, however the following points are new:
     \begin{itemize}
-        \item The discussion of calculating the gradient, \Cref{eq:gradient_infeasible}, for the \acrshort{la} / \acrshort{eis}.
+        \item The discussion of calculating the gradient, \eqref{eq:gradient_infeasible}, for the \acrshort{la} / \acrshort{eis}.
         \item We make the antithetic variable construction of \citep{Durbin1997Monte} rigorous. 
         \item \Cref{subsec:inference} is a rigorous reformulation of \citep[Section 11.5]{Durbin2012Time}.
     \end{itemize}
@@ -122,11 +123,11 @@ The models that we consider in this thesis will usually assume that densities fo
 
 \begin{remark}[dependence on $Y_{t - 1}$, dimensions]
     \label{rem:dependence_Yt-1}
-    Contrary to the standard definition of a \gls{ssm}, as found in, e.g., \citep[Chapter 2]{Chopin2020Introduction} or \citep[Chapter 9]{Durbin2012Time}, our \Cref{def:ssm} allows $Y_t$ to depend on $Y_{t - 1}$.
+    Contrary to the standard definition of a \gls{ssm}, as found in, e.g., \citep[Chapter 2]{Chopin2020Introduction} or \citep[Chapter 9]{Durbin2012Time}, our \Cref{def:ssm}  allows $Y_t$ to depend on $Y_{t - 1}$.
     As the models considered in \Cref{cha:analysis_of_selected_models} will make extensive use of \glspl{ssm} with this dependency structure we opt to use this non-standard definition here.
     This is of course not a limitation of the standard definition: given a \gls{ssm} of the form described in \Cref{def:ssm}, we can transform it to the standard form by choosing states $(X_t, Y_t) \in \mathcal X \times \mathcal Y$ and observations $Y_t \in \mathcal Y$ such that the \gls{ssm} becomes a stochastic process on $ \left( \mathcal X \times \mathcal Y\right) \times \mathcal Y$.
 
-    Additionally, the goal of our inferences will always be functionals of the conditional distribution $X|Y$ for a single, fixed, set of observations $y$. Assuming all densities exist, the conditional density $p(x|y)$ is given, up to a constant not depending on $x$, by \Cref{eq:joint_density}:
+    Additionally, the goal of our inferences will always be functionals of the conditional distribution $X|Y$ for a single, fixed, set of observations $y$. Assuming all densities exist, the conditional density $p(x|y)$ is given, up to a constant not depending on $x$, by \eqref{eq:joint_density}:
     $$
     p(x|y) \propto p(x,y) =p (x_0)\prod_{t = 1}^{n} p(x_{t}|x_{t - 1}) \prod_{t = 0}^{n} p(y_t | x_t, y_{t - 1}).
     $$
@@ -169,8 +170,8 @@ To obtain the maximum likelihood estimates $\hat\theta$ one needs access to the 
     p_{\theta}(y) = \int_{\mathcal X^{(n + 1)}} p_{\theta}(x,y) \d (\mu_{\mathcal X})^{(n+1)}x =\int_{\mathcal X^{(n + 1)}} p_{\theta}(x,y) \d x = \int_{\mathcal X^{(n + 1)}} p_{\theta}(y|x) p_{\theta}(x) \d x
 \end{align}
 which is usually not analytically available. Here and in the following we assume that $\mathcal X = \R^{m}$ for some $m \in \N$, that $p$ is absolutely continuous with respect to the $m$-dimensional Lebesgue measure and that $p$ is regular enough that the integral is a Riemann integral.
-Direct numerical evaluation of \Cref{eq:likelihood} is hopeless due to the high dimensionality of the state space $\mathcal X^n$.
-Instead, we will resort to simulation-based inference by importance sampling (see \Cref{sec:importance_sampling}), a Monte-Carlo method that approximates $p(y)$ by constructing a global tractable approximation to the integrand in \Cref{eq:likelihood}. Alternatively, \gls{smc} methods, i.e. particle filters, that perform importance sampling sequentially across the $n + 1$ time steps can be used. We will not follow this approach for reasons described later, but refer the reader to the excellent reference \citep{Chopin2020Introduction} for an introduction to these methods.
+Direct numerical evaluation of \eqref{eq:likelihood} is hopeless due to the high dimensionality of the state space $\mathcal X^n$.
+Instead, we will resort to simulation-based inference by importance sampling (see \Cref{sec:importance_sampling}), a Monte-Carlo method that approximates $p(y)$ by constructing a global tractable approximation to the integrand in \eqref{eq:likelihood}. Alternatively, \gls{smc} methods, i.e. particle filters, that perform importance sampling sequentially across the $n + 1$ time steps can be used. We will not follow this approach for reasons described later, but refer the reader to the excellent reference \citep{Chopin2020Introduction} for an introduction to these methods.
 
 The performance of such simulation-based estimates depends crucially on our ability to construct distributions that are close to the posterior $p(x|y)$ but are easy to sample from. To this end, we construct either \acrfullpl{glssm} (\Cref{subsec:glssm-approach}) in which sampling from the posterior is analytically possible, or Gaussian Markov processes (\Cref{subsec:markov-approach}) which are directly amenable to simulation.
 These two approaches are motivated by what we term ``{}optimal importance sampling''{}, where we use a proposal distribution that solves an optimization problem. Two popular approaches for choosing such a proposal are \acrlong{eis} and the \acrlong{cem}, which minimize an $L^{2}$ or \acrshort{kld} loss, respectively. Empirically, it has been shown that \acrshort{eis} outperforms the \acrshort{cem}, to which we add theoretical insight in the form of two central limit theorems (\Cref{sec:importance_sampling}): as both methods rely on importance sampling to determine an optimal proposal, the asymptotic variance of this procedure is of practical relevance, and we argue that this asymptotic variance is typically smaller for \acrshort{eis}.

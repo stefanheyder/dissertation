@@ -80,21 +80,22 @@ $$\hat \P_N = \sum_{i = 1}^{N} W_i \delta_{X^i}.$$
 % introduces bias
 Unless $\tilde w$ is degenerate, i.e. constant, $$\hat\zeta = \frac{\sum_{i = 1}^N \tilde w (X^{i} f(X^{i}))}{\sum_{i = 1}^{N} \tilde w(X^{i})}$$ is a ratio of two non-constant, unbiased estimators and so is itself biased. Nevertheless, noticing that the rescaled denominator $\frac{1}{N} \sum_{i = 1}^{N} \tilde w(X^{i})$ consistently estimates the integration constant $\G \tilde w$, we may apply Slutsky's lemma and obtain a central limit theorem for $\hat \zeta$ (recall that we assumed $fw \in L^{2}(\G)$).
 
-% introduce probabilit metrics from Agapiou
-The class for test functions $f$ for which this holds depends on $\P$ and $\G$. \citep{Agapiou2017Importance} study the behavior of uniformly bounded test functions $\lVert f \rVert \leq 1$. For these functions it suffices that $w \in L^{2}(\G)$ to ensure asymptotic normality of $\zeta$. 
+The class for test functions $f$ for which this holds depends on $\P$ and $\G$. \citet{Agapiou2017Importance} study the behavior of uniformly bounded test functions $\lVert f \rVert \leq 1$. For these functions it suffices that $w \in L^{2}(\G)$ to ensure asymptotic normality of $\zeta$. 
 %In this setting they show that the random measure $\hat \P_N$ converges to $\P$ at usual rate $\mathcal O\left(\frac 1 {\sqrt{N}}\right)$ in an appropriate metric on the space of random probability measures. 
 Thus an important quantity is
 $$
 \rho = \frac{1}{(\G \tilde w)^{2}}\G[\tilde w^{2}] = \G [w^{2}] =  \P [w],
 $$
-the second moment of the importance sampling weights. \citep{Agapiou2017Importance} show that the bias 
-$$
+the second moment of the importance sampling weights. \citet{Agapiou2017Importance} show that the bias 
+\begin{align}
+    \label{eq:agapiou_bias}
 \left| \mathbb E (\hat\P_{N} - \P)[f] \right|
-$$
+\end{align}
 and \acrfull{mse}
-$$
+\begin{align}
+    \label{eq:agapiou_mse}
 \mathbb E \left( (\hat \P_{N} - \P) [f] \right)^{2}
-$$
+\end{align}
 of importance sampling are both, for bounded $f$, of order $\mathcal O \left(\frac{\rho}{N}\right)$. Here the expectation $\mathbb E$ is with respect to the random particles $X^{1}, \dots, X^{N}$. Consequently, for bounded functions, keeping $ \frac{\rho}{N}$ small produces importance sampling estimates with small bias and \acrshort{mse}. This can be achieved in two ways: either we choose $\G$ \glqq{}close enough\grqq{} to $\P$ to ensure small $\rho$, or we choose $N$ large enough to compensate for a large $\rho$.
 
 Applying Jensen's inequality, we see that
@@ -126,7 +127,7 @@ so small $\rho$ implies a small \acrshort{kld} between $\P$ and $\G$ as well. Co
 Notice the boldface $\mathbb P$ and $\mathbb E$ to differentiate the measures $\P$ and $\G$ from expectations and probabilities with respect to the abstract probability space $\left( \Omega, \mathcal A, \mathbb P \right)$ where the random variables $X_{1}, \dots, X_{N}$ and $Z$ live.
 Theorem 1.2 in the same paper provides a qualitatively similar result for autonormalised importance sampling.
 
-However, there is room for improvement in \Cref{eq:chatterje-upper-bound}: as $t = \log N - L$, the first term of the right-hand side is $N^{-\frac{1}{4}} \exp(\frac{L}{4})$, a much slower rate of convergence than the usual $N^{-\frac{1}{2}}$ found in the law of large numbers. A small adaptation of the proof given in \citep{Chatterjee2018Sample} fixes this.
+However, there is room for improvement in \eqref{eq:chatterje-upper-bound}: as $t = \log N - L$, the first term of the right-hand side is $N^{-\frac{1}{4}} \exp(\frac{L}{4})$, a much slower rate of convergence than the usual $N^{-\frac{1}{2}}$ found in the law of large numbers. A small adaptation of the proof given in \citep{Chatterjee2018Sample} fixes this.
 
 \begin{proposition}
     \label{prop:chatterje_improve}
@@ -138,7 +139,7 @@ However, there is room for improvement in \Cref{eq:chatterje-upper-bound}: as $t
 \end{proposition}
 
 \begin{proof}
-    We reiterate the proof of \Cref{eq:chatterje-upper-bound} as given in Section 4 of \citep{Chatterjee2018Sample}, changing only the cutoff parameter, $a$, to incorporate $\varepsilon$. Let $a = \exp \left( L + \varepsilon t \right)$ and set $h = f \cdot \mathbf 1_{w^{-1}((-\infty, a])}$. By the triangle inequality,
+    We reiterate the proof of \eqref{eq:chatterje-upper-bound} as given in Section 4 of \citep{Chatterjee2018Sample}, changing only the cutoff parameter, $a$, to incorporate $\varepsilon$. Let $a = \exp \left( L + \varepsilon t \right)$ and set $h = f \cdot \mathbf 1_{w^{-1}((-\infty, a])}$. By the triangle inequality,
     $$
         \mathbb E \lvert \hat\P_{N}[f] - \P[f] \rvert \leq \mathbb E \lvert \hat \P_{N}[f - h] \rvert + \mathbb E \lvert \hat \P_{N} [h] - \P [h] \rvert + \lvert \P[f-h]\rvert
     $$
@@ -154,12 +155,12 @@ However, there is room for improvement in \Cref{eq:chatterje-upper-bound}: as $t
         &\leq \sqrt{\frac{\mathbb E \left(w(X^{1})^{2}h(X^{1})^{2}\right)}{N}} \leq \sqrt{\frac{a\mathbb E \left(w(X^{1})f(X^{1})^{2}\right)}{N}} = \sqrt{\frac{a}{N}} \lVert f \rVert _{L^{2}(\P)},
     \end{align*}
     as $h^{2} = f^{2} \mathbf 1_{w^{-1}((-\infty, a])}$ and so $\mathbb E \left(w(X^{1})^{2}h(X^{1})^{2}\right) \leq a \mathbb E \left(w(X^{1})f(X^{1})^{2}\right)$.
-    Noticing that $ \frac{a}{N} = \exp(-(1-\varepsilon) t)$ and putting everything together, we obtain \Cref{eq:chatterje-upper-bound-eps}.
+    Noticing that $ \frac{a}{N} = \exp(-(1-\varepsilon) t)$ and putting everything together, we obtain \eqref{eq:chatterje-upper-bound-eps}.
 \end{proof}
 
 With this slight adaptation, the first term in the upper bound is now $N^{-\frac{1-\varepsilon}{2}}$, and so can be made arbitrarily close to $N^{-\frac{1}{2}}$. 
 
-Let us consider the implications of \Cref{thm:chatterje2018Thm1} and \Cref{prop:chatterje_improve}, starting with \Cref{eq:chatterje-upper-bound-eps}, by devising heuristics to decide when $\G$ is a good proposal for fixed sample size $N$, and assume for simplicity that $ \lVert f \rVert_{L^{2}(\P)} = 1 $.
+Let us consider the implications of \Cref{thm:chatterje2018Thm1} and \Cref{prop:chatterje_improve}, starting with \eqref{eq:chatterje-upper-bound-eps}, by devising heuristics to decide when $\G$ is a good proposal for fixed sample size $N$, and assume for simplicity that $ \lVert f \rVert_{L^{2}(\P)} = 1 $.
 
 First, as $t = \log N - L$, we have $\exp(- (1-\varepsilon) \frac{t}{2}) =  \exp (L \frac{(1-\varepsilon)}{2})N^{-\tfrac{1 - \varepsilon}{2}}$, so for large $N$ this term becomes negligible, and the interesting term in inequality \eqref{eq:chatterje-upper-bound} is the second one. As $\E \log w(Z) = L$, this term is a tail probability, and we can use standard mass-concentration inequalities to analyze its behavior as $t$ (and so $N$) grows. Markov's inequality tells us that 
 $$
@@ -224,7 +225,7 @@ goes to $0$ as well.
 \end{corollary}
 Under the assumptions of this corollary, we see that a small variance of the log-weights implies a small \acrshort{kld}, which in turn implies good importance sampling performance.
 
-Let us now discuss the implications of \Cref{eq:chatterje-lower-bound}. We see that for large $s$, i.e. $N \ll \exp(L)$, the right-hand side is small, and so the probability that importance sampling fails for the constant function is practically relevant. Observe that here 
+Let us now discuss the implications of \eqref{eq:chatterje-lower-bound}. We see that for large $s$, i.e. $N \ll \exp(L)$, the right-hand side is small, and so the probability that importance sampling fails for the constant function is practically relevant. Observe that here 
 $$
 \hat \P_{N} [\mathbf 1 ] = \frac{1}{N} \sum_{i = 1}^N w_{i}
 $$
@@ -337,7 +338,7 @@ and for $X \sim \G$ the variance of $w(X)X$ is
     \label{eq:variance-wxx}
 \tau^{2} = \var \left( w(X)X \right) = \frac{\sigma^{4}}{\left( 2 \sigma^{2} - 1 \right)^{\frac{3}{2}}}
 \end{align}
-which goes to $\infty$ as $\sigma^2$ does. To show \Cref{eq:variance-wxx} we calculate the second moment of $w(X)X$,
+which goes to $\infty$ as $\sigma^2$ does. To show \eqref{eq:variance-wxx} we calculate the second moment of $w(X)X$,
 \begin{align*}
     \mathbb E (w(X)X)^{2} &= \int w(x)^{2} x^{2} g(x) \d x \\
     &= \int \sigma^{2} \exp \left( - x^{2} \left( 1 - \frac{1}{\sigma^{2}} \right)\right)\, x^{2}\, \frac{1}{\sqrt{2\pi\sigma^{2}}} \exp \left( -\frac{x^{2}}{2\sigma^{2}} \right)  \d x \\
@@ -357,7 +358,7 @@ $$
 This judges whether importance sampling has collapsed to just a few particles and is itself amenable to Monte-Carlo integration, by repeatedly sampling $N$ samples from $\G$ and calculating the weights. 
 As this requires multiple runs of importance sampling, it may, however, be prohibitively expensive in practice.
 
-In the following sections, we will predominantly take the position that we are interested in finding a good particle approximation $\hat\P_{N}$ of the form \Cref{eq:is-particle-approximation} over finding the optimal proposal $\G^{\ast}$ from \Cref{prop:minimum_MSE_IS} and assume that the importance sampling weights can only be evaluated up to a constant. 
+In the following sections, we will predominantly take the position that we are interested in finding a good particle approximation $\hat\P_{N}$ of the form \eqref{eq:is-particle-approximation} over finding the optimal proposal $\G^{\ast}$ from \Cref{prop:minimum_MSE_IS} and assume that the importance sampling weights can only be evaluated up to a constant. 
 This has several reasons: First of all, for most problems considered in this thesis $\P$ is usually a conditional distribution, e.g. $\P = \mathbb P^{X|Y=y}$ for states $X$ and observations $Y$ in the \acrshort{ssm} context. Should the appropriate densities exist, evaluating the weights amounts to calculating 
 $$
 \rnd{\mathbb P^{X| Y= y}}{\G}(x) = \frac{p(x|y)}{g(x)} = \frac{p(y|x)p(x)}{g(x)p(y)} \propto \frac{p(y|x)p(x)}{g(x)}.

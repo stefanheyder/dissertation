@@ -50,6 +50,7 @@
   bibencoding=utf8,
   language=auto,
   style=authoryear-comp,
+  date=year,
   sorting=nyt,
   maxbibnames=2,
   maxcitenames=2,
@@ -73,23 +74,6 @@
 
 \usepackage{enumitem}
 \setlist[enumerate,1]{label=(\roman*),ref=(\roman*)}
-
-\newtheorem{theorem}{Theorem}[chapter]
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{corollary}[theorem]{Corollary}
-
-\theoremstyle{definition}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{example}[theorem]{Example}
-
-%\theoremstyle{remark}
-\newtheorem{remark}[theorem]{Remark}
-\newtheorem{notation}[theorem]{Notation}
-
-\usepackage{etoolbox}
-\AtBeginEnvironment{remark}{\pushQED{\qed}}
-\AtEndEnvironment{remark}{\popQED\renewcommand{\qedsymbol}{\(\blacksquare\)}}
 
 
 % ********************************************************************
@@ -221,7 +205,38 @@
 \makeatother
 
 % cleveref should be loaded last
-\usepackage{cleveref} 
-\crefname{figure}{Figure}{Figures}
-\crefname{notation}{notation}{Notations}
-\crefname{table}{table}{tables}
+\usepackage{thmtools}
+\usepackage{cleveref}
+\usepackage{etoolbox}
+
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+%\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{notation}[theorem]{Notation}
+
+% Configure cleveref with BOTH singular and plural forms
+\crefname{theorem}{theorem}{theorems}
+\crefname{proposition}{proposition}{propositions}
+\crefname{lemma}{lemma}{lemmas}
+\crefname{corollary}{corollary}{corollaries}
+\crefname{definition}{definition}{definitions}
+\crefname{example}{example}{examples}
+\crefname{remark}{remark}{remarks}
+\crefname{notation}{notation}{notations}
+
+% Add capitalized versions for sentence beginnings
+\Crefname{theorem}{Theorem}{Theorems}
+\Crefname{definition}{Definition}{Definitions}
+\Crefname{example}{Example}{Examples}
+% etc. for other environments
+
+\AtBeginEnvironment{remark}{\pushQED{\qed}}
+\AtEndEnvironment{remark}{\popQED\renewcommand{\qedsymbol}{\(\blacksquare\)}}
