@@ -122,14 +122,14 @@ As such, we are able to focus on specifying of either the mean or variance and d
 
     Similarly, by \Cref{thm:eis-clt}, we have 
     \begin{align*}
-        V_{\text{EIS}} &= \cov_{\P}(T)^{-1} \cov_{\P} \left( (\log w_{\psi_{\eis}}) (T - \P[T]) \right)\cov_{\P}(T)^{-1} \\
-        &= \frac{\sigma^{4}}{\tau^{4}} \cov_{\P} \left( (\log p - \log g_{\peis}) \frac{\id}{\sigma}\right) \\
-        &= \frac{\sigma^{2}}{\tau^{4}} \cov_{\P} \left( (\log p - \peis T + \frac{\peis^{2}}{2} - \log h) \id \right) \\
-        &= \frac{\sigma^{2}}{\tau^{4}} \cov_{\P} \left( (\log p - \log h) \id \right) \\
+        V_{\text{EIS}} &= \cov_{\P}(T)^{-1} \cov_{\P} \left( (\log w_{\psi_{\eis}} - \lambda_{\eis}) (T - \P[T]) \right)\cov_{\P}(T)^{-1} \\
+        &= \frac{\sigma^{4}}{\tau^{4}} \cov_{\P} \left( (\log p - \log g_{\peis} - \lambda_{\eis}) \frac{\id}{\sigma}\right) \\
+        &= \frac{\sigma^{2}}{\tau^{4}} \cov_{\P} \left( (\log p - \peis T + \frac{\peis^{2}}{2} - \log h - \P\left[\log p - \log h\right]) \id \right) \\
+        &= \frac{\sigma^{2}}{\tau^{4}} \cov_{\P} \left( (\log p - \log h - \P \left[ \log p - \log h \right]) \id \right) \\
         &= \frac{\sigma^{2}}{\tau^{4}} \gamma
     \end{align*}
     where 
-    $$\gamma = \cov_{\P} \left( (\log p - \log h) \id \right) = \P \left[ \id^{2} \left( \log p - \log h \right)^{2} \right],$$
+    $$\gamma = \cov_{\P} \left( (\log p - \log h - \P \left[ \log p - \log h \right]) \id \right) = \P \left[ \id^{2} \left( \log p - \log h - \P\left[\log p - \log h\right] \right)^{2} \right],$$
     by symmetry of $\log p$ and $\log h$. 
     The variance ratio of \gls{eis} relative to the \gls{cem} is 
     $$
@@ -165,19 +165,16 @@ As such, we are able to focus on specifying of either the mean or variance and d
     \paragraph{Normal distribution}
     If $\P = \mathcal N(0, \tau^{2})$ is a centered normal distribution, 
     $$
-        \log p(x) - \log h(x) = \frac{1}{2}(\log \tau^{2} - \log \sigma^{2}) + \frac{x^{2}}{2}\left(\frac{1}{\tau^{2}} - \frac{1}{\sigma^{2}} \right)
+        \log p(x) - \log h(x) = \underbrace{\frac{1}{2}(\log \sigma^{2} - \log \tau^{2})}_{a} + \underbrace{\frac{x^{2}}{2}\left(\frac{1}{\sigma^{2}} - \frac{1}{\tau^{2}} \right)}_{b x^{2}}
     $$ 
-    so 
+    and so $\log p - \log h - \P \left[ \log p - \log h \right] = b \id ^{2} - b\tau^{2}$, thus
     \begin{align*}
-        \gamma &= \P \left[ \id^{2} \left( \log p - \log h \right)^{2} \right] \\
-            &= 
+        \gamma &= \P \left[ \id^{2} \left( b \id^{2} - b \tau^{2}\right)^{2} \right] \\
+            &= b^{2}\P \left[\id^{6} - 2\id^{4}\tau^{2} + \id^{2}\tau^{4}   \right] = b^{2} (15 \tau^{6} - 6 \tau^{6} + \tau^{6}) = 10 b^{2} \tau^{6}.
     \end{align*}
-    
-    
-    and $V_{\eis}$ reduces to
+    $V_{\eis}$ then reduces to
     \begin{align*}
-        V_{\eis} &= \P \left[ \id   \right]\\
-        &=\frac{5}{2} \left( \frac{\tau^{2}}{\sigma^{2}} - 1 \right)^{2} \frac{\sigma^{2}}{\tau^{2}} = \frac{5}{2} \frac{\left( V_{\ce} - 1\right)^{2}}{V_{\ce}}
+        V_{\eis} &= 10  \left( \tau^{2} - \sigma^2 \right)^{2}
     \end{align*}
     and so for $\tau^{2} = \sigma^{2}$ we have $V_{\eis} = 0$, so $\hpeis$ might converge faster than the standard $\mathcal O( N^{-\frac{1}{2}})$ rate. Indeed, in this case $\hpeis = \peis$ a.s. for $N > 1$, see \Cref{prop:eis-finite-sample}.
 
