@@ -9,7 +9,7 @@ We now have three tools to produce Gaussian importance sampling proposals: the \
     % numerical stability (?)
     \item breakdown of methods,
     \item time and space complexity of the method,
-    \item speed of stochastic convergence, as indicated by the asymptotic variance, for the \gls{cem} and \gls{eis}, and
+    \item speed of stochastic convergence of $\hpce$ and $\hpeis$, as indicated by the asymptotic variance, and
     %\item speed of numerical convergence, as indicated by the number of iterations until \Cref{alg:cem-markov-proposal-fast,alg:eis} reach numerical convergence for fixed sample size $N$ and precision $\epsilon$, and
     \item performance of the optimal proposal, as measured by the efficiency factor, with a focus on degradation as the dimension of the target grows.
 \end{itemize}
@@ -24,7 +24,7 @@ Finally, if one method has vastly better performance at the optimum, we might be
 
 \subsection{Breakdown of methods}
 
-It is generally difficult to determine whether the proposals produced by the three methods under consideration are valid, i.e. whether the second moment $\rho$ is finite, see the discussion surrounding \Cref{ex:ess_failure}. Nevertheless, by focusing on Gaussian targets, one can employ \Cref{lem:gaussian_proposal_factor_2}.  Let us thus begin with a classical example in which the \gls{la} fails to produce consistent importance sampling estimates. 
+It is generally difficult to determine whether the proposals produced by the three methods under consideration are valid, i.e. whether the second moment $\rho$ is finite, see the discussion surrounding \Cref{ex:ess_failure}. Nevertheless, by focusing on Gaussian targets, one can employ \Cref{lem:gaussian_proposal_factor_2}. Let us thus begin with an example in which the \gls{la} fails to produce consistent importance sampling estimates, exploiting the well-known property that importance sampling is inadmissible when the target has heavier tails than the proposal.
 \begin{example}[Failure of \gls{la}]
   \label{ex:la_failure}
   Consider the Gaussian scale mixture $\P = \frac{1}{2} \left(\mathcal N (0,1) + \mathcal N(0, \varepsilon^{-2})\right)$ with mode $x^{\ast}=0$, this is the same setup as in \Cref{ex:ess_failure}. We will perform importance sampling with a normal distribution $\G_{\psi} = \mathcal N (\mu, \sigma^{2})$ for $\psi = \left( \mu, \sigma^{2} \right)$.
@@ -37,27 +37,26 @@ It is generally difficult to determine whether the proposals produced by the thr
 
   As \Gls{eis} does not yield analytically tractable proposals in this setting, we resort to a simulation study. Using the same setup as described in \Cref{ex:univ-gaussian-s2-fixed}, we replicate $M = 100$ times $\hpeis$ for varying levels of $\varepsilon^{2}$, averaging over the $M$ runs. The resulting excess variances, i.e. $\widehat{\sigma^{2}}_{\eis} - \left( \frac{1}{2} + \frac{1}{2 \varepsilon^{2}} \right)$ and $\sigma^{2}_{\ce} - \left( \frac{1}{2} + \frac{1}{2 \varepsilon^{2}} \right)$, efficiency factors and asymptotic efficiencies are displayed in \Cref{fig:gsmm_eps}. We see that for small $\varepsilon^{2}$, \aeis is inconsistent, while the \acem stays consistent. However, as is to be expected, for small $\varepsilon^{2}$, the efficiency factor becomes very small for both methods, as the tails of both proposals are thinner than those of the target.
 
-  Regarding the asymptotic relative efficiencies, we see that $V_{\eis} < V_{\ce}$ when $\varepsilon^{2}$ is large, and only for very small $\varepsilon^{2}$, i.e. mixtures where one component has very different tail behavior than the other, the \gls{cem} has smaller asymptotic variance. 
+  Regarding the asymptotic variance ratio, we see that $V_{\eis} < V_{\ce}$ when $\varepsilon^{2}$ is large, and only for very small $\varepsilon^{2}$, i.e. mixtures where one component has very different tail behavior than the other, the \gls{cem} has smaller asymptotic variance. 
     \begin{figure}
         \centering
 
         \resizebox{\textwidth}{!}{%
             \input{tikz/gsmm_eps.tex}%
         }
-        \caption{Performance of the \gls{cem} and \gls{eis} for \Cref{ex:la_failure}. The \textbf{top} figure shows the excess variance, with positive values corresponding to importance sampling proposals that provide consistent estimates. The \textbf{middle} figure shows the degeneration of the efficiency factor as $\varepsilon^{2}$ goes to $0$. The \textbf{bottom} figure shows the asymptotic relative efficiencies of both methods, with \gls{eis} outperforming the \gls{cem} for practically relevant values of $\varepsilon^{2}$.}
+        \caption{Performance of the \gls{cem} and \gls{eis} for \Cref{ex:la_failure}. The \textbf{top} figure shows the excess variance, with positive values corresponding to importance sampling proposals that provide consistent estimates. The \textbf{middle} figure shows the degeneration of the efficiency factor as $\varepsilon^{2}$ goes to $0$. The \textbf{bottom} figure shows the asymptotic variance ratio $\frac{V_{\text{EIS}}}{V_{\text{CE}}}$ of both methods, with \gls{eis} outperforming the \gls{cem} for practically relevant values of $\varepsilon^{2}$.}
         \label{fig:gsmm_eps}
     \end{figure}
-
 \end{example}
 \vspace{15pt}
-In the \gls{egssm} setting \gls{eis} may produce invalid proposals, as estimates of the variance component in the weighted least squares regression are not guaranteed to be negative. Thus \gls{eis} may produce negative variances. To deal with this, the original \gls{eis} paper \citep[Section 3.2]{Richard2007Efficient} recommends either inflating the prior or setting the parameters in question to arbitrary fixed values. Alternatively using a more expensive constrained linear least squares solver, such as a conjugate-gradient method \citep{Branch1999Subspace} or the BVLS (bounded variable least squares) solver \citep{Stark1995Boundedvariable} may be appropriate, as is re-running the \gls{eis} procedure with a different random seed. Finally, in the \gls{egssm} setting, we could also identify the corresponding observation as missing, similar to the argument presented in \Cref{subsec:glssm-approach} for the \gls{cem}. 
+In the \gls{egssm} setting \gls{eis} may produce invalid proposals, as estimates of the variance component in the weighted least squares regression are not guaranteed to be non-negative. Thus, \gls{eis} may produce negative variances. To deal with this, the original \gls{eis} paper \citep[Section 3.2]{Richard2007Efficient} recommends either inflating the prior or setting the parameters in question to arbitrary fixed values. Alternatively using a more expensive constrained linear least squares solver, such as a conjugate-gradient method \citep{Branch1999Subspace} or the BVLS (bounded variable least squares) solver \citep{Stark1995Boundedvariable} may be appropriate, as is re-running the \gls{eis} procedure with a different random seed. Finally, in the \gls{egssm} setting, we could also identify the corresponding observation as missing, similar to the argument presented in \Cref{subsec:glssm-approach} for the \gls{cem}. 
 
 % CE failure?
-The \gls{cem} presented in \Cref{subsec:markov-approach} (\Cref{alg:cem-markov-proposal-fast}) depends on the fact that the covariance matrix of the posterior $\cov \left( X | Y = y \right)$ is \gls{spd}, i.e. non-singular. This might be violated if, e.g., the model contains seasonal components whose associated innovations have variance $0$. In this case, the Cholesky roots involved will not be unique. Still \Cref{alg:cem-markov-proposal-fast} will, as $N\to\infty$ converge a globally optimal solution, though it may not be unique. 
+The \gls{cem} presented in \Cref{subsec:markov-approach} (\Cref{alg:cem-markov-proposal-fast}) depends on the fact that the covariance matrix of the posterior $\cov \left( X | Y = y \right)$ is \gls{spd}, i.e. non-singular. This might be violated if, e.g., the model contains seasonal components whose associated innovations have variance $0$. In this case, the Cholesky roots involved will not be unique. Still \Cref{alg:cem-markov-proposal-fast} will, as $N\to\infty$, converge to a globally optimal solution, though it may not be unique. 
 
 
 \subsection{Computational complexity}
-Throughout this section, we assume that the model in question is an \gls{egssm} with linear signal (c.f. \Cref{def:egssm}) to simplify the treatment. This assumption benefits the \gls{la} and \gls{eis} approaches, enabling the use of the efficient simulation and signal smoother. If the observation dimension $p$ is smaller than that of states $m$, these algorithms are more efficient, and we will adopt them as well.
+Throughout this section, we assume that the model in question is a \gls{egssm} with linear signal (c.f. \Cref{def:egssm}) to simplify the treatment. This assumption benefits the \gls{la} and \gls{eis} approaches, enabling the use of the efficient simulation and signal smoother, see \Cref{subsec:glssm-approach}. If the observation dimension $p$ is smaller than that of states $m$, these algorithms are more efficient, and we will adopt them as well.
 An overview of computational complexities is presented in \Cref{tab:comparison-time-space-complexity}. It is important to acknowledge that most operations can be parallelized in one way or the other, e.g. sampling from the proposals. Therefore the time-complexities may not accurately reflect real-world-performance. Nevertheless, they provide theoretical insight into the performance of the three methods considered.
 
 \begin{table}
@@ -71,7 +70,7 @@ An overview of computational complexities is presented in \Cref{tab:comparison-t
         \gls{cem} & $\mathcal O (n (Nm^{2} + m^{3}))$& $\mathcal O (Nm + nm^{2})$ & $\mathcal O (Nnm^{2})$\\
         \bottomrule
     \end{tabular}
-    \caption{Computational complexities of importance sampling algorithms for \gls{egssm} with linear signals.}
+    \caption{Computational complexities of importance sampling algorithms for \gls{egssm} with linear signals. The first column indicates the time complexity of single iteration, i.e.~ a Newton-Raphson iteration for the \gls{la}, and a run of \Cref{alg:eis} or \Cref{alg:cem-markov-proposal-fast}. The second column shows the space complexity for the same single iteration. The third column shows the time complexity of simulating $N$ samples from the proposal. As both the \gls{la} and \gls{eis} use the \gls{glssm} approach, these are identical.}
     \label{tab:comparison-time-space-complexity}
 \end{table}
 
@@ -85,28 +84,29 @@ Another concern is the time required to generate $N$ samples from the fitted mod
 
 % of space
 With respect to space complexity, the \gls{la} implementation has to run the Kalman filter which requires $\mathcal O(n (p^{2} + m^{2}))$ space and storage of $\mathcal O(n p)$ parameters. 
-\gls{eis} has the same space requirement, yet requires needs additional $\mathcal O(Np)$ storage for the simulated signals --- it is sufficient to store just a single set of signals at once, as we can integrate the marginal \gls{eis} step into the simulation smoother. As the weights $w_{t}$ in \gls{eis} depend only on the current signals $S^{1}_{t}, \dots, S^{N}_{t}$, they can be discarded afterwards. See \Cref{subsec:markov-approach} for the derivation of the $\mathcal O(Nm + nm^{2})$ space requirement of the \gls{cem}.
+\gls{eis} has the same space requirement, yet requires additional $\mathcal O(Np)$ storage for the simulated signals --- it is sufficient to store just a single set of signals at once, as we can integrate the marginal \gls{eis} step into the simulation smoother. As the weights $w_{t}$ in \gls{eis} depend only on the current signals $S^{1}_{t}, \dots, S^{N}_{t}$, they can be discarded afterwards. See \Cref{subsec:markov-approach} for the derivation of the $\mathcal O(Nm + nm^{2})$ space requirement of the \gls{cem}.
 
 % interpretation
 The \gls{la} has the fastest and most space-efficient iteration of the three methods because it does not require the simulation of $N$ samples. This makes it an ideal candidate as an initial guess for the other two methods. 
-For $p \ll m$, \gls{eis} is faster than \gls{cem} as it is based on the signals $S$ only, thus having access to the efficient simulation and signal smoother algorithms. The same is true for the space complexity. If, however, $p\approx m$, there is no linear signal or the observations are not conditionally independent given the states or signals, the speed of a single iteration of \gls{eis} and \gls{cem} are comparable. 
+For $p \ll m$, \gls{eis} is faster than the \gls{cem} as it is based on the signals $S$ only, thus having access to the efficient simulation and signal smoother algorithms. The same is true for the space complexity. If, however, $p\approx m$, there is no linear signal or the observations are not conditionally independent given the states or signals, the speed of a single iteration of \gls{eis} and \gls{cem} are comparable. 
 While theoretically, the \gls{cem} performs sampling faster than the other two methods, for large numbers of samples $N$ the difference is negligible because the additional computations only have to be performed once. 
 
 \subsection{Relative efficiencies of finite-sample and asymptotic variances}
-As we have seen in the previous section, the number of samples $N$ used to estimate $\pce$ and $\peis$ enter linearly into the computational complexities. Naturally, we want to know how big a sample size we should choose for our procedures to estimate a proposal that is close to the true optimal value and whether one of the two simulation-based procedures requires fewer samples than the other. To answer this question we turn to the two central limit theorems, \Cref{thm:cem-clt,thm:eis-clt}. If $N$ is large, the asymptotic variances (or rather: the asymptotic standard deviations) tell us how much stochastic variation we should expect around the optimal value, and can thus guide us in choosing $N$. 
-We start with two examples in an univariate setting, where both the \gls{cem} and \gls{eis} use Gaussian proposals with either fixed variance (\Cref{ex:univ-gaussian-s2-fixed}) or mean (\Cref{ex:univ-gaussian-mu-fixed}).
+As we have seen in the previous section, the number of samples $N$ used to estimate $\pce$ and $\peis$ enter linearly into the computational complexities. Naturally, we want to know how big a sample size we should choose for our procedures to estimate a proposal that is close to the true parameter ($\pce$ or $\peis$) and whether one of the two simulation-based procedures requires fewer samples than the other one. To answer this question we turn to the two central limit theorems, \Cref{thm:cem-clt,thm:eis-clt}. If $N$ is large, the asymptotic variances (or rather: the asymptotic standard deviations) tell us how much stochastic variation we should expect around the optimal value, and can thus guide us in choosing $N$. 
+We start with two examples in a univariate setting, where both the \gls{cem} and \gls{eis} use Gaussian proposals with either fixed variance (\Cref{ex:univ-gaussian-s2-fixed}) or mean (\Cref{ex:univ-gaussian-mu-fixed}).
 %This allows us to compare the methods for either the mean (variance) if the variance (mean) is fixed and potentially misspecified, i.e. not the global optimum. Additionally, the univariate setting allows us, in some cases, to derive analytical expressions of the efficiencies involved, allowing us to interpret them.
 
 To compare both methods we will determine the asymptotic relative efficiencies, i.e. $ \frac{\var \left( \hpeis \right)}{\var \left( \hpce \right)}$, with values smaller than $1$ indicating that \gls{eis} requires (asymptotically) fewer samples for the same precision as the \gls{cem}.
 Let us note that we are comparing the efficiencies of parameters $\psi$, not those of derived parameters such as the standard deviation or the \gls{ess}. However, should both methods have the same optimal value, the relative efficiencies are the same for all parameters derived from $\psi$, by the delta method. By a continuity argument, the same is approximately true if the optimal values of the \gls{cem} and \gls{eis} are close.
 
-To make as much the of the following examples analytically tractable, we will apply the \gls{cem} and \gls{eis} in a univariate and single-parameter setting. This allows us to focus on the distinctive properties of the two methods, investigating under which circumstances each method performs well or poorly. In addition, we will use Gaussian proposals where mean (or variance) is fixed and the optimal variance (mean) is obtained by the \glspl{cem} or \gls{eis}.
+To make many of the following examples analytically tractable, we will apply the \gls{cem} and \gls{eis} in a univariate and single-parameter setting. This allows us to focus on the distinctive properties of the two methods, investigating under which circumstances each method performs well or poorly. In addition, we will use Gaussian proposals where mean (or variance) is fixed and the optimal variance (mean) is obtained by the \gls{cem} or \gls{eis}.
 As such, we are able to focus on specifying of either the mean or variance and determine which of the two is more crucial to specify accurately. Additionally, the univariate setting allows us, in some cases, to derive analytical expressions of the efficiencies involved.
 
 \begin{example}[univariate Gaussian proposal, $\sigma^{2}$ fixed]
     \label{ex:univ-gaussian-s2-fixed}
-    On $\R$, consider the probability measure $\P = p\lambda$ for the Lebesgue measure $\lambda$ and assume that $\P$ is symmetric around $0$, i.e. $p(-x) = p(x)$ for $\lambda$-a.e. $x\in\R$ and possesses up to third order moments.
-    Let $\G=\P$ be a proposal, so $W\equiv1$ and let $\G_{\psi} = \mathcal N \left( \sigma\psi, \sigma^{2} \right)$ be the single parameter natural exponential family of Gaussians with fixed variance $\sigma^{2} > 0$. Then 
+    On $\R$, consider the probability measure $\P = p\lambda$ for the Lebesgue measure $\lambda$ and assume that $\P$ is symmetric around $0$, i.e. $p(-x) = p(x)$ for $\lambda$-a.e. $x\in\R$ and possesses up to third order moments, with second moment $\tau^{2} = \P \left[\operatorname{id}^{2}\right]$.
+
+    Let $\G=\P$, so $W\equiv1$ and let $\G_{\psi} = \mathcal N \left( \sigma\psi, \sigma^{2} \right)$ be the single parameter natural exponential family of Gaussians with fixed variance $\sigma^{2} > 0$. Then 
     $$
     \log g_{\psi}(x) = \psi T(x) - \frac{\psi^{2}}{2} + \log h(x),
     $$
@@ -114,24 +114,24 @@ As such, we are able to focus on specifying of either the mean or variance and d
     Note that $T$ is centered under $\P$. To compare the asymptotic behavior of the \gls{cem} and \gls{eis} we compute the asymptotic variances arising from their respective central limit theorems (\Cref{thm:cem-clt,thm:eis-clt}).
 
     By symmetry, both $\pce$ and $\peis$ are equal to $0$. 
-    The Fisher information $I(\psi)$ is equal to $1$ for all $\psi$, so 
-    \begin{align}
-    \label{eq:ce-gaussian-mean-var}
-        V_{\ce} = \cov_{\P}(T) = \frac{\tau^{2}}{\sigma^{2}},
-    \end{align}
-    where $\tau^{2}=\P \operatorname{id}^{2}$ is the second moment of $\P$. 
+    Recalling \Cref{thm:cem-clt}, we see that the asymptotic variance of $\hpce$ is given by  
+    $$
+        V_{\text{CE}} = I(\pce) \P \left[w(T - \P [T]) (T - \P [T])^{T} \right] I(\pce) = \cov_{\P}(T) = \frac{\tau^{2}}{\sigma^{2}},
+    $$
+    as $w = 1$ almost surely and the Fisher information $I(\pce)$ is equal to $1$. 
 
-    Additionally, $B_{\eis} = (\cov_{\P}(T))^{-1} = \frac{\sigma^{2}}{\tau^{2}}$ and
+    Similarly, by \Cref{thm:eis-clt}, we have 
     \begin{align*}
-    M_{\eis} &= \cov_{\P} \left( (\log \frac{p(x)}{h(x)} - \lambda_{\eis})T\right) \\
-        &= \cov_{\P} \left(\left( \log p - \log h - \P (\log p - \log h) \right) T \right) \\
-        &= \frac{1}{\sigma^{2}}\int_{-\infty}^{\infty} p(x) x^{2}\left(\log p(x) + \frac{x^{2}}{2\sigma^{2}} - \P\left(\log p + \frac{\tau^{2}}{2\sigma^{2}}\right)\right)^{2} \d x.
+        V_{\text{EIS}} &= \cov_{\P}(T)^{-1} \cov_{\P} \left( (\log w_{\psi_{\eis}}) (T - \P[T]) \right)\cov_{\P}(T)^{-1} \\
+        &= \frac{\sigma^{4}}{\tau^{4}} \cov_{\P} \left( (\log p - \log g_{\peis}) \frac{\id}{\sigma}\right) \\
+        &= \frac{\sigma^{2}}{\tau^{4}} \cov_{\P} \left( (\log p - \peis T + \frac{\peis^{2}}{2} - \log h) \id \right) \\
+        &= \frac{\sigma^{2}}{\tau^{4}} \cov_{\P} \left( (\log p - \log h) \id \right) \\
+        &= \frac{\sigma^{2}}{\tau^{4}} \gamma
     \end{align*}
-    Thus
-    $$
-    V_{\eis} = B_{\eis}M_{\eis}B_{\eis}= \sigma^{2}\frac{\gamma}{\tau^{4}},
-    $$
-    where $\gamma = \int_{-\infty}^\infty p(x) x^{2}\left(\log p(x) + \frac{x^{2}}{2\sigma^{2}} - \P(\log p + \frac{\tau^{2}}{2\sigma^{2}})\right)^{2} \d x,$ and the efficiency of \gls{eis} relative to the \gls{cem} is 
+    where 
+    $$\gamma = \cov_{\P} \left( (\log p - \log h) \id \right) = \P \left[ \id^{2} \left( \log p - \log h \right)^{2} \right],$$
+    by symmetry of $\log p$ and $\log h$. 
+    The variance ratio of \gls{eis} relative to the \gls{cem} is 
     $$
         \frac{V_{\eis}}{V_{\ce}} = \frac{\sigma^{4}}{\tau^{6}} \gamma.
     $$
@@ -163,9 +163,21 @@ As such, we are able to focus on specifying of either the mean or variance and d
 
     
     \paragraph{Normal distribution}
-    If $\P = \mathcal N(0, \tau^{2})$ is a normal distribution, this reduces to
+    If $\P = \mathcal N(0, \tau^{2})$ is a centered normal distribution, 
+    $$
+        \log p(x) - \log h(x) = \frac{1}{2}(\log \tau^{2} - \log \sigma^{2}) + \frac{x^{2}}{2}\left(\frac{1}{\tau^{2}} - \frac{1}{\sigma^{2}} \right)
+    $$ 
+    so 
     \begin{align*}
-        V_{\eis} &= \frac{5}{2} \left( \frac{\tau^{2}}{\sigma^{2}} - 1 \right)^{2} \frac{\sigma^{2}}{\tau^{2}} = \frac{5}{2} \frac{\left( V_{\ce} - 1\right)^{2}}{V_{\ce}}
+        \gamma &= \P \left[ \id^{2} \left( \log p - \log h \right)^{2} \right] \\
+            &= 
+    \end{align*}
+    
+    
+    and $V_{\eis}$ reduces to
+    \begin{align*}
+        V_{\eis} &= \P \left[ \id   \right]\\
+        &=\frac{5}{2} \left( \frac{\tau^{2}}{\sigma^{2}} - 1 \right)^{2} \frac{\sigma^{2}}{\tau^{2}} = \frac{5}{2} \frac{\left( V_{\ce} - 1\right)^{2}}{V_{\ce}}
     \end{align*}
     and so for $\tau^{2} = \sigma^{2}$ we have $V_{\eis} = 0$, so $\hpeis$ might converge faster than the standard $\mathcal O( N^{-\frac{1}{2}})$ rate. Indeed, in this case $\hpeis = \peis$ a.s. for $N > 1$, see \Cref{prop:eis-finite-sample}.
 
