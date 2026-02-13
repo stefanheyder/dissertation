@@ -104,10 +104,8 @@ where we reparameterized to an unconstrained $\theta \in \R^{6}$. The model has 
 $$
     S_{t} = \left(\log \rho_{t} + u_{t,r}\right)_{r = 1, \dots, R},
 $$
-which makes inference fast, as the approximating \gls{glssm} in the \gls{la} and \gls{eis} method only requires $\mathcal O(n\,R)$ many parameters. Again, we use \gls{mle} to estimate $\theta$, using the methods from \Cref{sec:maximum_likelihood_estimation}.  \todo{describe setup/parameters}
-% computational stuff /setup
-%% N_samples, iterations, convergence criteria
-%% how predictions are done: cap at n_pop per county
+which makes inference fast, as the approximating \gls{glssm} in the \gls{la} and \gls{eis} method only requires $\mathcal O(n\,R)$ many parameters. Again, we use \gls{mle} to estimate $\theta$, using the methods from \Cref{sec:maximum_likelihood_estimation}. As the models state dimension is quite large, we resort to using the less intensive \gls{la} for all procedures in this chapter.
+\input{chapters/04_epidemiological_ssms/04_02_weekly_GF_showcase_hyperparameter_text.tex}
 
 We aggregate the reported cases from the \gls{rki} on a weekly level. We orient ourselves at the ECDC's ForecastHub, whose guidelines read
 \begin{quote}
