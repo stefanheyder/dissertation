@@ -105,7 +105,7 @@ $$
     S_{t} = \left(\log \rho_{t} + u_{t,r}\right)_{r = 1, \dots, R},
 $$
 which makes inference fast, as the approximating \gls{glssm} in the \gls{la} and \gls{eis} method only requires $\mathcal O(n\,R)$ many parameters. Again, we use \gls{mle} to estimate $\theta$, using the methods from \Cref{sec:maximum_likelihood_estimation}. As the models state dimension is quite large, we resort to using the less intensive \gls{la} for all procedures in this chapter.
-\input{chapters/04_epidemiological_ssms/04_02_weekly_GF_showcase_hyperparameter_text.tex}
+
 
 We aggregate the reported cases from the \gls{rki} on a weekly level. We orient ourselves at the ECDC's ForecastHub, whose guidelines read
 \begin{quote}
@@ -129,6 +129,8 @@ Similar to the last section, we start out with a motivational example on the cap
 \end{figure}
 
 We fit the model using maximum likelihood estimation and present the estimated parameters in \Cref{tab:regional_showcase_theta}. 
+\input{chapters/04_epidemiological_ssms/04_02_weekly_GF_showcase_hyperparameter_text.tex}
+
 The estimated auto-regressive parameter $\alpha$ is negative, which has can be interpreted as follows: when a region's log-growth factor is above the country-wide average at time $t$, it tends to decrease below the average in the following week. Similarly, regions with below-average growth factors tend to increase back toward the mean. This negative autocorrelation is sensible for the low-incidence setting we consider here, where large outbreaks are typically localized and temporary, rather than sustained.
 
 The standard deviation of the average growth rate, $\sigma_{\overline{\log \rho}}$, is small compared to that of the spatial effect, $\sigma_{S}$. This is visible from \Cref{fig:regional_showcase_rho.tex} as well, where we show the predicted median growth factors (not on the log scale) for the model with a blue dashed line ($\overline{\log \rho}_{t}$) and boxplots for the median growth rates for each county (summarized by blue boxplots). Here we can see that the variation over time at the county level is much larger than that at the country level, which is also evident when examining $\log \rho_{t,r}$ directly (figures not shown).

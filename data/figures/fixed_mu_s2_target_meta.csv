@@ -1,0 +1,8 @@
+P,param_name,param_value
+Normal,,
+GMM_location_0.10,$\omega^2$,0.1
+GMM_location_0.50,$\omega^2$,0.5
+GMM_location_1.00,$\omega^2$,1.0
+GMM_scale_100.00,$\varepsilon^2$,100.0
+GMM_scale_10.00,$\varepsilon^2$,10.0
+GMM_scale_2.00,$\varepsilon^2$,2.0

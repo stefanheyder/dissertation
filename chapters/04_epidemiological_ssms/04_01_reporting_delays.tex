@@ -22,7 +22,6 @@ Let $\hat p_{t, \tau} = \frac{Y_{t,\tau}}{Y_{t,\cdot}}$ denote the empirical del
 
 To produce accurate retrospective analyses of the daily growth factor, we will construct an \gls{ssm} that accounts for these delays, weekday effects and epidemics' dynamics. This model will enable us to better understand the delay process, accommodate periods of inconsistent reporting, and generate daily growth factors useful for the interpretation of \gls{npi} efficacy.
 
-\todo{lit rev.}
 The problem of accounting for reporting delays is generally termed ``{}nowcasting''{} in the literature, see also \Cref{sec:nowcasting_hospitalizations} and the literature review therein. Here, however, we are interested in a different problem: that of reconstructing the actual course of the epidemic, i.e. removing both the reporting delay and weekday-effects.
 
 In addition, we will demonstrate the model's utility when handling reporting artifacts not explicitly modeled, e.g. the Christmas period of 2020. \Acrshortpl{ssm} handle missing data seamlessly, so removing observations in that period and fitting the model again is straightforward.

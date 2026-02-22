@@ -91,7 +91,7 @@ The \gls{la} has the fastest and most space-efficient iteration of the three met
 For $p \ll m$, \gls{eis} is faster than the \gls{cem} as it is based on the signals $S$ only, thus having access to the efficient simulation and signal smoother algorithms. The same is true for the space complexity. If, however, $p\approx m$, there is no linear signal or the observations are not conditionally independent given the states or signals, the speed of a single iteration of \gls{eis} and \gls{cem} are comparable. 
 While theoretically, the \gls{cem} performs sampling faster than the other two methods, for large numbers of samples $N$ the difference is negligible because the additional computations only have to be performed once. 
 
-\subsection{Relative efficiencies of finite-sample and asymptotic variances}
+\subsection{Ratio of asymptotic variances}
 As we have seen in the previous section, the number of samples $N$ used to estimate $\pce$ and $\peis$ enter linearly into the computational complexities. Naturally, we want to know how big a sample size we should choose for our procedures to estimate a proposal that is close to the true parameter ($\pce$ or $\peis$) and whether one of the two simulation-based procedures requires fewer samples than the other one. To answer this question we turn to the two central limit theorems, \Cref{thm:cem-clt,thm:eis-clt}. If $N$ is large, the asymptotic variances (or rather: the asymptotic standard deviations) tell us how much stochastic variation we should expect around the optimal value, and can thus guide us in choosing $N$. 
 We start with two examples in a univariate setting, where both the \gls{cem} and \gls{eis} use Gaussian proposals with either fixed variance (\Cref{ex:univ-gaussian-s2-fixed}) or mean (\Cref{ex:univ-gaussian-mu-fixed}).
 %This allows us to compare the methods for either the mean (variance) if the variance (mean) is fixed and potentially misspecified, i.e. not the global optimum. Additionally, the univariate setting allows us, in some cases, to derive analytical expressions of the efficiencies involved, allowing us to interpret them.
@@ -129,8 +129,12 @@ As such, we are able to focus on specifying of either the mean or variance and d
         &= \frac{\sigma^{2}}{\tau^{4}} \gamma
     \end{align*}
     where 
-    $$\gamma = \cov_{\P} \left( (\log p - \log h - \P \left[ \log p - \log h \right]) \id \right) = \P \left[ \id^{2} \left( \log p - \log h - \P\left[\log p - \log h\right] \right)^{2} \right],$$
-    by symmetry of $\log p$ and $\log h$. 
+    $$\gamma = \cov_{\P} \left( (\log p - \log h - \P \left[ \log p - \log h \right]) \id \right) = \P \left[ \left( \log p - \log h - \P\left[\log p - \log h\right] \right)^{2}\id^{2}  \right],$$
+    as 
+    $$
+      \P \left[  (\log p - \log h - \P \left[ \log p - \log h \right]) \id  \right] = 0
+    $$
+    by symmetry of $p, \log p$ and $\log h$. 
     The variance ratio of \gls{eis} relative to the \gls{cem} is 
     $$
         \frac{V_{\eis}}{V_{\ce}} = \frac{\sigma^{4}}{\tau^{6}} \gamma.
@@ -145,7 +149,7 @@ As such, we are able to focus on specifying of either the mean or variance and d
         \resizebox{\textwidth}{!}{%
             \input{tikz/are.tex}%
         }
-        \caption{Asymptotic relative efficiency $\frac{V_{\eis}}{V_{\ce}}$ for the normal distribution from \Cref{ex:univ-gaussian-s2-fixed} (left hand side) and \Cref{ex:univ-gaussian-mu-fixed} (right hand side). Here $\P$ is either the standard normal distribution, a Gaussian location mixture, or a Gaussian scale mixture. $\G_{\psi}$ is the normal distribution $\mathcal N(\mu, \sigma^{2})$, where either $\sigma^{2}$ is fixed (left) and $\mu$ determined by the \gls{cem} / \gls{eis}, or the other way around (right). Notice the log scale of the $y$-axis. As $\mu$ or $\sigma^{2}$ get close to their true values, \gls{eis} outperforms the \gls{cem} in terms of asymptotic variance, see \Cref{prop:eis-finite-sample}. }
+        \caption{Asymptotic variance ratios $\frac{V_{\eis}}{V_{\ce}}$ for the normal distribution from \Cref{ex:univ-gaussian-s2-fixed} (left hand side) and \Cref{ex:univ-gaussian-mu-fixed} (right hand side). Vertical lines mark $\sigma^{2} = \frac{\tau^{2}}{2}$ for each $\P$ --- for $\sigma^{2} < \frac{\tau^{2}}{2}$ importance sampling with $\G_{\psi}$ is inadmissible. For the scale mixture, $\tau^{2} \approx \frac12$, so $\tau^{2}/2$, which is outside the range of this figure. Here $\P$ is, from top to bottom, either the standard normal distribution, a Gaussian location mixture, or a Gaussian scale mixture. $\G_{\psi}$ is the normal distribution $\mathcal N(\mu, \sigma^{2})$, where either $\sigma^{2}$ is fixed (left) and $\mu$ determined by the \gls{cem} / \gls{eis}, or the other way around (right). Notice the log scale of the $y$-axis, as well as the $x$-axis on the left-hand side. When the target is the standard normal distribution, as $\mu$ or $\sigma^{2}$ get close to their true values ($\mu = 0$ and $\sigma^{2} = 1$), \gls{eis} outperforms the \gls{cem} in terms of asymptotic variance, see \Cref{prop:eis-finite-sample}. }
         \label{fig:are}
     \end{figure}
 
@@ -165,12 +169,12 @@ As such, we are able to focus on specifying of either the mean or variance and d
     \paragraph{Normal distribution}
     If $\P = \mathcal N(0, \tau^{2})$ is a centered normal distribution, 
     $$
-        \log p(x) - \log h(x) = \underbrace{\frac{1}{2}(\log \sigma^{2} - \log \tau^{2})}_{a} + \underbrace{\frac{x^{2}}{2}\left(\frac{1}{\sigma^{2}} - \frac{1}{\tau^{2}} \right)}_{b x^{2}}
+        \log p(x) - \log h(x) = \frac{1}{2}(\log \sigma^{2} - \log \tau^{2}) + \frac{x^{2}}{2}\left(\frac{1}{\sigma^{2}} - \frac{1}{\tau^{2}} \right),
     $$ 
-    and so $\log p - \log h - \P \left[ \log p - \log h \right] = b \id ^{2} - b\tau^{2}$, thus
+    and letting $a= \frac{1}{2} \left( \frac{1}{\sigma^{2}} - \frac{1}{\tau^{2}} \right)$, we have $\log p - \log h - \P \left[ \log p - \log h \right] = a \id ^{2} - a\tau^{2}$, thus
     \begin{align*}
-        \gamma &= \P \left[ \id^{2} \left( b \id^{2} - b \tau^{2}\right)^{2} \right] \\
-            &= b^{2}\P \left[\id^{6} - 2\id^{4}\tau^{2} + \id^{2}\tau^{4}   \right] = b^{2} (15 \tau^{6} - 6 \tau^{6} + \tau^{6}) = 10 b^{2} \tau^{6}.
+        \gamma &= \P \left[ \id^{2} \left( a \id^{2} - a \tau^{2}\right)^{2} \right] \\
+            &= a^{2}\P \left[\id^{6} - 2\id^{4}\tau^{2} + \id^{2}\tau^{4}   \right] = a^{2} (15 \tau^{6} - 6 \tau^{6} + \tau^{6}) = 10 a^{2} \tau^{6}.
     \end{align*}
     $V_{\eis}$ then reduces to
     \begin{align*}
@@ -179,23 +183,30 @@ As such, we are able to focus on specifying of either the mean or variance and d
     and so for $\tau^{2} = \sigma^{2}$ we have $V_{\eis} = 0$, so $\hpeis$ might converge faster than the standard $\mathcal O( N^{-\frac{1}{2}})$ rate. Indeed, in this case $\hpeis = \peis$ a.s. for $N > 1$, see \Cref{prop:eis-finite-sample}.
 
     \paragraph{Gaussian location mixture}
-    Consider now the case where $\P = \frac{1}{2} \mathcal N(-1, \omega^{2}) + \frac{1}{2}\mathcal N(1, \omega^{2})$ is a Gaussian location mixture. The second moment is $\tau^{2} = 1 + \omega^{2} = -\frac{1}{2\pce}$. Unfortunately, there is no closed-form expression for many of the terms required for the analysis of \gls{eis}. Instead, we resort to a simulation study to determine the asymptotic variances and relative efficiencies for three different values of $\omega^{2} \in \{0.1, 0.5, 1.0\}$. 
+    Consider now the case where $\P = \frac{1}{2} \mathcal N(-1, \omega^{2}) + \frac{1}{2}\mathcal N(1, \omega^{2})$ is a Gaussian location mixture. The second moment is $\tau^{2} = 1 + \omega^{2}$. Unfortunately, there is no closed-form expression for many of the terms required for the analysis of \gls{eis}. Instead, we resort to a simulation study to determine the asymptotic variances and relative efficiencies for three different values of $\omega^{2} \in \{0.1, 0.5, 1.0\}$. 
     
-    To this end we draw $M = 400$ times from the distribution of $\hpce$ and $\hpeis$, where we use $N=1\,000$ samples from the tractable $\P$ as importance samples\footnote{Code for all simulation studies is available in the associated GitHub repository, see \Cref{cha:reproducibility_and_code}.}. We only iterate a single time for both procedures. From individual estimates, we estimate the asymptotic variances $V_{\ce}$ and $V_{\eis}$ by the respective empirical variances, and determine the relative efficiency of \gls{eis} over the \gls{cem} as $ \frac{\hat V_{\eis}}{\hat V_{\ce}}$. Again, we vary the fixed variance of the proposals, $\sigma^{2}$, from $\frac{1}{2}$ to $3$. 
-    To quantify uncertainty in these asymptotic relative efficiencies, we perform the non-parametric bootstrap with $10\,000$ samples to estimate their standard errors $\widehat{\text{se}}_{b}$. $M=400$ has been chosen to ensure that the relative bootstrap standard error $ \frac{\widehat{\text{se}}_{b}}{\hat V_{\eis} / \hat V_{\ce}}$ is less than $10\%$ across all simulations. 
+    To this end we draw $M = 10\,000$ times from the distribution of $\hpce$ and $\hpeis$, where we use $N=10\,000$ samples from the tractable $\P$ as importance samples\footnote{Code for all simulation studies is available in the associated GitHub repository, see \Cref{cha:reproducibility_and_code}.}. We only iterate a single time for both procedures. From individual estimates, we estimate the asymptotic variances $V_{\ce}$ and $V_{\eis}$ by the respective empirical variances, and determine the relative efficiency of \gls{eis} over the \gls{cem} as $ \frac{\hat V_{\eis}}{\hat V_{\ce}}$. Again, we vary the fixed variance of the proposals, $\sigma^{2}$, from $\frac{1}{2}$ to $3$. 
+
+    To quantify uncertainty in these asymptotic relative efficiencies, we perform the following bootstrap procedure to estimate standard errors of the asymptotic variances, which we sketch for the \acrshort{cem}: 
+    \begin{enumerate}
+        \item Resample from the $M$ estimates $\hat\psi_{\text{CE}, 1}, \dots, \hat\psi_{\text{CE}, M}$  with replacement $N_{\text{boot}} = 1000$ times and obtain variances $\text{Var}_{1}, \dots, \text{Var}_{N_{\text{boot}}}$.
+        \item Calculate the standard deviation of these $N_{\text{boot}}$ samples, $\widehat{\text{se}}_{b}$. 
+    \end{enumerate}
+
+    We perform the same scheme for $\hpeis$, as well as for the asymptotic variance ratio, where we obtain variance ratios in the first step instead. With the parameters chosen, all relative standard errors are below $2.5\%$. 
     
     \paragraph{Gaussian scale mixture}
     Finally we consider $\P = \frac{1}{2} \left(\mathcal N \left( 0, 1 \right) + \mathcal N (0, \varepsilon^{-2}) \right)$ for $\varepsilon^{2} \in \{2, 10, 100\}$, a scale mixture similar to the one seen in \Cref{ex:la_failure}. Contrary to that example, we choose $\varepsilon$ big, making the $\mathcal N(0,1)$ component the one with large variance, to make importance sampling with $\sigma^{2}$ in the range considered consistent. 
     Here $\tau^{2} = \frac{1}{2} + \frac{1}{2\varepsilon^{2}}$. 
-    Again, we estimate the asymptotic $V_{\eis}$ in the same way as for the Gaussian location mixture, with $M=100$ estimates using $N=1000$ samples each and obtain a Monte-Carlo standard error for the asymptotic variances of $1.1 \times 10^{-3}$.
+    Again, we estimate the asymptotic $V_{\eis}$ in the same way as for the Gaussian location mixture, with the same parameters and obtain the same relative standard errors bounds (below $2.5\%$).
 \end{example}
 \vspace{16pt}
-Note that for fixed $\sigma^{2}$ the asymptotic variance of the \gls{cem} $V_{\ce}$ is the same in all of the examples considered, as we sample directly from the tractable $\P$, so $V_{\ce}$ only depends on $\P$ through its second moment $\tau^{2}$. 
-The asymptotic variance of \gls{eis} however depends on both $\tau^{2}$ and $\gamma$, which depends on higher order moments of $\P$.
+
+Note that for fixed $\sigma^{2}$ the asymptotic variance of the \gls{cem} depends on $\P$ only through its second moment $\tau$, while for \gls{eis} the asymptotic variance depends on higher order moments of $\P$, i.e. on $\gamma$.
 
 From the left-hand side of \Cref{fig:are} we can observe that in the case of $\P = \mathcal N(0,1)$ \gls{eis} has smaller asymptotic variance compared to the \gls{cem}, as long as $\sigma^{2}$ is not heavily misspecified. Indeed, if $\sigma^{2} = 1$ is correctly specified, by \Cref{prop:eis-finite-sample}, \gls{eis} has asymptotic variance $0$ and converges already for a single sample. 
 
-Consider now the case where $\P$ is a Gaussian location mixture. For $\omega^{2} = 1$, the location mixture is unimodal with variance $2$ and \aeis outperforms the \acem in terms of asymptotic variance in the range considered. For the smaller values of $\omega^{2}$ considered here, the location mixture is bimodal. Close to the true variance $1 + \omega^{2}$, \aeis still outperforms the \acem. 
+Consider now the case where $\P$ is a Gaussian location mixture. For $\omega^{2} = 1$, the location mixture is unimodal with variance $2$ and \aeis outperforms the \acem in terms of asymptotic variance in the range considered. For the smaller values of $\omega^{2}$ considered here, the location mixture is bimodal. Close to the true variance of $\P$, $1 + \omega^{2}$, \gls{eis} still outperforms the \gls{cem} in terms of asymptotic variance.
 
 For the Gaussian scale mixture, the case is less clear. Here the true variance is $\frac{1}{2} + \frac{1}{2 \varepsilon^{2}}$. The location of the minimal relative efficiency is still close to this true variance, however, as $\varepsilon^{2}$ grows, the \acem starts to dominate \aeis. Additionally, recall from \Cref{ex:la_failure} that for large $\varepsilon^{2}$ \aeis becomes inadmissible. 
 
@@ -207,12 +218,13 @@ For the Gaussian scale mixture, the case is less clear. Here the true variance i
     $$
     \log g_{\psi}(x) = \psi T(x) + \frac{1}{2}\log \left( - 2 \psi \right) - \frac{1}{2} \log 2\pi
     $$
-    for $T(x) = (x - \mu)^{2}$. Thus $\P T = \tau^{2} + \mu^{2}$ and $\cov_{\P} T = \nu - \tau^{4} + 4\tau^{2}\mu^{2}$ where $\nu = \P \operatorname{id}^{4}$ and $\tau^{2} = \P \id^{2}$. 
+    for $T(x) = (x - \mu)^{2}$. Thus $\P [T] = \tau^{2} + \mu^{2}$ and $\cov_{\P} \left(T\right) = \nu - \tau^{4} + 4\tau^{2}\mu^{2}$ where $\nu = \P \left[\operatorname{id}^{4}\right]$ and $\tau^{2} = \P \left[\id^{2}\right]$. 
     %\paragraph{\Acrlong{cem}}
 
-    By matching moments, we obtain $\pce = -\frac{1}{2(\tau^{2} + \mu^{2})}$ and $I(\pce) = \frac{1}{2\psi^{2}_\ce} = 2(\tau^{2} + \mu^{2})^{2}$. In total 
+    As $\G_{\pce} \left[ T \right] = - \frac{1}{2\psi}$, matching moments (see \Cref{prop:cem_exponential_families}) yields
+    $\pce = -\frac{1}{2(\tau^{2} + \mu^{2})}$ and thus $I(\pce) = \frac{1}{2\psi^{2}_\ce} = 2(\tau^{2} + \mu^{2})^{2}$. In total,
     \begin{align}
-        V_{\ce} &= \frac{1}{4 (\tau^{2} + \mu^{2})^{4}} \left( \nu - \tau^{4} + 4\tau^{2}\mu^{2} \right)
+        V_{\ce} &= \frac{1}{4 (\tau^{2} + \mu^{2})^{4}} \left( \nu - \tau^{4} + 4\tau^{2}\mu^{2} \right).
     \end{align}
 
     %\paragraph{\Acrlong{eis}}
@@ -222,7 +234,7 @@ For the Gaussian scale mixture, the case is less clear. Here the true variance i
         &= \left( \nu - \tau^{4} + 4\tau^{2}\mu^{2} \right)^{-1} \underbrace{\int p(x)((x-\mu)^{2}-\tau^{2} - \mu^{2})(\log p(x) - \P\log p(x)) \d x}_{=\gamma}.
     \end{align*}
     
-    As $B_{\eis} = \cov_{\P} T ^{-1} = \left( \nu - \tau^{4} + 4 \tau^{2}\mu^{2} \right)^{-1}$, we have
+    As $B_{\eis} = \cov_{\P} \left(T\right) ^{-1} = \left( \nu - \tau^{4} + 4 \tau^{2}\mu^{2} \right)^{-1}$, we have
     \begin{align*}
         V_{\eis} = \left( \nu - \tau^{4} + 4 \tau^{2}\mu^{2}\right)^{-2} \P \left( (\id - \mu)^{4} \left( \log p - \peis (\id - \mu)^{2} - \P \log p + \psi (\tau^{2} + \mu^{2}) \right)^{2} \right),
     \end{align*}
@@ -286,7 +298,7 @@ For the Gaussian scale mixture, the case is less clear. Here the true variance i
 \end{figure}
 
 % AREs
-On the left-hand side of \Cref{fig:are} we see that for $\mu$ close to the optimal value, \aeis has smaller asymptotic variance than the \acem, except for the two bimodal location measures. Again, due to the finite sample convergence of \aeis, \Cref{prop:eis-finite-sample}, the asymptotic variance $V_{\eis}$ goes to $0$ as $\mu \to 0$. As $\mu$ is further from the true $0$ the ratio of asymptotic variances starts to grow. 
+On the left-hand side of \Cref{fig:are} we see that for $\mu$ close to the optimal value, \aeis has smaller asymptotic variance than the \acem, except for the two bimodal location measures. Again, due to the finite sample convergence of \aeis, \Cref{prop:eis-finite-sample}, the asymptotic variance $V_{\eis}$ goes to $0$ as $\mu \to 0$ in the normal case. As $\mu$ is further from the true $0$ the ratio of asymptotic variances starts to grow. 
 
 % sigma2s
 In \Cref{fig:cem_eis_sigma2} we see that, except for the extreme scale mixtures, \aeis tends to produce proposals that have a larger variance than those produced by the \acem. As we will see in the discussion of \Cref{fig:rho_mu}, this might be advantageous for \aeis as proposals with a small variance run the risk of missing a large part of the probability mass of the target. 
