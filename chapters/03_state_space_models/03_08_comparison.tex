@@ -108,7 +108,7 @@ As such, we are able to focus on specifying of either the mean or variance and d
 
     For the \textbf{standard normal} target, we set $\P = \mathcal N(0,1)$. For the \textbf{location mixture} we set $\P = \frac{1}{2} \mathcal N(-1, \omega^{2}) + \frac{1}{2}\mathcal N(1, \omega^{2})$, for $\omega^{2} \in \{0.1, 0.5, 1.0 \}$. For the \textbf{scale mixture}, we set $\P = \frac{1}{2} \left( \mathcal N(0, 1) + \mathcal N(0, \varepsilon^{-2}) \right)$, for $\varepsilon^{2} \in \{2, 10, 100 \}$.
 
-    In all the examples that follow let $\G=\P$, so $W\equiv1$.
+    In all the examples that follow let $\H=\P$, so $W\equiv1$.
     \begin{figure}
         \centering
 
@@ -158,9 +158,9 @@ For the targets under investigation in \Cref{ex:univ-gaussian-s2-fixed,ex:univ-g
 $$
 \text{AEF} = \frac{1}{\rho} \in (0, 1].
 $$
-As the proposal is always $\mathcal N(\mu, \sigma^{2})$ with either $\mu$ or $\sigma^{2}$ fixed, and $\P$ is a mixture of Gaussians or $\mathcal N(0,1)$, $\rho$ is analytically available, as 
+As the proposal is always $\G_{\psi} = \mathcal N(\mu, \sigma^{2})$ with either $\mu$ or $\sigma^{2}$ fixed, and $\P$ is a mixture of Gaussians or $\mathcal N(0,1)$, $\rho$ is analytically available, as 
 $$
-    \rho = \int w^{2} \mathrm d \mathcal \G = \int \frac{p^{2}}{g^{2}} \mathrm d \mathcal \G = \int_{-\infty}^\infty \frac{p^{2}(x)}{g(x)} \mathrm d x
+    \rho = \int w^{2} \mathrm d \mathcal \G_\psi = \int \frac{p^{2}}{g^{2}} \mathrm d \mathcal \G_\psi = \int_{-\infty}^\infty \frac{p^{2}(x)}{g_\psi(x)} \mathrm d x
 $$
 can then be reduced to Gaussian integrals, which we omit here for brevity\footnote{The calculations can be found in the accompanying Jupyter notebooks that produce the figures, \texttt{03\_07\_compare\_CE\_EIS.ipynb}.}.
 

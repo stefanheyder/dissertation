@@ -97,7 +97,7 @@ An additional attractive property of the \gls{cem} for exponential families with
     $$
     \P[T] = \G_{\pce} [T],
     $$
-    then $\pce$ is a maximizer of \eqref{eq:ce_argmax}. Furthermore, if $\cov_{\G_{\pce}} T$ is positive definite the maximizer is unique.
+    then $\pce$ is a maximizer of \eqref{eq:ce_argmax}. Furthermore, if $\cov_{\G_{\pce}} (T)$ is positive definite the maximizer is unique.
 \end{proposition}
 
 \begin{proof}
@@ -131,24 +131,24 @@ As a consequence, the \gls{cem} for natural exponential families reduces to matc
 In many cases, this system of equations can be solved analytically or by gradient descent algorithms.
 Let us discuss the assumptions and applicability of this proposition. Assuming that $T \in L^{1}(\P)$ is necessary for the target to be finite, it cannot be dropped. As $T$ typically consists of polynomial, rational or exponential functions, this is not too restrictive, provided the target does not exhibit heavy tails. The proof of uniqueness relies on $\cov_{\G_{\psi}} T$ being positive definite, to ensure that $\psi \mapsto \log Z(\psi)$ is strictly convex. This could also be achieved by requiring the exponential family to be minimal, see \citep[Theorem 1.13 (iv)]{Brown1986Fundamentals}. The existence of a $\psi$ such that $\P [T] = \G_{\psi} [T]$ is not restrictive for most commonly used distributions: for the (multivariate) normal, Poisson, negative binomial and binomial distribution there is always a unique solution, as the sufficient statistics consist of means and covariances. 
 
-While $\P [T]$ is usually not available, it is itself amenable to importance sampling. Given a proposal $\G$ we may estimate $\P [T]$ by $\hat\P_N T = \sum_{i = 1}^{N} W^{i} T(X^{i})$ for $X^{1}, \dots, X^{N} \iid \G$ and auto-normalized importance sampling weights $W^{i}$ and in turn, applying \Cref{prop:cem_exponential_families}, estimate $\psi_{\text{CE}}$ by $\hat \psi_{\text{CE}}$ solving
+While $\P [T]$ is usually not available, it is itself amenable to importance sampling. Given a helper proposal $\H$ we may estimate $\P [T]$ by $\hat\P_N T = \sum_{i = 1}^{N} W^{i} T(X^{i})$ for $X^{1}, \dots, X^{N} \iid \H$ and auto-normalized importance sampling weights $W^{i}$ and in turn, applying \Cref{prop:cem_exponential_families}, estimate $\psi_{\text{CE}}$ by $\hat \psi_{\text{CE}}$ solving
 \begin{equation}
     \label{eq:ee_hpce}
 \hat \P_N [T] = \G_{\hpce} [T].
 \end{equation}
-As $T \in L^{1}(\hat \P_{N})$, the only conditions we have to check to apply the above proposition are that this equation has a unique solution $\G$-almost surely in the interior of $\Psi$ and that $\Psi$ is convex. 
+As $T \in L^{1}(\hat \P_{N})$, the only conditions we have to check to apply the above proposition are that this equation has a unique solution $\H$-almost surely in the interior of $\Psi$ and that $\Psi$ is convex. 
 
 \begin{remark}[overview over measures used]
     \label{rem:measures_in_is}
     For the sake of clarity, let us summarize the measures used throughout this subsection.\footnote{We will use the same schema for the next subsection as well.}
 
-    We start with $\P$, the \textbf{target measure}, which is intractable, but the main interest of our overall endeavor. As we do not have access to $\P$, our goal is to construct an \textbf{approximation} to it and use importance sampling to calculate the integrals of interest with respect to $\P$. To this end, we want to choose from an exponential family, $(\G_{\psi})_{\psi \in \Psi}$ the optimal proposal, as a solution to \eqref{eq:ce_argmax}\footnote{\eqref{eq:eis_optim} for \gls{eis}.}. Unfortunately, the objective function depends on $\P$ as well, and so is itself not tractable. We thus introduce another measure, $\G$, whose sole purpose is to approximately solve \eqref{eq:ce_argmax} using importance sampling. $\G$ may stem from the family of proposals $(\G_{\psi})_{\psi \in \Psi}$, but is not restricted to these measures. 
+    We start with $\P$, the \textbf{target measure}, which is intractable, but the main interest of our overall endeavor. As we do not have access to $\P$, our goal is to construct an \textbf{approximation} to it and use importance sampling to calculate the integrals of interest with respect to $\P$. To this end, we want to choose from an exponential family, $(\G_{\psi})_{\psi \in \Psi}$ the optimal proposal, as a solution to \eqref{eq:ce_argmax}\footnote{\eqref{eq:eis_optim} for \gls{eis}.}. Unfortunately, the objective function depends on $\P$ as well, and so is itself not tractable. We thus introduce a \textbf{``helper'' measure}, $\H$, whose sole purpose is to approximately solve \eqref{eq:ce_argmax} using importance sampling. $\H$ may stem from the family of proposals $(\G_{\psi})_{\psi \in \Psi}$, but is not restricted to these measures. 
 
-    Thus, $\G$ and $\G_{\pce}$ serve different purposes: $\G$ is used to facilitate the search for the optimal $\pce$, while $\G_{\pce}$ is the resulting approximation of $\P$.
+    Thus, $\H$ and $\G_{\pce}$ serve different purposes: $\H$ is used to facilitate the search for the optimal $\pce$, while $\G_{\pce}$ is the resulting approximation of $\P$.
 \end{remark}
 
 
-To apply the \gls{cem} in practice, one usually iterates the sampling and estimation steps, using the previously found $\hpce$ to sample in the current iteration and starting the iteration with a proposal from the same exponential family $\G = \G_{\psi^{0}}$. To ensure numerical convergence, a popular device is that of \glspl{crn}, i.e. using the same random number seed in all iterations. A basic version of the \gls{cem} is presented in \Cref{alg:cem-basic}.
+To apply the \gls{cem} in practice, one usually iterates the sampling and estimation steps, using the previously found $\hpce$ to sample in the current iteration and starting the iteration with a proposal from the same exponential family $\H = \G_{\psi^{0}}$. To ensure numerical convergence, a popular device is that of \glspl{crn}, i.e. using the same random number seed in all iterations. A basic version of the \gls{cem} is presented in \Cref{alg:cem-basic}.
 
 \begin{algorithm}
     \caption{The basic \gls{cem} algorithm for exponential families}
@@ -185,7 +185,7 @@ In the remainder of this section, we will derive novel results on the performanc
 
 \begin{theorem}[consistency of $\hpce$]
     \label{thm:cem-consistent}
-    Adopt the same assumptions as in \Cref{prop:cem_exponential_families}. Furthermore, let $\G \gg \P$ be a proposal distribution and assume that
+    Adopt the same assumptions as in \Cref{prop:cem_exponential_families}. Furthermore, let $\H \gg \P$ be a proposal distribution and assume that
     
     \begin{enumerate}
         \item $\pce$ is the unique maximizer of \eqref{eq:ce_argmax},
@@ -223,8 +223,8 @@ To apply this theorem to our setting, let us begin by extending it to incorporat
 
 \begin{proposition}
     \label{prop:is-consistency}
-    Assume that the conditions of \Cref{thm:haberman-consistent} are fulfilled and let $\G \gg \P$ be another probability measure with Radon-Nikdoym derivative $w(x) = \rnd{\P}{\G}(x)$. 
-    Let $(X^{i})_{i \in \N} \iid \G$ and consider the particle approximations 
+    Assume that the conditions of \Cref{thm:haberman-consistent} are fulfilled and let $\H \gg \P$ be another probability measure with Radon-Nikdoym derivative $w(x) = \rnd{\P}{\H}(x)$. 
+    Let $(X^{i})_{i \in \N} \iid \H$ and consider the particle approximations 
     \begin{align*}
         \tilde \P_{N} &= \frac{1}{N}\sum_{i = 1}^N w(X^{i})\delta_{X^{i}},  \\ 
         \hat \P_{N} &= \sum_{i = 1}^{N} W^{i} \delta_{X^{i}},
@@ -242,14 +242,14 @@ To apply this theorem to our setting, let us begin by extending it to incorporat
     $$
     \tilde b(x, \psi) = w(x) b(x, \psi).
     $$
-    Then $\G \left[ \tilde b(\cdot, \psi) \right] = \P \left[ b(\cdot, \psi) \right]$ for all $\psi\in\Psi$, and so $\psi^{\ast}$ is the unique global maximum of $$\psi \mapsto \G \left[ \tilde b(\cdot, \psi) \right].$$ 
-    As $\G [\tilde b(\cdot, \psi)] = \P [b(\cdot, \psi)] < \infty$ and for fixed $x\in\mathcal X$ $\tilde b(x, \cdot) = w(x)b(x,\cdot)$ is concave, we may directly apply \Cref{thm:haberman-consistent} to $\tilde\psi_{N}$, showing its strong consistency.
+    Then $\H \left[ \tilde b(\cdot, \psi) \right] = \P \left[ b(\cdot, \psi) \right]$ for all $\psi\in\Psi$, and so $\psi^{\ast}$ is the unique global maximum of $$\psi \mapsto \H \left[ \tilde b(\cdot, \psi) \right].$$ 
+    As $\H [\tilde b(\cdot, \psi)] = \P [b(\cdot, \psi)] < \infty$ and for fixed $x\in\mathcal X$ $\tilde b(x, \cdot) = w(x)b(x,\cdot)$ is concave, we may directly apply \Cref{thm:haberman-consistent} to $\tilde\psi_{N}$, showing its strong consistency.
 
-    For $\hat\psi_{N}$, notice that for a fixed sample $X^{1}, \dots, X^{N} \iid \G$ and any function $f: \mathcal X \to [-\infty, \infty)$ we have, a.s., 
+    For $\hat\psi_{N}$, notice that for a fixed sample $X^{1}, \dots, X^{N} \iid \H$ and any function $f: \mathcal X \to [-\infty, \infty)$ we have, a.s., 
     $$
-        \hat \P _{N} [f] = \sum_{i = 1}^{N} W^{i} f(X^{i}) = \frac{\G [\tilde w]}{\sum_{i = 1}^N \tilde w(X^{i})} \sum_{i = 1}^{N} \frac{\tilde w(X^{i})}{\G[\tilde w]} f(X^{i}) = \frac{\G [\tilde w]}{\sum_{i = 1}^{N} \tilde w(X^{i})} \tilde \P _{N} [f] \propto \tilde \P_{N} [f],
+        \hat \P _{N} [f] = \sum_{i = 1}^{N} W^{i} f(X^{i}) = \frac{\H [\tilde w]}{\sum_{i = 1}^N \tilde w(X^{i})} \sum_{i = 1}^{N} \frac{\tilde w(X^{i})}{\H[\tilde w]} f(X^{i}) = \frac{\H [\tilde w]}{\sum_{i = 1}^{N} \tilde w(X^{i})} \tilde \P _{N} [f] \propto \tilde \P_{N} [f],
     $$
-    where $\tilde w$ are the unnormalized weights, i.e. $ \frac{\tilde w(x)}{\G [\tilde w]} = w(x), x \in\mathcal X$.
+    where $\tilde w$ are the unnormalized weights, i.e. $ \frac{\tilde w(x)}{\H [\tilde w]} = w(x), x \in\mathcal X$.
     Thus $\hat \psi_{N}$ maximizes $\tilde \P_{N} [b(\cdot, \psi)]$ as well, and the result follows from the consistency of $\tilde \psi_{N}$.
 \end{proof}
 
@@ -285,11 +285,11 @@ These rather strong properties enable us to derive a central limit theorem for t
 
 \begin{theorem}[\gls{clt} for $\hpce$]
     \label{thm:cem-clt}
-    Adopt the same assumptions as in \Cref{prop:cem_exponential_families}. Furthermore, let $\G \gg \P$ be a proposal distribution with weights $w = \rnd{\P}{\G}$ and assume that
+    Adopt the same assumptions as in \Cref{prop:cem_exponential_families}. Furthermore, let $\H \gg \P$ be a proposal distribution with weights $w = \rnd{\P}{\H}$ and assume that
     \begin{enumerate}
         \item\label{it:pceinterior} $\pce \in \Psi$ is the unique maximizer of \eqref{eq:ce_argmax} which lies in the interior of the convex parameter space $\Psi$, 
         \item\label{it:FIMspd} the Fisher information matrix $I(\pce)$ exists and is positive definite,
-        \item\label{it:wTinL2G} $w,wT \in L^{2}(\G)$, and 
+        \item\label{it:wTinL2G} $w,wT \in L^{2}(\H)$, and 
         \item\label{it:TinL2P} $T\in L^{2}(\P)$.
     \end{enumerate}
     
@@ -297,7 +297,7 @@ These rather strong properties enable us to derive a central limit theorem for t
     $$
         \sqrt{N}(\hpce - \pce) \convD \Normal (0, BMB)
     $$
-    where $B = I(\pce) = \cov_{\G_{\pce}} (T)^{-1}$ and $$M = \cov_{\G} (w(T - \P [T])) = \G \left[w^{2} (T - \P[T])(T - \P[T])^{T}\right] = \P \left[ w (T - \P [T]) (T - \P [T])^{T} \right].$$
+    where $B = I(\pce) = \cov_{\G_{\pce}} (T)^{-1}$ and $$M = \cov_{\H} (w(T - \P [T])) = \H \left[w^{2} (T - \P[T])(T - \P[T])^{T}\right] = \P \left[ w (T - \P [T]) (T - \P [T])^{T} \right].$$
 \end{theorem}
 
 To prove \Cref{thm:cem-clt}, let us start again with a general version of a central limit theorem for M-estimators based on concave objective functions. 
@@ -330,14 +330,14 @@ Similar to the consistency result above (\Cref{prop:is-consistency}), we need to
     \label{prop:is-clt}
     Assume that the conditions of \Cref{thm:haberman-clt} are fulfilled and use the same notation as in \Cref{prop:is-consistency}. Furthermore, assume that 
     \begin{enumerate}
-        \item[(A)] \label{it:wbprimeL2} $w(\cdot) b'(\cdot, \psi, \xi) \in L^{2}(\G)$ in a neighborhood $N$ of $\psi^{\ast}$ for all $\xi \in \R^{k}$. %\todo{rewrite differentiable + second moment}
+        \item[(A)] \label{it:wbprimeL2} $w(\cdot) b'(\cdot, \psi, \xi) \in L^{2}(\H)$ in a neighborhood $N$ of $\psi^{\ast}$ for all $\xi \in \R^{k}$. %\todo{rewrite differentiable + second moment}
     \end{enumerate}
 
     Then 
     \begin{equation}
         \sqrt{N} \left( \tilde \psi_{N} - \psi^\ast \right) \convD \Normal (0, B M B),
     \end{equation}
-    where $M = \cov \left( w(X)\nabla_{\psi} b(X,\psi^{\ast}) \right)$ for $X\sim\G$ and $B= - \left(H_{\psi} \P \left[ b(\cdot, \psi^{\ast}) \right]\right)^{-1}$ as in \Cref{thm:haberman-clt}. Additionally
+    where $M = \cov \left( w(X)\nabla_{\psi} b(X,\psi^{\ast}) \right)$ for $X\sim\H$ and $B= - \left(H_{\psi} \P \left[ b(\cdot, \psi^{\ast}) \right]\right)^{-1}$ as in \Cref{thm:haberman-clt}. Additionally
     \begin{equation}
         \sqrt{N}\left( \hat\psi_{N} - \psi^{\ast} \right) \convD \Normal (0, B M B).
     \end{equation}
@@ -348,17 +348,17 @@ Similar to the consistency result above (\Cref{prop:is-consistency}), we need to
     $$
     \tilde b(x,\psi) = w(x) b(x, \psi),
     $$
-    and notice that $\G \left[ \tilde b(\cdot, \psi) \right] = \P \left[ b(\cdot, \psi) \right]$. Let us verify the conditions of \Cref{thm:haberman-clt} for $\tilde b$ and the probability measure $\G$. 
+    and notice that $\H \left[ \tilde b(\cdot, \psi) \right] = \P \left[ b(\cdot, \psi) \right]$. Let us verify the conditions of \Cref{thm:haberman-clt} for $\tilde b$ and the probability measure $\H$. 
 
-    For condition \ref{it:C7}, as $H_{\psi} \P [b(\cdot, \psi)]$ exists and is non-singular, so does $$H_{\psi} \G [\tilde b(\cdot, \psi)] = H_{\psi} \P [b(\cdot, \psi)]$$
-    exist and is non-singular. Similarly, it is obvious that $\tilde b'(x,\psi,\xi) = w(x) b'(x, \psi, \xi)$ and so for $X\sim\G$ 
+    For condition \ref{it:C7}, as $H_{\psi} \P [b(\cdot, \psi)]$ exists and is non-singular, so does $$H_{\psi} \H [\tilde b(\cdot, \psi)] = H_{\psi} \P [b(\cdot, \psi)]$$
+    exist and is non-singular. Similarly, it is obvious that $\tilde b'(x,\psi,\xi) = w(x) b'(x, \psi, \xi)$ and so for $X\sim\H$ 
     $$
         \sigma_{\tilde b}^{2}(\psi, \xi) = \mathbb E \left(\tilde b'(X, \psi, \xi)\right)^{2} = \mathbb E w^{2}(X) b'(X, \psi, \xi)^{2} < \infty
     $$
-    by assumption \ref{it:wbprimeL2}, showing condition \ref{it:C10}. Thus we may apply \Cref{thm:haberman-clt} to $\tilde b$ and $\G$, finishing the proof.
+    by assumption \ref{it:wbprimeL2}, showing condition \ref{it:C10}. Thus we may apply \Cref{thm:haberman-clt} to $\tilde b$ and $\H$, finishing the proof.
 \end{proof}
 
-Interestingly, importance sampling only affects the $M$ component of the asymptotic variance. The reason for this is that $M$ is a quadratic function of the weights $w$, while $B$ only depends linearly on $w$, allowing to switch integrators from $\G$ to $\P$.
+Interestingly, importance sampling only affects the $M$ component of the asymptotic variance. The reason for this is that $M$ is a quadratic function of the weights $w$, while $B$ only depends linearly on $w$, allowing to switch integrators from $\H$ to $\P$.
 We now have all the tools at our disposal to proof \Cref{thm:cem-clt}.
 
 \begin{proof}[Proof of \Cref{thm:cem-clt}]
@@ -385,23 +385,23 @@ We now have all the tools at our disposal to proof \Cref{thm:cem-clt}.
 
     To show that the central limit theorem applies to $\hpce$, we additionally show that assumption \ref{it:wbprimeL2} in \Cref{prop:is-clt} is fulfilled, which will finish the proof. To this end, note that 
     $$
-        w(x)b'(x,\psi,\xi) = w(x) \xi^{T}\nabla_{\psi} b(x, \psi) = \xi^{T} \left( w(x) (T(x) - \G_{\psi}[T]) \right) \in L^{2} (\G)
+        w(x)b'(x,\psi,\xi) = w(x) \xi^{T}\nabla_{\psi} b(x, \psi) = \xi^{T} \left( w(x) (T(x) - \G_{\psi}[T]) \right) \in L^{2} (\H)
     $$
     by assumption \ref{it:wTinL2G}.
 
-    Finally, to show the representation of $M$, note that by \Cref{prop:is-clt} we have for $X \sim \G$
+    Finally, to show the representation of $M$, note that by \Cref{prop:is-clt} we have for $X \sim \H$
     $$
-        M = \cov \left( w(X) \left( T(X) - \G_{\pce}[T]\right)\right) = \G [w^{2} (T - \P [T])(T - \P[T])^{T}],
+        M = \cov \left( w(X) \left( T(X) - \G_{\pce}[T]\right)\right) = \H [w^{2} (T - \P [T])(T - \P[T])^{T}],
     $$
-    as $\G_{\pce} [T] = \P [T]$ by \Cref{prop:cem_exponential_families}, so $$\E w(X) \left( T(X) - \G_{\pce} [T] \right) = \G[w (T - \G_{\pce}[T])] = \P[T - \G_{\pce}[T]] =  0.$$
+    as $\G_{\pce} [T] = \P [T]$ by \Cref{prop:cem_exponential_families}, so $$\E w(X) \left( T(X) - \G_{\pce} [T] \right) = \H[w (T - \G_{\pce}[T])] = \P[T - \G_{\pce}[T]] =  0.$$
 \end{proof}
 
-The form of the asymptotic covariance matrix is that of the sandwich estimator \citep{White1982Maximum}, corrected for the importance sampling with $\G$. This is not surprising: the \gls{cem} essentially performs maximum likelihood estimation of $\psi$ where the data comes from the misspecified $\P$. Additionally, we have to correct the variance for performing importance sampling with $\G$, instead of sampling directly from $\P$.
+The form of the asymptotic covariance matrix is that of the sandwich estimator \citep{White1982Maximum}, corrected for the importance sampling with $\H$. This is not surprising: the \gls{cem} essentially performs maximum likelihood estimation of $\psi$ where the data comes from the misspecified $\P$. Additionally, we have to correct the variance for performing importance sampling with $\H$, instead of sampling directly from $\P$.
 
 % discuss assumptions of Thm
 The assumptions of \Cref{thm:cem-clt} are natural to facilitate the proof. The existence and positive definiteness of the Fisher information matrix are easily checked for the exponential family proposal and hold for minimal regular exponential families. Additionally, we have two moment constraints that involve the weights $w$ and the sufficient statistic $T$. 
 
-That $wT \in L^{2}(\G)$ is required for the application of \Cref{thm:haberman-clt} in the importance sampling setting, and can be seen as a usual regularity condition for such central limit theorems, involving now the weights $w$ as well, because of the importance sampling. In practice, this condition should not be problematic, as long as the initial proposal $\G$ is not too far from the target $\P$.
+That $wT \in L^{2}(\H)$ is required for the application of \Cref{thm:haberman-clt} in the importance sampling setting, and can be seen as a usual regularity condition for such central limit theorems, involving now the weights $w$ as well, because of the importance sampling. In practice, this condition should not be problematic, as long as the initial proposal $\H$ is not too far from the target $\P$.
 That $T\in L^{2}(\P)$ is required for the application of \Cref{thm:haberman-clt}, and, as mentioned before, should not be problematic in practice, except for heavy-tailed distributions. It is a natural condition, as $T \in \L^{2}(\G_{\pce})$ (as long as $\pce$ lies in the interior of $\Psi$) and $\G_{\pce}$ is supposed to approximate $\P$ well.
 
 For our application, we will choose $(\G_{\psi})_{\psi \in \Psi}$ to consist of Gaussian distributions with natural parameter $\psi = \left( \Sigma^{-1}\mu, -\frac{1}{2}\Sigma^{-1}\right)$ and sufficient statistic $T(x) = \left( x, xx^{T} \right)$. Thus $T\in L^{2}(\P)$ is equivalent to $\P$ having fourth order moments, which is reasonable if the target is not heavy-tailed.

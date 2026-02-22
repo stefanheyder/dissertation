@@ -646,9 +646,9 @@ Thus, the proposals $(\G_{\psi})_{\psi \in \Psi}$ form a natural exponential fam
 
 \begin{theorem}[\gls{clt} for the \gls{cem} in \glspl{pgssm}]
     \label{thm:cem_clt_ssm}
-    Let $\G_{\psi}$ be as in \Cref{lem:markov_proposal_exponential_family} and let $\G \gg \P^{X}$ be a proposal distribution. Suppose the following additional assumptions hold:
+    Let $\G_{\psi}$ be as in \Cref{lem:markov_proposal_exponential_family} and let $\H \gg \P^{X}$ be a proposal distribution. Suppose the following additional assumptions hold:
     \begin{enumerate}
-        \item $w, w\id, w\id^2 \in L^{2}(\G)$,
+        \item $w, w\id, w\id^2 \in L^{2}(\H)$,
         \item $\P^{X}$ posses all fourth order moments, and
         \item the covariance matrix of $\P^{X}$ is positive-definite.
     \end{enumerate}
@@ -694,13 +694,13 @@ After this setup, a central limit theorem for \gls{eis} for \glspl{pgssm} with l
 \begin{theorem}[\gls{clt} for \gls{eis} in \glspl{pgssm}]
     \label{thm:eis_clt_ssm}
 
-    Let $(\G_{\psi})_{\psi\in\Psi}$ be the family of proposals with densities $g_{\psi}(\cdot|z)$, as described above. Assume that $B$ has full row-rank and let $\G \gg \P^{S}$ be a proposal with weights $w$. Furthermore, assume that the following conditions hold for $T_{s,i} = \begin{pmatrix}
+    Let $(\G_{\psi})_{\psi\in\Psi}$ be the family of proposals with densities $g_{\psi}(\cdot|z)$, as described above. Assume that $B$ has full row-rank and let $\H \gg \P^{S}$ be a proposal with weights $w$. Furthermore, assume that the following conditions hold for $T_{s,i} = \begin{pmatrix}
         x_{s,i} \\
         x_{s,i}x_{s,i}
     \end{pmatrix}$, $s = 0, \dots, n$, $i=1,\dots,m$.
 
     \begin{enumerate}
-        \item $wT_{s,i}T_{s',j} \in L^{2}(\G)$ for $i,j = 1,\dots, m$ and $s,s' = 0, \dots, n$.
+        \item $wT_{s,i}T_{s',j} \in L^{2}(\H)$ for $i,j = 1,\dots, m$ and $s,s' = 0, \dots, n$.
         \item $\log p \in L^{4}(\P^{S})$ and
         \item $\cov _{\P^{S}}(T)$ is non-singular and $\peis \in \operatorname{int} \Psi$. 
     \end{enumerate}

@@ -63,11 +63,11 @@ We note that this is a convex objective function in $(\psi, \lambda)$ which, sim
 \end{proof}
 
 
-As the optimal $\peis$ depends on several unknown quantities, \gls{eis} proceeds like the \gls{cem} and employs importance sampling with a proposal $\G$, estimating $\peis$ by
+As the optimal $\peis$ depends on several unknown quantities, \gls{eis} proceeds like the \gls{cem} and employs importance sampling with a proposal $\H$, estimating $\peis$ by
 $$
 \left(\hat \lambda,\hat \psi_{\text{EIS}}\right) = \argmin_{\lambda,\psi} \P \left[ \log p - \psi^{T}(T - \P [T]) - \lambda \right]^{2},
 $$
-where $X^{1}, \dots, X^{N} \iid \G$, see also \Cref{rem:measures_in_is}. 
+where $X^{1}, \dots, X^{N} \iid \H$ --- to that end, recall our \Cref{rem:measures_in_is}. 
 Again, if $\G_{\psi}, \psi \in \Psi$ form an exponential family with natural parameter $\psi$, this optimization problem turns into a weighted least squares problem. As $\P[T]$ is not known, we use log-weights $\log\tilde w_{\psi} = \log p - \psi^{T}T$, as the constant factor $\P[T]$ does not matter in the weights, see the discussion surrounding \eqref{eq:eis_exponential_families}, instead.
 We can then estimate $\peis$ with the standard weighted least squares estimator
 $$
@@ -100,7 +100,7 @@ An attractive feature of \gls{eis} is that if the target $\P$ is a member of the
 \begin{proposition}[Finite sample convergence of \gls{eis}]
     \label{prop:eis-finite-sample}
     Suppose $\G_{\psi}, \psi \in \Psi \subseteq \R^{k}$ for a natural exponential family w.r.t. Lebesgue measure, where the support of the sufficient statistic $\operatorname{supp} T$ is open in $\R^{k}$. 
-    Furthermore let $\G$ be a probability measure on $\R^{m}$ that is equivalent to $\P$, i.e. $\G \ll \P$ and $\P \ll \G$. 
+    Furthermore let $\H$ be a probability measure on $\R^{m}$ that is equivalent to $\P$, i.e. $\H \ll \P$ and $\P \ll \H$. 
 
     If there is a $\psi_{\P} \in \Psi$ such that $\P = \G_{\psi_{\P}}$, then $\hpeis = \psi_{\P}$ a.s. for $N \geq k$. 
 \end{proposition}
@@ -110,7 +110,7 @@ An attractive feature of \gls{eis} is that if the target $\P$ is a member of the
     If we can show that $\cov_{\hat\P_{N}} (T)$ is non-singular, \eqref{eq:hpeis-cov} implies that $\hpeis = \psi_{\P}$ a.s.. 
 
     Let $W^{i}$ be the $i$-th weight, $i = 1,\dots, N$ in the particle approximation $\hat \P_{N}$.
-    By the assumed equivalence of $\G$ and $\P$, $W^{i}$ is non-zero $\G$-a.s., so $W^{i}(X^{i})T(X^{i}) \neq 0$ a.s. as well, as $T$ has open support.
+    By the assumed equivalence of $\H$ and $\P$, $W^{i}$ is non-zero $\H$-a.s., so $W^{i}(X^{i})T(X^{i}) \neq 0$ a.s. as well, as $T$ has open support.
     If $\cov_{\hat \P_{N}} (T)$ were singular, there would exist a $\psi \in \R^{k}$ such that
     $$
     \psi^{T} \cov_{\hat\P_{N}} (T) \psi = \cov_{\hat \P_{N}} \left( \psi^{T}T \right) = 0,
@@ -120,7 +120,7 @@ An attractive feature of \gls{eis} is that if the target $\P$ is a member of the
     Thus, all $T(X^{i})$, $i = 1, \dots N$, would have to lie in a subspace of dimension $k - 1$, which is a contradiction to $T$ having open support if $N \geq k$.
 \end{proof}
 
-Note that if in the above proposition only $\G \gg \P$ holds, we obtain, by a similar argument, that $$\mathbb P \left( \hpeis = \psi_{\P} \right) \stackrel{N\to\infty}\longrightarrow 1.$$
+Note that if in the above proposition only $\H \gg \P$ holds, we obtain, by a similar argument, that $$\mathbb P \left( \hpeis = \psi_{\P} \right) \stackrel{N\to\infty}\longrightarrow 1.$$
 Additionally, we then have to take care of the event $ \{ w(X) = 0 \}$, whose probability is now potentially positive.
 
 We now turn to deriving asymptotics for $\hpeis$. As for the \gls{cem}, we start with proving that $\hpeis$ consistently estimates $\peis$.
@@ -133,7 +133,7 @@ As \eqref{eq:eis_exponential_families} is a linear least squares problem, the ob
     $$
         \log g_{\psi}(x) = \psi^{T}T(x) - \log Z(\psi)
     $$
-    for convex $\Psi \subseteq \R^{k}$. Let $\G \gg \P$ be a proposal and suppose that 
+    for convex $\Psi \subseteq \R^{k}$. Let $\H \gg \P$ be a proposal and suppose that 
     \begin{enumerate}
         \item $\log p, T \in L^{2}(\P)$,
         \item $\cov_\P (T)$ is non-singular, and
@@ -171,7 +171,7 @@ As \eqref{eq:eis_exponential_families} is a linear least squares problem, the ob
     \ref{it:C1} is fulfilled, as we assumed $\peis \in \operatorname{int} \Psi$. \ref{it:C2} holds, as $\peis$ is the unique global maximizer by \Cref{prop:eis_exponential_families}, as $\cov (T)$ is non-singular.
     \ref{it:C3} obviously holds. 
 
-    Thus $\hpeis$ is strongly consistent if $\G = \P$. If $\G$ is different from $\P$, we can apply \Cref{prop:is-consistency}, where the existence of M-estimators is ensured by \eqref{eq:hpeis-cov}, using the Moore-Penrose inverse if $\cov_{\hat\P_{N}}(T)$ is singular. 
+    Thus $\hpeis$ is strongly consistent if $\H = \P$. If $\H$ is different from $\P$, we can apply \Cref{prop:is-consistency}, where the existence of M-estimators is ensured by \eqref{eq:hpeis-cov}, using the Moore-Penrose inverse if $\cov_{\hat\P_{N}}(T)$ is singular. 
 \end{proof}
 
 As \eqref{eq:hpeis-cov} expresses $\hpeis$ in terms of empirical covariances, we could alternatively prove consistency by ensuring that the empirical covariances are consistent as well, for which we would need to ensure that fourth-order moments of $\log p$ and $T$ w.r.t. $\P$ exist. This strategy may be fruitful if $\peis$ does not lie in the interior of $\Psi$, although the more sophisticated treatment of \citep{Haberman1989Concavity} may also be applicable under these circumstances.
@@ -185,11 +185,12 @@ Additionally, if fourth-order moments exist, we can derive a central limit theor
     $$
     \log g_{\psi}(x) = \psi^{T} T(x) - \log Z(\psi),
     $$
-    and convex parameter space $\Psi \subseteq \R^{k}$. Let $\G \gg \P$ be a proposal with weights $w = \rnd{\P}{\G}$. 
+    and convex parameter space $\Psi \subseteq \R^{k}$. Let $\H \gg \P$ be a proposal with weights $w = \rnd{\P}{\H}$. 
 
     Assume that
     \begin{enumerate}
-        \item\label{it:secondISmomentsexist}$w (T_{i} - \P[T_{i}])(T_{j} - \P[T_{j}]), w (\log p)^{2} \in L^{2}(\G)$ for $i,j = 1, \dots, k$,
+        %\item\label{it:secondISmomentsexist}$w (T_{i} - \P[T_{i}])(T_{j} - \P[T_{j}]), w (\log p)^{2} \in L^{2}(\H)$ for $i,j = 1, \dots, k$,
+        \item\label{it:secondISmomentsexist}$w (\log p)T_{i}, w\log p T_{j}, w T_{i}T_{j} \in L^{2}(\H)$ for $i,j = 1, \dots, k$,
         \item\label{it:fourthmomentsexist} $\log p, T_i \in L^{4}(\P)$ for all $i = 1, \dots, k$
         \item $\cov_{\P}(T)$ is non-singular and $\peis \in \operatorname{int} \Psi$.
     \end{enumerate}
@@ -200,7 +201,7 @@ Additionally, if fourth-order moments exist, we can derive a central limit theor
     $$
     where $B = \cov_{\P}(T)^{-1}$ and 
     $$
-    M = \cov_{\G} \left( w \left( \log p - \psi_{\eis}^{T}(T - \P[T]) - \lambda_{\eis} \right)(T - \P[T]) \right) = \cov_{\G} \left( w (\log w_{\psi_{\eis}}) (T - \P[T]) \right).
+    M = \cov_{\H} \left( w \left( \log p - \psi_{\eis}^{T}(T - \P[T]) - \lambda_{\eis} \right)(T - \P[T]) \right) = \cov_{\H} \left( w (\log w_{\psi_{\eis}}) (T - \P[T]) \right).
     $$
 \end{theorem}
 
@@ -233,11 +234,11 @@ Additionally, if fourth-order moments exist, we can derive a central limit theor
     $$
     is in $L^{1}(\P)$ by assumption \ref{it:fourthmomentsexist} and the Hölder inequality. 
 
-    To apply \Cref{prop:is-clt} we need to show that $w(\cdot)b'(\cdot, \psi',\xi') \in L^{2}(\G)$ for all $\xi'\in\R^{k + 1}$ and all $\psi'$ in a neighborhood of $\peis$. For this it suffices that we show 
+    To apply \Cref{prop:is-clt} we need to show that $w(\cdot)b'(\cdot, \psi',\xi') \in L^{2}(\H)$ for all $\xi'\in\R^{k + 1}$ and all $\psi'$ in a neighborhood of $\peis$. For this it suffices that we show 
     $$
         w^{2}(\nabla_{\psi'} b(\cdot, \psi'))_{i}(\nabla_{\psi'} b(\cdot, \psi'))_{j} = w^{2}\left( \log p - \psi^{\prime T}T' \right)^{2} T'_{i}T'_{j}
     $$
-    is in $L^{1}(\G)$, which holds, again, by assumption \ref{it:secondISmomentsexist} and the Hölder inequality.
+    is in $L^{1}(\H)$, which holds, again, by assumption \ref{it:secondISmomentsexist} and the Hölder inequality.
 
     We have thus shown a central limit theorem for $\hat\psi'_{\eis} = \left( \hpeis, \hat\lambda_{\eis} \right)$, i.e. 
     $$
@@ -251,7 +252,7 @@ Additionally, if fourth-order moments exist, we can derive a central limit theor
     $$ and $$
         M' = \cov \left( w(X) \nabla_{\psi'_{\eis}} b(X,\psi'_{\eis}) \right) 
     $$ 
-    for $X \sim \G$. As $B'$ is block-diagonal, to obtain the marginal distribution of $\hpeis - \peis$, we only need the upper left $k \times k$ block of $M'$, which is given by
+    for $X \sim \H$. As $B'$ is block-diagonal, to obtain the marginal distribution of $\hpeis - \peis$, we only need the upper left $k \times k$ block of $M'$, which is given by
     $$
         M = \cov \left( w \left( \log p - \peis^{T}(T - \P[T]) - \lambda_{\eis} \right)(T - \P [T]) \right).
     $$
@@ -263,5 +264,5 @@ A discussion of the assumptions of \Cref{thm:eis-consistent,thm:eis-clt} is in o
 
 Regarding the central limit theorem, \Cref{thm:eis-clt}, requiring the existence of higher order moments is natural. Unfortunately, there is no direct interpretation of these requirements as generalizations of the existence of $\rho$, as was the case for the \gls{cem}. 
 
-The only integrability conditions related to the proposal $\G$ are those for $w(T_{i} - \P [T_{i}]) (T_{j} - \P[T_{j}])$ and $w \log(p)^{2}$. 
-These technical conditions are not easily interpreted, as assuming existence of moments of the target distribution seem more natural than those involving the extra weighting term $w = \frac{p}{g}$, which depends on the proposal $\G$ as well. 
+The only integrability conditions related to the proposal $\H$ are those in \Cref{it:secondISmomentsexist}. 
+These technical conditions are not easily interpreted, as assuming existence of moments of the target distribution seem more natural than those involving the extra weighting term $w = \frac{p}{h}$, which depends on the proposal $\H$ as well. 
