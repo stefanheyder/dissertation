@@ -101,11 +101,28 @@ Let us note that we are comparing the variances of parameters $\psi$, not those 
 To make many of the following examples analytically tractable, we will apply the \gls{cem} and \gls{eis} in a univariate and single-parameter setting. This allows us to focus on the distinctive properties of the two methods, investigating under which circumstances each method performs well or poorly. In addition, we will use Gaussian proposals where mean (or variance) is fixed and the optimal variance (mean) is obtained by the \gls{cem} or \gls{eis}.
 As such, we are able to focus on specifying of either the mean or variance and determine which of the two is more crucial to specify accurately. Additionally, the univariate setting allows us, in some cases, to derive analytical expressions of the variance ratios involved.
 
+\begin{example}[symmetric target distributions]
+    \label{ex:symmetric-targets}
+    On $\R$, consider the probability measure $\P = p\lambda$ for the Lebesgue measure $\lambda$ and assume that $\P$ is symmetric around $0$, i.e. $p(-x) = p(x)$ for $\lambda$-a.e. $x\in\R$ and possesses up to fourth order moments, with second moment $\tau^{2} = \P \left[\operatorname{id}^{2}\right]$.
+
+    Let us now consider three exemplary choices of $\P$ that illustrate a target that is well-behaved (the standard normal), multimodal (a Gaussian location mixture) and has different behavior in the tails than indicated at the mode (a Gaussian scale mixture). The densities of the targets chosen are displayed in \Cref{fig:targets}
+
+    \begin{figure}
+        \centering
+
+        \resizebox{\textwidth}{!}{%
+            \input{tikz/targets.tex}%
+        }
+        \caption{Targets used for the \gls{cem} and \gls{eis} in \Cref{ex:univ-gaussian-s2-fixed} and \Cref{ex:univ-gaussian-s2-fixed}. In addition to the standard normal distribution, we use location and scale mixtures. The location mixture is chosen for its bimodality for the smaller two values of $\omega^{2}$, while the scale mixture is chosen for its different tail behavior compared to the behavior at the mode.}
+        \label{fig:targets}
+    \end{figure}
+
+\end{example}
+
 \begin{example}[univariate Gaussian proposal, $\sigma^{2}$ fixed]
     \label{ex:univ-gaussian-s2-fixed}
-    On $\R$, consider the probability measure $\P = p\lambda$ for the Lebesgue measure $\lambda$ and assume that $\P$ is symmetric around $0$, i.e. $p(-x) = p(x)$ for $\lambda$-a.e. $x\in\R$ and possesses up to third order moments, with second moment $\tau^{2} = \P \left[\operatorname{id}^{2}\right]$.
 
-    Let $\G=\P$, so $W\equiv1$ and let $\G_{\psi} = \mathcal N \left( \sigma\psi, \sigma^{2} \right)$ be the single parameter natural exponential family of Gaussians with fixed variance $\sigma^{2} > 0$. Then 
+    In \Cref{ex:symmetric-targets}, let $\G=\P$, so $W\equiv1$ and let $\G_{\psi} = \mathcal N \left( \sigma\psi, \sigma^{2} \right)$ be the single parameter natural exponential family of Gaussians with fixed variance $\sigma^{2} > 0$. Then 
     $$
     \log g_{\psi}(x) = \psi T(x) - \frac{\psi^{2}}{2} + \log h(x),
     $$
@@ -139,7 +156,6 @@ As such, we are able to focus on specifying of either the mean or variance and d
         \frac{V_{\eis}}{V_{\ce}} = \frac{\sigma^{4}}{\tau^{6}} \gamma.
     $$
     
-    Let us now consider three exemplary choices of $\P$ that illustrate a target that is well-behaved (the standard normal), multimodal (a Gaussian location mixture) and has different behavior in the tails than indicated at the mode (a Gaussian scale mixture). 
     For each target, we vary $\sigma^{2}$ from $\frac{1}{2}$ to $3$ and obtain variance ratios of the \gls{cem} and \gls{eis} either analytically or by simulation, the results are shown in the left-hand side of \Cref{fig:are}.
 
     \begin{figure}
@@ -150,18 +166,6 @@ As such, we are able to focus on specifying of either the mean or variance and d
         }
         \caption{Asymptotic variance ratios $\frac{V_{\eis}}{V_{\ce}}$ for the normal distribution from \Cref{ex:univ-gaussian-s2-fixed} (left hand side) and \Cref{ex:univ-gaussian-mu-fixed} (right hand side). Vertical lines mark $\sigma^{2} = \frac{\tau^{2}}{2}$ for each $\P$ --- for $\sigma^{2} < \frac{\tau^{2}}{2}$ importance sampling with $\G_{\psi}$ is inadmissible. For the scale mixture, $\tau^{2} \approx \frac12$, so $\tau^{2}/2$ is outside the range of this figure. Here $\P$ is, from top to bottom, either the standard normal distribution, a Gaussian location mixture, or a Gaussian scale mixture. $\G_{\psi}$ is the normal distribution $\mathcal N(\mu, \sigma^{2})$, where either $\sigma^{2}$ is fixed (left) and $\mu$ determined by the \gls{cem} / \gls{eis}, or the other way around (right). Notice the log scale of the $y$-axis, as well as the $x$-axis on the left-hand side. When the target is the standard normal distribution, as $\mu$ or $\sigma^{2}$ get close to their true values ($\mu = 0$ and $\sigma^{2} = 1$), \gls{eis} outperforms the \gls{cem} in terms of asymptotic variance, see \Cref{prop:eis-finite-sample}. }
         \label{fig:are}
-    \end{figure}
-
-
-    We show the target densities we will consider in this example in \Cref{fig:targets}.
-    \begin{figure}
-        \centering
-
-        \resizebox{\textwidth}{!}{%
-            \input{tikz/targets.tex}%
-        }
-        \caption{Targets used for the \gls{cem} and \gls{eis} in \Cref{ex:univ-gaussian-s2-fixed} and \Cref{ex:univ-gaussian-s2-fixed}. In addition to the standard normal distribution, we use location and scale mixtures. The location mixture is chosen for its bimodality for the smaller two values of $\omega^{2}$, while the scale mixture is chosen for its different tail behavior compared to the behavior at the mode.}
-        \label{fig:targets}
     \end{figure}
 
     
@@ -184,7 +188,7 @@ As such, we are able to focus on specifying of either the mean or variance and d
     \paragraph{Gaussian location mixture}
     Consider now the case where $\P = \frac{1}{2} \mathcal N(-1, \omega^{2}) + \frac{1}{2}\mathcal N(1, \omega^{2})$ is a Gaussian location mixture. The second moment is $\tau^{2} = 1 + \omega^{2}$. Unfortunately, there is no closed-form expression for many of the terms required for the analysis of \gls{eis}. Instead, we resort to a simulation study to determine the asymptotic variances and asymptotic variance ratios for three different values of $\omega^{2} \in \{0.1, 0.5, 1.0\}$. 
     
-    To this end we draw $M = 10\,000$ times from the distribution of $\hpce$ and $\hpeis$, where we use $N=10\,000$ samples from the tractable $\P$ as importance samples\footnote{Code for all simulation studies is available in the associated GitHub repository, see \Cref{cha:reproducibility_and_code}.}. We only iterate a single time for both procedures. From individual estimates, we estimate the asymptotic variances $V_{\ce}$ and $V_{\eis}$ by the respective empirical variances, and determine the variance ratios of \gls{eis} over the \gls{cem} as $ \frac{\hat V_{\eis}}{\hat V_{\ce}}$. Again, we vary the fixed variance of the proposals, $\sigma^{2}$, from $\frac{1}{2}$ to $3$. 
+    To this end we draw $M = 10\,000$ times from the distribution of $\hpce$ and $\hpeis$, where we use $N=10\,000$ samples from the tractable $\P$ as importance samples\footnote{Code for all simulation studies is available in the associated GitHub repository, see Appendix \ref{cha:reproducibility_and_code}.}. We only iterate a single time for both procedures. From individual estimates, we estimate the asymptotic variances $V_{\ce}$ and $V_{\eis}$ by the respective empirical variances, and determine the variance ratios of \gls{eis} over the \gls{cem} as $ \frac{\hat V_{\eis}}{\hat V_{\ce}}$. Again, we vary the fixed variance of the proposals, $\sigma^{2}$, from $\frac{1}{2}$ to $3$. 
 
     To quantify uncertainty in these asymptotic variance ratios, we perform the following bootstrap procedure to estimate standard errors of the asymptotic variances, which we sketch for the \acrshort{cem}: 
     \begin{enumerate}
@@ -217,13 +221,13 @@ For the Gaussian scale mixture, the case is less clear. Here the true variance i
     $$
     \log g_{\psi}(x) = \psi T(x) + \frac{1}{2}\log \left( - 2 \psi \right) - \frac{1}{2} \log 2\pi
     $$
-    for $T(x) = (x - \mu)^{2}$. Thus $\P [T] = \tau^{2} + \mu^{2}$ and $\cov_{\P} \left(T\right) = \nu - \tau^{4} + 4\tau^{2}\mu^{2}$ where $\nu = \P \left[\operatorname{id}^{4}\right]$ and $\tau^{2} = \P \left[\id^{2}\right]$. 
+    for $T(x) = (x - \mu)^{2}$. Thus $\P [T] = \tau^{2} + \mu^{2}$ and $\P[T^{2}] =\nu + 6\tau^{2}\mu^{2} + \mu^{4}$, so $\cov_{\P} \left(T\right) = \nu - \tau^{4} + 4\tau^{2}\mu^{2}$ where $\nu = \P \left[\operatorname{id}^{4}\right]$ and $\tau^{2} = \P \left[\id^{2}\right]$. 
     %\paragraph{\Acrlong{cem}}
 
     As $\G_{\pce} \left[ T \right] = - \frac{1}{2\psi}$, matching moments (see \Cref{prop:cem_exponential_families}) yields
-    $\pce = -\frac{1}{2(\tau^{2} + \mu^{2})}$ and thus $I(\pce) = \frac{1}{2\psi^{2}_\ce} = 2(\tau^{2} + \mu^{2})^{2}$. In total,
+    $\pce = -\frac{1}{2(\tau^{2} + \mu^{2})}$ and thus, using properties of the Gaussian natural exponential family, $I(\pce) = \frac{1}{2\psi^{2}_\ce} = 2(\tau^{2} + \mu^{2})^{2}$. In total, recalling \Cref{thm:cem-clt},
     \begin{align}
-        V_{\ce} &= \frac{1}{4 (\tau^{2} + \mu^{2})^{4}} \left( \nu - \tau^{4} + 4\tau^{2}\mu^{2} \right).
+        V_{\ce} &= I(\pce) \cov_{\P} (T) I(\pce) =\frac{1}{4 (\tau^{2} + \mu^{2})^{4}} \left( \nu - \tau^{4} + 4\tau^{2}\mu^{2} \right).
     \end{align}
 
     %\paragraph{\Acrlong{eis}}
@@ -233,6 +237,7 @@ For the Gaussian scale mixture, the case is less clear. Here the true variance i
         &= \left( \nu - \tau^{4} + 4\tau^{2}\mu^{2} \right)^{-1} \underbrace{\int p(x)((x-\mu)^{2}-\tau^{2} - \mu^{2})(\log p(x) - \P\log p(x)) \d x}_{=\gamma}.
     \end{align*}
     
+    Recall from \Cref{thm:eis-clt} that $V_{\eis} = B_{\eis} M_{\eis} B_{\eis}$.
     As $B_{\eis} = \cov_{\P} \left(T\right) ^{-1} = \left( \nu - \tau^{4} + 4 \tau^{2}\mu^{2} \right)^{-1}$, we have
     \begin{align*}
         V_{\eis} = \left( \nu - \tau^{4} + 4 \tau^{2}\mu^{2}\right)^{-2} \P \left( (\id - \mu)^{4} \left( \log p - \peis (\id - \mu)^{2} - \P \log p + \psi (\tau^{2} + \mu^{2}) \right)^{2} \right),
@@ -255,21 +260,7 @@ For the Gaussian scale mixture, the case is less clear. Here the true variance i
         \intertext{and}
         V_{\eis} &= \frac{\mu^{2} \left(2 \mu^{6} + 45 \mu^{4} \tau^{2} + 15 \tau^{6}\right)}{4 \tau^{4} \left(2 \mu^{2} + \tau^{2}\right)^{4}},
     \end{align*}
-    which we show in the following. By standard properties of the single parameter Gaussian exponential family $I(\psi_{\ce})^{-1} = \frac{ \left(2\mu^{2} + 2\tau^{2}\right)^{2}}{2} $, so $B_{\ce} = \frac{2}{\left(2\mu^{2} + 2\tau^{2}\right)^{2}}$. 
-
-    Additionally,
-    \begin{align*}
-    M_{\ce} = \cov_{\P} (T) & = \P \left( \left((\id - \mu)^{2} - \tau^{2} - \mu^{2} \right)^{2}\right)\\
-        &= \P \left( \left( \id^{2} - \tau^{2} + 2\mu\id \right)^{2} \right) \\
-        &= \P \left(\id^{4} - 2\id^{2}\tau^{2} + 4 \mu \id^{3} + \tau^{4} + 4\mu^{2}\id^{2}\right)\\
-        &= \nu + 4 \mu^{2}\tau^{2} - \tau^{4},
-    \end{align*}
-    as $\P \id^{3} = 0$ and $\P \id^{2} = \tau^{2}$. In total 
-    $$
-        V_{\ce} = B_{\ce} M_{\ce} B_{\ce} = \frac{4 \left(\nu + 4 \mu^{2}\tau^{2} - \tau^{4}\right)}{\left(2\mu^{2} + 2\tau^{2}\right)^{4}} = \frac{\nu + 4 \mu^{2}\tau^{2} - \tau^{4}}{4 \left( \mu^{2} + \tau^{2}\right)^{4}}.
-    $$
-
-    For \gls{eis}, we have $\log p(x) = -\frac{1}{2} \frac{x^{2}}{\tau^{2}} - \frac{1}{2\sqrt{\pi\tau^{2}}}$, so the log-weights are, up to an additive constant, given by
+    which we show for $V_{\eis}$ in the following. We have $\log p(x) = -\frac{1}{2} \frac{x^{2}}{\tau^{2}} - \frac{1}{2\sqrt{\pi\tau^{2}}}$, so the log-weights are, up to an additive constant, given by
     $$
         - \frac{1}{2} \frac{\id^{2}}{\tau^{2}} - T \psi_{\eis}.
     $$
@@ -339,7 +330,7 @@ Finally, we compare the \gls{cem} and \gls{eis} in a situation closer to the app
         \item $M$ times, using different seeds, perform \gls{eis} (\Cref{alg:eis}) to obtain proposals $\G^{1}_{\text{EIS}}, \dots, \G^{M}_{\text{EIS}}$, using the \gls{la} as a starting point. 
     \end{enumerate}
     
-    Unfortunately, there is no straightforward way to define the asymptotic variance ratios in this scenario. First, we are in the same scenario as in \Cref{ex:univ-gaussian-mu-fixed}: \gls{eis} and the \gls{cem} estimate different parameters. Additionally, the parameters estimated by the optimal importance sampling methods are now multivariate. 
+    Unfortunately, there is no straightforward way to define the asymptotic variance ratios in this scenario. First, we are in the same scenario as in \Cref{ex:univ-gaussian-mu-fixed}: \gls{eis} and the \gls{cem} estimate different parameters. Additionally, the parameters estimated by the optimal importance sampling methods are now multivariate, and of different dimensions. 
     To deal with this, we compare the determinants of the estimated covariance matrices of the signals $S = \left( \log I_{0}, \dots, \log I_{n} \right)$ instead, which we still call $V_{\text{CE}}$ and $V_{\text{EIS}}$.
 
     \input{chapters/03_state_space_models/03_08_comparison_ssm_parameters_var.tex}
@@ -361,7 +352,7 @@ Finally, we compare the \gls{cem} and \gls{eis} in a situation closer to the app
 %\input{chapters/03_state_space_models/03_08_comparison_old.tex}
 \subsection{Performance of the optimal proposal}
 \label{subsec:performance_at_optimal}
-For the performance of importance sampling the efficiency factor $ \text{EF} = \frac{\text{ESS}}{N}$ plays an important role, see \Cref{sec:importance_sampling}. Additionally, it allows a comparison of the effectiveness of importance sampling across multiple sample sizes $N$. Indeed, as $N\to\infty$, $\text{EF}$ converges to $ \rho^{-1}$, where $\rho$ is the second moment of importance sampling weights, $\int w^{2} \d \G$.
+For the performance of importance sampling the efficiency factor $ \text{EF} = \frac{\text{ESS}}{N}$ plays an important role, see \Cref{sec:importance_sampling}. Additionally, it allows a comparison of the effectiveness of importance sampling across multiple sample sizes $N$. Indeed, as $N\to\infty$, $\text{EF}$ converges to $ \rho^{-1}$, where $\rho$ is the second moment of importance sampling weights, $\int w^{2} \d \G$, as we have seen in \Cref{sec:importance_sampling}.
 
 Returning to the distributions studied in \Cref{ex:univ-gaussian-s2-fixed,ex:univ-gaussian-mu-fixed}, we now calculate the asymptotic efficiency factor
 $$
@@ -380,7 +371,7 @@ For \Cref{ex:univ-gaussian-s2-fixed}, where we have fixed $\sigma^{2}$ in the Ga
     \resizebox{\textwidth}{!}{%
         \input{tikz/rho_mu.tex}%
     }
-    \caption{Asymptotic efficiency factors of proposals for \Cref{ex:univ-gaussian-s2-fixed} in dependence of $\sigma^{2}$. The asymptotic efficiency factor is the same for the \gls{cem} and \gls{eis}, as the optimal $\mu$ is always $0$.}
+    \caption{Asymptotic efficiency factors of proposals for \Cref{ex:univ-gaussian-s2-fixed} in dependence of $\sigma^{2}$. The asymptotic efficiency factor is the same for the \gls{cem} and \gls{eis}, as the optimal $\mu$ is always $0$. We omit AEFs where importance sampling is inadmissible, i.e. because $\sigma^{2} < \frac{\tau^{2}}{2}$.}
     \label{fig:rho_mu}
 
 \end{figure}
@@ -427,9 +418,7 @@ Let us also return to the \gls{ssm} from \Cref{ex:growth_factor_ssm_are}. We use
 \end{figure} 
 
 \input{chapters/03_state_space_models/03_08_comparison_ssm_parameters_ef.tex}
-The resulting asymptotic efficiency factors are presented in \Cref{fig:ssm_comparison_efficiency_factor}. As expected, the asymptotic efficiency factor declines as $n$ grows for all methods. For small $n$, both \gls{eis} and the \gls{cem} produce better proposals --- as measured by the asymptotic efficiency factor --- than the \gls{la}. There are some issues for the \gls{la} and \gls{eis} for $n=1$, which we believe is due to the initialization scheme that is optimized with multiple observations in mind. From our experience, it is also the case that the proposal produced from \gls{eis} is close to the proposal produced by the \gls{la} --- which may explain the bad performance of \gls{eis} in this case. 
-
-Up to $n=20$, the \gls{cem} produces adequate proposals, however, starting at $n=50$, the performance deteriorates. Additionally, we had already seen in the previous section that the asymptotic variance of the \gls{cem} grows much more rapidly than that of \gls{eis}. 
+The resulting asymptotic efficiency factors are presented in \Cref{fig:ssm_comparison_efficiency_factor}. As expected, the asymptotic efficiency factor declines as $n$ grows for all methods. For small $n$, both \gls{eis} and the \gls{cem} produce better proposals --- as measured by the asymptotic efficiency factor --- than the \gls{la}. Up to $n=10$, the \gls{cem} produces adequate proposals, however, starting at $n=20$, the performance deteriorates. Additionally, we had already seen in the previous section that the asymptotic variance of the \gls{cem} grows much more rapidly than that of \gls{eis}. 
 
 \begin{table}
     \centering
