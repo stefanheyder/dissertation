@@ -9,17 +9,19 @@ We now have three tools to produce Gaussian importance sampling proposals: the \
     % numerical stability (?)
     \item breakdown of methods,
     \item time and space complexity of the method,
-    \item speed of stochastic convergence of $\hpce$ and $\hpeis$, as indicated by the asymptotic variance, and
-    \item performance of the optimal proposal, as measured by the asymptotic efficiency factor, with a focus on degradation as the dimension of the target grows.
+    \item performance of the optimal proposal, as measured by the asymptotic efficiency factor, with a focus on degradation as the dimension of the target grows, and
+    \item speed of stochastic convergence of $\hpce$ and $\hpeis$, as indicated by the asymptotic variance.
 \end{itemize}
 
 Let us elaborate on these criteria. With a breakdown of the methods, we mean settings in which either the numerical scheme diverges, produces parameters that lead to invalid proposals, i.e. negative variances, or where the proposals fail to produce consistent importance sampling estimates. 
 
 Time and space complexity of a single iteration of each method allow us to compare the theoretical computational resources required to apply the method in practice and can be used to inform our choice, provided there is no relevant difference in performance of the achieved importance sampling proposals.
-The speed of stochastic convergence is relevant for the \gls{cem} and \gls{eis} as well: the smaller the asymptotic variance, the smaller we can choose the sample size $N$ and thus decrease computation time. 
+
+If one method has vastly better performance at the optimum, we might be willing to spend more time initially to save time later when we use the proposal to perform inference. Of special interest is the performance for long (large $n$) or fat (large $m$) time series, as the models we fit in \Cref{cha:analysis_of_selected_models} usually fall into one of these categories.
+
+Finally, the speed of stochastic convergence is relevant for the \gls{cem} and \gls{eis} as well: the smaller the asymptotic variance, the smaller we can choose the sample size $N$ and thus decrease computation time. 
 Similarly, numerical convergence directly affects computation time. 
 
-Finally, if one method has vastly better performance at the optimum, we might be willing to spend more time initially to save time later when we use the proposal to perform inference. Of special interest is the performance for long (large $n$) or fat (large $m$) time series, as the models we fit in \Cref{cha:analysis_of_selected_models} usually fall into one of these categories.
 
 \subsection{Breakdown of methods}
 
@@ -55,6 +57,7 @@ The \gls{cem} presented in \Cref{subsec:markov-approach} (\Cref{alg:cem-markov-p
 
 
 \subsection{Computational complexity}
+\label{subsec:computational-complexity}
 Throughout this section, we assume that the model in question is a \gls{egssm} with linear signal (c.f. \Cref{def:egssm}) to simplify the treatment. This assumption benefits the \gls{la} and \gls{eis} approaches, enabling the use of the efficient simulation and signal smoother, see \Cref{subsec:glssm-approach}. If the observation dimension $p$ is smaller than that of states $m$, these algorithms are more efficient, and we will adopt them as well.
 An overview of computational complexities is presented in \Cref{tab:comparison-time-space-complexity}. It is important to acknowledge that most operations can be parallelized in one way or the other, e.g. sampling from the proposals. Therefore the time-complexities may not accurately reflect real-world-performance. Nevertheless, they provide theoretical insight into the performance of the three methods considered.
 
@@ -90,13 +93,9 @@ The \gls{la} has the fastest and most space-efficient iteration of the three met
 For $p \ll m$, \gls{eis} is faster than the \gls{cem} as it is based on the signals $S$ only, thus having access to the efficient simulation and signal smoother algorithms. The same is true for the space complexity. If, however, $p\approx m$, there is no linear signal or the observations are not conditionally independent given the states or signals, the speed of a single iteration of \gls{eis} and \gls{cem} are comparable. 
 While theoretically, the \gls{cem} performs sampling faster than the other two methods, for large numbers of samples $N$ the difference is negligible because the additional computations only have to be performed once. 
 
-\subsection{Ratio of asymptotic variances}
-As we have seen in the previous section, the number of samples $N$ used to estimate $\pce$ and $\peis$ enter linearly into the computational complexities. Naturally, we want to know how big a sample size we should choose for our procedures to estimate a proposal that is close to the true parameter ($\pce$ or $\peis$) and whether one of the two simulation-based procedures requires fewer samples than the other one. To answer this question we turn to the two central limit theorems, \Cref{thm:cem-clt,thm:eis-clt}. If $N$ is large, the asymptotic variances (or rather: the asymptotic standard deviations) tell us how much stochastic variation we should expect around the optimal value, and can thus guide us in choosing $N$. 
-We start with two examples in a univariate setting, where both the \gls{cem} and \gls{eis} use Gaussian proposals with either fixed variance (\Cref{ex:univ-gaussian-s2-fixed}) or mean (\Cref{ex:univ-gaussian-mu-fixed}).
-%This allows us to compare the methods for either the mean (variance) if the variance (mean) is fixed and potentially misspecified, i.e. not the global optimum. Additionally, the univariate setting allows us, in some cases, to derive analytical expressions of the efficiencies involved, allowing us to interpret them.
-
-To compare both methods we will determine the asymptotic variance ratio, i.e. $ \frac{\var \left( \hpeis \right)}{\var \left( \hpce \right)}$, with values smaller than $1$ indicating that \gls{eis} requires (asymptotically) fewer samples for the same precision as the \gls{cem}.
-Let us note that we are comparing the variances of parameters $\psi$, not those of derived parameters such as the standard deviation or the \gls{ess}. However, should both methods have the same optimal value, the ratios are the same for all parameters derived from $\psi$, by the delta method. By a continuity argument, the same is approximately true if the optimal values of the \gls{cem} and \gls{eis} are close.
+\subsection{Performance of the optimal proposal}
+\label{subsec:performance_at_optimal}
+For the performance of importance sampling the efficiency factor $ \text{EF} = \frac{\text{ESS}}{N}$ plays an important role, see \Cref{sec:importance_sampling}. Additionally, it allows a comparison of the effectiveness of importance sampling across multiple sample sizes $N$. Indeed, as $N\to\infty$, $\text{EF}$ converges to $ \rho^{-1}$, where $\rho$ is the second moment of importance sampling weights, $\int w^{2} \d \G$, as we have seen in \Cref{sec:importance_sampling}.
 
 To make many of the following examples analytically tractable, we will apply the \gls{cem} and \gls{eis} in a univariate and single-parameter setting. This allows us to focus on the distinctive properties of the two methods, investigating under which circumstances each method performs well or poorly. In addition, we will use Gaussian proposals where mean (or variance) is fixed and the optimal variance (mean) is obtained by the \gls{cem} or \gls{eis}.
 As such, we are able to focus on specifying of either the mean or variance and determine which of the two is more crucial to specify accurately. Additionally, the univariate setting allows us, in some cases, to derive analytical expressions of the variance ratios involved.
@@ -105,8 +104,11 @@ As such, we are able to focus on specifying of either the mean or variance and d
     \label{ex:symmetric-targets}
     On $\R$, consider the probability measure $\P = p\lambda$ for the Lebesgue measure $\lambda$ and assume that $\P$ is symmetric around $0$, i.e. $p(-x) = p(x)$ for $\lambda$-a.e. $x\in\R$ and possesses up to fourth order moments, with second moment $\tau^{2} = \P \left[\operatorname{id}^{2}\right]$.
 
-    Let us now consider three exemplary choices of $\P$ that illustrate a target that is well-behaved (the standard normal), multimodal (a Gaussian location mixture) and has different behavior in the tails than indicated at the mode (a Gaussian scale mixture). The densities of the targets chosen are displayed in \Cref{fig:targets}
+    Let us now consider three exemplary choices of $\P$ that illustrate a target that is well-behaved (the standard normal), multimodal (a Gaussian location mixture) and has different behavior in the tails than indicated at the mode (a Gaussian scale mixture). The densities of the targets chosen are displayed in \Cref{fig:targets}.
 
+    For the \textbf{standard normal} target, we set $\P = \mathcal N(0,1)$. For the \textbf{location mixture} we set $\P = \frac{1}{2} \mathcal N(-1, \omega^{2}) + \frac{1}{2}\mathcal N(1, \omega^{2})$, for $\omega^{2} \in \{0.1, 0.5, 1.0 \}$. For the \textbf{scale mixture}, we set $\P = \frac{1}{2} \left( \mathcal N(0, 1) + \mathcal N(0, \varepsilon^{-2}) \right)$, for $\varepsilon^{2} \in \{2, 10, 100 \}$.
+
+    In all the examples that follow let $\G=\P$, so $W\equiv1$.
     \begin{figure}
         \centering
 
@@ -121,15 +123,152 @@ As such, we are able to focus on specifying of either the mean or variance and d
 
 \begin{example}[univariate Gaussian proposal, $\sigma^{2}$ fixed]
     \label{ex:univ-gaussian-s2-fixed}
-
-    In \Cref{ex:symmetric-targets}, let $\G=\P$, so $W\equiv1$ and let $\G_{\psi} = \mathcal N \left( \sigma\psi, \sigma^{2} \right)$ be the single parameter natural exponential family of Gaussians with fixed variance $\sigma^{2} > 0$. Then 
+    In \Cref{ex:symmetric-targets} let $\G_{\psi} = \mathcal N \left( \sigma\psi, \sigma^{2} \right)$ be the single parameter natural exponential family of Gaussians with fixed variance $\sigma^{2} > 0$. Then 
     $$
     \log g_{\psi}(x) = \psi T(x) - \frac{\psi^{2}}{2} + \log h(x),
     $$
     where $T(x) = \frac{x}{\sigma}$ and $h(x)$ is the density of $\mathcal N(0, \sigma^{2})$ w.r.t. Lebesgue measure. 
-    Note that $T$ is centered under $\P$. To compare the asymptotic behavior of the \gls{cem} and \gls{eis} we compute the asymptotic variances arising from their respective central limit theorems (\Cref{thm:cem-clt,thm:eis-clt}).
+    Note that $T$ is centered under $\P$. By symmetry, both $\pce$ and $\peis$ are equal to $0$. 
 
-    By symmetry, both $\pce$ and $\peis$ are equal to $0$. 
+\end{example}
+
+\begin{example}[univariate Gaussian, $\mu$ fixed]
+    \label{ex:univ-gaussian-mu-fixed}
+    Consider the same setup as in \Cref{ex:univ-gaussian-s2-fixed}, i.e. $\P$ is symmetric around $0$ with second moment $\tau^{2}$, but let $\G_{\psi} = \mathcal N(\mu, -\frac{1}{2\psi})$ be the single parameter natural exponential family of Gaussians with fixed mean $\mu$ and variance $\sigma^{2} = -\frac{1}{2 \psi}$. 
+    
+    Then
+    $$
+    \log g_{\psi}(x) = \psi T(x) + \frac{1}{2}\log \left( - 2 \psi \right) - \frac{1}{2} \log 2\pi
+    $$
+    for $T(x) = (x - \mu)^{2}$. Thus $\P [T] = \tau^{2} + \mu^{2}$ and $\P[T^{2}] =\nu + 6\tau^{2}\mu^{2} + \mu^{4}$, so $\cov_{\P} \left(T\right) = \nu - \tau^{4} + 4\tau^{2}\mu^{2}$ where $\nu = \P \left[\operatorname{id}^{4}\right]$ and $\tau^{2} = \P \left[\id^{2}\right]$. 
+    %\paragraph{\Acrlong{cem}}
+
+    As $\G_{\pce} \left[ T \right] = - \frac{1}{2\psi}$, matching moments (see \Cref{prop:cem_exponential_families}) yields
+    $\pce = -\frac{1}{2(\tau^{2} + \mu^{2})}$
+
+    For \gls{eis},
+    \begin{align*}
+    \peis &= \left( \cov_{\P} (T) \right)^{-1} \cov_{\P} \left( T, \log p \right) \\
+        &= \left( \nu - \tau^{4} + 4\tau^{2}\mu^{2} \right)^{-1} \underbrace{\int p(x)((x-\mu)^{2}-\tau^{2} - \mu^{2})(\log p(x) - \P\log p(x)) \d x}_{=\gamma},
+    \end{align*}
+    which depends on the particular properties of $\log p$, rather than just moments of $\P$.
+\end{example}
+
+For the targets under investigation in \Cref{ex:univ-gaussian-s2-fixed,ex:univ-gaussian-mu-fixed}, we calculate the asymptotic efficiency factor
+$$
+\text{AEF} = \frac{1}{\rho} \in (0, 1].
+$$
+As the proposal is always $\mathcal N(\mu, \sigma^{2})$ with either $\mu$ or $\sigma^{2}$ fixed, and $\P$ is a mixture of Gaussians or $\mathcal N(0,1)$, $\rho$ is analytically available, as 
+$$
+    \rho = \int w^{2} \mathrm d \mathcal \G = \int \frac{p^{2}}{g^{2}} \mathrm d \mathcal \G = \int_{-\infty}^\infty \frac{p^{2}(x)}{g(x)} \mathrm d x
+$$
+can then be reduced to Gaussian integrals, which we omit here for brevity\footnote{The calculations can be found in the accompanying Jupyter notebooks that produce the figures, \texttt{03\_07\_compare\_CE\_EIS.ipynb}.}.
+
+For \Cref{ex:univ-gaussian-s2-fixed}, where we have fixed $\sigma^{2}$ in the Gaussian proposal $\G_{\psi}$, both \aeis and the \acem have, by symmetry, the same optimal $\mu = 0$. Thus the asymptotic efficiency factor only depends on the fixed $\sigma^{2}$, see \Cref{fig:rho_mu}, and is the same for \aeis and the \acem.
+
+\begin{figure}
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/rho_mu.tex}%
+    }
+    \caption{Asymptotic efficiency factors of proposals for \Cref{ex:univ-gaussian-s2-fixed} in dependence of $\sigma^{2}$. The asymptotic efficiency factor is the same for the \gls{cem} and \gls{eis}, as the optimal $\mu$ is always $0$. We omit AEFs where importance sampling is inadmissible, i.e. because $\sigma^{2} < \frac{\tau^{2}}{2}$.}
+    \label{fig:rho_mu}
+
+\end{figure}
+% fig:rho_mu
+%% except for location mixture w/ large omega^2 all EF quite high, 
+%% allows for misspecification in variance here, except to small for location mixture w/ large omega2
+%% better too have large sigma2 than small -> EIS better than CE? 
+
+For \Cref{ex:univ-gaussian-mu-fixed}, where we have fixed $\mu$ in the Gaussian proposal $\G_{\psi}$, the two methods have different optimal proposals, thus also different asymptotic efficiency factors. In \Cref{fig:rho}, the first two subfigures show how the asymptotic efficiency factor depends on the misspecified $\mu$ for both methods. The optimal variances are available analytically for the \gls{cem}, but based on simulation for \aeis, see \Cref{ex:avr-mu-fixed,ex:avrs-s2-fixed} for details. The right-hand subfigure shows the relative asymptotic efficiency factor, i.e. the ratio of the asymptotic efficiency factor for the \acem and \aeis. Here values smaller than $1$ indicate that \aeis has a larger efficiency factor than the \acem. 
+
+\begin{figure}
+    \centering
+
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/rho.tex}%
+    }
+    \caption{Asymptotic efficiency factors of the \gls{cem} and \gls{eis} for example \Cref{ex:univ-gaussian-mu-fixed}. Each line corresponds to one of the targets from \Cref{fig:targets}. The \textbf{left} (\textbf{middle}) column shows the asymptotic efficiency factor (in \%) for the \gls{cem} (\gls{eis}). The \textbf{right} column shows the relative asymptotic efficiency factor of the \gls{cem} vs. \gls{eis}, with values greater than $1$ indicating that the asymptotic efficiency factor of the \gls{cem} is bigger than that of \gls{eis}.} 
+    \label{fig:rho}
+\end{figure} 
+
+In this figure, we can observe that, as expected, stronger misspecification in $\mu$ almost always results in a smaller asymptotic efficiency factor, an exception being the scale mixture with $\varepsilon^{2} = 100$ for the \acem. 
+Compared to \Cref{fig:rho_mu}, we see that already small misspecification in $\mu$ results in a large decline in EF, although we should keep in mind that this is not a fair comparison, as $\mu$ and $\sigma^{2}$ live on different scales.
+If $\mu = 0 $ is correctly specified, both methods have comparable performance, except for extreme cases of the mixture models, i.e. when $\omega^{2} = 0.1$ or when $\varepsilon^{2} = 100$. 
+For small misspecification of $\mu$, this remains true, but for larger misspecification, the \acem has a larger asymptotic efficiency factor, especially for the bimodal location mixture with $\omega^{2} = 0.1$, where the performance of \aeis deteriorates. 
+
+Finally, we compare the \gls{cem} and \gls{eis} in a situation closer to the applications in \Cref{cha:analysis_of_selected_models}. 
+\begin{example}
+    \label{ex:growth-factor-ssm-aef}
+    Consider the following \gls{egssm}: the states are given by 
+    $$
+        X_{t} = \begin{pmatrix}
+            \log I_{t}\\
+            \log \rho_{t + 1}
+        \end{pmatrix}, t = 0, \dots, n
+    $$
+    with 
+    $$
+        X_{t + 1} = \begin{pmatrix}
+            \log I_{t+1} \\
+            \log \rho_{t + 2}
+        \end{pmatrix} = \begin{pmatrix}
+            \log I_{t} + \log \rho_{t+1} \\
+            \log \rho_{t + 1} + \varepsilon_{t + 1}
+        \end{pmatrix}, t = 0, \dots, n - 1
+    $$
+    where $\varepsilon_{t + 1} \sim \mathcal N (0, \sigma^{2})$ and $X_{0} \sim \mathcal N( x_{0}, \Sigma_{0})$. 
+    The observations $Y_{t}$ follow a conditional Poisson distribution $Y_{t} \sim \operatorname{Pois} \left( I_{t} \right)$. It is easy to see that this forms  an \gls{egssm} with linear signal $\log I_{t}$.
+    This model is a simplified version of the exponential growth factor model presented in \Cref{sec:model_reporting_delay}, and we defer the reader to this section for a detailed motivation of the model.
+
+    For the initial states we set $I_{0} = 1\,000$ and $\rho_{1} = 1$, and let $\Sigma_{0} = \begin{pmatrix}
+        1 & 0 \\
+        0 & 0.1 
+    \end{pmatrix}$. Finally, we choose $\sigma^{2} = \frac{0.05}{n}$. This ensures that the change in  $\log \rho$ over the whole time period, $\log \rho_{n + 2} - \log \rho_{1}$ has variance $0.05$, which makes large and small growth factors $\rho$ improbable.
+
+    We then perform the following simulation protocol for varying values of $n$. 
+    \begin{enumerate}
+        \item Simulate a single observation $y=(y_{0}, \dots, y_{n})$ from the model.
+        \item Obtain $\G_{\text{LA}}$ by the \gls{la}.
+        \item Obtain $\G_{\text{CEM}}$ by the \gls{cem}, using the \gls{la} as a starting point.
+        \item Obtain $\G_{\text{EIS}}$ by \gls{eis} (\Cref{alg:eis}), using the \gls{la} as a starting point. 
+        \item Draw $N = 10\,000$ samples from each proposal and estimate the asymptotic efficiency factor by  \eqref{eq:efficency_factor}.
+    \end{enumerate}
+
+\end{example}
+
+\begin{figure}
+    \centering
+
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/ssm_comparison_efficiency_factor.tex}%
+    }
+    \caption{Boxplots of asymptotic efficiency factors for the \gls{ssm} from \Cref{ex:growth_factor_ssm_are}. Note that the $x$-axis is not to scale, presenting only the values that $n$ takes in the simulations.} 
+    \label{fig:ssm_comparison_efficiency_factor}
+\end{figure} 
+
+\input{chapters/03_state_space_models/03_08_comparison_ssm_parameters_ef.tex}
+The resulting asymptotic efficiency factors are presented in \Cref{fig:ssm_comparison_efficiency_factor}. As expected, the asymptotic efficiency factor declines as $n$ grows for all methods. For small $n$, both \gls{eis} and the \gls{cem} produce better proposals --- as measured by the asymptotic efficiency factor --- than the \gls{la}. Up to $n=10$, the \gls{cem} produces adequate proposals, however, starting at $n=20$, the performance deteriorates. Additionally, we had already seen in the previous section that the asymptotic variance of the \gls{cem} grows much more rapidly than that of \gls{eis}. 
+
+\begin{table}
+    \centering
+    \input{tables/ssm_comparison_missing_values.tex}
+    \label{tab:ssm_comparison_missing_values}
+    \caption{Number of invalid asymptotic efficiency factors (out of $K=10$) per size $n$ and method. This includes cases where either the numerical scheme of the method failed to converge, or the proposal generated is numerically singular to the target.}
+\end{table}
+
+In addition to these observations, we report some numerical issues which result in invalid asymptotic efficiency factors. The number of occurrences is displayed in \Cref{tab:ssm_comparison_missing_values}. Again, the \gls{cem} is much more unstable than the \gls{la} or \gls{eis}, with the \gls{la} having the least amount of dropout. As both methods use the \gls{la} as their initial value, we would expect such numerical issues when the \gls{la} provides bad proposals --- which is the case for some proposals at $n=100$.
+
+\subsection{Ratio of asymptotic variances}
+As we have seen in \Cref{subsec:computational-complexity}, the number of samples $N$ used to estimate $\pce$ and $\peis$ enter linearly into the computational complexities. Naturally, we want to know how big a sample size we should choose for our procedures to estimate a proposal that is close to the true parameter ($\pce$ or $\peis$) and whether one of the two simulation-based procedures requires fewer samples than the other one. To answer this question we turn to the two central limit theorems, \Cref{thm:cem-clt,thm:eis-clt}. If $N$ is large, the asymptotic variances (or rather: the asymptotic standard deviations) tell us how much stochastic variation we should expect around the optimal value, and can thus guide us in choosing $N$. 
+We start with two examples in a univariate setting, where both the \gls{cem} and \gls{eis} use Gaussian proposals with either fixed variance (\Cref{ex:univ-gaussian-s2-fixed}) or mean (\Cref{ex:univ-gaussian-mu-fixed}).
+%This allows us to compare the methods for either the mean (variance) if the variance (mean) is fixed and potentially misspecified, i.e. not the global optimum. Additionally, the univariate setting allows us, in some cases, to derive analytical expressions of the efficiencies involved, allowing us to interpret them.
+
+To compare both methods we will determine the asymptotic variance ratio, i.e. $ \frac{\var \left( \hpeis \right)}{\var \left( \hpce \right)}$, with values smaller than $1$ indicating that \gls{eis} requires (asymptotically) fewer samples for the same precision as the \gls{cem}.
+Let us note that we are comparing the variances of parameters $\psi$, not those of derived parameters such as the standard deviation or the \gls{ess}. However, should both methods have the same optimal value, the ratios are the same for all parameters derived from $\psi$, by the delta method. By a continuity argument, the same is approximately true if the optimal values of the \gls{cem} and \gls{eis} are close.
+
+\begin{example}[Asymptotic variance ratios for \Cref{ex:univ-gaussian-s2-fixed}]
+    \label{ex:avrs-s2-fixed}
     Recalling \Cref{thm:cem-clt}, we see that the asymptotic variance of $\hpce$ is given by  
     $$
         V_{\text{CE}} = I(\pce) \P \left[w(T - \P [T]) (T - \P [T])^{T} \right] I(\pce) = \cov_{\P}(T) = \frac{\tau^{2}}{\sigma^{2}},
@@ -199,7 +338,7 @@ As such, we are able to focus on specifying of either the mean or variance and d
     We perform the same scheme for $\hpeis$, as well as for the asymptotic variance ratio, where we obtain variance ratios in the first step instead. With the parameters chosen, all relative standard errors are below $2.5\%$. 
     
     \paragraph{Gaussian scale mixture}
-    Finally we consider $\P = \frac{1}{2} \left(\mathcal N \left( 0, 1 \right) + \mathcal N (0, \varepsilon^{-2}) \right)$ for $\varepsilon^{2} \in \{2, 10, 100\}$, a scale mixture similar to the one seen in \Cref{ex:la_failure}. Contrary to that example, we choose $\varepsilon$ big, making the $\mathcal N(0,1)$ component the one with large variance, to make importance sampling with $\sigma^{2}$ in the range considered consistent. 
+    Finally, we consider $\P = \frac{1}{2} \left(\mathcal N \left( 0, 1 \right) + \mathcal N (0, \varepsilon^{-2}) \right)$ for $\varepsilon^{2} \in \{2, 10, 100\}$, a scale mixture similar to the one seen in \Cref{ex:la_failure}. Contrary to that example, we choose $\varepsilon$ big, making the $\mathcal N(0,1)$ component the one with large variance, to make importance sampling with $\sigma^{2}$ in the range considered consistent. 
     Here $\tau^{2} = \frac{1}{2} + \frac{1}{2\varepsilon^{2}}$. 
     Again, we estimate the asymptotic $V_{\eis}$ in the same way as for the Gaussian location mixture, with the same parameters and obtain the same relative standard errors bounds (below $2.5\%$).
 \end{example}
@@ -213,29 +352,16 @@ Consider now the case where $\P$ is a Gaussian location mixture. For $\omega^{2}
 
 For the Gaussian scale mixture, the case is less clear. Here the true variance is $\frac{1}{2} + \frac{1}{2 \varepsilon^{2}}$. The location of the minimal variance ratio is still close to this true variance, however, as $\varepsilon^{2}$ grows, the \acem starts to dominate \aeis. Additionally, recall from \Cref{ex:la_failure} that for large $\varepsilon^{2}$ \aeis becomes inadmissible. 
 
-\begin{example}[univariate Gaussian, $\mu$ fixed]
-    \label{ex:univ-gaussian-mu-fixed}
-    Consider the same setup as in \Cref{ex:univ-gaussian-s2-fixed}, i.e. $\P$ is symmetric around $0$ with second moment $\tau^{2}$, but let $\G_{\psi} = \mathcal N(\mu, -\frac{1}{2\psi})$ be the single parameter natural exponential family of Gaussians with fixed mean $\mu$ and variance $\sigma^{2} = -\frac{1}{2 \psi}$. 
-    
-    Then
-    $$
-    \log g_{\psi}(x) = \psi T(x) + \frac{1}{2}\log \left( - 2 \psi \right) - \frac{1}{2} \log 2\pi
-    $$
-    for $T(x) = (x - \mu)^{2}$. Thus $\P [T] = \tau^{2} + \mu^{2}$ and $\P[T^{2}] =\nu + 6\tau^{2}\mu^{2} + \mu^{4}$, so $\cov_{\P} \left(T\right) = \nu - \tau^{4} + 4\tau^{2}\mu^{2}$ where $\nu = \P \left[\operatorname{id}^{4}\right]$ and $\tau^{2} = \P \left[\id^{2}\right]$. 
-    %\paragraph{\Acrlong{cem}}
 
-    As $\G_{\pce} \left[ T \right] = - \frac{1}{2\psi}$, matching moments (see \Cref{prop:cem_exponential_families}) yields
-    $\pce = -\frac{1}{2(\tau^{2} + \mu^{2})}$ and thus, using properties of the Gaussian natural exponential family, $I(\pce) = \frac{1}{2\psi^{2}_\ce} = 2(\tau^{2} + \mu^{2})^{2}$. In total, recalling \Cref{thm:cem-clt},
+\begin{example}[Asymptotic variance ratios for \Cref{ex:univ-gaussian-mu-fixed}]
+    \label{ex:avr-mu-fixed}
+    
+    Using properties of the Gaussian natural exponential family, $I(\pce) = \frac{1}{2\psi^{2}_\ce} = 2(\tau^{2} + \mu^{2})^{2}$. In total, recalling \Cref{thm:cem-clt},
     \begin{align}
         V_{\ce} &= I(\pce) \cov_{\P} (T) I(\pce) =\frac{1}{4 (\tau^{2} + \mu^{2})^{4}} \left( \nu - \tau^{4} + 4\tau^{2}\mu^{2} \right).
     \end{align}
 
     %\paragraph{\Acrlong{eis}}
-    For \gls{eis},
-    \begin{align*}
-    \peis &= \left( \cov_{\P} (T) \right)^{-1} \cov_{\P} \left( T, \log p \right) \\
-        &= \left( \nu - \tau^{4} + 4\tau^{2}\mu^{2} \right)^{-1} \underbrace{\int p(x)((x-\mu)^{2}-\tau^{2} - \mu^{2})(\log p(x) - \P\log p(x)) \d x}_{=\gamma}.
-    \end{align*}
     
     Recall from \Cref{thm:eis-clt} that $V_{\eis} = B_{\eis} M_{\eis} B_{\eis}$.
     As $B_{\eis} = \cov_{\P} \left(T\right) ^{-1} = \left( \nu - \tau^{4} + 4 \tau^{2}\mu^{2} \right)^{-1}$, we have
@@ -269,7 +395,7 @@ For the Gaussian scale mixture, the case is less clear. Here the true variance i
     $$
         \P \left( (\id - \mu)^{4} \left( \log w - \P \log w \right)^{2}  \right)
     $$
-    which is the expectation of a sixth order polynomial with respect to the standard normal distribution $\P$, so its value is analytically tractable and turns out to be\footnote{See \texttt{03\_08\_comparison.ipynb} in the accompanying code for calculations.}
+    which is the expectation of a sixth order polynomial with respect to the standard normal distribution $\P$, so its value is analytically tractable and turns out to be\footnote{See \texttt{03\_07\_comparison.ipynb} in the accompanying code for calculations.}
     $$ M_{\eis} = \frac{\mu^{2} \left(2 \mu^{6} + 45 \mu^{4} \tau^{2} + 15 \tau^{6}\right)}{\left(2 \mu^{2} + \tau^{2}\right)^{2}}.
     $$
 
@@ -293,36 +419,9 @@ On the left-hand side of \Cref{fig:are} we see that for $\mu$ close to the optim
 % sigma2s
 In \Cref{fig:cem_eis_sigma2} we see that, except for the extreme scale mixtures, \aeis tends to produce proposals that have a larger variance than those produced by the \acem. As we will see in the discussion of \Cref{fig:rho_mu}, this might be advantageous for \aeis as proposals with a small variance run the risk of missing a large part of the probability mass of the target. 
 
-Finally, we compare the \gls{cem} and \gls{eis} in a situation closer to the applications in \Cref{cha:analysis_of_selected_models}. 
 \begin{example}[Growth factor \gls{ssm}]
     \label{ex:growth_factor_ssm_are}
-    Consider the following \gls{egssm}: the states are given by 
-    $$
-        X_{t} = \begin{pmatrix}
-            \log I_{t}\\
-            \log \rho_{t + 1}
-        \end{pmatrix}, t = 0, \dots, n
-    $$
-    with 
-    $$
-        X_{t + 1} = \begin{pmatrix}
-            \log I_{t+1} \\
-            \log \rho_{t + 2}
-        \end{pmatrix} = \begin{pmatrix}
-            \log I_{t} + \log \rho_{t+1} \\
-            \log \rho_{t + 1} + \varepsilon_{t + 1}
-        \end{pmatrix}, t = 0, \dots, n - 1
-    $$
-    where $\varepsilon_{t + 1} \sim \mathcal N (0, \sigma^{2})$ and $X_{0} \sim \mathcal N( x_{0}, \Sigma_{0})$. 
-    The observations $Y_{t}$ follow a conditional Poisson distribution $Y_{t} \sim \operatorname{Pois} \left( I_{t} \right)$. It is easy to see that this forms  an \gls{egssm} with linear signal $\log I_{t}$.
-    This model is a simplified version of the exponential growth factor model presented in \Cref{sec:model_reporting_delay}, and we defer the reader to this section for a detailed motivation of the model.
-
-    For the initial states we set $I_{0} = 1\,000$ and $\rho_{1} = 1$, and let $\Sigma_{0} = \begin{pmatrix}
-        1 & 0 \\
-        0 & 0.1 
-    \end{pmatrix}$. Finally, we choose $\sigma^{2} = \frac{0.05}{n}$. This ensures that the change in  $\log \rho$ over the whole time period, $\log \rho_{n + 2} - \log \rho_{1}$ has variance $0.05$, which makes large and small growth factors $\rho$ improbable.
-
-    We then perform the following simulation protocol for varying values of $n$. 
+    Consider the setting and \gls{ssm} from \Cref{ex:growth-factor-ssm-aef}.  To compare the AEF of the \gls{cem} and \gls{eis}, we perform a similar simulation protocol for varying values of $n$:
     \begin{enumerate}
         \item Simulate a single observation $y=(y_{0}, \dots, y_{n})$ from the model.
         \item Obtain the \gls{la} to the conditional distribution $X|Y = y$.
@@ -346,85 +445,4 @@ Finally, we compare the \gls{cem} and \gls{eis} in a situation closer to the app
     \end{figure}
 
     We show the resulting asymptotic variance ratios in \Cref{fig:ssm_comparison_asymptotic_variance}. For irrelevantly small values of $n$ ($n=1,2$), the \gls{cem} actually outperforms \gls{eis} in terms of asymptotic variance, but starting with $n = 3$, \gls{eis} begins to vastly outperform the \gls{cem}. 
-    
 \end{example}
-
-%\input{chapters/03_state_space_models/03_08_comparison_old.tex}
-\subsection{Performance of the optimal proposal}
-\label{subsec:performance_at_optimal}
-For the performance of importance sampling the efficiency factor $ \text{EF} = \frac{\text{ESS}}{N}$ plays an important role, see \Cref{sec:importance_sampling}. Additionally, it allows a comparison of the effectiveness of importance sampling across multiple sample sizes $N$. Indeed, as $N\to\infty$, $\text{EF}$ converges to $ \rho^{-1}$, where $\rho$ is the second moment of importance sampling weights, $\int w^{2} \d \G$, as we have seen in \Cref{sec:importance_sampling}.
-
-Returning to the distributions studied in \Cref{ex:univ-gaussian-s2-fixed,ex:univ-gaussian-mu-fixed}, we now calculate the asymptotic efficiency factor
-$$
-\text{AEF} = \frac{1}{\rho} \in (0, 1].
-$$
-As the proposal is always $\mathcal N(\mu, \sigma^{2})$ with either $\mu$ or $\sigma^{2}$ fixed, and $\P$ is a mixture of Gaussians or $\mathcal N(0,1)$, $\rho$ is analytically available, as 
-$$
-    \rho = \int w^{2} \mathrm d \mathcal \G = \int \frac{p^{2}}{g^{2}} \mathrm d \mathcal \G = \int_{-\infty}^\infty \frac{p^{2}(x)}{g(x)} \mathrm d x
-$$
-can then be reduced to Gaussian integrals.
-
-For \Cref{ex:univ-gaussian-s2-fixed}, where we have fixed $\sigma^{2}$ in the Gaussian proposal $\G_{\psi}$, both \aeis and the \acem have, by symmetry, the same optimal $\mu = 0$. Thus the asymptotic efficiency factor only depends on the fixed $\sigma^{2}$, see \Cref{fig:rho_mu}, and is the same for \aeis and the \acem.
-
-\begin{figure}
-    \centering
-    \resizebox{\textwidth}{!}{%
-        \input{tikz/rho_mu.tex}%
-    }
-    \caption{Asymptotic efficiency factors of proposals for \Cref{ex:univ-gaussian-s2-fixed} in dependence of $\sigma^{2}$. The asymptotic efficiency factor is the same for the \gls{cem} and \gls{eis}, as the optimal $\mu$ is always $0$. We omit AEFs where importance sampling is inadmissible, i.e. because $\sigma^{2} < \frac{\tau^{2}}{2}$.}
-    \label{fig:rho_mu}
-
-\end{figure}
-% fig:rho_mu
-%% except for location mixture w/ large omega^2 all EF quite high, 
-%% allows for misspecification in variance here, except to small for location mixture w/ large omega2
-%% better too have large sigma2 than small -> EIS better than CE? 
-
-For \Cref{ex:univ-gaussian-mu-fixed}, where we have fixed $\mu$ in the Gaussian proposal $\G_{\psi}$, the two methods have different optimal proposals, thus also different asymptotic efficiency factors. In \Cref{fig:rho}, the first two subfigures show how the asymptotic efficiency factor depends on the misspecified $\mu$ for both methods. The optimal variances are based on the results from \Cref{ex:univ-gaussian-mu-fixed}, i.e. based on simulation for \aeis. The right-hand subfigure shows the relative asymptotic efficiency factor, i.e. the ratio of the asymptotic efficiency factor for the \acem and \aeis. Here values smaller than $1$ indicate that \aeis has a larger efficiency factor than the \acem. 
-
-\begin{figure}
-    \centering
-
-    \resizebox{\textwidth}{!}{%
-        \input{tikz/rho.tex}%
-    }
-    \caption{Asymptotic efficiency factors of the \gls{cem} and \gls{eis} for example \Cref{ex:univ-gaussian-mu-fixed}. Each line corresponds to one of the targets from \Cref{fig:targets}. The \textbf{left} (\textbf{middle}) column shows the asymptotic efficiency factor (in \%) for the \gls{cem} (\gls{eis}). The \textbf{right} column shows the relative asymptotic efficiency factor of the \gls{cem} vs. \gls{eis}, with values greater than $1$ indicating that the asymptotic efficiency factor of the \gls{cem} is bigger than that of \gls{eis}.} 
-    \label{fig:rho}
-\end{figure} 
-
-In this figure, we can observe that, as expected, stronger misspecification in $\mu$ almost always results in a smaller asymptotic efficiency factor, an exception being the scale mixture with $\varepsilon^{2} = 100$ for the \acem. 
-Compared to \Cref{fig:rho_mu}, we see that already small misspecification in $\mu$ results in a large decline in EF, although we should keep in mind that this is not a fair comparison, as $\mu$ and $\sigma^{2}$ live on different scales.
-If $\mu = 0 $ is correctly specified, both methods have comparable performance, except for extreme cases of the mixture models, i.e. when $\omega^{2} = 0.1$ or when $\varepsilon^{2} = 100$. 
-For small misspecification of $\mu$, this remains true, but for larger misspecification, the \acem has a larger asymptotic efficiency factor, especially for the bimodal location mixture with $\omega^{2} = 0.1$, where the performance of \aeis deteriorates. 
-
-Let us also return to the \gls{ssm} from \Cref{ex:growth_factor_ssm_are}. We use a similar simulation routine to estimate asymptotic efficiency factors:
-
-\begin{enumerate}
-    \item Simulate a single observation $y=(y_{0}, \dots, y_{n})$ from the model.
-    \item Obtain $\G_{\text{LA}}$ by the \gls{la}.
-    \item Obtain $\G_{\text{CEM}}$ by the \gls{cem}, using the \gls{la} as a starting point.
-    \item Obtain $\G_{\text{EIS}}$ by \gls{eis} (\Cref{alg:eis}), using the \gls{la} as a starting point. 
-    \item Draw $N = 10\,000$ samples from each proposal and estimate the asymptotic efficiency factor by  \eqref{eq:efficency_factor}.
-\end{enumerate}
-
-\begin{figure}
-    \centering
-
-    \resizebox{\textwidth}{!}{%
-        \input{tikz/ssm_comparison_efficiency_factor.tex}%
-    }
-    \caption{Boxplots of asymptotic efficiency factors for the \gls{ssm} from \Cref{ex:growth_factor_ssm_are}. Note that the $x$-axis is not to scale, presenting only the values that $n$ takes in the simulations.} 
-    \label{fig:ssm_comparison_efficiency_factor}
-\end{figure} 
-
-\input{chapters/03_state_space_models/03_08_comparison_ssm_parameters_ef.tex}
-The resulting asymptotic efficiency factors are presented in \Cref{fig:ssm_comparison_efficiency_factor}. As expected, the asymptotic efficiency factor declines as $n$ grows for all methods. For small $n$, both \gls{eis} and the \gls{cem} produce better proposals --- as measured by the asymptotic efficiency factor --- than the \gls{la}. Up to $n=10$, the \gls{cem} produces adequate proposals, however, starting at $n=20$, the performance deteriorates. Additionally, we had already seen in the previous section that the asymptotic variance of the \gls{cem} grows much more rapidly than that of \gls{eis}. 
-
-\begin{table}
-    \centering
-    \input{tables/ssm_comparison_missing_values.tex}
-    \label{tab:ssm_comparison_missing_values}
-    \caption{Number of invalid asymptotic efficiency factors (out of $K=10$) per size $n$ and method. This includes cases where either the numerical scheme of the method failed to converge, or the proposal generated is numerically singular to the target.}
-\end{table}
-
-In addition to these observations, we report some numerical issues which result in invalid asymptotic efficiency factors. The number of occurrences are displayed in \Cref{tab:ssm_comparison_missing_values}. Again, the \gls{cem} is much more unstable than the \gls{la} or \gls{eis}, with the \gls{la} having the least amount of dropout. As both methods use the \gls{la} as their initial value, we would expect such numerical issues when the \gls{la} provides bad proposals - which is the case for some proposals at $n=100$.
