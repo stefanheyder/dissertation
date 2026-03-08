@@ -1,8 +1,7 @@
 \section{Regional growth factor model}%
 \label{sec:regional_growth_factor_model}
 
-
-Modeling the epidemics spread on a regional level allows us to differentiate between localized and global outbreaks, such as the one in June 2020, highlighted in \Cref{fig:cases_germany}. Additionally, regional level prediction and growth factors are of interest on their own, because \glspl{npi} are enforced on the regional level. Moreover, having access to the spread on the regional level enables, e.g., regression of the growth rate against regional covariates, which in turn sheds light on which factors drive the epidemic.
+Modeling the epidemics' spread on a regional level allows us to differentiate between localized and global outbreaks, such as the one in June 2020, highlighted in \Cref{fig:cases_germany}. Additionally, regional level prediction and growth factors are of interest on their own, because \glspl{npi} are enforced on the regional level. Moreover, having access to the spread on the regional level enables, e.g., regression of the growth rate against regional covariates, which in turn sheds light on which factors drive the epidemic.
 
 Instead of modeling the number of cases per day and with delay as we did in \Cref{sec:model_reporting_delay}, we will now model the total number of cases reported within one week for every county in Germany. Here we assume that a sufficient time period has passed, i.e. several days, see \Cref{fig:reporting_delays_cases}, such that the total number of cases is known sufficiently well. This weekly approach has several advantages: first, aggregating over the weekly data gets rid of the weekday effect, at the expense of a lower time resolution. Second, if we are interested in a retrospective analysis, it is sensible to assume all cases have been reported already, so we can avoid modeling the reporting delays. 
 
@@ -43,11 +42,18 @@ Again, we model the evolution of cases by
     \label{eq:log-growth-regional-model}
     \log I_{t + 1, r} \approx \log I_{t, r} + \log \rho_{t + 1, r}
 \end{align}
-where $\rho_{t+1, r}$ is the weekly growth factor in region $r$. Now we deviate from the previous model and model 
+where $\rho_{t+1, r}$ is the weekly growth factor in region $r$. Now we deviate from the previous model and set
 $$
     \log \rho_{t, r} = \overline{\log \rho}_{t} + u_{t, r},
 $$
 where $\overline{\log\rho}_{t}$ is the average growth rate and $u_{t,r}$ is the difference between the growth rate in region $r$ and the country wide average. 
+
+For $\overline{\log \rho}_{t}$ we assume, similar to the previous section, a random walk on the log-scale
+$$
+    \overline{\log\rho}_{t +1} = \overline{\log\rho}_{t} + \varepsilon_{t+1, \overline{\log \rho}},
+$$
+where $\left(\varepsilon_{t + 1, \overline{\log\rho}}\right)_{t =0, \dots, 1} \stackrel{\iid}{\sim} \mathcal N(0, \sigma^{2}_{\overline{\log\rho}})$.
+
 We will model $u_{t,r}, r = 1, \dots, R$ to be jointly Gaussian, but correlated, which will enable us to model regional dependencies. To motivate our choice for the covariance structure, let us consider how cases are transferred between regions first.
 
 As we are modeling cases on a regional level, we have to account for an exchange of cases as well. To illustrate our approach, suppose that we have for region $r$ $S^{r}$ many secondary cases generated where the primary case belongs to region $r$, but the secondary case may belong to another region $r'$. Here ``{}belonging to''{} signifies that the case is reported in that region, which means that the infectee has registered their center of living to be in this region. Denote by $p_{r,r'}$ the fraction of such cases and set $p_{r,r} = 1 - \sum_{r' \neq r} p_{r,r'}$. 
@@ -61,64 +67,64 @@ $$
     \cov \left( \tilde S\right) = \cov \left( P^{T}S, P^{T}S \right) = \sigma^{2}_SP^{T}P.
 $$
 
-However, modeling the correlation of newly reported cases turns out to be difficult: the cases will surely be modeled by a Poisson or Negative Binomial distribution, so we would have to decide on a copula to introduce this dependency structure. While this is feasible in principle, we opt for an easier way. Instead of modeling correlated incidences $I_{t + 1, r}$, we model correlated growth rates $\log \rho_{t + 1, r}$, by taking $\cov \left( u_{t} \right)$ to be $\sigma^{2}_SP^{T}P$. By \eqref{eq:log-growth-regional-model}, conditional on $I_{t,r}$, this also captures regional correlation, without having to specify an involved joint distribution for the incidences. Note however, that this is just a convenient modeling choice whose aim is to replicate the covariance structure of the --- somewhat artificial --- case of having i.i.d. number of secondary cases across all regions.
+However, modeling the correlation of newly reported cases turns out to be difficult: the cases will surely be modeled by a Poisson or Negative Binomial distribution, so we would have to decide on a copula to introduce this dependency structure. While this is feasible in principle, we opt for an easier way. Instead of modeling correlated incidences $I_{t + 1, r}$, we model correlated growth rates $\log \rho_{t + 1, r}$, by taking $\cov \left( u_{t} \right)$ to be $\sigma^{2}_SP^{T}P$. By \eqref{eq:log-growth-regional-model}, conditional on $I_{t,r}$, this also captures regional correlation, without having to specify an involved joint distribution for the incidences. Note however, that this is just a convenient modeling choice whose aim is to replicate the covariance structure of the --- somewhat artificial --- case of having an i.i.d. number of secondary cases across all regions.
 
 As elaborated in \Cref{sec:dessiderata}, we want the regional effects $u_{t,r}$ to be both flexible, but also, in some sense, stable over time. Thus, it makes sense to model $u_{t}$ as a stationary process in time. The simplest, non-trivial, stationary process is a vector-autoregressive process 
 $$
     u_{t + 1} = \alpha u_{t} + \varepsilon_{t + 1, u}
 $$
-where $\alpha \in (-1, 1)$ and $\varepsilon_{t + 1,u} \sim \mathcal N(0, \Gamma)$, where $\Gamma$ is a positive definite matrix. By the above discussion, we set $\Gamma = (1-\alpha^{2}) \sigma^{2}_{S}P^{T}P$ so that the stationary distribution of $u_{t}, t = 0, \dots, n$  is $\mathcal N(0, \sigma^{2}_SP^{T}P)$. 
+where $\alpha \in (-1, 1)$ and $\iid$ $\varepsilon_{t + 1,u} \sim \mathcal N(0, \Gamma)$, where $\Gamma$ is a positive definite matrix. By the above discussion, we set $\Gamma = (1-\alpha^{2}) \sigma^{2}_{S}P^{T}P$ so that the stationary distribution of $u_{t}, t = 0, \dots, n$  is $\mathcal N(0, \sigma^{2}_SP^{T}P)$. 
 
-To setup our \gls{ssm}, let $X_{t} = \left( \overline{\log \rho_{t + 1}}, u_{t, 1}, \dots, u_{t, R} \right)^{T} \in \R^{R + 1}$. For the observations, we let $Y_{t} = \left( I_{t, 1}, \dots, I_{t, R} \right)^{T}$, the number of cases observed in regions $1, \dots, R$ in the $t$-th week. 
+To set up our \gls{ssm}, let $X_{t} = \left( \overline{\log \rho_{t + 1}}, u_{t, 1}, \dots, u_{t, R} \right)^{T} \in \R^{R + 1}$. For the observations, we let $Y_{t} = \left( I_{t, 1}, \dots, I_{t, R} \right)^{T}$, the number of cases observed in regions $1, \dots, R$ in the $t$-th week. 
 
 We then model the number of cases at time $t + 1$ in region $r$, $I_{t+1, r}$ to follow a negative binomial distribution, conditional on the states $X_{t}$ to be
 $$
-    I_{t+1,r} | I_{t}, \overline{\log\rho}_{t}, u_{t,r} \sim \nbinom \left( \overline{\rho}_{t}\exp(u_{t,r})P^{T}I_t, r\right),
+    I_{t+1,r} | I_{t}, \overline{\log\rho}_{t}, u_{t,r} \sim \nbinom \left( \overline{\rho}_{t}\exp(u_{t,r})P^{T}I_t, \phi\right),
 $$
-conditionally independent. While the previous observations $I_{t}$ are now conditioned on as well, recall from our discussion in the beginning of \Cref{cha:state_space_models}, that this is not problematic.
+conditionally independent, where $\phi$ is a globally shared overdispersion parameter (see \Cref{ex:pois_negbinom} for our parametrization of the negative binomial distribution). While the previous observations $I_{t}$ are now conditioned on as well, recall from our discussion at the beginning of \Cref{cha:state_space_models}, that this is not problematic.
 
-To fully specify the model, we have to provide the transfer probabilities $p_{r,r'}$. For these, we use official data by Germany's federal employment agency on commuters. We use two datasets: the number of employees subject to social security contributions per county \citep{BundesagenturfuerArbeitStatistik2021Sozialversicherungspflichtig} and the number of commuters per county  \citep{BundesagenturfuerArbeitStatistik2024Pendleratlas}. We use the number of commuters per county from December 2022, which are no longer directly available on the homepage of the federal employment agency, but can be obtained through the Pendleratlas interface. In any case, these data are additionally available in the accompanying zenodo repository of this thesis \todo{link to it}. Notice that both datasets are dated after the Gebietsreform in June 2021. Counties are uniquely identified by the Allgemeiner Gemeinde Schlüssel (AGS), a five-digit code, which are also available in the \gls{rki} dataset. 
+To fully specify the model, we have to provide the transfer probabilities $p_{r,r'}$. For these, we use official data by Germany's federal employment agency on commuters. We use two datasets: the number of employees subject to social security contributions (sozialversicherungspflichtige Beschäftigte) per county \citep{BundesagenturfuerArbeitStatistik2021Sozialversicherungspflichtig} and the number of commuters per county  \citep{BundesagenturfuerArbeitStatistik2024Pendleratlas}. We use the number of commuters per county from December 2022, which are no longer directly available on the homepage of the federal employment agency, but can be obtained through the Pendleratlas interface\footnote{See \url{https://statistik.arbeitsagentur.de/DE/Navigation/Statistiken/Interaktive-Statistiken/Pendleratlas/Pendleratlas-Nav.html}.}. In any case, these data are additionally available in the accompanying zenodo repository of this thesis \todo{link to it}. Notice that both datasets are dated after the Gebietsreform in June 2021. Counties are uniquely identified by the Allgemeiner Gemeinde Schlüssel (AGS), a five-digit code, which is also available in the \gls{rki} dataset. 
 
-In this dataset a commuter is someone whose center of living (as registered with the German authorities) is a different county than the county of their workplace.
+In this dataset a commuter is someone whose center of life (as registered with the German authorities, \glqq{}Erstwohnsitz\grqq{}) is a different county than the county of their workplace.
 For two regions $r,r'$ we let $n_{r}$ be the total number of employees subject to social security contributions per county and $c_{r,r'}$ be the number of commuters from county $r$ to county $r'$, with $c_{r,r} = n_{r} - \sum_{r'\neq r} c_{r,r'}$.
-From these data, we calculate $q_{r,r'} = \frac{c_{r,r'}}{n_{r}}$, the fraction of socially insured employees that have their center of life in region $r$, but are registered to work in region $r'$. 
+From these data, we calculate $q_{r,r'} = \frac{c_{r,r'}}{n_{r}}$, the fraction of employees subject to social security contributions that have their center of life in region $r$, but are registered to work in region $r'$. 
 
 As this is only a crude approximation to the actual exchange between regions, we let
 $$
     p_{r,r'} \propto \bar q + (1- \bar q) \frac{q_{r,r'}}{\sum_{r'' \neq r} q_{r,r''} + C q_{r,r}} \phantom{......} r' \neq r
 $$
-where we interpret $\bar q$ as a constant socket of exchange between regions and $C \geq 1$ as an additional proportion of stay at home inhabitants that are not captured by $q_{r,r}$, e.g. elderly or children. The proportionality is owed to $\sum_{r' = 1}^R p_{r,r'} = 1$. Let us highlight some instances of $P$.  
+where we interpret $\bar q$ as a constant socket of exchange between regions and $C \geq 1$ as an additional proportion of stay at home inhabitants that are not captured by $q_{r,r}$, e.g. elderly or children. The proportionality is owed to the restriction $\sum_{r' = 1}^R p_{r,r'} = 1$. Let us highlight some instances of $P$.  
 
 If $\bar q = 0$ and $C = 1$, then $p_{r,r'} = q_{r,r'}$, which would distribute secondary cases according to the commuting given by the official data from Germany's federal employment agency. 
 
-If $\bar q = 1$ or $\bar q \to 1$ with fixed $C$, $P = \frac{1}{R}J\in\R^{R\times R}$, where $J$ is the matrix with all entries equal to $1$. We can interpret this as choosing the region a secondary case is reported in as uniformly as random across all regions, regardless of the original region of the primary case. 
+If $\bar q = 1$ or $\bar q \to 1$ with fixed $C$, $P = \frac{1}{R}J\in\R^{R\times R}$, where $J$ is the matrix with all entries equal to $1$. We can interpret this as the region a secondary case is reported in being chosen uniformly at random across all regions, regardless of the original region of the primary case. 
 
 If $\bar q \in [0,1)$ and $C \to \infty$, then $P \to I\in\R^{R \times R}$, where $I$ is to identity matrix. In this setting all regions evolve independently of one another.
 Thus, the model is flexible enough to account for these practically relevant scenarios, and interpolate between them.
 
 Our final model is parameterized by
 $$
-    \theta = \left( \log \sigma^{2}_S, \operatorname{logit} \alpha, \log (C - 1), \logit \bar q, \log \sigma^{2}_{\overline{\log \rho}}, \log r\right),
+    \theta = \left( \log \sigma^{2}_S, \operatorname{logit} \alpha, \log (C - 1), \logit \bar q, \log \sigma^{2}_{\overline{\log \rho}}, \log \phi\right),
 $$
 where we reparameterized to an unconstrained $\theta \in \R^{6}$. The model has a linear signal 
 $$
     S_{t} = \left(\log \rho_{t} + u_{t,r}\right)_{r = 1, \dots, R},
 $$
-which makes inference fast, as the approximating \gls{glssm} in the \gls{la} and \gls{eis} method only requires $\mathcal O(n\,R)$ many parameters. Again, we use \gls{mle} to estimate $\theta$, using the methods from \Cref{sec:maximum_likelihood_estimation}. As the models state dimension is quite large, we resort to using the less intensive \gls{la} for all procedures in this chapter.
+which makes inference fast, as the approximating \gls{glssm} in the \gls{la} and \gls{eis} method only requires $\mathcal O(n\,R)$ many parameters. Again, we use \gls{mle} to determine $\theta$, using the methods from \Cref{sec:maximum_likelihood_estimation}. As the models state dimension is quite large, we have occasionally encountered numerical difficulties when using \acrshort{eis}, especially resulting in negative variances leading to invalid proposals. For this reason, we resort to using the more stable \gls{la} for all procedures in this chapter.
 
 
 We aggregate the reported cases from the \gls{rki} on a weekly level. We orient ourselves at the ECDC's ForecastHub, whose guidelines read
 \begin{quote}
-    Forecast horizons should use the Epidemiological Week (EW) format, defined by the US CDC. Each week starts on Sunday and ends on Saturday. \footnote{\url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe/wiki/targets-and-horizons}}
+    Forecast horizons should use the Epidemiological Week (EW) format, defined by the US CDC. Each week starts on Sunday and ends on Saturday.\footnote{\url{https://github.com/european-modelling-hubs/covid19-forecast-hub-europe/wiki/targets-and-horizons}}
 \end{quote}
-Thus, the observations $I_{t, r}$ $t=0, \dots, n$ and $r = 1, \dots, R$ consist of the number of reported cases in region $r$ that were reported from the $t$-th Sunday up until the $t$-the Saturday in the period of interest and for identification purposes we identify $t$ with the $t$-th Saturday in the period under consideration. 
+Thus, the observations $I_{t, r}$ $t=0, \dots, n$ and $r = 1, \dots, R$ consist of the number of reported cases in region $r$ that were reported from the $t$-th Sunday until the $t$-the Saturday in the period of interest and for identification purposes we identify $t$ with the $t$-th Saturday in the period under consideration. 
 
 \subsection{Results}
-We will demonstrate the usefulness of our new model by applying it to two scenarios. First, recalling the local outbreak highlighted in \Cref{fig:cases_germany}, occurring in the middle of June 2022 \citep{Gunther2020SARSCoV2}, we show that using our model gives reasonable estimates of growth rates when incidences are low and local outbreaks can occur, which can then be used to give sensible forecasts, outperforming baseline models on the country as well as the regional level. We will use this as a \textbf{showcase} of the models capabilities, and comment on the estimated parameters, especially $P$, which accounts for cross-regional infections.
+We will demonstrate the usefulness of our new model by applying it to two scenarios. First, recalling the local outbreak highlighted in \Cref{fig:cases_germany}, occurring in the middle of June 2022 \citep{Gunther2020SARSCoV2}, we show that using our model gives reasonable estimates of growth rates when incidences are low, while allowing for local outbreaks. Our model can then be used to give sensible forecasts, outperforming baseline models on the country as well as the regional level. We will use this as a \textbf{showcase} of the models capabilities, and comment on the estimated parameters, especially $P$, which accounts for cross-regional infections.
 Second, we show that our model is able to give reasonable \textbf{one-week ahead forecasts} of \gls{c19} cases by comparing its predictive performance to that of real-time forecasts created in the ECDC's ForecastHub from April 2021 to January 2022.
 
-\paragraph{showcase}
-Similar to the last section, we start out with a motivational example on the capabilities of our model. For this, we use the local outbreak highlighted in \Cref{fig:cases_germany}, which occurred in the middle of June 2020 \citep{Gunther2020SARSCoV2}. We consider the time period from 25 April 2020\footnote{Recall that this weekly observation includes cases reported from 19 April 2020 to 25 April 2020.} up until 20 June 2020 as observations, consider the observation on 27 June 2020 to be missing, and fit the \gls{ssm} to this data. \Cref{fig:regional_showcase_prediction} shows the number of reported cases used to fit this model, aggregated to the whole of Germany. The local outbreak accounts for a total of $1\,413$ cases in the county of Gütersloh between 17 June 2020 and 23 June 2020 (see \citep[Figure 1]{Gunther2020SARSCoV2}), noticeable in this figure by the large jump between 13 June 2020 ($2324$ cases) and 20 June 2020 ($3872$ cases). 
+\paragraph{Showcase}
+Similar to the last section, we start out with a motivational example on the capabilities of our model. For this, we use the local outbreak highlighted in \Cref{fig:cases_germany}, which occurred in the middle of June 2020 \citep{Gunther2020SARSCoV2}. We consider the time period from 25 April 2020\footnote{Recall that this weekly observation includes cases reported from 19 April 2020 to 25 April 2020.} until 20 June 2020 as observations, consider the observation for 27 June 2020 to be missing, and fit the \gls{ssm} to this data. \Cref{fig:regional_showcase_prediction} shows the number of reported cases used to fit this model, aggregated to the whole of Germany. The local outbreak accounts for a total of $1\,413$ cases in the county of Gütersloh between 17 June 2020 and 23 June 2020 --- see \citep[Figure 1]{Gunther2020SARSCoV2} --- which is noticeable in our figure by the large jump between 13 June 2020 ($2324$ cases) and 20 June 2020 ($3872$ cases). 
 
 \begin{figure}
     \resizebox{\textwidth}{!}{%
@@ -128,10 +134,10 @@ Similar to the last section, we start out with a motivational example on the cap
     \label{fig:regional_showcase_prediction}
 \end{figure}
 
-We fit the model using maximum likelihood estimation and present the estimated parameters in \Cref{tab:regional_showcase_theta}. 
+We fit the model using \gls{mle}, see \Cref{tab:regional_showcase_theta} for the estimated parameters.
 \input{chapters/04_epidemiological_ssms/04_02_weekly_GF_showcase_hyperparameter_text.tex}
 
-The estimated auto-regressive parameter $\alpha$ is negative, which has can be interpreted as follows: when a region's log-growth factor is above the country-wide average at time $t$, it tends to decrease below the average in the following week. Similarly, regions with below-average growth factors tend to increase back toward the mean. This negative autocorrelation is sensible for the low-incidence setting we consider here, where large outbreaks are typically localized and temporary, rather than sustained.
+The estimated auto-regressive parameter $\alpha$ is negative, which can be interpreted as follows: when a region's log-growth factor is above the country-wide average at time $t$, it tends to decrease below the average in the following week. Similarly, regions with below-average growth factors tend to increase back toward the mean. This negative autocorrelation is sensible for the low-incidence setting we consider here, where large outbreaks are typically localized and temporary, rather than sustained.
 
 The standard deviation of the average growth rate, $\sigma_{\overline{\log \rho}}$, is small compared to that of the spatial effect, $\sigma_{S}$. This is visible from \Cref{fig:regional_showcase_rho.tex} as well, where we show the predicted median growth factors (not on the log scale) for the model with a blue dashed line ($\overline{\log \rho}_{t}$) and boxplots for the median growth rates for each county (summarized by blue boxplots). Here we can see that the variation over time at the county level is much larger than that at the country level, which is also evident when examining $\log \rho_{t,r}$ directly (figures not shown).
 
@@ -142,9 +148,9 @@ The standard deviation of the average growth rate, $\sigma_{\overline{\log \rho}
     \label{tab:regional_showcase_theta}
 \end{table}
 
-The estimated proportion of stay at home inhabitants, $C \approx 2.4$, is remarkably close to the Germany-wide ratio of total inhabitants to employees subject to social security contributions, which is $2.5$—despite the model having no direct access to total population data. The estimated overdispersion parameter $r$ indicates significant overdispersion in the data: as explained in \Cref{ex:pois_negbinom}, the variance of a $\operatorname{NegBinom}$ distribution with mean $\mu$ and overdispersion parameter $r$ is $1 + \frac{\mu}{r}$ times larger than that of a Poisson distribution with the same mean. 
+The estimated proportion of stay at home inhabitants, $C \approx 2.4$, is remarkably close to the Germany-wide ratio of total inhabitants to employees subject to social security contributions, which is $2.5$—despite the model having no direct access to total population data. The estimated overdispersion parameter $\phi$ indicates significant overdispersion in the data: as explained in \Cref{ex:pois_negbinom}, the variance of a $\operatorname{NegBinom}$ distribution with mean $\mu$ and overdispersion parameter $\phi$ is $1 + \frac{\mu}{\phi}$ times larger than that of a Poisson distribution with the same mean. 
 
-This overdispersion becomes practically significant when $\mu \geq r$, as this corresponds to at least doubling the variance compared to a Poisson model. For the date of 20 June 2020, this threshold was exceeded by 32 out of 400 counties, indicating that overdispersion was relevant for the larger counties during this period.
+This overdispersion becomes practically significant when $\mu \geq \phi$, as this corresponds to at least doubling the variance compared to a Poisson model. For the date of 20 June 2020, this threshold was exceeded by 32 out of 400 counties, indicating that overdispersion was relevant for the higher incidence counties during this period.
 
 % comment on predictions and neg binom baselines
 Having fitted the model, we can use it to obtain forecasts for the next observation, that on 27 June 2020, using the techniques detailed in \Cref{subsec:inference}. We show predictions (median, $50\%$ and $95\%$ prediction intervals) in \Cref{fig:regional_showcase_prediction}, indicated by the blue regions. As the predictions on the country level consist of those on the regional level, we additionally use the data on total inhabitants in a county, capping the number of predicted cases by the total inhabitants, that is we predict in region $r$ with samples
@@ -156,24 +162,60 @@ where $i=1,\dots,N$, $T$ is the index for which we want to perform predictions a
 To assess the performance, we compare it to three simple baseline models. 
 
 \begin{itemize}
-    \item The \texttt{nbinom} model uses a $ \operatorname{NegBinom}$ distribution with mean $\mu = 6451.1$ set to the country wide growth factor from 13 June 2020 to 20 June 2020 ($\rho = 1.67$) times the total number of cases reported for Germany for 20 June 2020 ($I_{t,\cdot} = 3872$). The overdispersion parameter is estimated by fitting the model to past observations with maximum likelihood estimation, resulting in $r = 143.1$. The median and prediction intervals presented in the figure are given by the respective quantiles of this distribution.
-    \item The \texttt{reg.nbinom} model uses the same strategy, but applied to observations on the county level, estimating an individual $r$ for each county. To take care of unrealisticly high growth factors, we cap all growth factors at $3$. Should the empirical growth factor be infinite or indeterminante due to the number of old cases being $0$, we set it to $1$.  The median and prediction intervals presented in the figure are obtained by simulating $10\,000$ samples from each county, independently, then taking empirical prediction intervals on the number of cases aggregated to the country level. We also apply the same capping strategy by the total number of inhabitants as for the \texttt{ssm} model.
+    \item The \texttt{nbinom} model uses a $ \operatorname{NegBinom}$ distribution with mean $\mu = 6451.1$ set to the country wide growth factor from 13 June 2020 to 20 June 2020 ($\rho = 1.67$) times the total number of cases reported for Germany for 20 June 2020 ($I_{t,\cdot} = 3872$). The overdispersion parameter is estimated by fitting the model to past observations with maximum likelihood estimation, resulting in $\phi = 143.1$. The median and prediction intervals presented in the figure are given by the respective quantiles of this distribution.
+    \item The \texttt{reg.nbinom} model uses the same strategy, but applied to observations on the county level, estimating an individual $\phi$ for each county. To take care of unrealisticly high growth factors, we cap all growth factors at $3$. Should the empirical growth factor be infinite or indeterminante due to the number of old cases being $0$, we set it to $1$.  The median and prediction intervals presented in the figure are obtained by simulating $10\,000$ samples from each county, independently, then taking empirical prediction intervals on the number of cases aggregated to the country level. We also apply the same capping strategy by the total number of inhabitants as for the \texttt{ssm} model.
     \item The \texttt{reg.nbinom no GL} model is the same as the \texttt{reg.nbinom} model, but with cases for the county of Gütersloh set to $0$. 
 \end{itemize}
 
-It is clear from \Cref{fig:regional_showcase_prediction} that the \texttt{ssm} approach outperforms the baseline models: it is the only model where the prediction interval contains, or is even close to the true observation. There are multiple reasons for this behavior. First, the simple \texttt{nbinom} overpredicts the number of total cases because the number of reported cases from the local outbreak in Gütersloh county dominate the country-wide development of cases. While the regional level \texttt{reg.nbinom} model is able to account for this, the empirical growth factor for Gütersloh is $\hat \rho_{T, \text{Gütersloh}} = 11.7$ with $856$ cases reported for 20 June 2020, which results in $\approx 10\,000$ cases predicted for that county alone. Recalling that we have capped the growth factor at $3$, the \texttt{reg.nbinom}  model would only predict $\approx 2\,600$ cases, which is still noticeable in the predictions. 
-The best of the three baseline models --- in terms of predictive performance for this single observation --- is the \texttt{reg.nbinom no GL} model, where we have removed Gütersloh from the prediction completely. However, it still overpredicts by a relevant margin which we attribute to the fact that the same effect --- albeit less pronounced may be at work in other counties: due to small numbers of reported cases there are many large outliers in the empirical growth factors, see \Cref{fig:regional_showcase_rho.tex}. 
+It is clear from \Cref{fig:regional_showcase_prediction} that the \texttt{ssm} approach outperforms the baseline models: it is the only model where the prediction interval contains, or is at least close to the true observation. There are multiple reasons for this behavior. First, the simple \texttt{nbinom} overpredicts the number of total cases because the number of reported cases from the local outbreak in Gütersloh county dominate the country-wide development of cases. While the regional level \texttt{reg.nbinom} model is able to account for this, the empirical growth factor for Gütersloh is $\hat \rho_{T, \text{Gütersloh}} = 11.7$ with $856$ cases reported for 20 June 2020, which results in $\approx 10\,000$ cases predicted for that county alone. Recalling that we have capped the growth factor at $3$, the \texttt{reg.nbinom}  model only predicts $\approx 2\,600$ cases, which is still noticeable in the predictions. 
+The best of the three baseline models --- in terms of predictive performance for this single observation --- is the \texttt{reg.nbinom no GL} model, where we have removed Gütersloh from the prediction completely. However, it still overpredicts by a relevant margin which we attribute to the fact that the same effect --- albeit less pronounced --- may be at work at other counties, too: due to small numbers of reported cases there are many large outliers in the empirical growth factors, see \Cref{fig:regional_showcase_rho.tex}. 
 
 \begin{figure}
     \resizebox{\textwidth}{!}{%
         \input{tikz/regional_showcase_rho.tex}%
     }
-    \caption{Growth factors for the showcase model estimated by the \gls{ssm} approach (blue boxplots and lines) and the empirical approach (red boxplots and lines). For the $400$ counties in Germany, we summarize the estimated growth factors with boxplots. The top of the y-axis is cutoff at $\rho = 4$ omitting the many outliers produced by both approaches, which is due to the overall small number of reported cases. The estimates of the \gls{ssm} approach tend to be more concentrated than those based on the empirical approach, as the \gls{ssm} approach regularizes the (log-)growth rates both in time an space. While the country level estimates (shown by dashed lines) mostly agree, they diverge at the end of the observational period, as the local outbreak \citep{Gunther2020SARSCoV2} has less of an impact in the \gls{ssm} approach.}
+    \caption{%
+        \textbf{Top figure:} Growth factors on the regional level for the $400$ counties in Germany for the showcase model. We show the \gls{ssm} approach with blue boxplots and the empirical approach with red boxplots. The top of the y-axis is cutoff at $\rho = 4$ omitting the many outliers produced by both regional approaches, which is due to the overall small number of reported cases. The estimates of the \gls{ssm} approach tend to be more concentrated than those based on the empirical approach, as the \gls{ssm} approach regularizes the (log-)growth rates both in time and space.\\
+        \textbf{Bottom figure:} Growth factors on the country level for the mean and  approaches from the \gls{ssm} and the empirical approach. For the \gls{ssm} approaches we additionally show $95\%$ prediction intervals as shaded regions.}
     \label{fig:regional_showcase_rho.tex}
 \end{figure}
 
-Another advantage of the \texttt{ssm} model are the regional and country level growth factors we obtain. In \Cref{fig:regional_showcase_rho.tex} we show median estimates of these growth factors, together with their empirical counterparts, i.e. the growth factors used in the \texttt{nbinom} and \texttt{reg.nbinom} baseline models (without the cap at $\rho = 3$ introduced there). 
-In this figure, we observe that the country level estimates of the growth factor are smaller for the \gls{ssm} approach, compared to the empirical one. The reason for this is that $\overline{\log \rho}_{t}$ is not the logarithm of a country wide growth factor, but the mean (on the log-scale) of all regional growth factors, so by Jensen's inequality it has to be smaller than the country level growth factor. Its estimate is close to the median growth factor on the county level, indicated by the bar in the blue boxplots.  For the county level growth factors in this figure, we additionally observe less variation of growth factors across counties due to the regularization our model imposes.
+Another advantage of the \gls{ssm} model are the regional and country level growth factors we obtain. In the bottom part of \Cref{fig:regional_showcase_rho.tex} we show estimates of these growth factors, together with their empirical counterparts, i.e. the growth factors used in the \texttt{nbinom} and \texttt{reg.nbinom} baseline models (without the cap at $\rho = 3$ introduced there), given by
+$$
+\rho_{t}^{\text{emp}} = \frac{\sum_{r = 1}^R I_{t, r}}{\sum_{r = 1}^{R} I_{t - 1, r}}.
+$$
+For the country level \gls{ssm} approach, we show two variants: the first consist of the average growth factor over all counties, 
+$$
+    \rho_{t}^{\text{mean}} = \frac{1}{R} \sum_{r = 1}^R \rho_{t,r},
+$$
+as well as an adjusted estimate based on weighing the regional $\rho_{t,r}$ with the number of current reported cases
+$$
+    \rho_{t}^{\text{adj}} = \frac{\sum_{r = 1}^R\rho_{t,r} I_{t,r}}{\sum_{r = 1}^R I_{t, r}},
+$$
+both of which we estimate by importance sampling. 
+
+In \Cref{fig:regional_showcase_rho.tex}, the adjusted and empirical growth factors mostly agree, except for the last date where the local outbreak described in \citep{Gunther2020SARSCoV2} occurred, where both \gls{ssm} based approaches produce smaller estimates due to the regularization introduced by our model. The mean growth factor differs from the other two approaches: it tends to be larger during periods of lower incidence and smaller during the local outbreak. This difference arises because $\rho_{t}^{\text{mean}}$ measures the average growth factor across all regions, while $\rho_{t}^{\text{adj}}$ measures the country-wide growth. To illustrate, consider the observations from 30 May 2020. The mean growth factor is close to $1$, indicating that an \glqq{}average\grqq{} region will experience stagnating cases. However, the adjusted growth factor is noticeably smaller than $1$, indicating that cases will decline at the country level. These observations are not contradictory: regions with large growth factors may have smaller incidences. Thus, taking both indicators into consideration is worthwhile.
+
+For the county level growth factors in the upper pat of \Cref{fig:regional_showcase_rho.tex}, we additionally observe less variation of growth factors across counties due to the regularization our model imposes.
+
+% case study on Gütersloh
+\begin{figure}
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/regional_showcase_guetersloh.tex}%
+    }
+    \caption{TODO} 
+    \label{fig:regional_showcase_guetersloh}
+\end{figure}
+
+\begin{figure}
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/regional_predictions_GL.tex}%
+    }
+    \caption{TODO} 
+    \label{fig:regional_predictions_GL}
+\end{figure}
+
+
 
 Finally, we can interpret the entries in $P$, which informs both the redistribution of cases between regions, and the covariance of regional effects $u_{t}$. As $P$ is a $400\times 400$ matrix, we focus only on a small section of it: the counties in the federal state of Saxony. Saxony is interesting because it contains two large cities (``Leipzig, Stadt'' and ``Dresden, Stadt'') with commuters commuting from the surrounding area to these cities. In the fitted model, this results in a larger row-sum for the indices associated with these cities, see the right-hand side of \Cref{fig:P_matrix_saxony.tex}.
 
@@ -181,17 +223,17 @@ Finally, we can interpret the entries in $P$, which informs both the redistribut
     \resizebox{\textwidth}{!}{%
         \input{tikz/P_matrix_saxony.tex}%
     }
-    \caption{We show part of the estimated $P$ for the showcase example for Saxonian counties. On the left-hand side we present $p_{r,r'}$ for $r,r'$ in Saxony. As the diagonal elements are much larger than the off-diagonal ones, we only apply the color gradient to the off-diagonal elements. The right-hand shows the proportion of in-county infections $p_{r',r'}$ (blue bars) and out-of-county infections $\sum_{r \neq r'} p_{r,r'}$ (red bars). For the two big cities, ``Leipzig, Stadt'' and ``Dresden, Stadt'', we see a larger influx of cases, compared to the more rural regions, e.g. ``Görlitz''.} 
+    \caption{We show part of the estimated $P$ for the showcase example for Saxonian counties. On the left-hand side we present $p_{r,r'}$ for $r,r'$ in Saxony. As the diagonal elements are much larger than the off-diagonal ones, we only apply the color gradient to the off-diagonal elements. The right-hand figure shows the proportion of in-county infections $p_{r',r'}$ (blue bars) and out-of-county infections $\sum_{r \neq r'} p_{r,r'}$ (red bars). For the two big cities, ``Leipzig, Stadt'' and ``Dresden, Stadt'', we see a larger influx of cases, compared to the more rural regions, e.g. ``Görlitz''.} 
     \label{fig:P_matrix_saxony.tex}
 \end{figure}
 
 % results:
 % WIS across all counties compare to poisson and nb baseline in that week (see talk at Karlsruhe)
 
-\paragraph{one-week ahead forecasts}
+\paragraph{One-week ahead forecasts}
 
 In the last section we have seen that our regional \gls{ssm} provides accurate forecasts in a low incidence setting. We now want to investigate if that holds true in higher incidence settings.
-To that end, we will compare the predictions made by our model to that of some models that participated in the \acrlong{gfch} \citep{Bracher2021Preregistered,Bracher2022National} and \acrlong{efch} \citep{Sherratt2023Predictive}, collaborative forecasting challenges for \gls{c19} cases, deaths and hospitalizations.
+To that end, we will compare the predictions made by our model to that of some models that participated in the \acrlong{gfch} \citep{Bracher2021Preregistered,Bracher2022National}, a collaborative forecasting challenge for \gls{c19} cases and deaths.
 From 10 October 2020, the \gls{gfch} gathered weekly real-time forecasts for cases and deaths in Germany and Poland on the national and sub-national level. The participating teams were required to submit their forecast in a standardized format, providing selected quantiles from their predictive distributions. To evaluate the predictive performance of our model, we compare it to three models submitted to the Hub:
 
 \begin{itemize}
@@ -200,8 +242,8 @@ From 10 October 2020, the \gls{gfch} gathered weekly real-time forecasts for cas
     \item The \texttt{itww} model makes predictions based on a county-level reproduction number model, with forecasts based on repeated simulations from the renewal equation \eqref{eq:renewal-model}. See \citep{Heyder2022Regional} for details.
 \end{itemize}
 
-We chose to focus on models submitted to the \gls{gfch} instead of the \gls{efch} for two reasons. 
-First, the \gls{efch} uses the JHU \gls{c19} data \citep{Dong2020} as truth, rather than the \gls{rki} data. The \gls{gfch} uses a dataset curated by the \gls{ecdc} instead, which is closer to the \gls{rki} as it is based on the TESSy reports from the \gls{rki}. Second, as the \gls{gfch} was explicitly gathering forecasts for Germany (and Poland), we expect the models submitted to it to create more accurate forecasts than the ones submitted to the \gls{efch}. 
+The \gls{efch} \citep{Sherratt2023Predictive} also gathered similar predictions, but we chose to focus on models submitted to the \gls{gfch} instead for two reasons. 
+First, the \gls{efch} uses JHU \gls{c19} data \citep{Dong2020} as ground truth, rather than \gls{rki} data. The \gls{gfch} uses a dataset curated by the \gls{ecdc}, which is closer to \gls{rki} data as it is based on \gls{tessy} reports from the \gls{rki}. Second, as the \gls{gfch} explicitly gathered forecasts for Germany and Poland, we expect models submitted to it to produce more accurate forecasts than those submitted to the \gls{efch}. 
 
 % switch KIT -> ECDC
 For the \texttt{ensemble} model we use a combination of the \texttt{KITCOVIDhub-median-baseline} model, submitted to the \gls{gfch} and the \texttt{EuroCOVIDhub-ensemble} model, submitted to the \gls{efch}: starting with 10 April 2021, the \texttt{KITCOVIDhub-median-baseline} only aggregates subnational forecasts, not national ones. Instead the \texttt{EuroCOVIDhub-ensemble} is used in the \gls{gfch} from that date on, and so we do the same. The switch is indicated in \Cref{fig:regional_forecasts_comparison.tex} by a vertical line. 
@@ -210,7 +252,7 @@ To obtain the predictions for the \texttt{ssm} model, we aim at replicating the 
 
 To fit the model, we use an abbreviated fitting and prediction procedure: we use only the initial guess of the parameter, $\hat\theta_{0}$ (\Cref{alg:mle}) which is obtained by at most $10$ iterations of a gradient descent procedure. Using this parameter, we obtain the \gls{la} (\Cref{alg:la}) of the posterior distribution and produce forecasts of the last, missing observation by using $1000$ samples from the \gls{la}, using the approach detailed in \Cref{subsec:inference}. The whole procedure can run in approximately 10 minutes for a single forecast on a consumer grade Macbook Air M3 with 16GB of RAM. 
 
-To evaluate the quality of the forecasts, we use a the true value the \gls{rki} used throughout this thesis, i.e. the dataset published on 5 May 2023, see \Cref{subsec:incidence_and_death_data}. 
+To evaluate the quality of the forecasts, we use the final value the \gls{rki} reported, i.e. the dataset published on 5 May 2023, see \Cref{subsec:incidence_and_death_data}. 
 
 \begin{figure}
     \resizebox{\textwidth}{!}{%
@@ -238,23 +280,23 @@ Additionally, we report the decomposition of the \gls{wis} into its four compone
 \begin{table}
     \centering
     \input{tables/regional_forecasts_combined_metrics.tex}
-    \caption{Quantitative comparison of the four approaches to one-week ahead forecasts. All metrics are averaged across the $67$ one-week ahead forecasts made by each model. To be consistent with the \gls{wis} we use the median as the point forecast for the \gls{mae}. For the \gls{wis} we show additional the decomposition into four components and the relative performance, when compared to the \texttt{baseline}, of the \texttt{ensemble}, \texttt{itww} and \texttt{ssm}. }
+    \caption{Quantitative comparison of the four approaches to one-week ahead forecasts. All metrics are averaged across the $67$ one-week ahead forecasts made by each model. To be consistent with the \gls{wis} we use the median as the point forecast for the \gls{mae}. For the \gls{wis} we show, additionally, the decomposition into four components, as well as for both MAE and WIS the relative performance, when compared to the \texttt{baseline}, of the \texttt{ensemble}, \texttt{itww} and \texttt{ssm}. }
     \label{tab:regional_forecasts_combined_metrics}
 \end{table}
 
 For the \gls{mae}, we see that the \texttt{ensemble} model obtains the best performance, followed closely by the \texttt{ssm} model, then the \texttt{baseline} model and finally, worse than the \texttt{baseline}, the \texttt{itww} model. While the \gls{mae} is dominated by the errors in periods of high incidence, we follow the argument of \citep[Section 5]{Bracher2021Evaluating}, which encourages the use of the \gls{mae} over relative performance measures, such as the mean absolute percentage error (MAPE), as using the \gls{mae} as a performance metric incentivizes models to report predictive medians. 
 Additionally, the \gls{mae} is one of the components in the decomposition of the \gls{wis}, making the two metrics compatible with one another. 
 
-For the \gls{wis}, we observe a similar ranking as for the \gls{mae}, with a slight difference: the \texttt{ensemble} model performs better relative to the baseline for \gls{wis} and the \texttt{ssm} model performs slightly worse. However, such comparisons should be treated carefully, as none of the measures reported here come with uncertainties attached and are based on only $67$ forecasts. 
+For the \gls{wis}, we observe a similar ranking as for the \gls{mae}, with a slight difference: the \texttt{ensemble} model performs better relative to the baseline for \gls{wis} and the \texttt{ssm} model performs slightly worse. However, such comparisons should be treated carefully, as none of the measures reported here come with uncertainties attached, and they are based on only $67$ forecasts. 
 
 As for the decomposition of the \gls{wis} into its four components, we see that for all models, except the \texttt{itww} model, substantial contributions come from the sharpness component, which penalizes large prediction intervals. For the \texttt{ssm} model, it is by far the largest component of the \gls{wis}, while for the \texttt{baseline} model underprediction (due to the long increase at the end of the forecasting period) and for the \texttt{ensemble} model overprediction are on a comparable level. 
 The \texttt{itww} model has a high \gls{wis} largely due to overprediction and, to lesser extent, underprediction. 
 
-For the empirical coverage of the prediction intervals, we observe similiar results: the best calibration of the $50\%$ and $95\%$ prediction intervals is achieved by the \texttt{ensemble} model, while the \texttt{baseline} model prodcues too narrow $50\%$ prediction intervals. The \texttt{itww} model produces too narrow forecasts, and the \texttt{ssm} model too wide ones. 
+For the empirical coverage of the prediction intervals, we observe similiar results: the best calibration of the $50\%$ and $95\%$ prediction intervals is achieved by the \texttt{ensemble} model, while the \texttt{baseline} model produces too narrow $50\%$ prediction intervals. The \texttt{itww} model produces too narrow forecasts, and the \texttt{ssm} model too wide ones. 
 
 From this comparison we can speculate that the \texttt{ssm} model would benefit from slight rescaling of the prediction intervals, while the \texttt{itww} model could benefit from larger prediction intervals. 
 
-As expected, the \texttt{ensemble} model outperforms all models --- this is consistent with the results from almost all such forecasting hubs, e.g. \citep{Bracher2021Comparison,Bracher2021Preregistered,Bracher2022National,Wolffram2023Collaborative,Sherratt2022Predictive,Ray2020Ensemble}. However, the \texttt{ssm} model is a close second, except for its somewhat large uncertainty intervals. In this analysis it should be mentioned that the model is in no way calibrated to perform accurate forecasts, i.e. we did not perform model selection (e.g. by Akaike's Information Criterion) or include predictive performance in the parameter fitting procedure.
+As expected, the \texttt{ensemble} model outperforms all models --- this is consistent with the results from almost all such forecasting hubs, e.g. \citep{Bracher2021Comparison,Bracher2021Preregistered,Bracher2022National,Wolffram2023Collaborative,Sherratt2022Predictive,Ray2020Ensemble}. However, the \texttt{ssm} model is a close second, except for its somewhat large prediction intervals. In this analysis it should be mentioned that the model is in no way calibrated to perform accurate forecasts, i.e. we did not perform model selection (e.g. by Akaike's Information Criterion) or include predictive performance in the parameter fitting procedure.
 
 \subsection{Discussion}
 
@@ -262,7 +304,7 @@ The \gls{ssm} we have introduced in this section allows making sensible reconstr
 
 Let us reiterate that our forecasting setup aims at replicating the available information during the real-time forecasts performed for the \gls{gfch} as closely as possible, to make the evaluation of the predictive performance valid. Indeed, our model even uses less information than is available, as the weekly aggregation ignores all cases reported on Sunday and Monday. 
 
-Our model also comes with some disadvantages: the dimension of $m=401$ states is quite high, which makes fitting the model more costly than the model presented in \Cref{sec:model_reporting_delay,sec:nowcasting_hospitalizations}, in fact so costly that we restrict ourselves to only $10$ time points. Estimating the MLE $\hat\theta$ with $N=10\,000$ samples for the showcase model takes 3 hours on a consumer grade Macbook Air M3, while obtaining the initial estimate of $\theta$, $\hat\theta_{0}$ is faster, taking only around $5$ minutes on the same computer. Let us note that for predictive performance in the one-week ahead forecasts, we have not found a practical difference between the two fitted models, so we opted for the cheaper $\hat\theta_{0}$. 
+Our model also comes with some disadvantages: the dimension of $m=401$ states is quite high, which makes fitting the model more costly than for the models presented in \Cref{sec:model_reporting_delay,sec:nowcasting_hospitalizations}, in fact so costly that we restrict ourselves to only $10$ time points. Estimating the MLE $\hat\theta$ with $N=10\,000$ samples for the showcase model takes 3 hours on a consumer grade Macbook Air M3, while obtaining the initial estimate of $\theta$, $\hat\theta_{0}$ is faster, taking only around $5$ minutes on the same computer. Let us note that for predictive performance in the one-week ahead forecasts, we have found no practical difference between the two fitted models, so we opted for the cheaper $\hat\theta_{0}$. 
 
 Furthermore, we model the exchange between regions, given by $P$, as static over the whole period which is likely unrealistic for longer periods --- we have investigated the estimated $\hat C$ and $\hat{\bar q}$ in the one-week ahead forecast setting, and found substantial change (figures not shown). While it is theoretically possible to have $P$ vary over time (e.g. by including different $C$ and $\bar q$ for each point in time), it will make fitting the model much more involved. 
 
@@ -274,4 +316,4 @@ Our approach differs from existing literature in several key aspects. First, whi
 
 A further advantage of our model is that it provides interpretable results, which will be useful in informing public health decision-making, as we may interpret the growth factors $\rho_{t}$ and $\rho_{t,r}$ (with the caveats provided in the discussion surrounding \Cref{fig:regional_showcase_rho.tex}) epidemiologically. Additionally, the hyperparameters $C$ and $\bar q$ also have interpretations in terms of population structure and mobility, although this interpretation has to be more careful. 
 
-In conclusion, our model addresses several gaps identified in our short literature review at the start of this section, by providing a flexible, yet interpretable framework for modeling the spatio-temporal spread of an infectious disease such as \gls{c19}. Compared to network-based \citep{Armbruster2024Networkbased} and spatio-temporal approaches \citep{Kline2022Bayesian}, our method achieves a balance between complexity, interpretability and predictive performance. While the aforementioned limitations remain, these allow for promising avenues for future research, by, including dynamic mobility modeling and real-time forecast evaluation, e.g. in the \gls{ecdc}'s RespiCast Hub \citep{ECDCRespiCast}. Overall, we believe this model to provide a valuable contribution to the toolkit of epidemic modeling at the regional level, with potential application beyond the current context. 
+In conclusion, our model addresses several gaps identified in our short literature review at the start of this section, by providing a flexible, yet interpretable framework for modeling the spatio-temporal spread of an infectious disease such as \gls{c19}. Compared to network-based \citep{Armbruster2024Networkbased} and spatio-temporal approaches \citep{Kline2022Bayesian}, our method achieves a balance between complexity, interpretability and predictive performance. While the aforementioned limitations remain, these allow for promising avenues for future research, by including dynamic mobility modeling and real-time forecast evaluation, e.g. in the \gls{ecdc}'s RespiCast Hub \citep{ECDCRespiCast}. Overall, we believe this model to provide a valuable contribution to the toolkit of epidemic modeling at the regional level, with potential application beyond the current context. 

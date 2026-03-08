@@ -789,7 +789,7 @@ wheels = [
 
 [[package]]
 name = "isssm"
-version = "0.1.2"
+version = "0.1.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jax" },
@@ -802,9 +802,9 @@ dependencies = [
     { name = "setuptools" },
     { name = "tensorflow-probability" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/42/88/dc8959f162552a38b45e4f4779e716dae878430dab8e28e54f9a23ad74d4/isssm-0.1.2.tar.gz", hash = "sha256:01ffc3a11f7eca01e5465b05d79c973d0da027bb984cd0ff9d8357d21fb1018a", size = 18399, upload-time = "2026-01-03T14:40:52.861Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/04/b6/a50406f87907fe21ccdc3f350c1b2b0124c25a586dbf01b36712e4f63f68/isssm-0.1.3.tar.gz", hash = "sha256:96d5be81769ba681dece5863177312cb60d7d58eacafc6f2703ff61841247b12", size = 18387, upload-time = "2026-03-08T13:08:05.13Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f3/4f/eb5fe9c97b891aa2c89717141ab6b1991ee2ece0adebbf7a9bfef4edbe38/isssm-0.1.2-py3-none-any.whl", hash = "sha256:43ee4db9031a03c0b14050e14d2abea7776e6058371116f6331c0b5ca1f8cc9c", size = 26703, upload-time = "2026-01-03T14:40:51.963Z" },
+    { url = "https://files.pythonhosted.org/packages/93/e2/ddc0218779bf0b9a11ee76f1c0c8af8a8185562355708ba504ffb2fc66a7/isssm-0.1.3-py3-none-any.whl", hash = "sha256:f940356ec7a7229ea8a55a103bfa431a1d01042202cf92a50e139c0a55f940b8", size = 26699, upload-time = "2026-03-08T13:08:04.197Z" },
 ]
 
 [[package]]
@@ -2449,7 +2449,7 @@ requires-dist = [
     { name = "fastcore", specifier = ">=1.8.2" },
     { name = "ipykernel", specifier = ">=6.29.5" },
     { name = "ipympl", specifier = ">=0.9.7" },
-    { name = "isssm", specifier = "==0.1.2" },
+    { name = "isssm", specifier = "==0.1.3" },
     { name = "jax", specifier = ">=0.6.1" },
     { name = "jaxtyping", specifier = ">=0.3.2" },
     { name = "jinja2", specifier = ">=3.1.6" },

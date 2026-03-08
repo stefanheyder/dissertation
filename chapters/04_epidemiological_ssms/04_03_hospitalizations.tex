@@ -3,20 +3,22 @@
 \newcommand*{\ilmprop}{\texttt{ILM-prop42}\xspace}
 \newcommand*{\ensemble}{\texttt{MeanEnsemble}\xspace}
 \label{sec:nowcasting_hospitalizations}
-Judging the severity of the COVID-19 epidemic has been an ongoing challenge since its inception. As immunization against COVID-19 rose, strict enforcement of social distancing rules eased and testing regimes became less strict, case incidences became a less reliable and harder to interpret indicator of epidemic severity. Instead, more direct indicators of morbidity, such as the number of deaths and ICU admissions and occupancy have come to the fore. But these indicators are late due to the substantial delays between infection and occurrence. An alternative indicator that captures the morbidity caused by COVID-19, but is earlier than the others, is the number of hospitalizations of positive COVID-19 cases.
+Judging the severity of the COVID-19 epidemic has been an ongoing challenge since its outbreak. As immunization against COVID-19 rose, strict enforcement of social distancing rules eased and testing regimes became less strict, case incidences became a less reliable and harder to interpret indicator of epidemic severity. Instead, more direct indicators of morbidity, such as the number of deaths and ICU admissions and occupancy have come to the fore. But these indicators are late due to the substantial delays between infection and occurrence. An alternative indicator that captures the morbidity caused by COVID-19, but is less delayed than the others, is the number of hospitalizations of positive COVID-19 cases.
 
 While hospitalizations occur earlier, they still come with substantial delay between the infection and subsequent admission to hospital. Additional difficulties arise due to delays in reporting, i.e.~the time it takes until the hospital reports the new case to the national health authorities. The problem of accounting for delays in reporting for occurred, but not yet reported events has been termed \textbf{nowcasting}, i.e.~forecasting of the indicator at time ``now''. Predicting the number of hospitalizations is thus a mixture of both forecasting --- which reported COVID-19 cases will end up in the hospital --- and nowcasting --- which cases have yet to be reported --- and we will use the term nowcasting in this section to mean this predictive mixture. We focus on the situation in Germany where data on hospitalizations has been available since April 2021 provided by the German federal health care authority, the \gls{rki}, via Github \citep{RobertKoch-Institut2021COVID19Hospitalisierungen}. Recall from \Cref{subsec:hospitalization_data} that the hospitalization incidence is reported on a daily basis and consists of weekly rolling sums of hospitalizations. For each day, it counts the hospitalizations with associated reporting dates of COVID-19 infections occurring in the week prior of that day. 
 
-In the period from November 2021 to March 2024, the German COVID-19 NowcastHub \citep{Wolffram2023Collaborative} has gathered daily submissions of nowcasts of the German hospitalization incidence from eight different research groups, using a variety of nowcasting approaches. The submissions are aggregated into different ensemble models which provides more accurate nowcasts than any individual model. Together with his supervisor Thomas Hotz, the author of this thesis has contributed the \texttt{ILM-prop} model, which is based on a regression on the number of reported cases available at the time of nowcast, as well as uncertainty quantification based on past model performance. 
+In the period from November 2021 to March 2024, the \gls{nch} \citep{Wolffram2023Collaborative} has gathered daily submissions of nowcasts of the German hospitalization incidence from eight different research groups, using a variety of nowcasting approaches. The submissions are aggregated into different ensemble models which provide more accurate nowcasts than any individual model. 
+As the probability of hospitalization is strongly affected by age, the 
+Together with his supervisor Thomas Hotz, the author of this thesis has contributed the \texttt{ILM-prop} model, which is based on a regression on the number of reported cases available at the time of nowcast, as well as uncertainty quantification based on past model performance. 
 
 In this section, we will extend the \texttt{ILM-prop} model by designing an \gls{ssm} that captures the main ideas present in that model, but provides prediction intervals based on the \gls{ssm}, rather than past model performance as the \texttt{ILM-prop} model does (see below for details on the model setup). This allows the model to adapt to changing circumstances faster and comes with the usual benefits of interpretability of \glspl{ssm}. Before we discuss our approach in more detail, let us provide some context for nowcasting in general.
 
 The origin of nowcasting lie in accounting for incurred, but not reported claims in the actuarial sciences \citep{Kaminsky1987Prediction}, delays in reporting for AIDS \citep{Zeger1989Statistical,Lawless1994Adjustments} and other infectious diseases \citep{Farrington1996Statistical}. Popular statistical approaches include methods from survival analysis \citep{Lawless1994Adjustments} and generalized linear regression \citep{Zeger1989Statistical}. In the survival analysis setting one commonly models the reverse time discrete hazard parametrically and assumes multinomial sampling of the final number of cases, potentially accounting for overdispersion. Such models have been applied in frequentist \citep{Midthune2005Modeling} and Bayesian \citep{Hohle2014Bayesian,AnDerHeiden2020Schatzung} settings. The generalized linear regression approach has origins in the chain ladder model from actuarial sciences \citep{Renshaw1998Stochastic} and models the observed counts in the reporting triangle by a Poisson or negative binomial distribution.
 For both approaches, available covariates can be incorporated in a straightforward way. In the setting of real-time nowcasting, it is often beneficial to incorporate epidemic dynamics into the model, this can be achieved by splines \citep{Hohle2014Bayesian,vandeKassteele2019Nowcasting} or by a latent process of infections \citep{McGough2020Nowcasting}.
 
-Nowcasting methods have wide application in accounting for reporting delays \citep{Midthune2005Modeling}, early outbreak detection \citep{Salmon2015Bayesian,Bastos2019Modelling}, and, in the recent COVID-19 epidemic, improving real-time monitoring of epidemic outbreaks \citep{AnDerHeiden2020Schatzung,Gunther2021Nowcasting,Schneble2021Nowcasting,Akhmetzhanov2021Estimation}. Evaluating a forecasting model in a real-time public health setting is advantageous as it avoid hindsight bias \citep{Desai2019Realtime}, however nowcasting approach may have difficulties with bias and properly calibrated uncertainty if used in a real-time setting. This includes rapidly changing dynamics \citep{Gunther2021Nowcasting,vandeKassteele2019Nowcasting}, both of the delay distribution and the underlying epidemic, retrospective changes in data \citep{Midthune2005Modeling} and long delays with few observed cases \citep{Noufaily2015Modelling}. 
+Nowcasting methods have wide application in accounting for reporting delays \citep{Midthune2005Modeling}, early outbreak detection \citep{Salmon2015Bayesian,Bastos2019Modelling}, and, in the recent COVID-19 epidemic, improving real-time monitoring of epidemic outbreaks \citep{AnDerHeiden2020Schatzung,Gunther2021Nowcasting,Schneble2021Nowcasting,Akhmetzhanov2021Estimation}. Evaluating a forecasting model in a real-time public health setting is advantageous as it avoids hindsight bias \citep{Desai2019Realtime} however, nowcasting approach may have difficulties with bias and properly calibrated uncertainty if used in a real-time setting. This includes rapidly changing dynamics \citep{Gunther2021Nowcasting,vandeKassteele2019Nowcasting} both of the delay distribution and the underlying epidemic, retrospective changes in data \citep{Midthune2005Modeling} and long delays with few observed cases \citep{Noufaily2015Modelling}. 
 
-To avoid the aforementioned hindsight bias one can make their predictions publicly available in real-time \citep{Ray2020Ensemble,Bracher2021Preregistered}. For the hospitalizations in Germany, we have participated in the German COVID-19 NowcastHub \citep{2022Nowcasts} since November 2021 where nowcasts are available in a public Github repository \citep{2022Hospitalization} with the \texttt{ILM-prop} model. The ideas, especially the model and the ``double-weekday effect'', discussed this section are based on this model. However, the \texttt{ILM-prop} model is based on simple point estimates for the proportion of hospitalizations per reported case, neglecting regularization over time. In this thesis we extend this model to the \gls{ssm} setting of this thesis and investigate if the increased model complexity results in improved performance. In particular, we want to reduce computation time, as the previous model quantified uncertainty by past model performance, which requires running the model many times. If prediction uncertainty is based on predicting future observations in an \gls{ssm}, we can reduce computation time drastically. However, this is only worthwhile, if the predictive performance is comparable to the computationally more intensive model. 
+To avoid the aforementioned hindsight bias one can make their predictions publicly available in real-time \citep{Ray2020Ensemble,Bracher2021Preregistered}. For the hospitalizations in Germany, we have participated in the \gls{nch} \citep{2022Nowcasts} since November 2021 where nowcasts are available in a public Github repository \citep{2022Hospitalization} with the \texttt{ILM-prop} model. The ideas, especially the model and the ``double-weekday effect'', discussed in this section are based on that model. However, the \texttt{ILM-prop} model is based on simple point estimates for the proportion of hospitalizations per reported case, neglecting regularization over time. In this section, we extend model to the \gls{ssm} setting and investigate if the increased model complexity results in improved performance. In particular, we want to reduce computation time, as the previous model quantified uncertainty by past model performance, which requires running the model many times. If prediction uncertainty is based on predicting future observations in an \gls{ssm}, we can reduce computation time drastically. However, this is only worthwhile, if the predictive performance is comparable to the computationally more intensive model. 
 
 %\subsection{Data}
 To predict the number of hospitalizations we consider the reporting process of both reported COVID-19 cases and reported hospitalizations. Recall that the reporting date of a COVID-19 case is shared for both the case and its hospitalization, i.e.~the case and hospitalization are linked through this date.
@@ -25,16 +27,16 @@ As hospitalizations are only available as \(7\)-day rolling sums, we use \(7\)-d
 
 We use the publicly available data from the \gls{rki} discussed in \Cref{sec:data} on daily reported COVID-19 cases \citep{RobertKoch-Institut2024SARSCoV2} and weekly reported hospitalizations \citep{RobertKoch-Institut2024COVID19Hospitalisierungen}. Both datasets are available on a daily basis.
 
-Recall from \Cref{sec:data} that COVID-19 cases are described by their date of reporting, and are subject to reporting delay and hospitalizations are reported by the \textit{reporting date of the associated case}, and are subject to delay as well. As the date of symptom onset is not known for a substantial amount of incident cases, and is not reported for hospitalized cases, we focus our analysis on the date of reporting.
+Recall from \Cref{sec:data} that COVID-19 cases are described by their date of reporting, and are subject to reporting delay, while hospitalizations are reported by the \textit{reporting date of the associated case}, and are subject to delay as well. As the date of symptom onset is not known for a substantial amount of incident cases, and is not reported for hospitalized cases, we focus our analysis on the date of reporting.
 
 \subsection{Model}
-In line with the structure of the data, we let $H^a_{t,t + \tau}$ be the number of weekly hospitalizations in age group $a$ with case reporting date $t - 1, \dots, t - 7$ that are known on the day $t + \tau$, aggregated over all states. We suppress the dependence on age group in the following for ease of notation, keeping in mind that we only model a single age group within each model, ending up with seven models (including one for the ``all ages'' aggregate age group). 
+In line with the structure of the data (recall \Cref{sec:data}), we let $H^a_{t,t + \tau}$ be the number of weekly hospitalizations in age group $a$ with case reporting date $t - 1, \dots, t - 7$ that are known on the day $t + \tau$, aggregated over all states. We will split our analysis by age group, an so construct an individual model and having separate data per age group. We suppress the dependence on age group in the following for ease of notation, keeping in mind that we only model a single age group within each model, ending up with seven models (including one for the ``all ages'' aggregate age group). 
 
-As we focus on same-day nowcasting, our goal is to predict on day $t$ $H^{}_{t, t + D}$ the number of hospitalizations reported $D$ days into the future, for simplicity assume that the maximal delay considered, $D$, is a multiple of $7$. We decompose this target into a weekly telescoping sum 
+As we focus on same-day nowcasting, our goal is to predict on day $t$ $H^{}_{t, t + D}$, the number of hospitalizations reported $D$ days into the future. For simplicity, assume that the maximal delay considered, $D$, is a multiple of $7$. We decompose this target into a weekly telescoping sum 
 $$
     H^{}_{t, t + D} = H^{}_{t, t} + \sum_{k = 1} ^{D / 7} (H^{}_{t, t + 7k} - H_{t, t + 7 ( k - 1)}),
 $$
-where $H_{t,t}$ is already known on day $t$ and $H_{t, t + 7k} - H_{t, t + 7 ( k - 1)}$ is the increment in the hospitalization incidence from the $(k-1)$-st week to the $k$-th week. Recalling that any case attached to the hospitalization incidence on this date has case reporting date $t$ we now crucially assume that the hospitalization reporting process consists of two independent events: hospitalization and its delayed reporting.
+where $H_{t,t}$ is already known on day $t$ and $H_{t, t + 7k} - H_{t, t + 7 ( k - 1)}$ is the increment in the hospitalization incidence from the $(k-1)$th week to the $k$-th week. Recalling that any case attached to the hospitalization incidence on this date has case reporting date $t$ we now crucially assume that the hospitalization reporting process consists of two independent events: hospitalization and its delayed reporting.
 More formally, let $I^{7}_{t}$ be the seven-day case incidence (again, modeled separately for every age group) on day $t$, defined in the same fashion as the hospitalization incidence. Thus,
 $$
     I^{7}_t = \sum_{\tau = 1}^{7} I^{}_{t - \tau, t}
@@ -52,13 +54,13 @@ For simplicity of notation, let $H_{t, t - 7} = 0$, so that $H_{t,t} - H_{t, t- 
     \resizebox{\textwidth}{!}{%
         \input{tikz/delay_hospitalization_probabilities.tex}%
     }
-    \caption{Empirical hospitalization probabilities $\hat p_{t,k}$ by date $t$ and delay $k$ for the NowcastHub period. The probabilities are given in percent. Note the different scales of the logged y-axes across different age groups. Zeroes are indicated by data points at the bottom of the y-axis, e.g. for age group 00-04.}
+    \caption{Empirical hospitalization probabilities $\hat p_{t,k}$ by date $t$ and delay $k$ for the \gls{nch} period. The probabilities are given in percent. Note the different scales of the logged y-axes across different age groups. Zeroes are indicated by data points at the bottom of the y-axis, e.g. for age group 00-04.}
     \label{fig:delay_hospitalization_probabilities}
 \end{figure}
 
-\Cref{fig:delay_hospitalization_probabilities} displays the empirical delay probabilities $\hat p_{t,k} = \frac{H_{t, t + 7k} - H_{t,t + 7 (k - 1)}}{I^{7}_t}$ for the period of the NowcastHub for $k = 0, 1, 2, 3$.
+\Cref{fig:delay_hospitalization_probabilities} displays the empirical delay probabilities $\hat p_{t,k} = \frac{H_{t, t + 7k} - H_{t,t + 7 (k - 1)}}{I^{7}_t}$ for the period of the \gls{nch} for $k = 0, 1, 2, 3$.
 
-Ignoring noisy day-to-day variation, we see that within an age group, the delay probabilities evolve roughly in parallel (on the log-scale). This encourages us split the delayed hospitalization probabilities $p_{t,k}$ for all $t$ and $k$ into two parts 
+Ignoring noisy day-to-day variation, we see that within an age group, the delay probabilities evolve roughly in parallel (on the log-scale). This encourages us to split the delayed hospitalization probabilities $p_{t,k}$ for all $t$ and $k$ into two parts 
 $$
     p_{t,k} = p_{t}q_{t,k}
 $$
@@ -72,7 +74,7 @@ For the delay distribution, we first reparameterize to consecutive conditional p
 $$
     q^{c}_{t,k} = \frac{q_{t,k}}{1 - \sum_{l = 1}^{k - 1} q_{t,l}},
 $$
-i.e. $q^{c}_{t,k}$ is the probability of a delay of exactly $k$ weeks, conditional on having at least $k$ weeks of delay. This reparameterization is a diffeomorphism from the open simplex $\left\{p \in \R^{D / 7 + 1}_{> 0} \middle| \left\lVert p \right\rVert_{1} = 1 \right\}$ to $(0, 1)^{D / 7} \times \{1\}$ which has the advantage that $q_{t,k}$ only depends on $q^{c}_{t,l}$ for $l \leq k$ (rather than all of them, as was the case for the model in \Cref{sec:model_reporting_delay}). We then model the logits of these reparameterized delay probabilities to perform independent random walks 
+i.e. $q^{c}_{t,k}$ is the probability of a delay of exactly $k$ weeks, conditional on having at least $k$ weeks of delay, like a hazard function in discrete time. This reparameterization is a diffeomorphism from the open simplex $\left\{p \in \R^{D / 7 + 1}_{> 0} \middle| \left\lVert p \right\rVert_{1} = 1 \right\}$ to $(0, 1)^{D / 7} \times \{1\}$ which has the advantage that $q_{t,k}$ only depends on $q^{c}_{t,l}$ for $l \leq k$ (rather than all of them, as was the case for the model in \Cref{sec:model_reporting_delay}). We then model the logits of these reparameterized delay probabilities to perform independent random walks 
 $$
     \logit q^{c}_{t+1,k} = \logit q^{c}_{t,k} + \varepsilon_{t + 1,q,k}
 $$
@@ -91,7 +93,7 @@ We assume that the innovations
     \cov \left( \varepsilon_{t + 1 } \right) &= \Sigma_{t + 1} = \diag \left( \sigma^{2}_p, \sigma^2_{q}, \dots, \sigma^{2}_q, \sigma^{2}_W , \sigma^{2}_{W}\right)
 \end{align*} are centered, independent across all $t$ and Gaussian.
 
-These considerations lead to an \gls{pgssm} with linear signal: let the states and signals be given by 
+These considerations lead to a \gls{pgssm} with linear signal: let the states and signals be given by 
 \begin{align*}
    X_{t} &= \left( \log p_{t}, \logit q_{t,0}, \dots, \logit q_{t, D / 7}, \log W_{t, 0}, \dots, \log W_{t - 5, 0}, \log W_{t, 1}, \dots, \log W_{t - 5, 1} \right) ^{T} \\
    S_{t} &= \begin{pmatrix}
@@ -99,13 +101,13 @@ These considerations lead to an \gls{pgssm} with linear signal: let the states a
    \end{pmatrix} X_{t} \\
    & = \left( \log p_{t}, \logit q_{t,0} + \log W_{t, 0}, \logit q_{t, 1} + \log W_{t, 1}, \logit q_{t, 2}, \dots, \logit q_{t, \frac{D}{7} - 1} \right)^{T}
 \end{align*}
-and let the observations be 
+and let the observations consist of the hospitalizations 
 $$
     Y_{t} = \left( H_{t,t},  H_{t, t + 7} - H^{}_{t, t} , \dots, H_{t, t + D} - H^{}_{t, t + D - 7}\right)^{T}
 $$
-with conditional distribution given by \eqref{eq:hosp_increment_distribution} where $\lambda_{t,k}$ is given by \eqref{eq:hosp_lambda_weekday}.
+with conditional distribution given by \eqref{eq:hosp_increment_distribution} where $\lambda_{t,k}$ is given by \eqref{eq:hosp_lambda_weekday}. Thus, we model the distribution of $Y_{t}$ conditional on having observed the incidences $I_{t}$
 
-For the initial distribution of use $X_{0} \sim \mathcal N(\E X_{0}, \Sigma_0)$ where 
+For the initial distribution of the states, we use $X_{0} \sim \mathcal N(\E X_{0}, \Sigma_0)$ where 
 $$
     \E X_{0} = \begin{pmatrix}
         \log p_{0} \\
@@ -126,10 +128,10 @@ which we estimate by \gls{mle}.
 
 \subsection{Results}
 
-To demonstrate the capabilities of our model, we fit it the analysis period of the NowcastHub, i.e. to the period from 22nd November 2021 to 29th April 2022 \citep{Wolffram2023Collaborative}. We do this for each of the seven age groups, including all age-groups together, the 00+ age group. 
+To demonstrate the capabilities of our model, we fit it to the analysis period of the \gls{nch}, i.e. to the period from 22nd November 2021 to 29th April 2022 \citep{Wolffram2023Collaborative}. We do this for each of the seven age groups, including all age-groups together, the 00+ age group. 
 For each of these age groups, we fit the model as described in last subsection. 
 
-In the original NowcastHub the truth against which nowcasts were to be evaluated was set to the data available 100 days after the last date of the study period, 8th August 2022, under the assumptions that there would be no late reporting after such a long period. However, it turns out that the hospitalization incidence is still subject to relevant data revisions long after the date of reporting of the \gls{c19} case has passed see \citep[Section 3.7]{Wolffram2023Collaborative}. Thus, we choose to focus on a delay of 42 days (6 weeks), similar to the time horizon of 40 days proposed as an alternative target in the same section in that work. 
+In the original \gls{nch} the truth against which nowcasts were to be evaluated was set to the data available 100 days after the last date of the study period, 8th August 2022, under the assumption that there would be no late reporting after such a long period. However, it turns out that the hospitalization incidence is still subject to relevant data revisions long after the date of reporting of the \gls{c19} case has passed --- see \citep[Section 3.7]{Wolffram2023Collaborative}. Thus, we choose to focus on a delay of 42 days (6 weeks), similar to the time horizon of 40 days proposed as an alternative target in the same section in that work. 
 
 For the younger age groups, long delays are rare (see also \Cref{fig:delay_hospitalization_probabilities}), which leads to numerical instabilities in the consecutive logit parametrization. If such numerical instabilities occur, we manually choose the maximum delay (in weeks) that still produces a reasonable model fit, which we define here as  an \gls{ef} above $2.5\%$. We show the resulting weeks of delay and \gls{ef} in \Cref{tab:hospitalization_showcase_ess}. The resulting posterior distributions of interest are displayed in \Cref{fig:hospitalization_showcase_results}. 
 
@@ -137,18 +139,18 @@ For the younger age groups, long delays are rare (see also \Cref{fig:delay_hospi
     \resizebox{\textwidth}{!}{%
         \input{tikz/hospitalization_showcase_results.tex}%
     }
-    \caption{For each of the seven age groups (indicated by color and linetype), we show means of the smoothing distribution for the first four delay probabilities $q_{t,k}$, $k = 0,\dots, 3$, the smoothed probabilities of hospitalization $p_t$ and the two weekday effects $W_{t,0}, W_{t,1}$. Recall that we fit a separate model for each age group. For the smoothed delay probabilities, we additionally show 95\% prediction intervals. Note the log-scale of the $y$-axis for the smoothed delay probabilities. %
+    \caption{For each of the seven age groups (indicated by color and linetype), we show means of the smoothing distribution for the first four delay probabilities $q_{t,k}$, $k = 0,\dots, 3$, the smoothed probabilities of hospitalization $p_t$ and the two weekday effects $W_{t,0}, W_{t,1}$. Additionally, we show the mean delay $\bar \tau_{t}$. Recall that we fit a separate model for each age group. For the smoothed delay probabilities, we additionally show 95\% prediction intervals. Note the log-scale of the $y$-axis for the smoothed delay probabilities. %
     }
     \label{fig:hospitalization_showcase_results}
 \end{figure}
 
-We see that, generally, hospitalization probabilities $p_{t}$ grow larger as the age group under consideration becomes older; note the logarithmic $y$-axis. The exception here is the youngest age group A00-04. While infants are vulnerable to \gls{c19} \citep{Havers2024COVID19Associateda}, this may also be explained by circumstantial testing in hospitals: children in age group A05-14 were largely  subjected to mandatory testing at school, so we would expect the darkfigure of unreported cases in age group A00-04 to be large compared to the older age groups. Let us stress that interpretations of our results are contingent on taking the considerations from \Cref{sec:data} into account. 
-Nevertheless, we see $p_{t}$ drop in all age groups, except A00-A04, over the period considered. This is consistent with the rise of the Omicron variant of \gls{scov2} \citep{RobertKoch-Institut2024SARSCoV2b} which is associated with milder progression of disease. 
+We see that, generally, hospitalization probabilities $p_{t}$ grow larger as the age group under consideration becomes older; note the logarithmic $y$-axis. The exception here is the youngest age group A00-04. While infants are vulnerable to \gls{c19} \citep{Havers2024COVID19Associateda}, this may also be explained by circumstantial testing in hospitals: children in age group A05-14 were largely  subjected to mandatory testing at school, so we would expect the darkfigure of unreported cases in age group A00-04 to be large compared to the older age groups. This would also explain the short average delay $\bar \tau$, see further below. Let us stress that interpretations of our results are contingent on taking the considerations from \Cref{sec:data} into account. 
+Nevertheless, we see $p_{t}$ drop in all age groups, except A00-A04, over the period considered. This is consistent with the rise of the Omicron variant of \gls{scov2} \citep{RobertKoch-Institut2024SARSCoV2b} which is associated with a milder progression of disease. 
 
 % weekday effect as expected, consistent across age groups
 We also observe a pronounced weekday effect $W_{t,0}$ across all age groups, with a smaller proportion of $I^{7}_{t}$ reported as hospitalized already on day $t$ if $t$ is a Sunday, as indicated by the vertical grid lines in \Cref{fig:hospitalization_showcase_results}. To compensate, $W_{t,1}$ is large when $W_{t,0}$ is small. Again, A00-04 exhibits a more pronounced weekday effect, but the general pattern is consistent across all age groups. 
 % faster reporting? -> check
-On the right-hand side of \Cref{fig:hospitalization_showcase_results} we see the delay probabilities $q_{t,k}$ for $k=0, \dots, 3$, as well as the average delay (in weeks)
+On the left-hand side of \Cref{fig:hospitalization_showcase_results} we see the delay probabilities $q_{t,k}$ for $k=0, \dots, 3$, as well as the average delay (in weeks)
 $$
     \bar \tau_{t} = \sum_{k = 0}^{\frac{D}{7}} k q_{t,k},
 $$
@@ -157,13 +159,13 @@ for all age groups. We can observe that starting in the middle of December 2021 
 \begin{table}
     \centering
     \input{tables/hospitalization_showcase_ess.tex}
-    \caption{Efficiency factors (in \%) and weeks of delay for the seven models (one per age group) presented in this section. For younger age groups, there are few long delays, which causes numerical instabilities due to the consecutive conditional probability parametrization chosen in this section. For each of the age groups, we chose the longest delays that still allowed for a reasonable fit, with a maximum delay of $8$ weeks. While the efficiency factor for A15-34 is quite low, we use a large enough number of samples for the prediction of states and signals, so the \gls{ess} is still sufficiently large.}
+    \caption{Efficiency factors (in \%) and weeks of delay for the seven models (one per age group) presented in this section. For younger age groups, there are few long delays, which causes numerical instabilities due to the consecutive conditional probability parametrization chosen in this section. For each of the age groups, we chose the longest delays that still acceptable for a reasonable fit, with a maximum delay of $8$ weeks. While the efficiency factor for A15-34 is quite low, we use an adequate number of samples for the prediction of states and signals, so the \gls{ess} is still sufficiently large.}
     \label{tab:hospitalization_showcase_ess}
 \end{table}
 
 %% application 2: nowcasting
 \paragraph{Real-time nowcasting of hospitalization incidences}
-To evaluate the predictive capabilities of our model, we use it to perform retrospective nowcasting of hospitalizations, emulating the setting of the German NowcastHub. 
+To evaluate the predictive capabilities of our model, we use it to perform retrospective nowcasting of hospitalizations, emulating the setting of the \gls{nch}. 
 We focus on same-day nowcasting, i.e. only nowcasting for the current day, with a maximum delay of $6$ weeks, performing all predictions for every age group separately. Let us call this model \ssm in the remainder of this section.
 
 For every day, $s$ say, in the period of 22nd November 2021 to 29th April 2022 we fit the model to the data of the past $100$ days that were available on day $s$. 
@@ -176,7 +178,7 @@ the $k$-th component of $y_{t}$ is missing whenever $t + 7(k - 1) > s$.
 Taking the last day, $s$, as an example $H_{s,s}$ is made available to the model, but $H_{s, s+7k}$ for $k > 0$ is not, and so $y_{s} = \left( H_{s,s}, \textbf{NA}, \dots, \textbf{NA} \right)$ where \textbf{NA} indicates missing observations. Similarly, the last observation for which the second component is available is $y_{s - 7} = \left( H_{s-7, s-7}, H_{s-7, s} - H_{s - 7, s - 7}, \textbf{NA}, \dots, \textbf{NA} \right)$ and so on. 
 
 Similar to the other models in this thesis, we can include these missing observations in a straightforward manner, by setting the corresponding rows of $B_{t}$ to $0$, setting the same entries of $s_{t}$ to $-\infty$, such that $\lambda_{t,k} = 0$, and replacing missing observations by $0$. For the approximating \glspl{glssm}, we fix the rows and columns of $\Omega_{t}$ and entries of $z_{t}$ that correspond to missing signals $s_{t}$ to $0$. 
-To make fitting the 158 resulting models computationally feasible, we omit the \gls{mle} step and fit the model using only the initial value from \Cref{alg:mle}. 
+To make fitting the 158 resulting models computationally feasible, we omit the \gls{mle} step and fit the model using only the initial value from \Cref{alg:mle} $\theta^{0}$, an approach we deem reasonable: for comparing predictive capabilities we are only interested in performance of the whole procedure. Additionally, it is our experience (see also, e.g., \Cref{tab:christmas-parameters}) the \gls{mle} $\hat\theta$ is usually close to $\theta^{0}$.
 
 % missigness 
 % hyperparameters
@@ -185,7 +187,7 @@ To make fitting the 158 resulting models computationally feasible, we omit the \
 % compare 
 % only time period of NCH
 
-To nowcast the total number of hospitalizations, we use the method described in \Cref{subsec:inference}, i.e. using MC-integration to estimate quantiles of $H_{s, D}$. Accordingly, we draw $N$ samples from the smoothing distribution $S^{i}_{s} | Z = z$ with weights $W^{i}$ and, conditional on these samples, $\tilde Y^{i}_{s} | S^{i}_s \sim \operatorname{Poisson} \left( \exp S^{i}_s \right)$, independent of everything else, where we fix the first component be the known $y_{s,1} = H_{s,s}$. In total, we obtain $N$ draws $H^{i}_{s,D} = H_{s,s} + \sum_{k = 1}^{D / 7} \tilde Y^{i}_{s,k}$ with associated weights $W^{i}$ from which we can estimate the desired quantiles. We use the same quantiles as in the NowcastHub, i.e. the $2.5\%, 10\%, 25\%, 50\%, 75\%, 90\%, 97.5\%$ quantiles. 
+To nowcast the total number of hospitalizations, we use the method described in \Cref{subsec:inference}, i.e. using MC-integration to estimate quantiles of $H_{s, D}$, which amounts to inverting an empirical \gls{cdf}. Accordingly, we draw $N$ samples from the smoothing distribution $S^{i}_{s} | Z = z$ with weights $W^{i}$ and, conditional on these samples, $\tilde Y^{i}_{s} | S^{i}_s \sim \operatorname{Poisson} \left( \exp S^{i}_s \right)$, independent of everything else, where we fix the first component to be the known $y_{s,1} = H_{s,s}$. In total, we obtain $N$ draws $H^{i}_{s,D} = H_{s,s} + \sum_{k = 1}^{D / 7} \tilde Y^{i}_{s,k}$ with associated weights $W^{i}$ from which we can estimate the desired quantiles. We use the same quantiles as in the \gls{nch}, i.e. the $2.5\%, 10\%, 25\%, 50\%, 75\%, 90\%, 97.5\%$ quantiles. 
 
 % discuss disimilarities with \texttt{ILM-prop}
 To assess the predictive performance of our model, we compare its predictions to the \ilmprop and the revised ensemble model, \ensemble tailored to a maximum delay of 40 days from \citep[Section 3.7]{Wolffram2023Collaborative}. 
@@ -201,7 +203,7 @@ $$
 Thus, $\widehat{p_{t,k}}$ depends on data that are associated with infections $k$ weeks ago, which makes the model slow to react to fast changes. 
 Prediction intervals are constructed by fitting a log-normal distribution to past predictions of the model, and so the uncertainty is based on past model performance. 
 
-The \ensemble model is constructed from all submissions to the NowcastHub. Its point predictions and prediction intervals are based on averaging across all models that submitted a valid nowcast on that day --- see \citep{Wolffram2023Collaborative} for details.
+The \ensemble model is constructed from all submissions to the \gls{nch}. Its point predictions and prediction intervals are based on averaging across all models that submitted a valid nowcast on that day --- see \citep{Wolffram2023Collaborative} for details.
 
 \begin{figure}
     \centering
@@ -217,33 +219,33 @@ For each model, we additionally quantify the nowcasting performance by the mean 
 \begin{table}
 \centering
 \input{tables/df_table_performance.tex}
-\label{tab:df_table_performance}
 \caption{%
     Average nowcasting performance metrics of the three models for hospitalization. The weighted interval score (WIS) is additionally decomposed into sharpness and under/over-prediction (see \citep{Bracher2021Evaluating} and \citep[Section 2.5]{Wolffram2023Collaborative} for details). For each metric, the best value has been highlighted by boldface.%
 }
+\label{tab:df_table_performance}
 \end{table}
 
 In this table we see that the \ensemble model outperforms all other models in most aspects, with an exception for the sharpness --- the \ssm model has smaller prediction intervals --- and the underprediction component --- the \ilmprop overpredicts, especially between January 2022 to March 2022.
 However, the interesting comparison is between the \ilmprop and \ssm model, as we expect the ensemble model to outperform any single model. 
 
-Comparing these two models, we see that the \ssm performs better than the \ilmprop model in most metrics. The mean absolute error over the period considered is smaller and closer to the ensemble. The WIS is smaller as well, but, taking the ensemble as a baseline, the difference is not as striking as for the mean absolute error. However, the coverage metrics of the \ssm are worse than those of \ilmprop and \ssm produces smaller prediction intervals overall, making it overconfident. In total, the \ssm model tends to produce better point forecasts, but \ilmprop is better calibrated --- which is sensible, as its prediction intervals are informed by past performance of the model. This explains why the WIS for \ssm is only slightly smaller than that of \ilmprop. 
+Comparing these two models, we see that the \ssm performs better than the \ilmprop model in most metrics. The mean absolute error over the period considered is smaller and closer to the ensemble. The WIS is smaller as well, but, taking the ensemble as a baseline, the difference is not as striking as for the mean absolute error. However, the coverage metrics of the \ssm are worse than those of \ilmprop, and \ssm produces smaller prediction intervals overall, making it overconfident. In total, the \ssm model tends to produce better point forecasts, but \ilmprop is better calibrated --- which is sensible, as its prediction intervals are informed by past performance of the model. This explains why the WIS for \ssm is only slightly smaller than that of \ilmprop. 
 
 \subsection{Discussion}
 
 % discussion of indicator
-Before we start a discussion on the performance, advantages and disadvantages of our model, let begin with a discussion of the indicator we are aiming to nowcast. Let us stress that its value on a given date does not represent the current occupancy of hospitals in Germany with COVID-19 patients but is rather an approximation to the morbidity caused by COVID-19 on that date. The reason for this discrepancy is that hospitalizations are attributed to the reporting date of the associated case, not that of hospitalization. While the reporting date of the hospitalization can be recovered from the publicly available data, the date of hospitalization cannot. Additionally, no information on the duration of stay is available, making it impossible to create an indicator for the occupancy of hospitals based solely on data provided by the \gls{rki}.  Nevertheless, the indicator was used to decide on which countermeasures to implement, so it still seems worthwhile to nowcast it, or similar indicators in the future. 
+Before we start a discussion on the performance, advantages and disadvantages of our model, let us begin with a discussion of the indicator we are aiming to nowcast. Let us stress that its value on a given date does not represent the current occupancy of hospitals in Germany with COVID-19 patients but is rather an approximation to the morbidity caused by COVID-19 on that date. The reason for this discrepancy is that hospitalizations are attributed to the reporting date of the associated case, not that of hospitalization. While the reporting date of the hospitalization can be recovered from the publicly available data, the date of hospitalization cannot. Additionally, no information on the duration of stay is available, making it impossible to create an indicator for the occupancy of hospitals based solely on data provided by the \gls{rki}.  Nevertheless, the indicator was used to decide on which countermeasures to implement, so it still seems worthwhile to nowcast it, or similar indicators in the future. 
 
 % advantages of SSM for retrospective analysis
 The \gls{ssm} introduced in this section offers several distinct advantages for retrospective analysis of hospitalization incidence.  First, the model is highly interpretable, as each component corresponds directly to epidemiologically meaningful quantities such as the probability of hospitalization, the delay distribution, and the weekday effects. 
 Second, the flexible structure of the SSM allows for straightforward incorporation --- or leaving out, as shown for the real-time nowcasting --- of weekday effects, which is essential for accurately capturing reporting patterns observed in the data.  Third, the computational efficiency of the model is notable: fitting and generating predictions typically requires only a few minutes for a single day of nowcasts, making it practical for large-scale retrospective studies. 
-A minor drawback is that some manual tuning of initial states and hyperparameters is required to ensure robust model performance, but this is manageable given the overall transparency and speed
+A minor drawback is that some manual tuning of initial states and hyperparameters is required to ensure robust model performance, but this is manageable given the overall transparency and speed of the procedure.
 
 Compared to the \ilmprop model, the \ssm reacts more quickly to sudden changes in the underlying dynamics, as seen during the Omicron wave in early 2022. 
 The computational cost of the SSM remains negligible, even with increased model complexity.
 However, the need for parameter fitting introduces the possibility of instability or suboptimal choices, which requires careful attention. 
 A potential avenue for further improvement would be to combine the point forecasts from the SSM with the prediction interval strategy employed in the \texttt{ILM-prop}, to combine the strengths of both models.
 
-Compared to other approaches in the COVID-19 NowcastHub, that tended to exclusively focus on modeling the delay distribution with parametric and non-parametric models, our \ssm model, similar to the \ilmprop model, sidesteps this complex delay structure by decomposing delayed hospitalizations into weekly chunks and incorporating case data. As cases and hospitalizations are explicitly linked by the case reporting date we forecast the number of hospitalizations in each chunk based on the current incidences and past fractions of hospitalizations in a comparable weekly chunk. 
+Compared to other approaches in the \gls{nch} that tended to exclusively focus on modeling the delay distribution with parametric and non-parametric models, our \ssm model, similar to the \ilmprop model, sidesteps this complex delay structure by decomposing delayed hospitalizations into weekly chunks and incorporating case data. As cases and hospitalizations are explicitly linked by the case reporting date we forecast the number of hospitalizations in each chunk based on the current incidences and past fractions of hospitalizations in a comparable weekly chunk. 
 
 % caveats
-The comparison of the three models in the previous section is not completely free of bias. After all, the \ssm model was created and fit retrospectively, while both the \ilmprop and \ensemble models were created in a live setting under preregistration, which makes the nowcasts more honest.
+The comparison of the three models in the previous section is not completely free of bias. After all, the \ssm model was created and fit retrospectively, while both the \ilmprop and \ensemble models were created in a live setting under preregistration, which renders the nowcasts more honest.
