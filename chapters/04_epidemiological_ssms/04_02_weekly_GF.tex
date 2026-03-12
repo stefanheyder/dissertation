@@ -108,7 +108,7 @@ $$
 $$
 where we reparameterized to an unconstrained $\theta \in \R^{6}$. The model has a linear signal 
 $$
-    S_{t} = \left(\log \rho_{t} + u_{t,r}\right)_{r = 1, \dots, R},
+    S_{t} = \left(\overline{\log \rho_{t}} + u_{t,r}\right)_{r = 1, \dots, R},
 $$
 which makes inference fast, as the approximating \gls{glssm} in the \gls{la} and \gls{eis} method only requires $\mathcal O(n\,R)$ many parameters. Again, we use \gls{mle} to determine $\theta$, using the methods from \Cref{sec:maximum_likelihood_estimation}. As the models state dimension is quite large, we have occasionally encountered numerical difficulties when using \acrshort{eis}, especially resulting in negative variances leading to invalid proposals. For this reason, we resort to using the more stable \gls{la} for all procedures in this chapter.
 
@@ -203,7 +203,9 @@ For the county level growth factors in the upper pat of \Cref{fig:regional_showc
     \resizebox{\textwidth}{!}{%
         \input{tikz/regional_showcase_guetersloh.tex}%
     }
-    \caption{TODO} 
+    \caption{\textbf{Top figure:} We show a map of neighboring counties $r$ to Gütersloh county, with associated $p_{\text{GL},r}$ (in $\%$) indicating how our model secondary cases infected from primary cases in Gütersloh to neighboring counties. These seven neighboring counties are also the counties with the highest $p_{\text{GL}, r}$ values.\\
+    \textbf{Bottom figure:} We show growth factors for the eight counties displayed in the top figure. For each county we show $\bar \rho_{t} = \exp \left( \overline{\log\rho_{t}} \right)$, as well as regional growth factors derived from our model ($\rho_{t, r}$) and based on the observations only $\rho^{\text{emp}}_{t, r} = \frac{I_{t,r}}{I_{t - 1, r}}$. For $\rho_{t,r}$ we additionally show $95\%$ prediction intervals as well as the prediction $\rho_{T,r}$ for the final date $T$, which was not accessible to the model during fitting.%
+    } 
     \label{fig:regional_showcase_guetersloh}
 \end{figure}
 
@@ -211,16 +213,38 @@ For the county level growth factors in the upper pat of \Cref{fig:regional_showc
     \resizebox{\textwidth}{!}{%
         \input{tikz/regional_predictions_GL.tex}%
     }
-    \caption{TODO} 
+    \caption{We show $95\%$ prediction intervals for observations at the final time $T =$ 27 June 2020 for Gütersloh county and its seven neighbors (c.f. \Cref{fig:regional_showcase_guetersloh}), based on the local predictions from the single region negative binomial model ($I^{\text{nbinom}}_{T,r}$) as well as the whole country \gls{ssm} ($I^{\text{ssm}}_{T,r}$). The actual observation $I_{T,r}$ is indicated by a vertical black bar. Note the log-scale of the $y$-axis. We note that for the shown prediction intervals, in the region of the local outbreak, the \gls{ssm} approach seems to produce forecasts that are better calibrated: the true observation is contained in all the prediction intervals. Additionally, the prediction intervals produced by the \gls{ssm} approach tend to be wider.} 
     \label{fig:regional_predictions_GL}
 \end{figure}
 
-To demonstrate the regional capabilities of our model, we focus on Gütersloh, where the outbreak occurred, and its neighboring counties. In \Cref{fig:regional_showcase_guetersloh}, we show a map of the distribution of the exchange matrix entries $p_{\text{GL}, r}$ for neighboring regions $r$ to the region $\text{GL}$. Most individuals stay in Gütersloh, with some exchange to Bielefeld and Warendorf. In the bottom of that figure, we show growth factors for these counties, both the empirical growth factor and the model-based $\rho_{t,r}$ with prediction intervals, as well as $\bar\rho$. The empirical and model-based growth factors largely agree, but their usage for prediction is different. Let $T$ be the final date considered, i.e.\ the date for which we want to perform predictions. The model we have fitted produces a prediction for the new growth factors $\rho_{T, r}$, based on the model's state dynamics for $\bar\rho_{t}$ and $u_{t,r}$. As $\alpha$ is negative, $\rho_{T,r}$ is notably smaller than $\rho_{T - 1, r}$ for most of the regions considered here. Thus, our model predicts smaller incidences for counties with large $\rho$, such as Gütersloh. Another exception to the agreement of the two growth factors is in the presence of outliers, either large or small growth factors, which our model smooths out due to the small area effect. 
+To demonstrate the regional capabilities of our model, we focus on Gütersloh, where the outbreak occurred, and its neighboring counties. In \Cref{fig:regional_showcase_guetersloh}, we show a map of the distribution of the exchange matrix entries $p_{\text{GL}, r}$ for neighboring regions $r$ to the region $\text{GL}$. Most individuals stay in Gütersloh, with some exchange to Bielefeld, Stadt and Warendorf. In the bottom of that figure, we show growth factors for these counties, both the empirical growth factor and the model-based $\rho_{t,r}$ with prediction intervals, as well as $\bar\rho$. The empirical and model-based growth factors mostly agree --- except for some smoothing, especially if incidences are small in that region ---, but their use for prediction is different. 
 
-% can now also perform predictions on regional level and compare to naive baselien: negative binomial regional model as before where prediction intervals are based on quantiles of the fitted negative binomial distribution
-% show results in next figure fig:regional_predictions_GL
-% observe that for Bielefeld and Warendorf the two regions which have somewhat large Exchange with Gütersloh, the prediction intervals are quite wide --- this is probably due to the regional coupling, which leads to cases from GL producing larger uncertainty. nbinom uncertainty intervals are comparably very small here (though note log-scale), as they do not capture this effect
-% overall, ssm intervals seem much more favorable: larger and include true value more often
+Let $T$ be the final date considered, i.e.\ the date for which we want to perform predictions, 27 June 2020. The model we have fitted produces a prediction for the new growth factors $\rho_{T, r}$, based on the model's state dynamics for $\overline{\log \rho_{t}}$ and $u_{t,r}$. As $\alpha$ is negative, $\rho_{T,r}$ is notably smaller than $\rho_{T - 1, r}$ for most of the regions considered here. An empirical approach would simply use the last observed value of $\rho^{\text{emp}}_{T,r} = \frac{I_{T,r}}{I_{T - 1, r}}$ to predict the future $\hat\rho^{\text{emp}}_{T, r}$.  Thus, our model should predict smaller incidences for counties with large $\rho$, such as Gütersloh, compared to the empirical approach; see below. Another exception to the agreement of the two growth factors is in the presence of outliers, either large or small growth factors, which our model smooths out due to the small area effect. Importantly, our model can also provide prediction intervals for the growth factors, which the empirical approach cannot.
+
+Subsequently, we compare the regional \gls{ssm} predictions to those from the regional negative binomial model presented earlier in \Cref{fig:regional_showcase_prediction}, where prediction intervals are based on quantiles of the fitted negative binomial distribution on the regional level. The results are shown in \Cref{fig:regional_predictions_GL}. For regions with substantial exchange with Gütersloh, such as Bielefeld and Warendorf, the \gls{ssm} prediction intervals are notably wider than those from the local negative binomial model. Although the prediction intervals for the \gls{ssm} based approach tend to be larger overall, this difference is most notable for these two regions. 
+This widening reflects the regional coupling in the \gls{ssm}, which captures uncertainty propagating between regions due to case exchange modeled by $P$. In contrast, the negative binomial model's prediction intervals are comparably narrow and do not account for this inter-regional effects. Overall, the \gls{ssm} approach produces prediction intervals that are wider and achieve better coverage, including the true observations more consistently, at least for the regions considered.
+
+\begin{table}
+    \centering
+    \input{tables/performance_regional_ssm_vs_nbinom.tex}
+    \caption{Mean prediction metrics across all $400$ regions for forecasts produced by the regional negative binomial and \gls{ssm} models for 27 June 2020. The \gls{ssm} approach consistently beats the regional baseline, except for the sharpness component of the \gls{wis} and the coverage of $50\%$ prediction intervals.}
+    \label{tab:performance_regional_ssm_vs_nbinom}
+\end{table}
+
+To investigate whether this holds up on the global scale, we evaluate the predictions made by the two models by several forecasting performance metrics across the different counties, as shown in \Cref{tab:performance_regional_ssm_vs_nbinom}. We use three different metrics: 
+\begin{itemize}
+    \item the \acrlong{mae}, where we take the median of the predictive distribution as a point forecast and average the absolute error between this point forecast and the true observation over all $400$ counties,
+    \item the \acrlong{wis}\citep{Bracher2021Evaluating}, a proper scoring rule which approximates the continuous ranked probability score. It takes into account the whole predictive distribution, i.e. the centered prediction intervals provided in the forecasts. Lower values of WIS are better, and WIS can be decomposed into components measuring over- and underprediction as well as sharpness (length of predictive intervals). Finally, we also report
+    \item the empirical coverage of $50\%$ and $95\%$ prediction intervals. 
+\end{itemize}
+Additionally, we report the decomposition of the \gls{wis} into its four components. 
+\todo{finish}
+% ssm beats nbinom except for two metrics: sharpness (nbinom has smaller predition intervals) and 50% PI coverage where difference is neglibible
+% overall ssm seems to produe much more sensible forecasts than considering a single county alone
+% alternative of possion baseline would probably be even worse, as nbinom has overdispersion. 
+
+% overall, for the difficult prediction task in the showcase scenario, the ssm model outperforms this simple nbinom baselien severely: on the country level (figure above), on the inidividual region level where we would assume prediction to be hard (Gütersloh and neighbors) and across all regions (see table). 
+% caveats: we might be "lucky" that our model got alpha negative, as negative autocorrelation is beneficial here (Gütersloh predictoin very low). howeover, later setting investigates predictive performance in varying scenarios so that should be fine
 
 % to investigate in this setting, we also compute WIS and related performance metrics, show in table
 
@@ -274,15 +298,8 @@ We show median, $50\%$ and $95\%$ prediction intervals of all four models in \Cr
 For the \texttt{baseline} model, we see that carrying forward the last observation results in over- or underpredctions in times of decline or growth. The \texttt{ensemble} model provides prediction intervals of medium size, and has close to nominal coverage (see \Cref{tab:regional_forecasts_combined_metrics}). The \texttt{itww} model has very narrow prediction intervals, which often miss the true reported cases completely, resulting in overall bad performance. 
 Our novel \texttt{ssm} approach has much wider prediction intervals, but also provides quite precise point predictions. 
 
-To make the comparison more rigorous, we evaluate the predictions made by the four models by several forecasting performance metrics, as shown in \Cref{tab:regional_forecasts_combined_metrics}. We use three different metrics: 
-
-\begin{itemize}
-    \item the \acrlong{mae}, where we take the median of the predictive distribution as a point forecast and average the absolute error between this point forecast and the \gls{rki} truth over all $67$ observations,
-    \item the \acrlong{wis}\citep{Bracher2021Evaluating}, a proper scoring rule which approximates the continuous ranked probability score. It takes into account the whole predictive distribution, i.e. the centered prediction intervals provided in the forecasts. Lower values of WIS are better, and WIS can be decomposed into components measuring over- and underprediction as well as sharpness (length of predictive intervals). Finally, we also report
-    \item the empirical coverage of $50\%$ and $95\%$ prediction intervals. 
-\end{itemize}
-
-Additionally, we report the decomposition of the \gls{wis} into its four components and the \gls{mae} and \gls{wis} relative to the baseline model, to quickly identify which of the three other models outperforms the baseline model. 
+To make the comparison more rigorous, we evaluate the predictions made by the four models by several forecasting performance metrics, similar to the analysis shown in \Cref{tab:performance_regional_ssm_vs_nbinom}. Here we average not over the regions considered --- as we only consider predictions for the whole country of Germany --- but rather over all $67$ observations, as was done in the \gls{gfch} as well.
+Additionally, we report the \gls{mae} and \gls{wis} relative to the baseline model, to quickly identify which of the three other models outperforms this reference.
 
 \begin{table}
     \centering
