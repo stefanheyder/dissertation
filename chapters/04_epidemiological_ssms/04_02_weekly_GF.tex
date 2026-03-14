@@ -124,13 +124,13 @@ We will demonstrate the usefulness of our new model by applying it to two scenar
 Second, we show that our model is able to give reasonable \textbf{one-week ahead forecasts} of \gls{c19} cases by comparing its predictive performance to that of real-time forecasts created in the ECDC's ForecastHub from April 2021 to January 2022.
 
 \paragraph{Showcase}
-Similar to the last section, we start out with a motivational example on the capabilities of our model. For this, we use the local outbreak highlighted in \Cref{fig:cases_germany}, which occurred in the middle of June 2020 \citep{Gunther2020SARSCoV2}. We consider the time period from 25 April 2020\footnote{Recall that this weekly observation includes cases reported from 19 April 2020 to 25 April 2020.} until 20 June 2020 as observations, consider the observation for 27 June 2020 to be missing, and fit the \gls{ssm} to this data. \Cref{fig:regional_showcase_prediction} shows the number of reported cases used to fit this model, aggregated to the whole of Germany. The local outbreak accounts for a total of $1\,413$ cases in the county of Gütersloh between 17 June 2020 and 23 June 2020 --- see \citep[Figure 1]{Gunther2020SARSCoV2} --- which is noticeable in our figure by the large jump between 13 June 2020 ($2324$ cases) and 20 June 2020 ($3872$ cases). 
+Similar to the last section, we start out with a motivational example on the capabilities of our model. For this, we use the local outbreak highlighted in \Cref{fig:cases_germany}, which occurred in the middle of June 2020 \citep{Gunther2020SARSCoV2}. We consider the time period from 25 April 2020\footnote{Recall that this weekly observation includes cases reported from 19 April 2020 to 25 April 2020.} until 20 June 2020 as observations, consider the observation for 27 June 2020 to be missing, and fit the \gls{ssm} to this data. Throughout this example, let us denote that date by $T$. \Cref{fig:regional_showcase_prediction} shows the number of reported cases used to fit this model, aggregated to the whole of Germany. The local outbreak accounts for a total of $1\,413$ cases in the county of Gütersloh between 17 June 2020 and 23 June 2020 --- see \citep[Figure 1]{Gunther2020SARSCoV2} --- which is noticeable in our figure by the large jump between 13 June 2020 ($2324$ cases) and 20 June 2020 ($3872$ cases). 
 
 \begin{figure}
     \resizebox{\textwidth}{!}{%
         \input{tikz/regional_showcase_prediction.tex}%
     }
-    \caption{Incidences $I_{t,\cdot} = \sum_{r = 1}^R I_{t,r}$ in Germany in the period under consideration in the regional showcase model. We additionally show predictions (median, $50\%$ and $95\%$ prediction intervals) as shaded regions for three different approaches: the \gls{ssm} presented in this section and three negative binomial baselines (see text for details). The \gls{ssm} approach is the only approach with the actual incidences ending up within the $95\%$ prediction interval, the three baselines completely miss this target. Note that all four prediction intervals are located at 27 June 2020, but are shifted horizontally for better visibility.}
+    \caption{Incidences $I_{t,\cdot} = \sum_{r = 1}^R I_{t,r}$ in Germany in the period under consideration in the regional showcase model. We additionally show predictions (median, $50\%$ and $95\%$ prediction intervals) as shaded regions for three different approaches: the \gls{ssm} presented in this section and three negative binomial baselines (see text for details). The \gls{ssm} approach is the only approach with the actual incidences ending up within the $95\%$ prediction interval, the three baselines completely miss this target. Note that all four prediction intervals are located at 27 June 2020, but are shifted horizontally for better visibility. None of the approaches presented had access to data reported after 20 June 2020.}
     \label{fig:regional_showcase_prediction}
 \end{figure}
 
@@ -170,6 +170,31 @@ To assess the performance, we compare it to three simple baseline models.
 It is clear from \Cref{fig:regional_showcase_prediction} that the \texttt{ssm} approach outperforms the baseline models: it is the only model where the prediction interval contains, or is at least close to the true observation. There are multiple reasons for this behavior. First, the simple \texttt{nbinom} overpredicts the number of total cases because the number of reported cases from the local outbreak in Gütersloh county dominate the country-wide development of cases. While the regional level \texttt{reg.nbinom} model is able to account for this, the empirical growth factor for Gütersloh is $\hat \rho_{T, \text{Gütersloh}} = 11.7$ with $856$ cases reported for 20 June 2020, which results in $\approx 10\,000$ cases predicted for that county alone. Recalling that we have capped the growth factor at $3$, the \texttt{reg.nbinom}  model only predicts $\approx 2\,600$ cases, which is still noticeable in the predictions. 
 The best of the three baseline models --- in terms of predictive performance for this single observation --- is the \texttt{reg.nbinom no GL} model, where we have removed Gütersloh from the prediction completely. However, it still overpredicts by a relevant margin which we attribute to the fact that the same effect --- albeit less pronounced --- may be at work at other counties, too: due to small numbers of reported cases there are many large outliers in the empirical growth factors, see \Cref{fig:regional_showcase_rho.tex}. 
 
+Let us interpret the entries in $P$, which informs both the redistribution of cases between regions, and the covariance of regional effects $u_{t}$. As $P$ is a $400\times 400$ matrix, we focus only on a small section of it: the counties in the immediate neighborhood of Gütersloh.
+% start with analysis of p_GL,r for these regions where we fix the first position to GL. high values here indicate that many secondary cases originating from GL will be attributed to this region
+% in this figure we see largest entires in Bielefeld, a close city, as well was Warendorf.
+% for counties with larger distance (Coesfeld, Steinfurt) neglibile entries in P
+
+
+%Saxony is interesting because it contains two large cities (``Leipzig, Stadt'' and ``Dresden, Stadt'') with commuters commuting from the surrounding area to these cities. In the fitted model, this results in a larger row-sum for the indices associated with these cities, see the right-hand side of \Cref{fig:P_matrix_GL_neighbors}.
+
+\begin{figure}
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/P_map_GL.tex}%
+    }
+    \caption{\textbf{} We show a map of neighboring counties $r$ to Gütersloh county, with associated $p_{\text{GL},r}$ (in $\%$) indicating how our model distributes secondary cases infected from primary cases in Gütersloh to neighboring counties. As the Gütersloh $p_{\text{GL}, \text{GL}}$ is much larger than the other values, we apply the red colorscheme only to the other counties. The seven direct neighboring counties are also the counties with the highest $p_{\text{GL}, r}$ values.
+} 
+    \label{fig:P_map_GL}
+\end{figure}
+
+\begin{figure}
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/P_matrix_GL_neighbors.tex}%
+    }
+    \caption{We show part of the estimated $P$ for the showcase example for the counties displayed in \Cref{fig:P_map_GL}. On the left-hand side we present $p_{r,r'}$ for $r,r'$ among these counties. As the diagonal elements are much larger than the off-diagonal ones, we only apply the color gradient to the off-diagonal elements. The right-hand figure shows the proportion of in-county infections $p_{r',r'}$ (blue bars) and out-of-county infections $\sum_{r \neq r'} p_{r,r'}$ (red bars).} 
+    \label{fig:P_matrix_GL_neighbors}
+\end{figure}
+
 \begin{figure}
     \resizebox{\textwidth}{!}{%
         \input{tikz/regional_showcase_rho.tex}%
@@ -203,8 +228,7 @@ For the county level growth factors in the upper pat of \Cref{fig:regional_showc
     \resizebox{\textwidth}{!}{%
         \input{tikz/regional_showcase_guetersloh.tex}%
     }
-    \caption{\textbf{Top figure:} We show a map of neighboring counties $r$ to Gütersloh county, with associated $p_{\text{GL},r}$ (in $\%$) indicating how our model secondary cases infected from primary cases in Gütersloh to neighboring counties. These seven neighboring counties are also the counties with the highest $p_{\text{GL}, r}$ values.\\
-    \textbf{Bottom figure:} We show growth factors for the eight counties displayed in the top figure. For each county we show $\bar \rho_{t} = \exp \left( \overline{\log\rho_{t}} \right)$, as well as regional growth factors derived from our model ($\rho_{t, r}$) and based on the observations only $\rho^{\text{emp}}_{t, r} = \frac{I_{t,r}}{I_{t - 1, r}}$. For $\rho_{t,r}$ we additionally show $95\%$ prediction intervals as well as the prediction $\rho_{T,r}$ for the final date $T$, which was not accessible to the model during fitting.%
+    \caption{We show growth factors for the eight counties displayed in the top figure. For each county we show $\bar \rho_{t} = \exp \left( \overline{\log\rho_{t}} \right)$, as well as regional growth factors derived from our model ($\rho_{t, r}$) and based on the observations only $\rho^{\text{emp}}_{t, r} = \frac{I_{t,r}}{I_{t - 1, r}}$. For $\rho_{t,r}$ we additionally show $95\%$ prediction intervals as well as the prediction $\rho_{T,r}$ for the final date $T$, which was not accessible to the model during fitting.%
     } 
     \label{fig:regional_showcase_guetersloh}
 \end{figure}
@@ -219,7 +243,7 @@ For the county level growth factors in the upper pat of \Cref{fig:regional_showc
 
 To demonstrate the regional capabilities of our model, we focus on Gütersloh, where the outbreak occurred, and its neighboring counties. In \Cref{fig:regional_showcase_guetersloh}, we show a map of the distribution of the exchange matrix entries $p_{\text{GL}, r}$ for neighboring regions $r$ to the region $\text{GL}$. Most individuals stay in Gütersloh, with some exchange to Bielefeld, Stadt and Warendorf. In the bottom of that figure, we show growth factors for these counties, both the empirical growth factor and the model-based $\rho_{t,r}$ with prediction intervals, as well as $\bar\rho$. The empirical and model-based growth factors mostly agree --- except for some smoothing, especially if incidences are small in that region ---, but their use for prediction is different. 
 
-Let $T$ be the final date considered, i.e.\ the date for which we want to perform predictions, 27 June 2020. The model we have fitted produces a prediction for the new growth factors $\rho_{T, r}$, based on the model's state dynamics for $\overline{\log \rho_{t}}$ and $u_{t,r}$. As $\alpha$ is negative, $\rho_{T,r}$ is notably smaller than $\rho_{T - 1, r}$ for most of the regions considered here. An empirical approach would simply use the last observed value of $\rho^{\text{emp}}_{T,r} = \frac{I_{T,r}}{I_{T - 1, r}}$ to predict the future $\hat\rho^{\text{emp}}_{T, r}$.  Thus, our model should predict smaller incidences for counties with large $\rho$, such as Gütersloh, compared to the empirical approach; see below. Another exception to the agreement of the two growth factors is in the presence of outliers, either large or small growth factors, which our model smooths out due to the small area effect. Importantly, our model can also provide prediction intervals for the growth factors, which the empirical approach cannot.
+Recall that $T$ is the date for which we want to perform predictions, i.e.\ 27 June 2020. The model we have fitted produces a prediction for the new growth factors $\rho_{T, r}$, based on the model's state dynamics for $\overline{\log \rho_{t}}$ and $u_{t,r}$. As $\alpha$ is negative, $\rho_{T,r}$ is notably smaller than $\rho_{T - 1, r}$ for most of the regions considered here. An empirical approach would simply use the last observed value of $\rho^{\text{emp}}_{T,r} = \frac{I_{T,r}}{I_{T - 1, r}}$ to predict the future $\hat\rho^{\text{emp}}_{T, r}$.  Thus, our model should predict smaller incidences for counties with large $\rho$, such as Gütersloh, compared to the empirical approach; see below. Another exception to the agreement of the two growth factors is in the presence of outliers, either large or small growth factors, which our model smooths out due to the small area effect. Importantly, our model can also provide prediction intervals for the growth factors, which the empirical approach cannot.
 
 Subsequently, we compare the regional \gls{ssm} predictions to those from the regional negative binomial model presented earlier in \Cref{fig:regional_showcase_prediction}, where prediction intervals are based on quantiles of the fitted negative binomial distribution on the regional level. The results are shown in \Cref{fig:regional_predictions_GL}. For regions with substantial exchange with Gütersloh, such as Bielefeld and Warendorf, the \gls{ssm} prediction intervals are notably wider than those from the local negative binomial model. Although the prediction intervals for the \gls{ssm} based approach tend to be larger overall, this difference is most notable for these two regions. 
 This widening reflects the regional coupling in the \gls{ssm}, which captures uncertainty propagating between regions due to case exchange modeled by $P$. In contrast, the negative binomial model's prediction intervals are comparably narrow and do not account for this inter-regional effects. Overall, the \gls{ssm} approach produces prediction intervals that are wider and achieve better coverage, including the true observations more consistently, at least for the regions considered.
@@ -238,25 +262,11 @@ To investigate whether this holds up on the global scale, we evaluate the predic
     \item the empirical coverage of $50\%$ and $95\%$ prediction intervals. 
 \end{itemize}
 Additionally, we report the decomposition of the \gls{wis} into its four components. 
-\todo{finish}
-% ssm beats nbinom except for two metrics: sharpness (nbinom has smaller predition intervals) and 50% PI coverage where difference is neglibible
-% overall ssm seems to produe much more sensible forecasts than considering a single county alone
-% alternative of possion baseline would probably be even worse, as nbinom has overdispersion. 
 
-% overall, for the difficult prediction task in the showcase scenario, the ssm model outperforms this simple nbinom baselien severely: on the country level (figure above), on the inidividual region level where we would assume prediction to be hard (Gütersloh and neighbors) and across all regions (see table). 
-% caveats: we might be "lucky" that our model got alpha negative, as negative autocorrelation is beneficial here (Gütersloh predictoin very low). howeover, later setting investigates predictive performance in varying scenarios so that should be fine
+The \gls{ssm} approach outperforms the regional negative binomial baseline in nearly all metrics. The only exceptions are the sharpness component of the \gls{wis}, as the negative binomial model produces smaller prediction intervals, and the coverage of $50\%$ prediction intervals, where the difference is negligible, as both models produce well calibrated $50\%$ prediction intervals. Overall, the joint \gls{ssm} appears to produce much more sensible forecasts than considering each county in isolation. In particular, the tails of the \gls{ssm} prediction intervals are better calibrated: the $95\%$ coverage is much closer to nominal, whereas for the negative binomial approach, tails of the predictive distribution are too light. We note that a Poisson baseline would likely perform even worse, as it cannot account for overdispersion as the negative binomial distribution can. An additional advantage of modeling all regions together is that we do not have to assume that regions evolve independently when computing aggregate forecasts, nor do we need to introduce artificial coupling mechanisms.
 
-% to investigate in this setting, we also compute WIS and related performance metrics, show in table
+In summary, for the challenging prediction task in this showcase scenario, the \gls{ssm} severely outperforms the simple negative binomial baseline: on the country level (see \Cref{fig:regional_showcase_prediction}), on the individual region level, where we would expect prediction to be difficult (Gütersloh and its neighbors, see \Cref{fig:regional_predictions_GL}), and across all regions (see \Cref{tab:performance_regional_ssm_vs_nbinom}). One caveat is that we might be fortunate that our model estimated a negative $\alpha$, as negative autocorrelation is beneficial in this setting --- it drives the predicted growth factor for Gütersloh downward after the outbreak. However, we will investigate predictive performance in varying scenarios below, which should address this concern.
 
-Finally, we can interpret the entries in $P$, which informs both the redistribution of cases between regions, and the covariance of regional effects $u_{t}$. As $P$ is a $400\times 400$ matrix, we focus only on a small section of it: the counties in the federal state of Saxony. Saxony is interesting because it contains two large cities (``Leipzig, Stadt'' and ``Dresden, Stadt'') with commuters commuting from the surrounding area to these cities. In the fitted model, this results in a larger row-sum for the indices associated with these cities, see the right-hand side of \Cref{fig:P_matrix_saxony.tex}.
-
-\begin{figure}
-    \resizebox{\textwidth}{!}{%
-        \input{tikz/P_matrix_saxony.tex}%
-    }
-    \caption{We show part of the estimated $P$ for the showcase example for Saxonian counties. On the left-hand side we present $p_{r,r'}$ for $r,r'$ in Saxony. As the diagonal elements are much larger than the off-diagonal ones, we only apply the color gradient to the off-diagonal elements. The right-hand figure shows the proportion of in-county infections $p_{r',r'}$ (blue bars) and out-of-county infections $\sum_{r \neq r'} p_{r,r'}$ (red bars). For the two big cities, ``Leipzig, Stadt'' and ``Dresden, Stadt'', we see a larger influx of cases, compared to the more rural regions, e.g. ``Görlitz''.} 
-    \label{fig:P_matrix_saxony.tex}
-\end{figure}
 
 % results:
 % WIS across all counties compare to poisson and nb baseline in that week (see talk at Karlsruhe)
