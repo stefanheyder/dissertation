@@ -245,8 +245,22 @@ To demonstrate the regional capabilities of our model, we focus on Gütersloh, w
 
 Recall that $T$ is the date for which we want to perform predictions, i.e.\ 27 June 2020. The model we have fitted produces a prediction for the new growth factors $\rho_{T, r}$, based on the model's state dynamics for $\overline{\log \rho_{t}}$ and $u_{t,r}$. As $\alpha$ is negative, $\rho_{T,r}$ is notably smaller than $\rho_{T - 1, r}$ for most of the regions considered here. An empirical approach would simply use the last observed value of $\rho^{\text{emp}}_{T,r} = \frac{I_{T,r}}{I_{T - 1, r}}$ to predict the future $\hat\rho^{\text{emp}}_{T, r}$.  Thus, our model should predict smaller incidences for counties with large $\rho$, such as Gütersloh, compared to the empirical approach; see below. Another exception to the agreement of the two growth factors is in the presence of outliers, either large or small growth factors, which our model smooths out due to the small area effect. Importantly, our model can also provide prediction intervals for the growth factors, which the empirical approach cannot.
 
+\begin{figure}
+    \resizebox{\textwidth}{!}{%
+        \input{tikz/guetersloh_neighbors_cases.tex}%
+    }
+    \caption{TODO} 
+    \label{fig:guetersloh_neighbors_cases}
+\end{figure}
+Another advantage of the fitted model is, that we can also investigate the distribution of secondary cases across regions. In particular, we can address the question of how many predicted cases in a given region are attributable to its proximity to Gütersloh. However, we stress that this should not be interpreted as an appropriate reconstruction of the actual transmission dynamics, and as such, the results must be treated with care. Indeed, the outbreak occurred in a meat processing plant with worker accommodations nearby, so there is reason to believe that primary cases did not travel extensively between regions.
+
+For the regions under consideration, we show $I_{T, r \to r'} = p_{r,r'}\rho_{T,r} I_{T-1,r}$, the number of secondary cases in regions $r'$ whose primary case is in region $r$, in \Cref{fig:guetersloh_neighbors_cases}, together with $95\%$ prediction intervals (all values rounded to integers). We observe that there is some contribution of Gütersloh cases to Bielefeld, and fewer to Warendorf --- these are the regions with high $p_{\text{GL}, r'}$ values. For Warendorf, this contribution is negligible compared to that of cases originating within Warendorf itself. For Bielefeld, the contribution from Gütersloh is more practically relevant, as the model predicts cases of similar magnitude from both sources. Note that the values shown here are not necessarily consistent with those presented elsewhere, as we used different random seeds for each figure. Beyond these two regions, there is not much exchange, as both the number of cases and the $p_{r,r'}$ values are generally low (see \Cref{fig:P_map_GL}).
+
+
 Subsequently, we compare the regional \gls{ssm} predictions to those from the regional negative binomial model presented earlier in \Cref{fig:regional_showcase_prediction}, where prediction intervals are based on quantiles of the fitted negative binomial distribution on the regional level. The results are shown in \Cref{fig:regional_predictions_GL}. For regions with substantial exchange with Gütersloh, such as Bielefeld and Warendorf, the \gls{ssm} prediction intervals are notably wider than those from the local negative binomial model. Although the prediction intervals for the \gls{ssm} based approach tend to be larger overall, this difference is most notable for these two regions. 
 This widening reflects the regional coupling in the \gls{ssm}, which captures uncertainty propagating between regions due to case exchange modeled by $P$. In contrast, the negative binomial model's prediction intervals are comparably narrow and do not account for this inter-regional effects. Overall, the \gls{ssm} approach produces prediction intervals that are wider and achieve better coverage, including the true observations more consistently, at least for the regions considered.
+
+
 
 \begin{table}
     \centering
