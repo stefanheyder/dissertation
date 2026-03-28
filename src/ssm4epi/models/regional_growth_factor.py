@@ -433,10 +433,6 @@ def _observation_model(obs: Float[Array, "n+2 K"], P: Float[Array, "K K"], r: Fl
         r, sum_I = jnp.moveaxis(xi, -1, 0)
         return NBinom(r, logits=signal + jnp.log(sum_I) - jnp.log(r))
 
-    def dist_obs_pois(signal, xi):
-        sum_I = xi
-        return Poisson(log_rate=signal + jnp.log(sum_I))
-
     B = jnp.hstack([jnp.ones((p, 1)), jnp.eye(p)])
     B = jnp.broadcast_to(B, (np1, p, p + 1))
     v = jnp.zeros((np1, p))
@@ -494,7 +490,7 @@ n_ij = (
 )
 n_pop = pd.read_csv(here() / "data/processed/population.csv").iloc[:, -1].to_numpy()
 
-# %% ../../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 30
+# %% ../../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 31
 df_weekly_cases = pd.read_csv(here() / "data/processed/RKI_county_weekly.csv").pivot(
     index="date", columns="ags", values="cases"
 )
@@ -504,13 +500,13 @@ cases_full = jnp.asarray(df_weekly_cases.to_numpy(), dtype=jnp.float64)
 dates_full = df_weekly_cases.index.to_numpy()
 ags_full = df_weekly_cases.columns.to_numpy()
 
-# %% ../../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 31
+# %% ../../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 32
 def make_aux(date, cases_full, n_ij, n_tot, np1):
     iloc_of_date_in_index = jnp.where(dates_full == date)[0][0]
     cases = cases_full[iloc_of_date_in_index : iloc_of_date_in_index + np1 + 1]
     return cases, n_ij, n_tot
 
-# %% ../../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 32
+# %% ../../../nbs/4 Models/4.2 Regional growth factor model/10_model.ipynb 33
 import jax.scipy as jsp
 
 

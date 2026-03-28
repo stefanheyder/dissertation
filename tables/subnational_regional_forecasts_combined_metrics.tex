@@ -1,0 +1,23 @@
+
+\begin{tabular}{lrrrr}
+\toprule
+metric & baseline & ensemble & itww & ssm\\
+\midrule
+MAE & 1,239.28 & 917.93 & 1,055.22 & 892.09\\
+WIS & 745.38 & 550.52 & 678.64 & 561.43\\
+\addlinespace[0.3em]
+\multicolumn{5}{l}{\textbf{WIS components}}\\
+\hspace{1em}sharpness & 274.18 & 168.14 & 144.66 & 400.79\\
+\hspace{1em}underprediction & 298.72 & 72.05 & 32.18 & 76.33\\
+\hspace{1em}overprediction & 114.73 & 270.15 & 456.36 & 46.20\\
+\hspace{1em}rescaled MAE & 57.76 & 40.18 & 45.44 & 38.10\\
+\addlinespace[0.3em]
+\multicolumn{5}{l}{\textbf{coverage}}\\
+\hspace{1em}\hspace{1em}coverage 50\% PI [\%] & 36.16 & 48.44 & 41.54 & 73.31\\
+\hspace{1em}\hspace{1em}coverage 95\% PI [\%] & 88.99 & 90.36 & 79.95 & 99.87\\
+\addlinespace[0.3em]
+\multicolumn{5}{l}{\textbf{relative to baseline}}\\
+\hspace{1em}MAE & 1.00 & 0.74 & 0.85 & 0.72\\
+\hspace{1em}WIS & 1.00 & 0.74 & 0.91 & 0.75\\
+\bottomrule
+\end{tabular}

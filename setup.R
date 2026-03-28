@@ -98,6 +98,32 @@ ggsave_tikz <- function(filename, plot = last_plot(), width = default_width, hei
     dev.off()
 }
 
+ggsave_tikz_full <- function(filename, plot = last_plot(), width = default_width, height = default_height, caption = "", ...) {
+    IRdisplay::display_markdown(caption)
+    tikz(filename, width = width, height = height, ...)
+    print(plot)
+    dev.off()
+    
+    # Extract base name without extension for label
+    base_name <- tools::file_path_sans_ext(basename(filename))
+    
+    # Create wrapper file with figure environment
+    wrapper_filename <- sub("\\.tex$", "_full.tex", filename)
+
+
+    label <- gsub("[^a-zA-Z0-9]", "_", base_name)  
+    
+    writeLines(c(
+        "\\begin{figure}",
+        "   \\resizebox{\\textwidth}{!}{%",
+        paste0("        \\input{", sub(paste0(here(), "/"), "", filename), "}"),
+        "}",
+        paste0("    \\caption{", caption, "}"),
+        paste0("    \\label{fig:", label, "}"),
+        "\\end{figure}"
+    ), wrapper_filename)
+}
+
 theme_thesis <- function() {
     theme_minimal()
 }
