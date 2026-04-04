@@ -136,7 +136,7 @@ In the original \gls{nch} the truth against which nowcasts were to be evaluated 
 For the younger age groups, long delays are rare (see also \Cref{fig:delay_hospitalization_probabilities}), which leads to numerical instabilities in the consecutive logit parametrization. If such numerical instabilities occur, we manually choose the maximum delay (in weeks) that still produces a reasonable model fit, which we define here as  an \gls{ef} above $2.5\%$. We show the resulting weeks of delay and \gls{ef} in \Cref{tab:hospitalization_showcase_ess}. The resulting posterior distributions of interest are displayed in \Cref{fig:hospitalization_showcase_results}. 
 
 \begin{figure}
-    \resizebox{\textwidth}{!}{%
+    \resizebox{.90\textwidth}{!}{%
         \input{tikz/hospitalization_showcase_results.tex}%
     }
     \caption{For each of the seven age groups (indicated by color and linetype), we show means of the smoothing distribution for the first four delay probabilities $q_{t,k}$, $k = 0,\dots, 3$, the smoothed probabilities of hospitalization $p_t$ and the two weekday effects $W_{t,0}, W_{t,1}$. Additionally, we show the mean delay $\bar \tau_{t}$. Recall that we fit a separate model for each age group. For the smoothed delay probabilities, we additionally show 95\% prediction intervals. Note the log-scale of the $y$-axis for the smoothed delay probabilities. %

@@ -11,84 +11,385 @@
     sort={a02},%
     type=symbols%
 }
+\newglossaryentry{sym:Z}{%
+    name=\ensuremath{\mathbf Z},%
+    description={Integers},%
+    sort={a021},%
+    type=symbols%
+}
+\newglossaryentry{sym:R_num}{%
+    name=\ensuremath{\R},%
+    description={Real numbers},%
+    sort={a03},%
+    type=symbols%
+}
 \newglossaryentry{sym:Rptimesm}{%
     name=\ensuremath{\R^{p \times m}},%
-    description={matrices with $p$ rows and $m$ columns of real entries},%
+    description={Matrices with $p$ rows and $m$ columns of real entries},%
     sort={a03},%
     type=symbols%
 }
 
-%% probability theory / statistics
-\newglossaryentry{sym:E}{%
-    name=\ensuremath{\E},%
-    description={expected value},%
-    sort={b01},
-    type=symbols%
-}
-\newglossaryentry{sym:Pois}{%
-    name=\ensuremath{\operatorname{Pois}},%
-    description={Poisson distribution},%
-    type=symbols%
-}
-\newglossaryentry{sym:Xs-to-t}{%
-    name=\ensuremath{X_{s:t}},%
-    description={$(X_{s}, \dots, X_{t})$ for $s, t \in \N_{0}$, $s < t$},%
-    type=symbols%
-}
-\newglossaryentry{sym:X-to-t}{%
-    name=\ensuremath{X_{:t}},%
-    description={$(X_{0}, \dots, X_{t})$ for $t \in \N_{0}$},%
-    type=symbols%
-}
-\newglossaryentry{sym:theta}{%
-    name=\ensuremath{\theta},%
-    description={a parameter},%
-    type=symbols%
-}
-\newglossaryentry{sym:Theta}{%
-    name=\ensuremath{\Theta},%
-    description={set of all parameters},%
-    type=symbols%
-}
-\newglossaryentry{sym:p}{%
-    name=\ensuremath{p},%
-    description={generic density},%
-    type=symbols%
-}
-%% epidemiology
-\newglossaryentry{sym:Rc}{%
-    name=\ensuremath{R_c},%
-    description={case reproduction number},%
+%% epidemiological core
+\newglossaryentry{sym:It}{%
+    name=\ensuremath{I_t},%
+    description={Number of newly infected individuals at time $t$},%
+    sort={b01},%
     type=symbols%
 }
 \newglossaryentry{sym:Rt}{%
     name=\ensuremath{R_t},%
-    description={time-varying reproduction number},%
+    description={Instantaneous/time-varying reproduction number},%
+    sort={b02},%
     type=symbols%
 }
-\newglossaryentry{sym:w}{%
-    name=\ensuremath{w},%
-    description={generation time distribution},%
+\newglossaryentry{sym:Rc}{%
+    name=\ensuremath{R_c},%
+    description={Case reproduction number},%
+    sort={b03},%
     type=symbols%
 }
-\newglossaryentry{sym:rho}{%
-    name=\ensuremath{\rho},%
-    description={growth factor},%
+\newglossaryentry{sym:rhot}{%
+    name=\ensuremath{\rho_t},%
+    description={Time-varying exponential growth factor},%
+    sort={b04},%
     type=symbols%
 }
-
-\newglossaryentry{sym:Rg0}{%
-    name=\ensuremath{\R_{>0}},%
-    description={positive real numbers},%
+\newglossaryentry{sym:rho7}{%
+    name=\ensuremath{\rho^7},%
+    description={Weekly growth factor},%
+    sort={b05},%
     type=symbols%
 }
 \newglossaryentry{sym:r}{%
     name=\ensuremath{r},%
-    description={exponential growth rate},%
+    description={Exponential growth rate},%
+    sort={b06},%
     type=symbols%
 }
 \newglossaryentry{sym:d}{%
     name=\ensuremath{d},%
-    description={doubling time},%
+    description={Doubling time},%
+    sort={b07},%
+    type=symbols%
+}
+\newglossaryentry{sym:w}{%
+    name=\ensuremath{w},%
+    description={Generation time distribution / infectivity profile},%
+    sort={b081},%
+    type=symbols%
+}
+\newglossaryentry{sym:wtau}{%
+    name=\ensuremath{w_\tau},%
+    description={Generation time distribution at delay $\tau$},%
+    sort={b082},%
+    type=symbols%
+}
+\newglossaryentry{sym:betatau}{%
+    name=\ensuremath{\beta_\tau},%
+    description={Expected secondary infections $\tau$ days after infection},%
+    sort={b09},%
+    type=symbols%
+}
+
+%% state space model variables
+\newglossaryentry{sym:Xt}{%
+    name=\ensuremath{X_t},%
+    description={Latent state at time $t$},%
+    sort={c01},%
+    type=symbols%
+}
+\newglossaryentry{sym:X0n}{%
+    name=\ensuremath{X_{0:n}},%
+    description={All latent states from time $0$ to $n$},%
+    sort={c02},%
+    type=symbols%
+}
+\newglossaryentry{sym:Yt}{%
+    name=\ensuremath{Y_t},%
+    description={Observation at time $t$},%
+    sort={c03},%
+    type=symbols%
+}
+\newglossaryentry{sym:Y1n}{%
+    name=\ensuremath{Y_{1:n}},%
+    description={All observations from time $1$ to $n$},%
+    sort={c04},%
+    type=symbols%
+}
+\newglossaryentry{sym:St}{%
+    name=\ensuremath{S_t},%
+    description={Signal (linear combination of states)},%
+    sort={c05},%
+    type=symbols%
+}
+\newglossaryentry{sym:At}{%
+    name=\ensuremath{A_t},%
+    description={State transition matrix},%
+    sort={c06},%
+    type=symbols%
+}
+\newglossaryentry{sym:Bt}{%
+    name=\ensuremath{B_t},%
+    description={Observation/signal mapping matrix},%
+    sort={c07},%
+    type=symbols%
+}
+\newglossaryentry{sym:utvt}{%
+    name=\ensuremath{u_t, v_t},%
+    description={Deterministic bias terms for state/observation equations},%
+    sort={c08},%
+    type=symbols%
+}
+\newglossaryentry{sym:epsilont}{%
+    name=\ensuremath{\varepsilon_t},%
+    description={State/innovation noise},%
+    sort={c09},%
+    type=symbols%
+}
+\newglossaryentry{sym:etat}{%
+    name=\ensuremath{\eta_t},%
+    description={Observation/measurement noise},%
+    sort={c10},%
+    type=symbols%
+}
+\newglossaryentry{sym:Sigmat}{%
+    name=\ensuremath{\Sigma_t},%
+    description={State noise covariance matrix},%
+    sort={c11},%
+    type=symbols%
+}
+\newglossaryentry{sym:Omegat}{%
+    name=\ensuremath{\Omega_t},%
+    description={Observation noise covariance matrix},%
+    sort={c12},%
+    type=symbols%
+}
+
+%% filtering and smoothing
+\newglossaryentry{sym:Xhattmids}{%
+    name=\ensuremath{\hat{X}_{t \mid s}},%
+    description={Conditional expectation of $X_t$ given $Y_{1:s}$},%
+    sort={d01},%
+    type=symbols%
+}
+\newglossaryentry{sym:Xitmids}{%
+    name=\ensuremath{\Xi_{t \mid s}},%
+    description={Conditional covariance of $X_t$ given $Y_{1:s}$},%
+    sort={d02},%
+    type=symbols%
+}
+\newglossaryentry{sym:Yhattmids}{%
+    name=\ensuremath{\hat{Y}_{t \mid s}},%
+    description={Predicted observation given $Y_{1:s}$},%
+    sort={d03},%
+    type=symbols%
+}
+\newglossaryentry{sym:Psitmids}{%
+    name=\ensuremath{\Psi_{t \mid s}},%
+    description={Observation prediction covariance},%
+    sort={d04},%
+    type=symbols%
+}
+
+%% probability distributions
+\newglossaryentry{sym:Normal}{%
+    name=\ensuremath{\mathcal{N}(\mu, \Sigma)},%
+    description={(Multivariate) normal distribution},%
+    sort={e01},%
+    type=symbols%
+}
+\newglossaryentry{sym:Pois}{%
+    name=\ensuremath{\mathrm{Pois}(\lambda)},%
+    description={Poisson distribution},%
+    sort={e02},%
+    type=symbols%
+}
+\newglossaryentry{sym:NegBinom}{%
+    name=\ensuremath{\mathrm{NegBinom}(\mu, \phi)},%
+    description={Negative binomial distribution},%
+    sort={e03},%
+    type=symbols%
+}
+\newglossaryentry{sym:LogNorm}{%
+    name=\ensuremath{\mathrm{LogNorm}(\mu, \sigma^2)},%
+    description={Log-normal distribution},%
+    sort={e04},%
+    type=symbols%
+}
+
+%% statistical quantities and operators
+\newglossaryentry{sym:E}{%
+    name=\ensuremath{\mathbb{E}[\cdot]},%
+    description={Expectation},%
+    sort={f01},%
+    type=symbols%
+}
+\newglossaryentry{sym:P}{%
+    name=\ensuremath{\mathbf{P}},%
+    description={Probability measure, target of importance sampling},%
+    sort={f021},%
+    type=symbols%
+}
+\newglossaryentry{sym:G}{%
+    name=\ensuremath{\mathbf{G}},%
+    description={Probability measure, importance sampling proposal},%
+    sort={f022},%
+    type=symbols%
+}
+\newglossaryentry{sym:H}{%
+    name=\ensuremath{\mathbf{H}},%
+    description={Probability measure, auxiliary proposal},%
+    sort={f023},%
+    type=symbols%
+}
+\newglossaryentry{sym:px}{%
+    name=\ensuremath{p, g},%
+    description={Probability density functions},%
+    sort={f03},%
+    type=symbols%
+}
+\newglossaryentry{sym:pxmidy}{%
+    name=\ensuremath{p(x \mid y)},%
+    description={Conditional density},%
+    sort={f04},%
+    type=symbols%
+}
+\newglossaryentry{sym:ell}{%
+    name=\ensuremath{\ell(\theta)},%
+    description={Log-likelihood function},%
+    sort={f05},%
+    type=symbols%
+}
+\newglossaryentry{sym:DKL}{%
+    name=\ensuremath{D_\mathrm{KL}(P \| Q)},%
+    description={Kullback-Leibler divergence},%
+    sort={f06},%
+    type=symbols%
+}
+\newglossaryentry{sym:ESS}{%
+    name=\ensuremath{\mathrm{ESS}},%
+    description={Effective sample size},%
+    sort={f07},%
+    type=symbols%
+}
+\newglossaryentry{sym:AEF}{%
+    name=\ensuremath{\mathrm{AEF}},%
+    description={Asymptotic efficiency factor},%
+    sort={f071},%
+    type=symbols%
+}
+
+%% importance sampling
+\newglossaryentry{sym:wx}{%
+    name=\ensuremath{w},%
+    description={Normalized importance sampling weight},%
+    sort={g011},%
+    type=symbols%
+}
+\newglossaryentry{sym:wx_unnorm}{%
+    name=\ensuremath{\tilde w},%
+    description={Unormalized importance sampling weight},%
+    sort={g012},%
+    type=symbols%
+}
+\newglossaryentry{sym:wx_autonorm}{%
+    name=\ensuremath{W},%
+    description={Autonormalized importance sampling weights},%
+    sort={g013},%
+    type=symbols%
+}
+\newglossaryentry{sym:rhoIS}{%
+    name=\ensuremath{\rho},%
+    description={Second moment of importance weights},%
+    sort={g02},%
+    type=symbols%
+}
+\newglossaryentry{sym:N_samples}{%
+    name=\ensuremath{N},%
+    description={Number of Monte Carlo samples},%
+    sort={g03},%
+    type=symbols%
+}
+\newglossaryentry{sym:deltax}{%
+    name=\ensuremath{\delta_x},%
+    description={Dirac delta measure at $x$},%
+    sort={g04},%
+    type=symbols%
+}
+
+%% parameters and estimation
+\newglossaryentry{sym:theta}{%
+    name=\ensuremath{\theta},%
+    description={Model parameter (vector)},%
+    sort={h01},%
+    type=symbols%
+}
+\newglossaryentry{sym:thetahat}{%
+    name=\ensuremath{\hat{\theta}},%
+    description={Maximum likelihood estimate of $\theta$},%
+    sort={h021},%
+    type=symbols%
+}
+\newglossaryentry{sym:psi}{%
+    name=\ensuremath{\psi},%
+    description={Parameter of importance sampling proposal},%
+    sort={h022},%
+    type=symbols%
+}
+\newglossaryentry{sym:phi}{%
+    name=\ensuremath{\phi},%
+    description={Overdispersion parameter (negative binomial)},%
+    sort={h03},%
+    type=symbols%
+}
+\newglossaryentry{sym:alpha}{%
+    name=\ensuremath{\alpha},%
+    description={Autoregressive coefficient},%
+    sort={h04},%
+    type=symbols%
+}
+\newglossaryentry{sym:lambdat}{%
+    name=\ensuremath{\lambda_t},%
+    description={Poisson rate parameter},%
+    sort={h05},%
+    type=symbols%
+}
+
+%% matrix operations and functions
+\newglossaryentry{sym:Im}{%
+    name=\ensuremath{I_m},%
+    description={Identity matrix of dimension $m$},%
+    sort={k01},%
+    type=symbols%
+}
+\newglossaryentry{sym:diag}{%
+    name=\ensuremath{\mathrm{diag}(\cdot)},%
+    description={Diagonal matrix operator},%
+    sort={k02},%
+    type=symbols%
+}
+\newglossaryentry{sym:bdiag}{%
+    name=\ensuremath{\mathrm{bdiag}(\cdot)},%
+    description={Block diagonal matrix},%
+    sort={k03},%
+    type=symbols%
+}
+\newglossaryentry{sym:chol}{%
+    name=\ensuremath{\mathrm{chol}(\cdot)},%
+    description={Cholesky decomposition},%
+    sort={k04},%
+    type=symbols%
+}
+\newglossaryentry{sym:tr}{%
+    name=\ensuremath{\mathrm{tr}(\cdot)},%
+    description={Matrix trace},%
+    sort={k05},%
+    type=symbols%
+}
+\newglossaryentry{sym:logit}{%
+    name=\ensuremath{\mathrm{logit}(\cdot)},%
+    description={Logistic function $p \mapsto \log(p/(1-p))$},%
+    sort={k06},%
     type=symbols%
 }

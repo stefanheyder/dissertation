@@ -5794,56 +5794,6 @@
       \endverb
       \warn{\item Datamodel: article entry 'Koopman1997Exact' (bibliography.bib): Invalid ISSN in value of field 'issn'}
     \endentry
-    \entry{Koopman1992Exact}{article}{}{}
-      \name{author}{2}{}{%
-        {{un=0,uniquepart=base,hash=21f365c12bd59fa8a7120260bd39f1fc}{%
-           family={Koopman},
-           familyi={K\bibinitperiod},
-           given={Siem\bibnamedelima Jan},
-           giveni={S\bibinitperiod\bibinitdelim J\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=297d9c8d6a4dcfbed876803d5cbba67b}{%
-           family={Shephard},
-           familyi={S\bibinitperiod},
-           given={Neil},
-           giveni={N\bibinitperiod},
-           givenun=0}}%
-      }
-      \list{publisher}{1}{%
-        {[Oxford University Press, Biometrika Trust]}%
-      }
-      \strng{namehash}{7d3e8cfd4417cf35bdd2aeb0a5f8c111}
-      \strng{fullhash}{7d3e8cfd4417cf35bdd2aeb0a5f8c111}
-      \strng{fullhashraw}{7d3e8cfd4417cf35bdd2aeb0a5f8c111}
-      \strng{bibnamehash}{7d3e8cfd4417cf35bdd2aeb0a5f8c111}
-      \strng{authorbibnamehash}{7d3e8cfd4417cf35bdd2aeb0a5f8c111}
-      \strng{authornamehash}{7d3e8cfd4417cf35bdd2aeb0a5f8c111}
-      \strng{authorfullhash}{7d3e8cfd4417cf35bdd2aeb0a5f8c111}
-      \strng{authorfullhashraw}{7d3e8cfd4417cf35bdd2aeb0a5f8c111}
-      \field{sortinit}{K}
-      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{eprinttype}{jstor}
-      \field{issn}{0006-3444}
-      \field{journaltitle}{Biometrika}
-      \field{number}{4}
-      \field{title}{Exact {{Score}} for {{Time Series Models}} in {{State Space Form}}}
-      \field{volume}{79}
-      \field{year}{1992}
-      \field{dateera}{ce}
-      \field{pages}{823\bibrangedash 826}
-      \range{pages}{4}
-      \verb{doi}
-      \verb 10.2307/2337237
-      \endverb
-      \verb{eprint}
-      \verb 2337237
-      \endverb
-      \warn{\item Datamodel: article entry 'Koopman1992Exact' (bibliography.bib): Invalid field 'publisher' for entrytype 'article'}
-    \endentry
     \entry{Koopman2015Numerically}{article}{}{}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=21f365c12bd59fa8a7120260bd39f1fc}{%

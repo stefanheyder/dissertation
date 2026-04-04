@@ -12,3 +12,10 @@ repos:
     types: [tex]
     args: [--multiline]
     verbose: true
+  - id: check-missing-refs
+    name: "Check for missing references/citations in thesis.log"
+    entry: bash -c 'if [ -f thesis.log ]; then if grep -qE "Reference .* undefined|Citation .* undefined" thesis.log; then echo "Missing references or citations found in thesis.log:"; grep -E "Reference .* undefined|Citation .* undefined" thesis.log; exit 1; fi; fi'
+    language: system
+    types: [tex]
+    pass_filenames: false
+

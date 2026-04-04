@@ -26,10 +26,10 @@ As we have assumed that $R_{c}$ is finite, we may write $\beta_{\tau} = R_{c}w_{
     \label{eq:renewal-eq}
 \E \left(I_{t}| I_{t - 1}, I_{t - 2}, \dots \right) = R_{c} \sum_{\tau = 1}^\infty I_{t - \tau} w_{\tau},
 \end{align}
-the so-called renewal equation. Here we have implicitly assumed that $\gls{sym:w}_{0} = 0$, i.e. infected individuals need at least one day to become infectious themselves. For \gls{c19} this is a reasonable assumption \citep{Lauer2020Incubation}. If case numbers are small, e.g. if the assumptions we demand hold, the conditional distribution of $I_{t}$ given past cases is, by the law of small numbers, well approximated by a Poisson distribution and combined with the renewal equation we obtain the renewal equation model \citep{Fraser2007Estimating}
+the so-called renewal equation. Here we have implicitly assumed that $w_{0} = 0$, i.e. infected individuals need at least one day to become infectious themselves. For \gls{c19} this is a reasonable assumption \citep{Lauer2020Incubation}. If case numbers are small, e.g. if the assumptions we demand hold, the conditional distribution of $I_{t}$ given past cases is, by the law of small numbers, well approximated by a Poisson distribution and combined with the renewal equation we obtain the renewal equation model \citep{Fraser2007Estimating}
 \begin{align}
     \label{eq:renewal-model}
-    I_{t} | I_{t - 1}, I_{t - 2}, \dots \sim \gls{sym:Pois} \left( \gls{sym:Rt} \sum _{\tau = 1}^\infty I_{t - \tau} w_{\tau} \right),
+    I_{t} | I_{t - 1}, I_{t - 2}, \dots \sim \operatorname{Pois} \left( \gls{sym:Rt} \sum _{\tau = 1}^\infty I_{t - \tau} w_{\tau} \right),
 \end{align}
 where the time-varying or instantaneous reproduction number $R_{t}$ can vary over time as well. Working with the time-varying reproduction number $R_{t}$ instead of the case reproduction number $R_{c}$ has multiple advantages. 
 First, $R_{c}$ is a measure of the future behavior of a case, i.e. it does not capture the current state of the epidemic\footnote{Note that $R_{c}$ also depends on $t$ here and in the following, which we suppress for ease of notation.}. 
@@ -52,7 +52,7 @@ An additional advantage is that the model \eqref{eq:renewal-model} can be interp
 If $I_{0}$ is small compared to the total population size, a sensible assumption, one can show that under the above model, the expected number of cases grows approximately exponentially \citep[Section 1.2]{Diekmann2013Mathematical}, 
 \begin{align}
     \label{eq:exponential-growth}
-\E I_{t} \approx \gls{sym:rho} \E I_{t - 1} \approx \rho^{t} \E I_{0}.
+\E I_{t} \approx \rho \E I_{t - 1} \approx \rho^{t} \E I_{0}.
 \end{align}
 $\rho$ is called the daily exponential growth factor and can be recovered from \eqref{eq:renewal-eq} by an exponential ansatz \citep{Wallinga2007How}:
 $$

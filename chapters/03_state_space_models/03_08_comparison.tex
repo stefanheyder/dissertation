@@ -50,7 +50,7 @@ It is generally difficult to determine whether the proposals produced by the thr
     \end{figure}
 \end{example}
 \vspace{15pt}
-In the \gls{egssm} setting \gls{eis} may produce invalid proposals, as estimates of the variance component in the weighted least squares regression are not guaranteed to be non-negative. Thus, \gls{eis} may produce negative variances. To deal with this, the original \gls{eis} paper \citep[Section 3.2]{Richard2007Efficient} recommends either inflating the prior or setting the parameters in question to arbitrary fixed values. Alternatively using a more expensive constrained linear least squares solver, such as a conjugate-gradient method \citep{Branch1999Subspace} or the BVLS (bounded variable least squares) solver \citep{Stark1995Boundedvariable} may be appropriate, as is re-running the \gls{eis} procedure with a different random seed. Finally, in the \gls{egssm} setting, we could also identify the corresponding observation as missing, similar to the argument presented in \Cref{subsec:glssm-approach} for the \gls{cem}. 
+In the \gls{egssm} setting \gls{eis} may produce invalid proposals, as estimates of the variance component in the weighted least squares regression are not guaranteed to be non-negative. To deal with this, the original \gls{eis} paper \citep[Section 3.2]{Richard2007Efficient} recommends either inflating the prior or setting the parameters in question to arbitrary fixed values. Alternatively using a more expensive constrained linear least squares solver, such as a conjugate-gradient method \citep{Branch1999Subspace} or the BVLS (bounded variable least squares) solver \citep{Stark1995Boundedvariable} may be appropriate, as is re-running the \gls{eis} procedure with a different random seed. Finally, in the \gls{egssm} setting, we could also identify the corresponding observation as missing, similar to the argument presented in \Cref{subsec:glssm-approach} for the \gls{cem}. 
 
 % CE failure?
 The \gls{cem} presented in \Cref{subsec:markov-approach} (\Cref{alg:cem-markov-proposal-fast}) depends on the fact that the covariance matrix of the posterior $\cov \left( X | Y = y \right)$ is \gls{spd}, i.e. non-singular. This might be violated if, e.g., the model contains seasonal components whose associated innovations have variance $0$. In this case, the Cholesky roots involved will not be unique. Still \Cref{alg:cem-markov-proposal-fast} will, as $N\to\infty$, converge to a globally optimal solution, though it may not be unique. 
@@ -160,7 +160,7 @@ $$
 $$
 As the proposal is always $\G_{\psi} = \mathcal N(\mu, \sigma^{2})$ with either $\mu$ or $\sigma^{2}$ fixed, and $\P$ is a mixture of Gaussians or $\mathcal N(0,1)$, $\rho$ is analytically available, as 
 $$
-    \rho = \int w^{2} \mathrm d \mathcal \G_\psi = \int \frac{p^{2}}{g^{2}} \mathrm d \mathcal \G_\psi = \int_{-\infty}^\infty \frac{p^{2}(x)}{g_\psi(x)} \mathrm d x
+    \rho = \int w^{2} \mathrm d \mathcal \G_\psi = \int \frac{p^{2}}{g_{\psi}^{2}} \mathrm d \mathcal \G_\psi = \int_{-\infty}^\infty \frac{p^{2}(x)}{g_\psi(x)} \mathrm d x
 $$
 can then be reduced to Gaussian integrals, which we omit here for brevity\footnote{The calculations can be found in the accompanying Jupyter notebooks that produce the figures, \texttt{03\_07\_compare\_CE\_EIS.ipynb}.}.
 
@@ -248,13 +248,17 @@ Finally, we compare the \gls{cem} and \gls{eis} in a situation closer to the app
 \end{figure} 
 
 \input{chapters/03_state_space_models/03_08_comparison_ssm_parameters_ef.tex}
-The resulting asymptotic efficiency factors are presented in \Cref{fig:ssm_comparison_efficiency_factor}. As expected, the asymptotic efficiency factor declines as $n$ grows for all methods. For small $n$, both \gls{eis} and the \gls{cem} produce better proposals --- as measured by the asymptotic efficiency factor --- than the \gls{la}. Up to $n=10$, the \gls{cem} produces adequate proposals, however, starting at $n=20$, the performance deteriorates. Additionally, we had already seen in the previous section that the asymptotic variance of the \gls{cem} grows much more rapidly than that of \gls{eis}. 
+The resulting asymptotic efficiency factors are presented in \Cref{fig:ssm_comparison_efficiency_factor}. As expected, the asymptotic efficiency factor declines as $n$ grows for all methods. 
+
+For small $n$, both \gls{eis} and the \gls{cem} produce better proposals --- as measured by the asymptotic efficiency factor --- than the \gls{la}. 
+Up to $n=10$, the \gls{cem} produces adequate proposals, however, starting at $n=20$, the performance deteriorates. 
+Additionally, we had already seen in the previous section that the asymptotic variance of the \gls{cem} grows much more rapidly than that of \gls{eis}. 
 
 \begin{table}
     \centering
     \input{tables/ssm_comparison_missing_values.tex}
     \label{tab:ssm_comparison_missing_values}
-    \caption{Number of invalid asymptotic efficiency factors (out of $K=10$) per size $n$ and method. This includes cases where either the numerical scheme of the method failed to converge, or the proposal generated is numerically singular to the target.}
+    \caption{Number of invalid asymptotic efficiency factors (out of $K=100$) per size $n$ and method. This includes cases where either the numerical scheme of the method failed to converge, or the proposal generated is numerically singular to the target.}
 \end{table}
 
 In addition to these observations, we report some numerical issues which result in invalid asymptotic efficiency factors. The number of occurrences is displayed in \Cref{tab:ssm_comparison_missing_values}. Again, the \gls{cem} is much more unstable than the \gls{la} or \gls{eis}, with the \gls{la} having the least amount of dropout. As both methods use the \gls{la} as their initial value, we would expect such numerical issues when the \gls{la} provides bad proposals --- which is the case for some proposals at $n=100$.

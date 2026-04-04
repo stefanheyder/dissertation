@@ -38,9 +38,10 @@ may also be used, where $\oslash$ is the Hadamard, i.e. entry-wise, division. Si
 
 % weights
 In this setting, the importance sampling weights are given by 
-$$
+\begin{align}
+\label{eq:w-splits-by-time}
 w(x) = \frac{p(x|y)}{g(x|z)} = \frac{p(y|x)p(x)}{g(z|x)p(x)} \frac{g(z)}{p(y)} \propto \prod_{t = 0}^n \frac{p(y_{t}|x_{t})}{g(z_{t}|x_{t})},
-$$
+\end{align}
 % Signals
 so they can be computed efficiently. Additionally, for an \gls{egssm} with linear signals, $p(y_{t}|x_{t})$ and $g(z_{t}|x_{t})$ depend on $x_{t}$ only through the signal $s_{t} = B_{t}x_{t}$, and we have 
 \begin{align}

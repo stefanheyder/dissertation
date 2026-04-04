@@ -12,7 +12,7 @@
 \newcommand{\Pp}{{\ensuremath{\mathbb P^{X| Y=y}}}}
 \newcommand{\Pps}{{\ensuremath{\mathbb P^{S| Y=y}}}}
 
-\newcommand{\la}{{\ensuremath{\text{LA}}}}
+\newcommand{\la}{\gls{la}\xspace}
 
 \newcommand{\Dto}{\stackrel{\mathcal D}{\to}}
 \newcommand{\id}{\operatorname{id}}
@@ -25,7 +25,7 @@
 \label{cha:state_space_models}
 \newpage
 \begin{tcolorbox}[title={Contributions}]
-    The main contribution of this chapter consists of a rigorous comparison of two importance sampling frameworks: the \Acrfull{cem} and \Acrfull{eis}. Both methods determine optimal importance sampling proposals, but have, until now, been studied in separate communities: the \acem is popular in rare-event estimation and engineering disciplines, while \aeis is popular in the financial time series community. 
+    The main contribution of this chapter consists of a rigorous comparison of two importance sampling frameworks: the \gls{cem} and \gls{eis}. Both methods determine optimal importance sampling proposals, but have, until now, been studied in separate communities: the \acem is popular in rare-event estimation and engineering disciplines, while \aeis is popular in the financial time series community. 
 
     The contributions of the individual sections are as follows:
 
@@ -55,7 +55,6 @@
     \paragraph{\nameref{sec:maximum_likelihood_estimation}}
     This section is for the largest part based on literature, however the following points are new:
     \begin{itemize}
-        \item The discussion of calculating the gradient, \eqref{eq:gradient_infeasible}, for the \gls{la} / \gls{eis}.
         \item We make the antithetic variable construction of \citep{Durbin1997Monte} rigorous. 
         \item \Cref{subsec:inference} is a rigorous reformulation of \citep[Section 11.5]{Durbin2012Time}.
     \end{itemize}
@@ -64,6 +63,7 @@
     This whole section is a new contribution, extensively comparing the \gls{cem} with \gls{eis}.
 \end{tcolorbox}
 \newpage
+\glsresetall
 
 In the last chapter, we have detailed the need for models capable of modeling complex epidemiological phenomena. Crucially, we must account for the time-series and discrete nature of the data at hand. 
 \Glspl{ssm} form a versatile class of statistical models that allow modeling of non-stationary time series data while providing a straightforward, mechanistic interpretation of the time series' dynamics.
@@ -93,7 +93,7 @@ Let us start from a very general definition of an \gls{ssm}.
     \end{enumerate}
 \end{definition}
 
-For notational convenience, we will write $\gls{sym:Xs-to-t} = \left(X_s, \dots, X_{t}\right)$ for the vector that contains all states from $s$ to $t$, $s \leq t$, dropping the first index if we consider the whole set of observations up to time $t$, so $\gls{sym:X-to-t} = X_{0:t}$, and dropping the subscript if we consider all states at once, $X = X_{:n}$.
+For notational convenience, we will write $X_{s:t} = \left(X_s, \dots, X_{t}\right)$ for the vector that contains all states from $s$ to $t$, $s \leq t$, dropping the first index if we consider the whole set of observations up to time $t$, so $X_{:t} = X_{0:t}$, and dropping the subscript if we consider all states at once, $X = X_{:n}$.
 Similarly we set $Y_{s:t} = \left(Y_s, \dots, Y_{t}\right)$, $Y_{:t} = Y_{0:t}$ and $Y = Y_{:n}$.
 
 The models that we consider in this thesis will usually assume that densities for the state transitions with respect to a common dominating measure $\mu_{\mathcal X}$ and similar for the observations with respect to some dominating measure $\mu_{\mathcal Y}$ exist. 
@@ -101,11 +101,11 @@ The models that we consider in this thesis will usually assume that densities fo
 \begin{notation}[Densities, conditional densities]
     \label{not:densities}
     We will use the standard abuse of notation for densities that makes the type of density ``{}obvious''{} from the arguments used.
-    This means that $\gls{sym:p}(x)$ is the density for all states $X$, evaluated at $x$, $p(x_t|x_{t - 1})$ the conditional density of $X_t|X_{t - 1}$, evaluated at $x_{t}$ and $x_{t - 1}$ and similarly for observations: $p(y|x)$ is the density of the conditional distribution of all observations $Y$ conditioned on all states $X$, evaluated at $y$ and $x$.
+    This means that $p(x)$ is the density for all states $X$, evaluated at $x$, $p(x_t|x_{t - 1})$ the conditional density of $X_t|X_{t - 1}$, evaluated at $x_{t}$ and $x_{t - 1}$ and similarly for observations: $p(y|x)$ is the density of the conditional distribution of all observations $Y$ conditioned on all states $X$, evaluated at $y$ and $x$.
 
     Note that this notation also implicitly includes the time $t$ and allows for changes in, e.g., the state transition over time.
 
-    When densities come from a parametric model parametrized by $\gls{sym:theta}\in \gls{sym:Theta} \subseteq \mathbf{R}^{l}$ and the dependence of the model on $\theta$ is of interest, e.g. because we try to estimate $\theta$, we indicate this by adding a subscript to the densities.
+    When densities come from a parametric model parametrized by $\theta \in \Theta \subseteq \mathbf{R}^{l}$ and the dependence of the model on $\theta$ is of interest, e.g. because we try to estimate $\theta$, we indicate this by adding a subscript to the densities.
     If this dependence is not of interest, e.g. because $\theta$ is fixed, we omit $\theta$ for better readability.
 
     In this notation, the joint density of a parametric \gls{ssm} factorizes as
