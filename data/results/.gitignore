@@ -1,2 +1,8 @@
 *
 !.gitignore
+!4_local_outbreak_model/showcase.csv
+!4_local_outbreak_model/estimated_parameters_with_se.csv
+!4_local_outbreak_model/showcase_rho_observed.csv
+!4_local_outbreak_model/showcase_P_matrix.csv
+!4_local_outbreak_model/Q.csv
+!4_local_outbreak_model/guetersloh_distribution_cases.csv
