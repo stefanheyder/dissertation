@@ -188,8 +188,7 @@ $$
 where $p(x,\theta|y)$ is the joint posterior of states and hyperparameters, conditional on observations $y$. To tackle this problem, one may again use importance sampling methods, see e.g. \citep[Chapter 13.1]{Durbin2012Time}, or use \gls{mcmc}-methods tailored to \glspl{ssm}, e.g. Particle-\gls{mcmc} \citep[Chapter 16]{Chopin2020Introduction} --- however this approach is outside the scope of this thesis.
 
 
-To perform the above tasks, the setting defined in \Cref{def:ssm} is too general to have numerically tractable solutions. Thus we restrict our studies to more structured \glspl{ssm}. We begin with assuming a joint Gaussian distribution for states and observations. Subsequently, we will relax this assumption to allow the observations $Y$ to have more general distributions. 
-%\input{chapters/03_state_space_models/03_01_Modelling.tex}
+To perform the above tasks, the setting defined in \Cref{def:ssm} is too general to have numerically tractable solutions. Thus we restrict our studies to more structured \glspl{ssm}. We begin with assuming a joint Gaussian distribution for states and observations. Subsequently, we will relax this assumption to allow the observations $Y$ to have more general distributions.
 \input{chapters/03_state_space_models/03_02_LGSSM.tex}
 \input{chapters/03_state_space_models/03_03_LCSSM.tex}
 \input{chapters/03_state_space_models/03_04_IS.tex}
