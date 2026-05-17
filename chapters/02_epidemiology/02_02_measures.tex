@@ -18,10 +18,10 @@ The following subsections are loosely based on \citep{Diekmann2013Mathematical,H
 
 \subsection{Reproduction number}
 \label{subsec:reproduction_number}
-We will model the evolution of the epidemic in discrete time, as this is the time scale on which data are available. Denote by $I_{0} \in \gls{sym:N}$ the initial number of infected individuals on a reference day $0$, and for a day $t \in \Z$ let $I_{t}$ be the number of newly infected individuals on that day. Note that $I_{t}$ is random. For $\tau\in\Z$ let $\beta_{\tau}$ be the expected number of secondary cases a primary case infects $\tau$ days after it becomes infectious, and assume that the expected number of secondary cases $
-\gls{sym:Rc} = \sum_{\tau \in \N}\beta_{\tau}$ is non-zero and finite $0 < R_{c} < \infty$. $R_{c}$ is called the case reproduction number.  
+We will model the evolution of the epidemic in discrete time, as this is the time scale on which data are available. Denote by $I_{0} \in \N$ the initial number of infected individuals on a reference day $0$, and for a day $t \in \Z$ let $I_{t}$ be the number of newly infected individuals on that day. Note that $I_{t}$ is random. For $\tau\in\Z$ let $\beta_{\tau}$ be the expected number of secondary cases a primary case infects $\tau$ days after it becomes infectious, and assume that the expected number of secondary cases $
+R_{c} = \sum_{\tau \in \N}\beta_{\tau}$ is non-zero and finite $0 < R_{c} < \infty$. $R_{c}$ is called the case reproduction number.  
 
-As we have assumed that $R_{c}$ is finite, we may write $\beta_{\tau} = R_{c}w_{\tau}$ where $w_{\tau} = \frac{\beta_{\tau}}{R_{c}}$. $w = \left( w_{\tau} \right)_{\tau \in \N}$ is called the generation time distribution or the infectivity profile. On day $t$ the conditional expectation of newly infected individuals given all past incidences $\gls{sym:E} \left(I_{t}| I_{t - 1}, I_{t - 2}, \dots \right)$  can then be written as a convolution of $w$ and the number of past cases 
+As we have assumed that $R_{c}$ is finite, we may write $\beta_{\tau} = R_{c}w_{\tau}$ where $w_{\tau} = \frac{\beta_{\tau}}{R_{c}}$. $w = \left( w_{\tau} \right)_{\tau \in \N}$ is called the generation time distribution or the infectivity profile. On day $t$ the conditional expectation of newly infected individuals given all past incidences $\E \left(I_{t}| I_{t - 1}, I_{t - 2}, \dots \right)$  can then be written as a convolution of $w$ and the number of past cases 
 \begin{align}
     \label{eq:renewal-eq}
 \E \left(I_{t}| I_{t - 1}, I_{t - 2}, \dots \right) = R_{c} \sum_{\tau = 1}^\infty I_{t - \tau} w_{\tau},
@@ -29,7 +29,7 @@ As we have assumed that $R_{c}$ is finite, we may write $\beta_{\tau} = R_{c}w_{
 the so-called renewal equation. Here we have implicitly assumed that $w_{0} = 0$, i.e. infected individuals need at least one day to become infectious themselves. For \gls{c19} this is a reasonable assumption \citep{Lauer2020Incubation}. If case numbers are small, e.g. if the assumptions we demand hold, the conditional distribution of $I_{t}$ given past cases is, by the law of small numbers, well approximated by a Poisson distribution and combined with the renewal equation we obtain the renewal equation model \citep{Fraser2007Estimating}
 \begin{align}
     \label{eq:renewal-model}
-    I_{t} | I_{t - 1}, I_{t - 2}, \dots \sim \operatorname{Pois} \left( \gls{sym:Rt} \sum _{\tau = 1}^\infty I_{t - \tau} w_{\tau} \right),
+    I_{t} | I_{t - 1}, I_{t - 2}, \dots \sim \operatorname{Pois} \left( R_{t} \sum _{\tau = 1}^\infty I_{t - \tau} w_{\tau} \right),
 \end{align}
 where the time-varying or instantaneous reproduction number $R_{t}$ can vary over time as well. Working with the time-varying reproduction number $R_{t}$ instead of the case reproduction number $R_{c}$ has multiple advantages. 
 First, $R_{c}$ is a measure of the future behavior of a case, i.e. it does not capture the current state of the epidemic\footnote{Note that $R_{c}$ also depends on $t$ here and in the following, which we suppress for ease of notation.}. 
@@ -94,7 +94,7 @@ Thus, if we accept slight numerical errors, for \gls{c19} we may think of $\rho^
 
 The exponential growth rate $r$ and doubling time $d$ are closely related to the growth factor, and are given by 
 \begin{align*}
-    \gls{sym:r} = \log \rho && \gls{sym:d} = \log_{\rho} 2 = \frac{\log 2}{\log \rho}.
+    r = \log \rho && d = \log_{\rho} 2 = \frac{\log 2}{\log \rho}.
 \end{align*}
 Thus $r$ is the growth rate of the exponentially increasing cases, $\E I_{t} \approx \exp(rt) \E I_{0}$ and $d$ is the time it takes for cases to double under this exponential growth, $\E I_{t + d} \approx 2\E I_{t}$. Notice that the last equation only makes sense if $d \in \N$, or if we model the epidemic to evolve in continuous time instead. These two quantities are not as easy to interpret as, e.g., the weekly growth factor or the reproduction number. 
 

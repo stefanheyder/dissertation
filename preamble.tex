@@ -1,6 +1,12 @@
 \usepackage[width=150mm,top=35mm,bottom=25mm,bindingoffset=6mm]{geometry}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
+
+\usepackage{iftex}
+\ifpdftex
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+\else
+  \usepackage{fontspec}
+\fi
 \usepackage{microtype}
 % adjust spacing on titlepage
 \usepackage{setspace}
@@ -100,7 +106,9 @@
 \usetikzlibrary{external}
 
 \usepackage{pgfplots}
-\DeclareUnicodeCharacter{2212}{−}
+\ifpdftex
+  \DeclareUnicodeCharacter{2212}{−}
+\fi
 \usepgfplotslibrary{groupplots,dateplot}
 \usetikzlibrary{patterns,shapes.arrows}
 \pgfplotsset{compat=newest}

@@ -252,7 +252,9 @@ The resulting asymptotic efficiency factors are presented in \Cref{fig:ssm_compa
 
 For small $n$, both \gls{eis} and the \gls{cem} produce better proposals --- as measured by the asymptotic efficiency factor --- than the \gls{la}. 
 Up to $n=10$, the \gls{cem} produces adequate proposals, however, starting at $n=20$, the performance deteriorates. 
-Additionally, we had already seen in the previous section that the asymptotic variance of the \gls{cem} grows much more rapidly than that of \gls{eis}. 
+Starting with $n=10$, the \gls{cem} produces proposals with small AEF, whose share grow as $n$ increases.
+Nevertheless, the median AEF of the \gls{cem} is largest across all methods up to $n=20$ --- in \Cref{subsec:ratio_of_asymptotic_variances} we will see that the asymptotic variance of the \gls{cem} tends to grow much more rapidly than that of \gls{eis}. 
+Starting with $n=50$, the \gls{cem} collapses completely, while \gls{eis} tends to outperform the \gls{la}.
 
 \begin{table}
     \centering
@@ -264,6 +266,7 @@ Additionally, we had already seen in the previous section that the asymptotic va
 In addition to these observations, we report some numerical issues which result in invalid asymptotic efficiency factors. The number of occurrences is displayed in \Cref{tab:ssm_comparison_missing_values}. Again, the \gls{cem} is much more unstable than the \gls{la} or \gls{eis}, with the \gls{la} having the least amount of dropout. As both methods use the \gls{la} as their initial value, we would expect such numerical issues when the \gls{la} provides bad proposals --- which is the case for some proposals at $n=100$.
 
 \subsection{Ratio of asymptotic variances}
+\label{subsec:ratio_of_asymptotic_variances}
 As we have seen in \Cref{subsec:computational-complexity}, the number of samples $N$ used to estimate $\pce$ and $\peis$ enter linearly into the computational complexities. Naturally, we want to know how big a sample size we should choose for our procedures to estimate a proposal that is close to the true parameter ($\pce$ or $\peis$) and whether one of the two simulation-based procedures requires fewer samples than the other one. To answer this question we turn to the two central limit theorems, \Cref{thm:cem-clt,thm:eis-clt}. If $N$ is large, the asymptotic variances (or rather: the asymptotic standard deviations) tell us how much stochastic variation we should expect around the optimal value, and can thus guide us in choosing $N$. 
 We start with two examples in a univariate setting, where both the \gls{cem} and \gls{eis} use Gaussian proposals with either fixed variance (\Cref{ex:univ-gaussian-s2-fixed}) or mean (\Cref{ex:univ-gaussian-mu-fixed}).
 %This allows us to compare the methods for either the mean (variance) if the variance (mean) is fixed and potentially misspecified, i.e. not the global optimum. Additionally, the univariate setting allows us, in some cases, to derive analytical expressions of the efficiencies involved, allowing us to interpret them.

@@ -1,0 +1,166 @@
+\newlength{\symcolwidth}\setlength{\symcolwidth}{16em}
+
+\chapter*{List of symbols}
+\addcontentsline{toc}{chapter}{List of symbols}
+\markboth{List of symbols}{List of symbols}
+
+\section*{Numbers and sets}
+\noindent
+\begin{tabular}{@{} p{\symcolwidth} p{\dimexpr\linewidth-\symcolwidth-2\tabcolsep\relax} @{}}
+$\mathbf{N}_0$           & Natural numbers including $0$ \\
+$\mathbf{N}$             & Natural numbers excluding $0$ \\
+$\mathbf{Z}$             & Integers \\
+$\mathbb{R}$             & Real numbers \\
+$\mathbb{R}^{p\times m}$ & Real $p \times m$ matrices \\
+\end{tabular}
+
+\section*{Epidemiological indicators}
+\noindent
+\begin{tabular}{@{} p{\symcolwidth} p{\dimexpr\linewidth-\symcolwidth-2\tabcolsep\relax} @{}}
+$I_t$        & New infections / reported cases at time $t$ \\
+$R$          & Reproduction number \\
+$R_t$        & Time-varying reproduction number \\
+$R_c$        & Case reproduction number \\
+$\rho$       & Daily growth factor \\
+$\rho_t$     & Time-varying daily growth factor \\
+$\rho^{7}$   & Weekly growth factor \\
+$\rho^{7}_t$ & Time-varying weekly growth factor \\
+$r$          & Exponential growth rate, $r = \log \rho$ \\
+$d$          & Doubling time, $d = \log_\rho 2$ \\
+$w$          & Generation time distribution \\
+$w_\tau$     & Generation time at delay $\tau$ \\
+$\bar w$     & Mean generation time \\
+$\beta_\tau$ & Expected secondary cases at delay $\tau$ \\
+\end{tabular}
+
+\section*{Reporting and observed data}
+\noindent
+\begin{tabular}{@{} p{\symcolwidth} p{\dimexpr\linewidth-\symcolwidth-2\tabcolsep\relax} @{}}
+$I_{s,t}$        & Reported cases for date $s$ at time $t$ \\
+$H_{s,t}$        & Reported hospitalizations for date $s$ at time $t$ \\
+$i_{s,\tau}$     & Newly reported cases for date $s$ with delay $\tau$ \\
+$h_{s,\tau}$     & Newly reported hospitalizations for date $s$ with delay $\tau$ \\
+$\tilde I_{s,t}$ & Monotonized reported cases for date $s$ at time $t$ \\
+$p_{s,\tau}$     & Share of $s$-cases at delay $\tau$ \\
+$\hat S_s(\tau)$ & Empirical survival function of delays for date $s$ at delay $\tau$ \\
+\end{tabular}
+
+\section*{State Space Models}
+\noindent
+\begin{tabular}{@{} p{\symcolwidth} p{\dimexpr\linewidth-\symcolwidth-2\tabcolsep\relax} @{}}
+$m$                   & Number of states \\
+$p$                   & Number of observations \\
+$n$                   & Number of time points \\
+$\mathcal{X}$         & State space \\
+$\mathcal{Y}$         & Observation space \\
+$\mu_{\mathcal X}$    & Dominating measure on $\mathcal{X}$ \\
+$\mu_{\mathcal Y}$    & Dominating measure on $\mathcal{Y}$ \\
+$X_t$                 & Latent state at time $t$ \\
+$X_{0:n}$             & All states $(X_0, \dots, X_n)$ \\
+$Y_t$                 & Observation at time $t$, $Y_t \in \mathbb{R}^p$ or $\mathbf{Z}^p$ \\
+$Y_{0:n}$             & All observations $(Y_0, \dots, Y_n)$ \\
+$S_t$                 & Signal $S_t = B_t X_t \in \mathbb{R}^p$ \\
+$A_t$                 & State transition matrix, $A_t \in \mathbb{R}^{m \times m}$ \\
+$B_t$                 & Observation matrix, $B_t \in \mathbb{R}^{p \times m}$ \\
+$u_t, v_t$            & Bias terms, $u_t \in \mathbb{R}^m$, $v_t \in \mathbb{R}^p$ \\
+$\varepsilon_t$       & Innovation noise, $\varepsilon_t \in \mathbb{R}^m$ \\
+$\eta_t$              & Measurement noise, $\eta_t \in \mathbb{R}^p$ \\
+$\Sigma_t$            & State noise covariance, $\Sigma_t \in \mathbb{R}^{m \times m}$ \\
+$\Sigma_0$            & Initial state covariance matrix \\
+$\Omega_t$            & Observation noise covariance, $\Omega_t \in \mathbb{R}^{p \times p}$ \\
+$\ell$                & Log-likelihood \\
+\end{tabular}
+
+\section*{Probability distributions}
+\noindent
+\begin{tabular}{@{} p{\symcolwidth} p{\dimexpr\linewidth-\symcolwidth-2\tabcolsep\relax} @{}}
+$\mathcal{N}(\mu, \Sigma)$         & (Multivariate) normal distribution \\
+$\mathrm{Pois}(\lambda)$           & Poisson distribution with mean $\lambda$\\
+$\mathrm{NegBinom}(\log \mu, \phi)$     & Negative binomial distribution with log mean $\log \mu$ and overdispersion $\phi$ \\
+$\mathrm{LogNorm}(\mu, \sigma^2)$  & Log-normal distribution \\
+$\chi^2_k$                         & Chi-squared distribution, with $k$ degrees of freedom \\
+$\mathrm{Unif}(0,1)$               & Uniform distribution on $[0,1]$ \\
+$\mathrm{Binom}(n,p)$              & Binomial distribution with $n$ repetition and success probability $p$ \\
+\end{tabular}
+
+\section*{Probability measures, densities, and related quantities}
+\noindent
+\begin{tabular}{@{} p{\symcolwidth} p{\dimexpr\linewidth-\symcolwidth-2\tabcolsep\relax} @{}}
+$\mathbb{E}[\cdot]$              & Expectation \\
+$\mathrm{Var}(\cdot)$            & Variance \\
+$\mathrm{Cov}(\cdot,\cdot)$      & Covariance / covariance matrix \\
+$\mu[f]$                         & Integral of function $f$ w.r.t. measure $\mu$ \\
+$\mathbf{P}$                     & Importance sampling target measure \\
+$\mathbf{G}$                     & Importance sampling proposal measure \\
+$\mathbf{H}$                     & Auxiliary helper proposal measure \\
+$\mathbb{P}^{X \mid Y = y}$      & Smoothing distribution of states \\
+$\mathbb{P}^{S \mid Y = y}$      & Smoothing distribution of signals \\
+$p, g$                           & Probability density functions \\
+$p(x \mid y)$                    & Conditional density \\
+$L^p(\nu)$                       & Space of $p$-times $\nu$-integrable functions \\
+$D_\mathrm{KL}(P \| Q)$          & Kullback-Leibler divergence 
+\end{tabular}
+
+%% ---------- Importance sampling ---------------------------------------
+\section*{Importance sampling}
+\noindent
+\begin{tabular}{@{} p{\symcolwidth} p{\dimexpr\linewidth-\symcolwidth-2\tabcolsep\relax} @{}}
+$w$                 & Importance sampling weight, $w = \frac{\mathrm d\mathbf{P}}{\mathrm d\mathbf{G}}$ \\
+$\tilde w$          & Unnormalized importance weight, $\tilde w \propto \frac{\mathrm d\mathbf{P}}{\mathrm d\mathbf{G}}$  \\
+$N$                 & Number of Monte-Carlo samples \\
+$W^{i}$             & Self-normalized importance weights, $i=1,\dots, N$ \\
+$\rho$              & Second moment of weights, $\rho = \mathbf{G}[w^{2}]$ \\
+$\delta_x$          & Dirac delta measure at $x$ \\
+$\hat{\mathbf P}_N$ & Particle approximation of $\mathbf{P}$ \\
+$\mathrm{ESS}$      & Effective sample size, $\left(\sum_{i = 1}^N W_i^{2}\right) ^{-1}$ \\
+$\mathrm{EF}$       & Efficiency factor, $\mathrm{ESS} / N$ \\
+$\mathrm{AEF}$      & Asymptotic efficiency factor, $1 / \rho$ \\
+\end{tabular}
+
+%% ---------- Parameters and parameter spaces ---------------------------
+\section*{Parameters and parameter spaces}
+\noindent
+\begin{tabular}{@{} p{\symcolwidth} p{\dimexpr\linewidth-\symcolwidth-2\tabcolsep\relax} @{}}
+$\theta$       & Model hyperparameter, $\theta \in \R^{k}$ \\
+$\hat{\theta}$ & Maximum likelihood estimate of $\theta$ \\
+$\Theta$       & Parameter space for $\theta$ \\
+$\psi$         & Proposal hyperparamete parameter \\
+$\Psi$         & Parameter space of the proposal family \\
+\end{tabular}
+
+\section*{Optimal-proposal parameters and asymptotic variances}
+\noindent
+\begin{tabular}{@{} p{\symcolwidth} p{\dimexpr\linewidth-\symcolwidth-2\tabcolsep\relax} @{}}
+$\psi_\mathrm{CE}$              & Optimal CEM parameter \\
+$\psi_\mathrm{EIS}$             & Optimal EIS parameter \\
+$\psi_\mathrm{VM}$              & Optimal VMM parameter \\
+$\lambda_\mathrm{EIS}$          & EIS least-squares nuisance parameter \\
+$V_\mathrm{CE}, V_\mathrm{EIS}$ & Asymptotic variances of CEM / EIS estimators \\
+$B, M$                          & Bread / meat matrices in sandwich variance $BMB$ \\
+\end{tabular}
+
+%% ---------- Exponential families --------------------------------------
+\section*{Exponential families}
+\noindent
+\begin{tabular}{@{} p{\symcolwidth} p{\dimexpr\linewidth-\symcolwidth-2\tabcolsep\relax} @{}}
+$Z(\psi)$    & Cumulant generating function \\
+$T(y)$       & Sufficient statistic \\
+$h(y)$       & Base measure \\
+$\eta(\psi)$ & Natural parameter\\
+$I(\psi)$    & Fisher information matrix \\
+\end{tabular}
+
+\section*{Matrix operations and derivatives}
+\noindent
+\begin{tabular}{@{} p{\symcolwidth} p{\dimexpr\linewidth-\symcolwidth-2\tabcolsep\relax} @{}}
+$I_m$                              & $m$-dimensional identity matrix \\
+$\mathrm{diag}(\cdot)$             & Diagonal matrix operator \\
+$\mathrm{bdiag}(\cdot)$            & Block-diagonal matrix \\
+$\mathrm{chol}(\cdot)$             & Cholesky decomposition \\
+$\mathrm{tr}(\cdot)$               & Matrix trace \\
+$\mathrm{logit}(\cdot)$            & Logit function, $p \mapsto \log(p / (1 - p))$ \\
+$A^{\dagger}, A^{-}$               & Moore--Penrose / generalized inverse \\
+$\oslash$                          & Hadamard (entry-wise) division \\
+$H_\psi f$                         & Hessian of $f$ at $\psi$ \\
+$\nabla_\psi f$                    & Gradient of $f$ at $\psi$ \\
+\end{tabular}

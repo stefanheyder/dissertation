@@ -98,15 +98,20 @@ Additionally, the moment generating function $\psi \mapsto Z(\psi)$ is smooth on
     $$
     \log p_{\lambda} (x) = -\lambda + x\log \lambda - \log x!.
     $$
-    Thus the Poisson distribution forms an exponential family with natural parameter $\log \lambda$, natural statistic $\id$ (the identity), base measure $h(x) = \frac{1}{x!}$ and moment-generating function function $Z(\lambda) = \exp \left( -\lambda \right)$. 
+    Thus the Poisson distribution forms an exponential family with natural parameter $\log \lambda$, natural statistic $\id$ (the identity), base measure $h(x) = \frac{1}{x!}$ and moment-generating function $Z(\lambda) = \exp \left( -\lambda \right)$. 
 
-    The log-density of the negative binomial distribution $\operatorname{NegBinom} \left( q, \phi \right)$ with overdispersion parameter $\phi > 0$ and success probability $q \in (0, 1)$ is 
+    The log-density of the negative binomial distribution with overdispersion parameter $\phi > 0$ and success probability $q \in (0, 1)$ is 
     $$
     \log p_{q,\phi}(x) = \log \binom{x + \phi - 1}{x} + x \log (1 - q) + \phi \log q.
     $$
     For fixed $\phi$ these distributions form an exponential family with natural parameter $\log (1 - q )$, natural statistic $T = \id$, base measure $h(x) = \binom{x + \phi - 1}{x}$ and moment-generating function $Z(q) = \phi \log q$. 
 
-    In this parametrization the mean of the $\operatorname{NegBinom}(q,\phi)$ distribution is $\mu = \phi \frac{1 - q}{q}$ and its variance is $\phi \frac{1 - q}{q^{2}}$. An alternative parametrization that will become useful in \Cref{cha:analysis_of_selected_models} is that by the log mean $\xi = \log \mu$ and overdisperision $\phi$, with variance $\mu + \frac{\mu^{2}}{\phi}$. Thus, the $ \operatorname{NegBinom}$ distribution has $1 + \frac{\mu}{\phi}$ times the variance of a Poisson distribution with the same mean. As $q = \frac{\phi}{\phi + \mu}$, this parametrization has log-density
+    In this parametrization the mean is $\mu = \phi \frac{1 - q}{q}$ and the variance is $\phi \frac{1 - q}{q^{2}}$. 
+    Thus, the negative binomial distribution has $1 + \frac{\mu}{\phi}$ times the variance of a Poisson distribution with the same mean. 
+
+    An alternative parametrization that will become useful in \Cref{cha:analysis_of_selected_models} is that by the log mean $\xi = \log \mu$ and overdispersion $\phi$, with variance $\mu + \frac{\mu^{2}}{\phi}$, which we will denote by $\nbinom \left( \xi, 
+    \phi \right)$. 
+    As $q = \frac{\phi}{\phi + \mu}$, this parametrization has log-density
     $$
     \log p_{\phi,\xi}(x) = \log \binom{x + \phi - 1}{x} + x \xi  - (\phi + x) \log (\exp \xi + \phi) + \phi \log \phi,
     $$
@@ -116,8 +121,6 @@ Additionally, the moment generating function $\psi \mapsto Z(\psi)$ is smooth on
         \intertext{and}
         \partial_{\xi^{2}}^{2} \log p_{\phi,\xi} (x) &= -(\phi + x) \frac{\phi\exp(\xi)}{(\exp(\xi) + \phi)^{2}} < 0,
     \end{align*}
-    $$
-    $$
     for all $x \in \N_{0}$. 
 \end{example}
 
