@@ -311,10 +311,15 @@ tikz/externalized
 # latex-build
 build
 
-# nbdev
+# nbdev / quarto
 _proc
+_docs/
 __pycache__/
 *.egg-info/*
+.ipynb_checkpoints/
+
+# faculty council reports etc., not part of thesis submission
+reports/
 
 # MACOS
 .DS_Store
