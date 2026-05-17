@@ -58,7 +58,6 @@ $$
 $$
 where $w(X^{i})$ is called the importance weight, or just weight, of the $i$-th sample. If the samples are clear from the context we sometimes write $w^{i} = w(X^{i})$. 
 This motivates us to regard
-%If one is not interested in a particular function $f$, we may instead think of
 \begin{align}
 \label{eq:is-particle-approximation}
 \hat \P_N = \frac{1}{N} \sum_{i = 1}^{N} w(X_i) \delta_{X_i},
@@ -80,8 +79,7 @@ $$\hat \P_N = \sum_{i = 1}^{N} W_i \delta_{X^i}.$$
 % introduces bias
 Unless $\tilde w$ is degenerate, i.e. constant, $$\hat\zeta = \frac{\sum_{i = 1}^N \tilde w (X^{i} f(X^{i}))}{\sum_{i = 1}^{N} \tilde w(X^{i})}$$ is a ratio of two non-constant, unbiased estimators and so is itself biased. Nevertheless, noticing that the rescaled denominator $\frac{1}{N} \sum_{i = 1}^{N} \tilde w(X^{i})$ consistently estimates the integration constant $\G \tilde w$, we may apply Slutsky's lemma and obtain a central limit theorem for $\hat \zeta$ (recall that we assumed $fw \in L^{2}(\G)$).
 
-The class for test functions $f$ for which this holds depends on $\P$ and $\G$. \citet{Agapiou2017Importance} study the behavior of uniformly bounded test functions $\lVert f \rVert \leq 1$. For these functions it suffices that $w \in L^{2}(\G)$ to ensure asymptotic normality of $\zeta$. 
-%In this setting they show that the random measure $\hat \P_N$ converges to $\P$ at usual rate $\mathcal O\left(\frac 1 {\sqrt{N}}\right)$ in an appropriate metric on the space of random probability measures. 
+The class for test functions $f$ for which this holds depends on $\P$ and $\G$. \citet{Agapiou2017Importance} study the behavior of uniformly bounded test functions $\lVert f \rVert \leq 1$. For these functions it suffices that $w \in L^{2}(\G)$ to ensure asymptotic normality of $\zeta$.
 Thus an important quantity is
 $$
 \rho = \frac{1}{(\G \tilde w)^{2}}\G[\tilde w^{2}] = \G [w^{2}] =  \P [w],
@@ -363,8 +361,7 @@ $$
 $$
 In these situations $p(y) = \int p(x,y)\d x$ is usually intractable. For $\G^{\ast}$ we are in the same situation, where the evaluation of the integration constant $\P \lvert f \rvert$ is infeasible, but the density $\lvert f(x)\rvert p(x)$ is available.
 % do not focus on a single f
-Second, focusing on the particle approximation allows us to consider multiple test functions $f$, e.g. focus on different marginals of $\P$, which is usually what practitioners are interested in. 
-%Third, for maximum likelihood estimation (\Cref{sec:maximum_likelihood_estimation}), we will see that these two notions coincide.
+Second, focusing on the particle approximation allows us to consider multiple test functions $f$, e.g. focus on different marginals of $\P$, which is usually what practitioners are interested in.
 % simplify notation: P always target, G always proposal
 Finally, this allows us to simplify the notation used in this thesis. $\P$ will always be the probability measure of interest and $\G$ the proposal. In later parts of this thesis, we will predominantly perform Gaussian importance sampling, i.e. $\G = \mathcal N(\mu, \Sigma)$, hence a handy mnemonic is to think of $\G$ as a \textbf{G}aussian proposal.
 
@@ -392,6 +389,5 @@ For the \glspl{ssm} we consider in this thesis, the numerical methods can be imp
 However, as the \gls{la} is a local approximation, it may be an inappropriate description of the global behavior of the target, see \Cref{ex:la_failure} for a breakdown of \gls{la}, and the simulation studies presented in \Cref{sec:simulation_studies}. 
 Additionally, even if the \gls{la} works in principle, its \gls{ess} will usually degenerate quickly once the dimension increases whereas the \gls{cem} and \gls{eis} do so at a slower pace.
 
-%\input{chapters/03_04_02_VM.tex}
 \input{chapters/03_state_space_models/03_04_03_CEM.tex}
 \input{chapters/03_state_space_models/03_04_04_EIS.tex}
