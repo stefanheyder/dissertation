@@ -41,7 +41,7 @@ $H_{s,t}$        & Reported hospitalizations for date $s$ at time $t$ \\
 $i_{s,\tau}$     & Newly reported cases for date $s$ with delay $\tau$ \\
 $h_{s,\tau}$     & Newly reported hospitalizations for date $s$ with delay $\tau$ \\
 $\tilde I_{s,t}$ & Monotonized reported cases for date $s$ at time $t$ \\
-$p_{s,\tau}$     & Share of $s$-cases at delay $\tau$ \\
+$p_{s,\tau}$     & Share of date $s$-cases at delay $\tau$ \\
 $\hat S_s(\tau)$ & Empirical survival function of delays for date $s$ at delay $\tau$ \\
 \end{tabular}
 
@@ -123,8 +123,9 @@ $\mathrm{AEF}$      & Asymptotic efficiency factor, $1 / \rho$ \\
 \begin{tabular}{@{} p{\symcolwidth} p{\dimexpr\linewidth-\symcolwidth-2\tabcolsep\relax} @{}}
 $\theta$       & Model hyperparameter, $\theta \in \R^{k}$ \\
 $\hat{\theta}$ & Maximum likelihood estimate of $\theta$ \\
+$\theta_{0}$       & Initial value for maximum likelihood estimation \\
 $\Theta$       & Parameter space for $\theta$ \\
-$\psi$         & Proposal hyperparamete parameter \\
+$\psi$         & Proposal hyperparameter parameter \\
 $\Psi$         & Parameter space of the proposal family \\
 \end{tabular}
 
@@ -133,7 +134,6 @@ $\Psi$         & Parameter space of the proposal family \\
 \begin{tabular}{@{} p{\symcolwidth} p{\dimexpr\linewidth-\symcolwidth-2\tabcolsep\relax} @{}}
 $\psi_\mathrm{CE}$              & Optimal CEM parameter \\
 $\psi_\mathrm{EIS}$             & Optimal EIS parameter \\
-$\psi_\mathrm{VM}$              & Optimal VMM parameter \\
 $\lambda_\mathrm{EIS}$          & EIS least-squares nuisance parameter \\
 $V_\mathrm{CE}, V_\mathrm{EIS}$ & Asymptotic variances of CEM / EIS estimators \\
 $B, M$                          & Bread / meat matrices in sandwich variance $BMB$ \\
