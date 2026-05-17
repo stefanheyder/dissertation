@@ -43,3 +43,5 @@ renv::restore()
 ```
 
 to install packages necessary to re-create the figures.
+
+All data is available via [Zenodo](https://doi.org/10.5281/zenodo.20258543).
