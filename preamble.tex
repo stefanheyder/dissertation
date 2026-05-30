@@ -175,23 +175,25 @@
 \usepackage{hyperref}
 \hypersetup{%
   %draft, % hyperref's draft mode, for printing see below
-  colorlinks=true, linktocpage=true, pdfstartpage=3, pdfstartview=FitV,%
-  % uncomment the following line if you want to have black links (e.g., for printing)
-  %colorlinks=false, linktocpage=false, pdfstartpage=3, pdfstartview=FitV, pdfborder={0 0 0},%
+  linktocpage=true, pdfstartpage=3, pdfstartview=FitV,%
   breaklinks=true, pageanchor=true,%
   pdfpagemode=UseNone, %
   % pdfpagemode=UseOutlines,%
   plainpages=false, bookmarksnumbered, bookmarksopen=true, bookmarksopenlevel=1,%
   hypertexnames=true, pdfhighlight=/O,%nesting=true,%frenchlinks,%
-  %urlcolor=CTurl, linkcolor=CTlink, 
-  citecolor=gray, %pagecolor=RoyalBlue,%
-  %urlcolor=Black, linkcolor=Black, citecolor=Black, %pagecolor=Black,%
   pdftitle={\myTitle},%
   pdfauthor={\textcopyright\ \myName, \myUni},%
   pdfsubject={},%
   pdfkeywords={},%
   pdfcreator={pdfLaTeX}%
 }
+% \printversion (defined by thesis_print.tex) builds the print version with
+% all links in black and no colored boxes; otherwise links are colored.
+\ifdefined\printversion
+  \hypersetup{colorlinks=false, pdfborder={0 0 0}}%
+\else
+  \hypersetup{colorlinks=true, citecolor=black}%
+\fi
 
 
 
