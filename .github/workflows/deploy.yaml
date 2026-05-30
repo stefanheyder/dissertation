@@ -11,4 +11,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      PIP_CONSTRAINT: ${{ github.workspace }}/constraints.txt
     steps: [uses: fastai/workflows/quarto-ghp@master]
