@@ -39,18 +39,8 @@ To download the full published archive and unpack it into `data/`
 bash scripts/download_data.sh
 ```
 
-This resolves the Zenodo DOI from the thesis appendix, fetches the
-archive, and restores the `data/` tree. To package the local `data/`
-(together with the thesis PDFs and this README) for a new Zenodo upload,
-run
-
-``` bash
-bash scripts/prepare_zenodo_archive.sh
-```
-
-which writes `/tmp/ssm4epi_data.zip`.
-
-### Code
+This uses the Zenodo DOI to fetches the archive, and restores the
+`data/` tree. The archive encompases around 6GB of data. \### Code
 
 This project uses the Python package manager
 [uv](https://docs.astral.sh/uv/). To run the code in Python Jupter
