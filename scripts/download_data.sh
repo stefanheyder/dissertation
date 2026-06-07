@@ -13,27 +13,14 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-APPENDIX="chapters/AA_appendix/AA_appendix.tex"
 OUT="/tmp/ssm4epi_data-v1.0.0.zip"
 
-if [[ ! -f "$APPENDIX" ]]; then
-    echo "error: appendix not found at $APPENDIX" >&2
-    exit 1
-fi
-
-# Parse the numeric Zenodo record id (e.g. 20258543) out of the DOI in the
-# appendix. The concept DOI's record id resolves to the latest version.
-RECORD_ID="$(grep -oE 'zenodo\.[0-9]+' "$APPENDIX" | head -n1 | cut -d. -f2)"
-if [[ -z "${RECORD_ID:-}" ]]; then
-    echo "error: could not find a 'zenodo.<id>' DOI in $APPENDIX" >&2
-    exit 1
-fi
+RECORD_ID="20258543"
 echo "==> Zenodo record id: $RECORD_ID"
 
 API="https://zenodo.org/api/records/${RECORD_ID}"
 echo "==> querying $API"
 
-# Note: this download is large (~6 GB).
 read -r -p "This will download roughly 6 GB of data. Continue? [y/N] " CONFIRM
 if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
     echo "aborted"
