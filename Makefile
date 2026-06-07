@@ -24,13 +24,9 @@ data:
 	cd code && quarto render data_commuting.qmd --to pdf --output $$(mktemp --suffix ".pdf")
 	cd code && quarto render data_rki.qmd --to pdf --output $$(mktemp --suffix ".pdf")
 
-# Register the IRkernel "ir" kernelspec (idempotent). Needs renv restored and
-# the project venv on PATH so the spec lands where jupyter/nbconvert looks.
 r-kernel:
 	PATH="$(CURDIR)/.venv/bin:$$PATH" Rscript -e 'IRkernel::installspec(name = "ir", displayname = "R")'
 
-# Re-execute every figure notebook in place with the R kernel. Run from a
-# checkout with renv restored (the main checkout, not a worktree).
 figures: r-kernel
 	@find nbs -iname '*figures*.ipynb' -not -path '*/.ipynb_checkpoints/*' -print0 | \
 	while IFS= read -r -d '' nb; do \
