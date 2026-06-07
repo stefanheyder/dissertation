@@ -103,15 +103,9 @@ $$
 for each $q$ of the $15$ quarters present in our dataset separately, as the reporting behavior may have changed over time. Here $s\in q$ means that the day $s$ lies in the quarter $q$. The results are shown in \Cref{fig:survival_function_rep_tri_incidences} \textbf{B}, where we observe that for most quarters, $95\%$ of the cases have been reported after $4$ days delay and $99\%$ of the cases have been reported after $8$ days delay. 
 Furthermore, we see that the amount of next-day ($\tau = 1$) reporting slightly increased in $2021$ and $2022$, compared to the beginning of the pandemic.
 
-\begin{figure}
-    \resizebox{\textwidth}{!}{%
-        \input{tikz/survival_function_rep_tri_incidences.tex}%
-    }
-    \caption{\textbf{A}: Box plots for the empirical survival function $\hat S_{s}(\tau)$ for all days $s$ in the dataset, after $4$ ($10$) days, the upper quartile of $\hat S_{s}$ is close to $5\%$ ($1\%$).\textbf{B}: Empirical survival function $\hat S(\tau)$ for every quarter present in the \gls{c19} dataset. In most quarters $95\%$ ($99\%$) of the cases have been reported after $4$ ($8$) days of delay.}
-    \label{fig:survival_function_rep_tri_incidences}
-\end{figure}
+\input{tikz/survival_function_rep_tri_incidences_full.tex}%
 
-Reporting delays and artifacts are not the only obstacles we have to overcome when analyzing these data. By definition, the number of reported cases consists of cases with a positive PCR test. To compare reported incidences between two points in time, one has to assume that the so-called dark figure, i.e. the ratio of undetected to detected cases, is the same. However, there is are some objections to this assumption: the capacity and total number of PCR tests per week, as well as the ratio of positive tests, has been changing throughout the whole epidemic, see e.g. \citep{Willrich2021Update}. Additionally, the wide-spread availability of rapidtests, and the 2G (access to workplace and social gatherings only for vaccinated and recovered individuals) and 3G (like 2G, but also access with a negative test) \glspl{npi} introduced in fall 2021 likely changed the characteristics of those still getting PCR tests. Nevertheless, for short durations without such events we may still assume a 
+Reporting delays and artifacts are not the only obstacles we have to overcome when analyzing these data. By definition, the number of reported cases consists of cases with a positive PCR test. To compare reported incidences between two points in time, one has to assume that the so-called dark figure, i.e. the ratio of undetected to detected cases, is the same. However, there is are some objections to this assumption: the capacity and total number of PCR tests per week, as well as the ratio of positive tests, has been changing throughout the whole epidemic, see e.g. \citep{Willrich2021Update}. Additionally, the wide-spread availability of rapidtests, and the 2G (access to workplace and social gatherings only for vaccinated and recovered individuals) and 3G (like 2G, but also access with a negative test) \glspl{npi} introduced in fall 2021 likely changed the characteristics of those still getting PCR tests. Nevertheless, for short durations without such events we may still assume a constant dark-figure.
 
 In summary, we see that handling case data turns out to be quite involved: we have to account for reporting artifacts, delays and keep in mind that the reported number of cases is not the same as the actual number of cases. 
 
@@ -128,7 +122,7 @@ $s + \tau$.
 
 \begin{figure}
     \resizebox{\textwidth}{!}{%
-        \input{tikz/double_weekday_effect_hosp.tex}%
+         \input{tikz/double_weekday_effect_hosp.tex}%
     }
     \caption{\textbf{A}: the newly reported hospitalizations on days $s$ in December 2021, by delay $\tau$. Notice the double weekday effect in both $s$ and $s+\tau$. \textbf{B}: newly reported hospitalizations during December 2021. The double weekday effect is visible in the striped pattern. \textbf{C}: empirical survival function of hospitalization delays for cases with case reporting date December 1st 2021 with vertical dashed lines indicating four-week increments.}
     \label{fig:double_weekday_effect_hosp}

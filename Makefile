@@ -1,18 +1,21 @@
 SHELL := /bin/bash
 
-SOURCES := thesis.tex preamble.tex commands.tex acronyms.tex
+SOURCES := thesis.tex preamble.tex commands.tex acronyms.tex 
 
-.PHONY: all print open data commit_yesterday clean
+# extra memory for figures
+TEX_MEM := extra_mem_top=2000000 extra_mem_bot=8000000
+
+.PHONY: all print open data commit_yesterday clean thesis.pdf thesis_print.pdf
 
 all: thesis.pdf thesis_print.pdf
 
 print: thesis_print.pdf
 
 thesis.pdf: $(SOURCES)
-	latexmk -pdf thesis.tex
+	$(TEX_MEM) latexmk -pdf thesis.tex
 
 thesis_print.pdf: thesis_print.tex $(SOURCES)
-	latexmk -pdf thesis_print.tex
+	$(TEX_MEM) latexmk -pdf thesis_print.tex
 
 open:
 	zathura -x "code-insiders --no-sandbox -r -g %{input}:%{line}" thesis.pdf

@@ -20,6 +20,20 @@ to create `tikz` graphics.
 
 ## Reproducibility
 
+### Data
+
+The required raw data to run the notebooks is available through two
+means:
+
+- smaller files (\< 100MB) are directly checked into this repository and
+- larger files are available through
+  [Zenodo](https://doi.org/10.5281/zenodo.20258543).
+
+Additionally, all downstream data (e.g. model results used for figures)
+are also available on Zenodo.
+
+### Code
+
 This project uses the Python package manager
 [uv](https://docs.astral.sh/uv/). To run the code in Python Jupter
 notebooks, run the following commands
@@ -44,4 +58,4 @@ renv::restore()
 
 to install packages necessary to re-create the figures.
 
-All data is available via [Zenodo](https://doi.org/10.5281/zenodo.20258543).
+To build the artifacts (e.g., PDF files) refer to the `Makefile`.

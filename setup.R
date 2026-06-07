@@ -125,7 +125,15 @@ ggsave_tikz_full <- function(filename, plot = last_plot(), width = default_width
 }
 
 theme_thesis <- function() {
-    theme_minimal()
+    theme_minimal() +  
+        theme(
+            axis.text   = element_text(colour = "grey5"),
+            panel.grid  = element_line(colour = "grey80"),
+            axis.title  = element_text(colour = "black"),
+            strip.text  = element_text(colour = "black"),
+            plot.title  = element_text(colour = "black"),
+            legend.text = element_text(colour = "grey5")
+        )
 }
 
 theme_set(theme_thesis())
