@@ -5,7 +5,7 @@ SOURCES := thesis.tex preamble.tex commands.tex acronyms.tex
 # extra memory for figures
 TEX_MEM := extra_mem_top=2000000 extra_mem_bot=8000000
 
-.PHONY: all print open data commit_yesterday clean thesis.pdf thesis_print.pdf
+.PHONY: all print open data figures r-kernel commit_yesterday clean thesis.pdf thesis_print.pdf
 
 all: thesis.pdf thesis_print.pdf
 
@@ -23,6 +23,23 @@ open:
 data:
 	cd code && quarto render data_commuting.qmd --to pdf --output $$(mktemp --suffix ".pdf")
 	cd code && quarto render data_rki.qmd --to pdf --output $$(mktemp --suffix ".pdf")
+
+# Register the IRkernel "ir" kernelspec (idempotent). Needs renv restored and
+# the project venv on PATH so the spec lands where jupyter/nbconvert looks.
+r-kernel:
+	PATH="$(CURDIR)/.venv/bin:$$PATH" Rscript -e 'IRkernel::installspec(name = "ir", displayname = "R")'
+
+# Re-execute every figure notebook in place with the R kernel. Run from a
+# checkout with renv restored (the main checkout, not a worktree).
+figures: r-kernel
+	@find nbs -iname '*figures*.ipynb' -not -path '*/.ipynb_checkpoints/*' -print0 | \
+	while IFS= read -r -d '' nb; do \
+		echo "==> executing $$nb"; \
+		uv run jupyter nbconvert --to notebook --execute --inplace \
+			--ExecutePreprocessor.kernel_name=ir \
+			--ExecutePreprocessor.timeout=-1 "$$nb" || exit 1; \
+	done
+	@echo "figures: done"
 
 commit_yesterday:
 	git commit --amend --date="yesterday 8PM" --no-edit
