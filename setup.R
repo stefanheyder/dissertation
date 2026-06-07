@@ -128,7 +128,7 @@ theme_thesis <- function() {
     theme_minimal() +  
         theme(
             axis.text   = element_text(colour = "grey5"),
-            panel.grid  = element_line(colour = "grey65", linewidth = 0.4),
+            panel.grid  = element_line(colour = "grey55", linewidth = 0.5),
             axis.title  = element_text(colour = "black"),
             strip.text  = element_text(colour = "black"),
             plot.title  = element_text(colour = "black"),
