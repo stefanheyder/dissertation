@@ -32,6 +32,24 @@ means:
 Additionally, all downstream data (e.g. model results used for figures)
 are also available on Zenodo.
 
+To download the full published archive and unpack it into `data/`
+(overwriting in place), run
+
+``` bash
+bash scripts/download_data.sh
+```
+
+This resolves the Zenodo DOI from the thesis appendix, fetches the
+archive, and restores the `data/` tree. To package the local `data/`
+(together with the thesis PDFs and this README) for a new Zenodo upload,
+run
+
+``` bash
+bash scripts/prepare_zenodo_archive.sh
+```
+
+which writes `/tmp/ssm4epi_data.zip`.
+
 ### Code
 
 This project uses the Python package manager
